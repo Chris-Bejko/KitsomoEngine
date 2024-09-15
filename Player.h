@@ -13,7 +13,7 @@ public:
 	bool Init() override final
 	{
 		entity->transform->position = Vector2F(100, 100);
-		AssetManager::get().loadTexture("test", "C:\\Users\\kitso\\Documents\\CPP Game\\SDL ECS\\Assets\\test.png");
+		AssetManager::get().loadTexture("test", "test.png");
 		entity->AddComponent<Sprite>("test");
 		return true;
 	}
@@ -23,25 +23,31 @@ public:
 	{
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			entity->transform->Translate(Vector2F(0.1, 0));
+			Move(Vector2F(0.1, 0));
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			entity->transform->Translate(Vector2F(-0.1, 0));
+			Move(Vector2F(-0.1, 0));
 		}
 
 		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			entity->transform->Translate(Vector2F(0, -0.1));
+			Move(Vector2F(0, -0.1));
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			entity->transform->Translate(Vector2F(0, 0.1));
+			Move(Vector2F(0, 0.1));
 		}
 	}
 
+
+private:
+	void Move(const Vector2F movement)
+	{
+		entity->transform->Translate(movement);
+	}
 
 
 };

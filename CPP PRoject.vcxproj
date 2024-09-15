@@ -162,9 +162,7 @@
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\SDL ECS\Assets\test.png">
-      <DeploymentContent>false</DeploymentContent>
-    </Image>
+    <Image Include="test.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

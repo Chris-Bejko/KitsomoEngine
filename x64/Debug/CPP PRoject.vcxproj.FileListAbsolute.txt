@@ -1,1 +1,2 @@
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\x64\Debug\CPP PRoject.exe
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe

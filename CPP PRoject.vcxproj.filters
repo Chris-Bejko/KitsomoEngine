@@ -130,7 +130,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\SDL ECS\Assets\test.png">
+    <Image Include="test.png">
       <Filter>Source Files\Assets</Filter>
     </Image>
   </ItemGroup>
