@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BoxCollider2D.h" />
+    <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="EngineP.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="InputSystem.cpp" />
@@ -146,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="..\SDL ECS\ECS\Engine\Engine.h" />
     <ClInclude Include="AssetManager.h" />
+    <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="ECSEngine.h" />

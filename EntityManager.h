@@ -13,7 +13,7 @@ public:
     void draw();
     void update();
     void refresh();
-    //void Collisions();
+    void Collisions();
 
     void addEntity(Entity* ent);
     void eraseEntity(Entity* ent);

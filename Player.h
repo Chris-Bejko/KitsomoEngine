@@ -15,6 +15,7 @@ public:
 		entity->transform->position = Vector2F(100, 100);
 		AssetManager::get().loadTexture("test", "test.png");
 		entity->AddComponent<Sprite>("test");
+		entity->AddComponent<BoxCollider2D>("player", sf::FloatRect(0, 0, 150, 150));
 		return true;
 	}
 
@@ -31,7 +32,7 @@ public:
 			Move(Vector2F(-0.1, 0));
 		}
 
-		if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
 			Move(Vector2F(0, -0.1));
 		}

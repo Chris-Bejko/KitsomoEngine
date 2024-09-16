@@ -38,9 +38,15 @@ void Engine::Init()
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
 	Entity* newEntity = new Entity();
-
+	Entity* bot = new Entity();
 	newEntity->AddComponent<Player>();
+	bot->AddComponent<Sprite>("test");
+	bot->transform->position = Vector2F(500, 0);
+	bot->AddComponent<BoxCollider2D>("tag", sf::FloatRect(0, 0, 150, 150));
+
+	
 	manager->addEntity(newEntity);
+	manager->addEntity(bot);
 	isRunning = true;
 
 }
@@ -63,6 +69,7 @@ void Engine::Render()
 void Engine::Update()
 {
 	SystemsManager::get().Update();
+	manager->Collisions();
 	manager->update();
 }
 

@@ -21,7 +21,7 @@ public:
         transform = &entity->GetComponent<Transform>();
         texture = AssetManager::get().getTexture(textureID);
         sprite.setTexture(texture);
-     
+
         return true;
     }
 
@@ -32,7 +32,6 @@ public:
 
     inline void update() override final
     {
-        std::cout << transform->position << std::endl;
         sprite.setPosition(transform->position.x, transform->position.y);
         sprite.setRotation(transform->rotation);
     }
@@ -47,11 +46,18 @@ public:
         return width;
     }
 
+    inline sf::FloatRect GetGlobalBounds()
+    {
+        return sprite.getGlobalBounds();
+    }
+
+    inline sf::FloatRect TranslateHitbox(sf::FloatRect& hitbox)
+    {
+        return sprite.getTransform().transformRect(hitbox);
+    }
 private:
     int width = 0;
     int height = 0;
-    //SDL_Rect srcRect = {0, 0, 0, 0};
-    //SDL_Rect destRect = {0, 0, 0, 0};
 
     Transform* transform = nullptr;
     std::string textureID = "";
