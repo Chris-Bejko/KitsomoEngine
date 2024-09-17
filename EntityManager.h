@@ -15,6 +15,7 @@ public:
     void refresh();
     void Collisions();
 
+
     void addEntity(Entity* ent);
     void eraseEntity(Entity* ent);
 

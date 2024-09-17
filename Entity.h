@@ -74,6 +74,14 @@ public:
         }
     }
 
+    inline void OnCollisionEnter(BoxCollider2D& other)
+    {
+        for(auto& comp : components)
+        {
+            comp->OnCollisionEnter(other);
+        }
+    }
+
 private:
     bool isActive;
     ComponentList componentsList;
