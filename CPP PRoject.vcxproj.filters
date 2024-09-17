@@ -78,11 +78,11 @@
     <ClCompile Include="InputSystem.cpp">
       <Filter>Source Files\ECS\InputSystem</Filter>
     </ClCompile>
+    <ClCompile Include="CollisionSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\SDL ECS\ECS\Engine\Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Source Files\ECS\Engine</Filter>
     </ClInclude>
@@ -128,10 +128,28 @@
     <ClInclude Include="Player.h">
       <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
+    <ClInclude Include="FloorSquare.h">
+      <Filter>Source Files\Game\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>Source Files\Game\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SDL ECS\ECS\Engine\Engine.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionSystem.h">
+      <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionTuple.h">
+      <Filter>Source Files\ECS\Base Data STr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="test.png">
       <Filter>Source Files\Assets</Filter>
+    </Image>
+    <Image Include="triangle.png">
+      <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
 </Project>

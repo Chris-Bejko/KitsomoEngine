@@ -24,6 +24,8 @@ public:
 
     void Events();
 
+    void Spawn(Entity* entity);
+
     inline static Engine& get()
     {
         if (s_instance == nullptr)
@@ -38,7 +40,13 @@ public:
     {
         return isRunning;
     }
+
     sf::RenderWindow &GetWindow();
+
+    EntityManager* GetManager()
+    {
+        return manager;
+    }
 private:
     EntityManager* manager;
     bool isRunning;

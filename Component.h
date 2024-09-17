@@ -18,4 +18,8 @@ public:
 	virtual void update() { }
 
 	virtual void OnCollisionEnter(BoxCollider2D& other) { }
+	virtual void OnCollisionExit(BoxCollider2D& other) { }
+	virtual void OnTriggerEnter(BoxCollider2D& other) { }
+	virtual void OnTriggerExit(BoxCollider2D& other) { }
+	virtual void OnTriggerStay(BoxCollider2D& other) { }
 };

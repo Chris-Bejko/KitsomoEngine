@@ -26,7 +26,15 @@ public:
 
 	void Update() override final;
 
+	bool ActiveCollision(std::string a, std::string b);
+
+	void SetActive(std::string a, std::string b);
+	void SetInactive(std::string a, std::string b);
+
 private:
 	static CollisionSystem* s_instance;
 
+
 };
+
+

@@ -22,7 +22,7 @@ public:
 	{
 		collisionTag = tag;
 		this->hitbox = hitbox;
-		this->isTrigger = isTrigger;
+		std::cout << isTrigger << std::endl;
 		configuredHitbox = true;
 	}
 	~BoxCollider2D() = default;

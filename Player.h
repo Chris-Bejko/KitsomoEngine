@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ECSEngine.h"
+#include "FloorSquare.h"
 
 class Player : public Component
 {
@@ -56,7 +57,16 @@ public:
 
 	void OnCollisionEnter(BoxCollider2D& other) override final
 	{
-		std::cout << "Collision registered" << std::endl;
+		if(other.entity->HasComponent<FloorSquare>())
+		{
+			entity->GetComponent<Sprite>().SetColor(other.entity->GetComponent<FloorSquare>().GetColor());
+			//std::cout << other.entity->GetComponent<FloorSquare>().GetColor().toInteger() << std::endl;
+		}
+	}
+
+	void OnCollisionExit(BoxCollider2D& other) override final
+	{
+		entity->GetComponent<Sprite>().SetColor(sf::Color::Red);
 	}
 
 private:

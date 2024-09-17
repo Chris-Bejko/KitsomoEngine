@@ -12,6 +12,7 @@
 #include <cassert>
 #include "Engine.h"
 #include "Player.h"
+#include "GameManager.h"
 
 Engine* Engine::s_instance = nullptr;
 
@@ -39,12 +40,12 @@ void Engine::Init()
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
 	Entity* newEntity = new Entity();
-	Entity* bot = new Entity();
+	Entity* floorSquare = new Entity();
 	newEntity->AddComponent<Player>(true, Vector2F(100, 100), "player");
-	bot->AddComponent<Player>(false, Vector2F(550, 550), "bot");
+	floorSquare->AddComponent<FloorSquare>().Config(Vector2F(250,100), sf::Color(0, 128, 0, 255));
 
 	manager->addEntity(newEntity);
-	manager->addEntity(bot);
+	manager->addEntity(floorSquare);
 	isRunning = true;
 
 }
@@ -84,3 +85,7 @@ sf::RenderWindow& Engine::GetWindow()
 	return *window;
 }
 
+void Engine::Spawn(Entity* entity)
+{
+	manager->addEntity(entity);
+}

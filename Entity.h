@@ -82,6 +82,36 @@ public:
         }
     }
 
+    inline void OnTriggerEnter(BoxCollider2D& other)
+    {
+        for(auto& comp : components)
+        {
+            comp->OnTriggerEnter(other);
+        }
+    }
+    inline void OnTriggerStay(BoxCollider2D& other)
+    {
+        for (auto& comp : components)
+        {
+            comp->OnTriggerStay(other);
+        }
+    }
+    inline void OnTriggerExit(BoxCollider2D& other)
+    {
+        for (auto& comp : components)
+        {
+            comp->OnTriggerExit(other);
+        }
+    }
+
+    inline void OnCollisionExit(BoxCollider2D& other)
+    {
+        for (auto& comp : components)
+        {
+            comp->OnCollisionExit(other);
+        }
+    }
+
 private:
     bool isActive;
     ComponentList componentsList;

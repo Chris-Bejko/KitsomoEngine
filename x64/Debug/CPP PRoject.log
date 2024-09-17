@@ -1,4 +1,35 @@
-﻿  AssetManager.cpp
+﻿  EngineP.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\FloorSquare.h(13,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(25,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(37,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(42,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(47,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(52,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(86,40): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,42): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
@@ -9,76 +40,5 @@ C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(15,1): message 
           [
               T=Transform
           ]
-  BoxCollider2D.h
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,42): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(15,1): message : see reference to function template instantiation 'T &Entity::AddComponent<Transform,int,int>(int &&,int &&)' being compiled
-          with
-          [
-              T=Transform
-          ]
-  EngineP.cpp
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(24,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(36,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(41,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(46,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(51,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(76,40): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,42): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(15,1): message : see reference to function template instantiation 'T &Entity::AddComponent<Transform,int,int>(int &&,int &&)' being compiled
-          with
-          [
-              T=Transform
-          ]
-  EntityManager.cpp
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\CollisionSystem.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,42): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(15,1): message : see reference to function template instantiation 'T &Entity::AddComponent<Transform,int,int>(int &&,int &&)' being compiled
-          with
-          [
-              T=Transform
-          ]
-  main.cpp
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,42): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(15,1): message : see reference to function template instantiation 'T &Entity::AddComponent<Transform,int,int>(int &&,int &&)' being compiled
-          with
-          [
-              T=Transform
-          ]
-  Generating Code...
+x64\Debug\InputSystem.obj : warning LNK4042: object specified more than once; extras ignored
   CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe

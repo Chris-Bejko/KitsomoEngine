@@ -76,6 +76,11 @@ public:
     {
         return sprite;
     }
+
+    inline void SetColor(const sf::Color &color)
+    {
+        sprite.setColor(color);
+    }
 private:
     int width = 0;
     int height = 0;
