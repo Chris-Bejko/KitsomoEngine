@@ -18,6 +18,7 @@ Engine* Engine::s_instance = nullptr;
 Engine::Engine()
 {
 	isRunning = false;
+	isEngine = true;
 }
 
 Engine::~Engine()
@@ -39,12 +40,9 @@ void Engine::Init()
 	manager = new EntityManager();
 	Entity* newEntity = new Entity();
 	Entity* bot = new Entity();
-	newEntity->AddComponent<Player>();
-	bot->AddComponent<Sprite>("test");
-	bot->transform->position = Vector2F(500, 0);
-	bot->AddComponent<BoxCollider2D>("tag", sf::FloatRect(0, 0, 150, 150));
+	newEntity->AddComponent<Player>(true, Vector2F(100, 100), "player");
+	bot->AddComponent<Player>(false, Vector2F(550, 550), "bot");
 
-	
 	manager->addEntity(newEntity);
 	manager->addEntity(bot);
 	isRunning = true;

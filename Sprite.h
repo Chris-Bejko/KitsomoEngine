@@ -21,7 +21,7 @@ public:
         transform = &entity->GetComponent<Transform>();
         texture = AssetManager::get().getTexture(textureID);
         sprite.setTexture(texture);
-
+        sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
         return true;
     }
 
@@ -34,6 +34,7 @@ public:
     {
         sprite.setPosition(transform->position.x, transform->position.y);
         sprite.setRotation(transform->rotation);
+        sprite.setScale(sf::Vector2f(transform->scale.x, transform->scale.y));
     }
 
     inline int GetHeight()
@@ -46,6 +47,11 @@ public:
         return width;
     }
 
+    inline sf::Vector2f GetScale()
+    {
+        return sprite.getScale();
+    }
+
     inline sf::FloatRect GetGlobalBounds()
     {
         return sprite.getGlobalBounds();
@@ -54,6 +60,21 @@ public:
     inline sf::FloatRect TranslateHitbox(sf::FloatRect& hitbox)
     {
         return sprite.getTransform().transformRect(hitbox);
+    }
+
+    inline sf::Vector2f GetPosition()
+    {
+        return sprite.getPosition();
+    }
+
+    inline sf::Vector2f GetOrigin()
+    {
+        return (sf::Vector2f)texture.getSize() / 2.0f;
+    }
+
+    inline sf::Sprite GetSprite()
+    {
+        return sprite;
     }
 private:
     int width = 0;

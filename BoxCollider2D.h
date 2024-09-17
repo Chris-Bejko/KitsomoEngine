@@ -36,23 +36,37 @@ public:
 			if (!configuredHitbox)
 			{
 				hitbox = sprite->GetGlobalBounds();
-
-				std::cout << hitbox.height << std::endl;
-				std::cout << hitbox.width << std::endl;
-				std::cout << hitbox.left << std::endl;
-				std::cout << hitbox.top << std::endl;
 			}
 
 		}
+
+		SetUpColliderVisuals();
+
+
 		return true;
+	}
+
+	void SetUpColliderVisuals()
+	{
+		colliderVisual.setFillColor(sf::Color::Transparent);
+		colliderVisual.setOutlineColor(sf::Color::Green);
+		colliderVisual.setOutlineThickness(1);
+		//colliderVisual.setPosition(sf::Vector2f(transform->position.x, transform->position.y));
+		colliderVisual.setSize(sf::Vector2f(hitbox.width * transform->scale.x, hitbox.height * transform->scale.y));
+		//colliderVisual.setOrigin(sprite->GetOrigin());
 	}
 
 	void draw() override final
 	{
+		colliderVisual.setRotation(transform->rotation);
+		Engine::get().GetWindow().draw(colliderVisual);
 	}
 
 	void update() override final
 	{
+		//colliderVisual.setPosition(sprite->GetPosition());
+		//colliderVisual.setOrigin(sprite->GetOrigin());
+		colliderVisual.setPosition(GetRect().getPosition());
 	}
 
 	std::string GetCollisionTag() const
@@ -63,15 +77,20 @@ public:
 	sf::FloatRect GetRect()
 	{
 		return sprite->TranslateHitbox(hitbox);
-		//return sprite->GetGlobalBounds();
 	}
 
-
+	sf::Sprite GetSprite()
+	{
+		return sprite->GetSprite();
+	}
 private:
 	friend class Collision;
+	float offset_x, offset_y;
 	std::string collisionTag = "";
 	Transform* transform = nullptr;
 	Sprite* sprite = nullptr;
 	sf::FloatRect hitbox;
 	bool configuredHitbox;
+
+	sf::RectangleShape colliderVisual;
 };

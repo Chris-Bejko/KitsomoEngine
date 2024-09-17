@@ -37,9 +37,11 @@ void EntityManager::Collisions()
 
             auto coll1 = entity->GetComponent<BoxCollider2D>();
             auto coll2 = other->GetComponent<BoxCollider2D>();
-
-            if (CollisionSystem::get().AABB(coll1, coll2))
+          
+            if (CollisionSystem::get().AABB(coll1.GetRect(), coll2.GetRect()))
             {
+                coll1.entity->OnCollisionEnter(coll2);
+                coll2.entity->OnCollisionEnter(coll1);
                 std::cout << "Collision Detected between " << coll1.GetCollisionTag() << "," << coll2.GetCollisionTag() << std::endl;
             }
         }

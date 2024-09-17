@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "System.h"
 #include "SFML/Graphics.hpp"
 #include "BoxCollider2D.h";
@@ -12,7 +12,7 @@ public:
 	bool AABB(sf::FloatRect a, sf::FloatRect b);
 
 
-	bool AABB(BoxCollider2D& colA, BoxCollider2D& colB);
+	bool AABB(BoxCollider2D colA, BoxCollider2D colB);
 
 	inline static CollisionSystem get()
 	{

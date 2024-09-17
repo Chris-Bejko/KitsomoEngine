@@ -9,6 +9,8 @@ constexpr int SCREEN_HEIGHT = 720;
 class Engine
 {
 public:
+    bool isEngine;
+
     Engine();
     ~Engine();
 

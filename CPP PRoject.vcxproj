@@ -154,6 +154,8 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
+    <ClInclude Include="FloorSquare.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderContainer.h" />
     <ClInclude Include="Rigidbody.h" />
@@ -165,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="test.png" />
+    <Image Include="triangle.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

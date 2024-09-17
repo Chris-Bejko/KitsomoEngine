@@ -39,4 +39,9 @@ public:
     {
         position += velocity;
     }
+
+    void LookAt(const float rotation)
+    {
+        this->rotation = rotation;
+    }
 };

@@ -1,4 +1,4 @@
-#include "CollisionSystem.h"
+﻿#include "CollisionSystem.h"
 
 CollisionSystem* CollisionSystem::s_instance = nullptr;
 
@@ -10,7 +10,7 @@ bool CollisionSystem::AABB(sf::FloatRect a, sf::FloatRect b)
 		a.top + a.height > b.top);
 }
 
-bool CollisionSystem::AABB(BoxCollider2D& colA, BoxCollider2D& colB)
+bool CollisionSystem::AABB(BoxCollider2D colA, BoxCollider2D colB)
 {
 	return AABB(colA.GetRect(), colB.GetRect());
 }
