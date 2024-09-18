@@ -24,7 +24,7 @@ public:
         return true;
     }
 
-    void update() override final
+    void update(float dt) override final
     {
         velocity.x = force.x - drag.x;
         velocity.y = force.y + drag.y + gravityScale * GRAVITY * mass;

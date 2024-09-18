@@ -15,7 +15,7 @@ public:
 
 	virtual bool Init() { return true; }
 	virtual void draw() { }
-	virtual void update() { }
+	virtual void update(float dt) { }
 
 	virtual void OnCollisionEnter(BoxCollider2D& other) { }
 	virtual void OnCollisionExit(BoxCollider2D& other) { }

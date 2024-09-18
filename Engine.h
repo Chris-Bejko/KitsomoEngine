@@ -53,4 +53,5 @@ private:
     sf::RenderWindow *window;
     static Engine* s_instance;
     InputSystem* inputSystem;
+    float dt = 1.f;
 };

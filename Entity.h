@@ -66,11 +66,11 @@ public:
         }
     }
 
-    inline void Update()
+    inline void Update(float dt)
     {
         for (auto& comp : components)
         {
-            comp->update();
+            comp->update(dt);
         }
     }
 

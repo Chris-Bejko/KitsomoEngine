@@ -67,9 +67,11 @@ void Engine::Render()
 
 void Engine::Update()
 {
+	sf::Clock deltaClock;
+	manager->update(dt);
 	SystemsManager::get().Update();
 	manager->Collisions();
-	manager->update();
+	dt = deltaClock.restart().asSeconds();
 }
 
 void Engine::Events()

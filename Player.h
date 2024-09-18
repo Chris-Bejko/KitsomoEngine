@@ -27,29 +27,29 @@ public:
 	}
 
 
-	void update() override final
+	void update(float dt) override final
 	{
 		if (!useControls)
 			return;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
-			Move(Vector2F(0.1, 0));
+			Move(Vector2F(moveSpeed * dt, 0));
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		{
-			Move(Vector2F(-0.1, 0));
+			Move(Vector2F(-moveSpeed * dt, 0));
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 		{
-			Move(Vector2F(0, -0.1));
+			Move(Vector2F(0, -moveSpeed * dt));
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		{
-			Move(Vector2F(0, 0.1));
+			Move(Vector2F(0, moveSpeed * dt));
 		}
 
 		LookAtMouse();
@@ -73,6 +73,8 @@ private:
 	bool useControls;
 	Vector2F initPos;
 	std::string initTag;
+
+	float moveSpeed = 1000;
 	void Move(const Vector2F movement)
 	{
 		entity->transform->Translate(movement);

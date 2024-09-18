@@ -12,11 +12,11 @@ void EntityManager::draw()
 	}
 }
 
-void EntityManager::update()
+void EntityManager::update(float dt)
 {
 	for (auto& entity : entities)
 	{
-		entity->Update();
+		entity->Update(dt);
 	}
 }
 

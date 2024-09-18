@@ -30,7 +30,7 @@ public:
         Engine::get().GetWindow().draw(sprite);
     }
 
-    inline void update() override final
+    inline void update(float dt) override final
     {
         sprite.setPosition(transform->position.x, transform->position.y);
         sprite.setRotation(transform->rotation);

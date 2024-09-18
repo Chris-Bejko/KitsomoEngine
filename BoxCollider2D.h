@@ -62,7 +62,7 @@ public:
 		Engine::get().GetWindow().draw(colliderVisual);
 	}
 
-	void update() override final
+	void update(float dt) override final
 	{
 		//colliderVisual.setPosition(sprite->GetPosition());
 		//colliderVisual.setOrigin(sprite->GetOrigin());
