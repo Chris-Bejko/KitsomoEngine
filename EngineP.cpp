@@ -41,11 +41,20 @@ void Engine::Init()
 	manager = new EntityManager();
 	Entity* newEntity = new Entity();
 	Entity* floorSquare = new Entity();
+	Entity* floorSquare1 = new Entity();
+	Entity* floorSquare2 = new Entity();
+	Entity* floorSquare3 = new Entity();
 	newEntity->AddComponent<Player>(true, Vector2F(100, 100), "player");
 	floorSquare->AddComponent<FloorSquare>().Config(Vector2F(250,100), sf::Color(0, 128, 0, 255));
-
+	floorSquare->AddComponent<FloorSquare>().Config(Vector2F(250, 100), sf::Color::Green);
+	floorSquare1->AddComponent<FloorSquare>().Config(Vector2F(550, 159), sf::Color::Red);
+	floorSquare2->AddComponent<FloorSquare>().Config(Vector2F(1000, 500), sf::Color::Magenta);
+	floorSquare3->AddComponent<FloorSquare>().Config(Vector2F(500, 500), sf::Color::Cyan);
 	manager->addEntity(newEntity);
 	manager->addEntity(floorSquare);
+	manager->addEntity(floorSquare1);
+	manager->addEntity(floorSquare2);
+	manager->addEntity(floorSquare3);
 	isRunning = true;
 
 }

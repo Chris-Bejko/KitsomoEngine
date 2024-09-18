@@ -1,2 +1,33 @@
-﻿x64\Debug\InputSystem.obj : warning LNK4042: object specified more than once; extras ignored
+﻿  EngineP.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\FloorSquare.h(13,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Bullet.h(16,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(26,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(55,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(113,40): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(23,36): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(15,1): message : see reference to function template instantiation 'T &Entity::AddComponent<Transform,int,int>(int &&,int &&)' being compiled
+          with
+          [
+              T=Transform
+          ]
   CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe

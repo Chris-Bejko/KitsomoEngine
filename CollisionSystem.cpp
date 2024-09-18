@@ -23,6 +23,9 @@ void CollisionSystem::Update()
 
 bool CollisionSystem::ActiveCollision(std::string a, std::string b)
 {
+	if (a == b)
+		return false;
+
 	auto activeCollisions = Engine::get().GetManager()->GetActiveCollisions();
 	for (auto& active : activeCollisions)
 	{
@@ -42,6 +45,8 @@ bool CollisionSystem::ActiveCollision(std::string a, std::string b)
 
 void CollisionSystem::SetActive(std::string a, std::string b)
 {
+	if (a == b)
+		return;
 	auto activeCollisions = Engine::get().GetManager()->GetActiveCollisions();
 	std::vector<std::string> colliders = { a, b };
 	std::vector<std::string> collidersOpposite = { b, a };
@@ -54,7 +59,8 @@ void CollisionSystem::SetActive(std::string a, std::string b)
 
 void CollisionSystem::SetInactive(std::string a, std::string b)
 {
-
+	if (a == b)
+		return;
 	auto activeCollisions = Engine::get().GetManager()->GetActiveCollisions();
 	std::vector<std::string> vectors = { a,b };
 	std::vector<std::string> vectors2 = { b,a };

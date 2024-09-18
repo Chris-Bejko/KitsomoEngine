@@ -9,7 +9,7 @@ public:
 	bool Init() override final
 	{
 		AssetManager::get().loadTexture("square", "square.png");
-		entity->AddComponent<Sprite>("square");
+		sprite = &entity->AddComponent<Sprite>("square");
 		entity->transform->scale = Vector2F(0.2, 0.2);
 		entity->AddComponent<BoxCollider2D>("floor", sf::FloatRect(0, 0, 125, 125), true);
 
@@ -21,6 +21,7 @@ public:
 		this->color = color;
 		std::cout << color.a << std::endl;
 		entity->transform->position = position;
+		sprite->SetColor(color);
 	}
 
 
@@ -37,4 +38,5 @@ public:
 	}
 private:
 	sf::Color color;
+	Sprite* sprite;
 };

@@ -2,6 +2,7 @@
 
 #include "ECSEngine.h"
 #include "FloorSquare.h"
+#include "Bullet.h"
 
 class Player : public Component
 {
@@ -23,6 +24,10 @@ public:
 		entity->AddComponent<Sprite>("triangle");
 		entity->AddComponent<BoxCollider2D>(initTag, sf::FloatRect(0, 0, 55, 50));
 		entity->transform->scale = Vector2F(0.05, 0.05);
+		Entity* bulletSpawnPoint = new Entity();
+		AssetManager::get().loadTexture("circle", "circle.png");
+		spawnPoint = bulletSpawnPoint->transform;
+		Engine::get().Spawn(bulletSpawnPoint);
 		return true;
 	}
 
@@ -32,6 +37,23 @@ public:
 		if (!useControls)
 			return;
 
+		spawnPoint->position = entity->transform->position;
+		spawnPoint->rotation = entity->transform->rotation;
+		timer += dt;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && timer > cooldown)
+		{
+			timer = 0;
+
+			Entity* bullet = new Entity();
+			std::cout << "Space pressed" << std::endl;
+
+			auto spawned = &bullet->AddComponent<Bullet>();
+			spawned->SetPosition(spawnPoint->position);
+			spawned->SetRotation(entity->transform->rotation);
+			spawned->SetColor(lastColor);
+			Engine::get().GetManager()->addEntity(bullet);
+			spawned->AddForce(Vector2F(0.2, entity->transform->rotation));
+		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			Move(Vector2F(moveSpeed * dt, 0));
@@ -57,10 +79,10 @@ public:
 
 	void OnCollisionEnter(BoxCollider2D& other) override final
 	{
-		if(other.entity->HasComponent<FloorSquare>())
+		if (other.entity->HasComponent<FloorSquare>())
 		{
-			entity->GetComponent<Sprite>().SetColor(other.entity->GetComponent<FloorSquare>().GetColor());
-			//std::cout << other.entity->GetComponent<FloorSquare>().GetColor().toInteger() << std::endl;
+			lastColor = other.entity->GetComponent<FloorSquare>().GetColor();
+			entity->GetComponent<Sprite>().SetColor(lastColor);
 		}
 	}
 
@@ -73,7 +95,10 @@ private:
 	bool useControls;
 	Vector2F initPos;
 	std::string initTag;
-
+	Transform* spawnPoint;
+	sf::Color lastColor;
+	float cooldown = 1;
+	float timer;
 	float moveSpeed = 1000;
 	void Move(const Vector2F movement)
 	{
