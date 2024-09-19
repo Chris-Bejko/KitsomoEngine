@@ -26,8 +26,8 @@ public:
 
     void update(float dt) override final
     {
-        velocity.x = force.x - drag.x;
-        velocity.y = force.y + drag.y + gravityScale * GRAVITY * mass;
+        velocity.x = force.x - drag.x * dt;
+        velocity.y = force.y + drag.y + gravityScale * GRAVITY * mass * dt;
         transform->Translate(velocity);
     }
 

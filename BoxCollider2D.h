@@ -26,7 +26,6 @@ public:
 		configuredHitbox = true;
 	}
 	~BoxCollider2D() {
-		std::cout << "Destroyed box collider for some reason: " << entity << std::endl;
 	}
 
 	bool Init() override final

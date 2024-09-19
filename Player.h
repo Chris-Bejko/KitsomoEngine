@@ -41,9 +41,10 @@ public:
 		spawnPoint->position = entity->transform->position;
 		spawnPoint->rotation = entity->transform->rotation;
 		timer += dt;
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		std::cout << sf::Mouse::isButtonPressed(sf::Mouse::Left) << " , " << ( timer >= cooldown )<< std::endl;
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && timer >= cooldown)
 		{
-			//timer = 0;
+			timer = 0;
 
 			Entity* bullet = new Entity();
 			std::cout << "Space pressed" << std::endl;
@@ -53,7 +54,7 @@ public:
 			spawned->SetRotation(entity->transform->rotation);
 			spawned->SetColor(lastColor);
 			Engine::get().GetManager()->addEntity(bullet);
-			spawned->AddForce(GetMouseVector() * 10);
+			spawned->AddForce(GetMouseVector());
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
@@ -107,7 +108,7 @@ private:
 	std::string initTag;
 	Transform* spawnPoint;
 	sf::Color lastColor;
-	float cooldown = 1;
+	float cooldown = 0.2f;
 	float timer;
 	float moveSpeed = 1000;
 	sf::Vector2i mousePos;
