@@ -42,7 +42,7 @@ struct Vector2
         return v1;
     }
 
-    inline Vector2<T> operator&(const T scalar) const
+    inline Vector2<T> operator*(const T scalar) const
     {
         return Vector2<T>(x * scalar, y * scalar);
     }

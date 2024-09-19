@@ -3,6 +3,7 @@
 #include "ECSEngine.h"
 #include "FloorSquare.h"
 #include "Bullet.h"
+#include <math.h>
 
 class Player : public Component
 {
@@ -40,19 +41,19 @@ public:
 		spawnPoint->position = entity->transform->position;
 		spawnPoint->rotation = entity->transform->rotation;
 		timer += dt;
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && timer > cooldown)
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 		{
-			timer = 0;
+			//timer = 0;
 
 			Entity* bullet = new Entity();
 			std::cout << "Space pressed" << std::endl;
-
+		
 			auto spawned = &bullet->AddComponent<Bullet>();
 			spawned->SetPosition(spawnPoint->position);
 			spawned->SetRotation(entity->transform->rotation);
 			spawned->SetColor(lastColor);
 			Engine::get().GetManager()->addEntity(bullet);
-			spawned->AddForce(Vector2F(0.2, entity->transform->rotation));
+			spawned->AddForce(GetMouseVector() * 10);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
@@ -91,6 +92,15 @@ public:
 		entity->GetComponent<Sprite>().SetColor(sf::Color::Red);
 	}
 
+	Vector2F GetMouseVector()
+	{
+		auto mousePos = Vector2F(this->mousePos.x, this->mousePos.y);
+		auto origin = Vector2F(entity->GetComponent<Sprite>().GetOrigin().x, entity->GetComponent<Sprite>().GetOrigin().y);
+		Vector2F aimDir = mousePos - origin;
+		auto aimDirNorm = aimDir / sqrt(pow(aimDir.x, 2) + pow(aimDir.y, 2));
+		return aimDirNorm;
+	}
+
 private:
 	bool useControls;
 	Vector2F initPos;
@@ -100,6 +110,8 @@ private:
 	float cooldown = 1;
 	float timer;
 	float moveSpeed = 1000;
+	sf::Vector2i mousePos;
+
 	void Move(const Vector2F movement)
 	{
 		entity->transform->Translate(movement);
@@ -107,7 +119,7 @@ private:
 
 	void LookAtMouse()
 	{
-		auto mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
+		mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
 		auto mouseAngle = -atan2(mousePos.x - entity->transform->position.x, mousePos.y - entity->transform->position.y) * 180 / 3.14159;
 
 		entity->transform->LookAt(mouseAngle + 180);

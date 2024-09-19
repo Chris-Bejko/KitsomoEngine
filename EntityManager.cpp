@@ -28,11 +28,11 @@ void EntityManager::update(float dt)
 		entity->Update(dt);
 	}
 
-	//entities.erase(std::remove_if(entities.begin(), entities.end(),
-	//	[](const std::unique_ptr<Entity>& entity) {
-	//		return !entity->IsActive();  // Remove if entity is not active
-	//	}),
-	//	entities.end());
+	entities.erase(std::remove_if(entities.begin(), entities.end(),
+		[](const std::unique_ptr<Entity>& entity) {
+			return !entity->IsActive(); 
+		}),
+		entities.end());
 }
 
 void EntityManager::Collisions()

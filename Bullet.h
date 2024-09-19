@@ -13,7 +13,7 @@ public:
 	bool Init() override final
 	{
 		sprite = &entity->AddComponent<Sprite>("circle");
-		entity->transform->scale = Vector2F(0.1, 0.1f);
+		entity->transform->scale = Vector2F(0.05f, 0.05f);
 		rb = &entity->AddComponent<Rigidbody>(0.f);
 //		entity->AddComponent<BoxCollider2D>("bullet", sf::FloatRect(0, 0, 44, 44), true);
 		return true;
@@ -22,6 +22,11 @@ public:
 	void update(float dt) override final
 	{
 		timer += dt;
+		if(entity->transform->position.x < 0 || entity->transform->position.x > Engine::get().GetWindow().getSize().x
+			|| entity->transform->position.y < 0 || entity->transform->position.y > Engine::get().GetWindow().getSize().y)
+		{
+			Engine::get().GetManager()->eraseEntity(entity);
+		}
 		//if(timer > 5)
 			//Engine::get().GetManager()->eraseEntity(entity);
 

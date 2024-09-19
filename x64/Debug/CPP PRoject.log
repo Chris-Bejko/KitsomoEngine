@@ -1,25 +1,5 @@
-﻿  EngineP.cpp
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\FloorSquare.h(13,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Bullet.h(16,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(26,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(55,1): warning C4305: 'argument': truncation from 'double' to 'T'
-          with
-          [
-              T=float
-          ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Player.h(113,40): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+﻿  EntityManager.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\CollisionSystem.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(23,36): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
