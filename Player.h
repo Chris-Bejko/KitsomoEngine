@@ -28,17 +28,14 @@ public:
 		Entity* bulletSpawnPoint = new Entity("spawnpoint");
 		AssetManager::get().loadTexture("circle", "circle.png");
 		bulletSpawnPoint->AddComponent<Sprite>("circle");
+		bulletSpawnPoint->AddComponent<BoxCollider2D>("test", sf::FloatRect(0,0,0,0), true);
 		spawnPoint = bulletSpawnPoint->transform;
 		spawnPoint->scale = Vector2F(.03f, .03f);
 		Engine::get().Spawn(bulletSpawnPoint);
 		return true;
 	}
-	//auto GetComponentName() const  -> std::string override { return "Player"; }
 
-	//void SetLastCompName() override final
-	//{
-	//	entity->SetLastComponent("Player");
-	//}
+
 	void update(float dt) override final
 	{
 		if (!useControls)

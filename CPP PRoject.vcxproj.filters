@@ -195,7 +195,7 @@
       <Filter>Source Files\imguiHandler</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>Source Files\imguiHandler</Filter>
+      <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,7 +7,7 @@ class Bullet : public Component
 
 public:
 	Bullet() = default;
-	~Bullet() = default;
+	virtual ~Bullet() = default;
 
 
 	bool Init() override final

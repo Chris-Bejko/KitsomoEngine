@@ -7,6 +7,8 @@
 #include "Transform.h"
 #include "imgui.h"
 #include "imgui-SFML.h"
+#include <regex>
+
 class Entity
 {
 public:
@@ -159,22 +161,20 @@ public:
 		ImGui::Text(entityName.c_str());
 		for (auto& e : components)
 		{
-			e->SetLastCompName();
-			ImGui::Text(lastCompName.c_str());
+			std::string str(typeid(*e).name());
+			str = std::regex_replace(str, std::regex("class "), "");
+			ImGui::Text(str.c_str());
 		}
 	}
 
-	inline void SetLastComponentName(std::string str)
-	{
-		lastCompName = str;
-	}
 
 private:
-	bool isOnInspector;
 	bool isActive;
+
 	ComponentList componentsList;
 	ComponentBitset componentsBitset;
+
 	std::string entityName;
-	std::string lastCompName;
+
 	std::vector<std::unique_ptr<Component>> components;
 };

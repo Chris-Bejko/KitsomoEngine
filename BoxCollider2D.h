@@ -25,7 +25,7 @@ public:
 		std::cout << isTrigger << std::endl;
 		configuredHitbox = true;
 	}
-	~BoxCollider2D() {
+	virtual ~BoxCollider2D() {
 	}
 
 

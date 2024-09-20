@@ -22,5 +22,6 @@ void ImguiHandler::Update(sf::Time rest)
 
 	ImGui::Begin("Inspector");
 	Engine::get().GetManager()->DisplayComponents();
+	ImGui::Button("+");
 	ImGui::End();
 }

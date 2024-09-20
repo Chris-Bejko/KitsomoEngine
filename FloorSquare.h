@@ -5,7 +5,9 @@
 class FloorSquare : public Component
 {
 public:
+	FloorSquare() = default;
 
+	virtual ~FloorSquare() = default;
 	bool Init() override final
 	{
 		AssetManager::get().loadTexture("square", "square.png");

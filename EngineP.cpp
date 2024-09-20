@@ -58,7 +58,6 @@ void Engine::Init()
 	Entity* floorSquare3 = new Entity("floorSquare(3)");
 	newEntity->AddComponent<Player>(true, Vector2F(100, 100), "player");
 	floorSquare->AddComponent<FloorSquare>().Config(Vector2F(250, 100), sf::Color(0, 128, 0, 255));
-	floorSquare->AddComponent<FloorSquare>().Config(Vector2F(250, 100), sf::Color::Green);
 	floorSquare1->AddComponent<FloorSquare>().Config(Vector2F(550, 159), sf::Color::Red);
 	floorSquare2->AddComponent<FloorSquare>().Config(Vector2F(1000, 500), sf::Color::Magenta);
 	floorSquare3->AddComponent<FloorSquare>().Config(Vector2F(500, 500), sf::Color::Cyan);
