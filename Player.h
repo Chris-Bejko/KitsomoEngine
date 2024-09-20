@@ -42,6 +42,8 @@ public:
 			return;
 
 		SetSpawnPointPosition();
+		//spawnPoint->position = Vector2F(entity->transform->position.x, entity->transform->position.y - 10);
+		spawnPoint->rotation = entity->transform->rotation;
 		timer += dt;
 		std::cout << sf::Mouse::isButtonPressed(sf::Mouse::Left) << " , " << (timer >= cooldown) << std::endl;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && timer >= cooldown)
@@ -84,10 +86,10 @@ public:
 	void SetSpawnPointPosition()
 	{
 		auto bounds = entity->GetComponent<Sprite>().GetGlobalBounds();
-		spawnPoint->entity->GetComponent<Sprite>().SetOrigin(Vector2F(bounds.left, bounds.top));
+		spawnPoint->entity->GetComponent<Sprite>().SetOrigin(Vector2F(bounds.left + bounds.width / 2, bounds.top));
 		sf::Transform rot;
 		rot.rotate(entity->transform->rotation, entity->transform->position.x, entity->transform->position.y);
-		sf::Vector2f point = rot.transformPoint(bounds.left + bounds.width / 2, bounds.height / 2);
+		sf::Vector2f point = rot.transformPoint(entity->transform->position.x, entity->transform->position.y - 20);
 
 		spawnPoint->position = Vector2F(point.x, point.y);
 		spawnPoint->rotation = entity->transform->rotation;
