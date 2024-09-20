@@ -28,6 +28,7 @@ public:
 	~BoxCollider2D() {
 	}
 
+
 	bool Init() override final
 	{
 		transform = &entity->GetComponent<Transform>();
@@ -42,7 +43,6 @@ public:
 		}
 
 		SetUpColliderVisuals();
-
 
 		return true;
 	}
@@ -70,6 +70,7 @@ public:
 		colliderVisual.setPosition(GetRect().getPosition());
 	}
 
+	
 	std::string GetCollisionTag() const
 	{
 		return collisionTag;

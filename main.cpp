@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
 #include "Engine.h"
+#include "imgui.h"
+#include "imgui-SFML.h"
 
 int main()
 {
@@ -16,6 +18,7 @@ int main()
         engine.Render();
     }
     std::cout << "Loop Broken" << std::endl;
+    ImGui::SFML::Shutdown();
 
     return 0;
 }

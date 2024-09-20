@@ -5,15 +5,18 @@
 #include <memory>
 #include "Component.h"
 #include "Transform.h"
-
+#include "imgui.h"
+#include "imgui-SFML.h"
 class Entity
 {
 public:
+	bool displayComponents;
 	Transform* transform;
-	Entity()
+	Entity(std::string name)
 	{
 		this->transform = &this->AddComponent<Transform>(0, 0);
 		isActive = true;
+		this->entityName = name;
 	}
 	virtual ~Entity() {}
 
@@ -73,6 +76,11 @@ public:
 		{
 			comp->update(dt);
 		}
+
+		//if (!displayComponents)
+			//return;
+
+		//DisplayComponents();
 	}
 
 	inline void OnCollisionEnter(BoxCollider2D& other)
@@ -138,10 +146,35 @@ public:
 		}
 	}
 
+	inline std::string GetName()
+	{
+		return entityName;
+	}
+
+	inline void DisplayComponents()
+	{
+		if (!displayComponents)
+			return;
+
+		ImGui::Text(entityName.c_str());
+		for (auto& e : components)
+		{
+			e->SetLastCompName();
+			ImGui::Text(lastCompName.c_str());
+		}
+	}
+
+	inline void SetLastComponentName(std::string str)
+	{
+		lastCompName = str;
+	}
+
 private:
+	bool isOnInspector;
 	bool isActive;
 	ComponentList componentsList;
 	ComponentBitset componentsBitset;
-
+	std::string entityName;
+	std::string lastCompName;
 	std::vector<std::unique_ptr<Component>> components;
 };

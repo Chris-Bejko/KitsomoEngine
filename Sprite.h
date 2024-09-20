@@ -81,6 +81,15 @@ public:
     {
         sprite.setColor(color);
     }
+
+    inline void SetOrigin(const Vector2F &origin)
+    {
+        sprite.setOrigin(sf::Vector2f(origin.x, origin.y));
+    }
+
+    inline sf::Vector2f GetRotation()
+    {
+    }
 private:
     int width = 0;
     int height = 0;

@@ -31,6 +31,7 @@ public:
     }
     virtual ~Transform() = default;
 
+
     Vector2F position = Vector2F();
     Vector2F scale = Vector2F(1.0f, 1.0f);
     float rotation = 0.0f;

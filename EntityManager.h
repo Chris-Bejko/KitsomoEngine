@@ -3,6 +3,8 @@
 #include <vector>
 #include <memory>
 #include "Entity.h"
+#include "imgui.h"
+#include "imgui-SFML.h"
 
 class EntityManager
 {
@@ -35,6 +37,33 @@ public:
 	{
 		activeCollisions.erase(std::remove(activeCollisions.begin(), activeCollisions.end(), it), activeCollisions.end());
 	}
+
+	void DisplayEntities()
+	{
+		for (auto& e : entities)
+		{
+			if(ImGui::Checkbox(e->GetName().c_str(), &e->displayComponents))
+			{
+				for(auto& a : entities)
+				{
+					if(a->GetName() == e->GetName())
+						continue;
+
+					a->displayComponents = false;
+				}
+			}
+
+		}
+	}
+
+	void DisplayComponents()
+	{
+		for (auto& e : entities)
+		{
+			e->DisplayComponents();
+		}
+	}
+
 
 private:
 	std::vector<std::unique_ptr<Entity>> entities;

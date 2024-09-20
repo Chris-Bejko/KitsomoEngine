@@ -47,7 +47,13 @@ public:
     {
         return manager;
     }
+
+    inline bool IsPlayMode()
+    {
+        return playMode;
+    }
 private:
+    bool playMode;
     EntityManager* manager;
     bool isRunning;
     sf::RenderWindow *window;
