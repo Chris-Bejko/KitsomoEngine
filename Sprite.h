@@ -16,15 +16,26 @@ public:
     {
         textureID = textureId;
     }
-    inline bool Init() override final
+
+    bool Init() override final
     {
+        Serialize();
         transform = &entity->GetComponent<Transform>();
         texture = AssetManager::get().getTexture(textureID);
         sprite.setTexture(texture);
         sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
         return true;
     }
+       
+    std::vector<SerializableVariable>* GetSerializedFields() override final
+    {
+        return &variables;
+    }
 
+    void Serialize()
+    {
+        variables.push_back({ "textureID", &textureID, Char_Type });
+    }
     inline void draw() override final
     {
         Engine::get().GetWindow().draw(sprite);
@@ -91,6 +102,8 @@ public:
     {
     }
 private:
+    std::vector<SerializableVariable> variables;
+
     int width = 0;
     int height = 0;
 

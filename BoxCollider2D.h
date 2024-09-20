@@ -6,32 +6,28 @@
 #include "SFML/Graphics.hpp"
 #include "Sprite.h"
 
-class BoxCollider2D : public Component
+class BoxCollider : public Component
 {
 public:
-	bool isTrigger;
 
-	BoxCollider2D(std::string tag, bool isTrigger = false)
+	BoxCollider(std::string tag, bool isTrigger = false)
 	{
 		collisionTag = tag;
 		configuredHitbox = false;
 		this->isTrigger = isTrigger;
 	}
 
-	BoxCollider2D(std::string tag, sf::FloatRect hitbox, bool isTrigger = false)
+	BoxCollider(const std::string tag, sf::FloatRect hitbox, bool isTrigger = false)
 	{
 		collisionTag = tag;
 		this->hitbox = hitbox;
-		std::cout << isTrigger << std::endl;
 		configuredHitbox = true;
-	}
-	virtual ~BoxCollider2D() {
-	}
 
+	}
+	virtual ~BoxCollider() = default;
 
-	bool Init() override final
+	bool Init() override 
 	{
-		transform = &entity->GetComponent<Transform>();
 		if (entity->HasComponent<Sprite>())
 		{
 			sprite = &entity->GetComponent<Sprite>();
@@ -43,23 +39,38 @@ public:
 		}
 
 		SetUpColliderVisuals();
+		//transform = &entity->GetComponent<Transform>();
+		Serialize();
 
 		return true;
 	}
+	void Serialize()
+	{
+		serializables.clear();
+		serializables.push_back({ "collider Top", &hitbox.top, Float_Type });
+		serializables.push_back({ "collider Left", &hitbox.left, Float_Type });
+		serializables.push_back({ "collider Width", &hitbox.width, Float_Type });
+		serializables.push_back({ "collider Height", &hitbox.height, Float_Type });
+		serializables.push_back({ "Tag", &collisionTag, Char_Type });
+	}
 
+	std::vector<SerializableVariable> *GetSerializedFields() override final
+	{
+		return &serializables;
+	}
 	void SetUpColliderVisuals()
 	{
 		colliderVisual.setFillColor(sf::Color::Transparent);
 		colliderVisual.setOutlineColor(sf::Color::Green);
 		colliderVisual.setOutlineThickness(1);
 		//colliderVisual.setPosition(sf::Vector2f(transform->position.x, transform->position.y));
-		colliderVisual.setSize(sf::Vector2f(hitbox.width * transform->scale.x, hitbox.height * transform->scale.y));
+		colliderVisual.setSize(sf::Vector2f(hitbox.width * entity->transform->scale.x, hitbox.height * entity->transform->scale.y));
 		//colliderVisual.setOrigin(sprite->GetOrigin());
 	}
 
 	void draw() override final
 	{
-		colliderVisual.setRotation(transform->rotation);
+		colliderVisual.setRotation(entity->transform->rotation);
 		Engine::get().GetWindow().draw(colliderVisual);
 	}
 
@@ -71,7 +82,7 @@ public:
 	}
 
 	
-	std::string GetCollisionTag() const
+	std::string GetCollisionTag() 
 	{
 		return collisionTag;
 	}
@@ -85,14 +96,20 @@ public:
 	{
 		return sprite->GetSprite();
 	}
+
+	bool IsTrigger()
+	{
+		return isTrigger;
+	}
 private:
+	std::vector<SerializableVariable> serializables;
 	friend class Collision;
 	float offset_x, offset_y;
-	std::string collisionTag = "";
-	Transform* transform = nullptr;
+	std::string collisionTag;
 	Sprite* sprite = nullptr;
 	sf::FloatRect hitbox;
 	bool configuredHitbox;
+	bool isTrigger;
 
 	sf::RectangleShape colliderVisual;
 };

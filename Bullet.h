@@ -15,7 +15,7 @@ public:
 		sprite = &entity->AddComponent<Sprite>("circle");
 		entity->transform->scale = Vector2F(0.05f, 0.05f);
 		rb = &entity->AddComponent<Rigidbody>(0.f);
-		entity->AddComponent<BoxCollider2D>("bullet", sf::FloatRect(0, 0, 500, 500), true);
+		entity->AddComponent<BoxCollider>("bullet", sf::FloatRect(0, 0, 500, 500), true);
 		return true;
 	}
 
@@ -49,7 +49,7 @@ public:
 		lastColor = color;
 		sprite->SetColor(color);
 	}
-	void OnCollisionEnter(BoxCollider2D& other) override final
+	void OnCollisionEnter(BoxCollider& other) override final
 	{
 		if (other.GetCollisionTag() == "floor")
 		{

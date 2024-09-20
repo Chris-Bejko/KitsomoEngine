@@ -1,10 +1,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Serialization.h"
+#include <vector>
 
 class Entity;
-class BoxCollider2D;
-
+class BoxCollider;
 
 class Component
 {
@@ -16,10 +17,12 @@ public:
 	virtual bool Init() { return true; }
 	virtual void draw() { }
 	virtual void update(float dt) { }
+	virtual std::vector<SerializableVariable>* GetSerializedFields() { return nullptr; }
 
-	virtual void OnCollisionEnter(BoxCollider2D& other) { }
-	virtual void OnCollisionExit(BoxCollider2D& other) { }
-	virtual void OnTriggerEnter(BoxCollider2D& other) { }
-	virtual void OnTriggerExit(BoxCollider2D& other) { }
-	virtual void OnTriggerStay(BoxCollider2D& other) { }
+
+	virtual void OnCollisionEnter(BoxCollider& other) { }
+	virtual void OnCollisionExit(BoxCollider& other) { }
+	virtual void OnTriggerEnter(BoxCollider& other) { }
+	virtual void OnTriggerExit(BoxCollider& other) { }
+	virtual void OnTriggerStay(BoxCollider& other) { }
 };

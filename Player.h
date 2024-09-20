@@ -23,15 +23,15 @@ public:
 		entity->transform->position = initPos;
 		AssetManager::get().loadTexture("triangle", "triangle.png");
 		entity->AddComponent<Sprite>("triangle");
-		entity->AddComponent<BoxCollider2D>(initTag, sf::FloatRect(0, 0, 55, 50));
+		entity->AddComponent<BoxCollider>(initTag, sf::FloatRect(0, 0, 55, 50));
 		entity->transform->scale = Vector2F(0.05, 0.05);
 		Entity* bulletSpawnPoint = new Entity("spawnpoint");
 		AssetManager::get().loadTexture("circle", "circle.png");
 		bulletSpawnPoint->AddComponent<Sprite>("circle");
-		bulletSpawnPoint->AddComponent<BoxCollider2D>("test", sf::FloatRect(0,0,0,0), true);
 		spawnPoint = bulletSpawnPoint->transform;
 		spawnPoint->scale = Vector2F(.03f, .03f);
 		Engine::get().Spawn(bulletSpawnPoint);
+
 		return true;
 	}
 
@@ -43,7 +43,7 @@ public:
 
 		SetSpawnPointPosition();
 		timer += dt;
-		//std::cout << sf::Mouse::isButtonPressed(sf::Mouse::Left) << " , " << (timer >= cooldown) << std::endl;
+		std::cout << sf::Mouse::isButtonPressed(sf::Mouse::Left) << " , " << (timer >= cooldown) << std::endl;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && timer >= cooldown)
 		{
 			timer = 0;
@@ -93,7 +93,7 @@ public:
 		spawnPoint->rotation = entity->transform->rotation;
 	}
 
-	void OnCollisionEnter(BoxCollider2D& other) override final
+	void OnCollisionEnter(BoxCollider& other) override final
 	{
 		if (other.entity->HasComponent<FloorSquare>())
 		{
@@ -102,7 +102,7 @@ public:
 		}
 	}
 
-	void OnCollisionExit(BoxCollider2D& other) override final
+	void OnCollisionExit(BoxCollider& other) override final
 	{
 		entity->GetComponent<Sprite>().SetColor(sf::Color::Red);
 	}

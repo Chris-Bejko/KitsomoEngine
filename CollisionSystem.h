@@ -12,7 +12,7 @@ public:
 	bool AABB(sf::FloatRect a, sf::FloatRect b);
 
 
-	bool AABB(BoxCollider2D colA, BoxCollider2D colB);
+	bool AABB(BoxCollider colA, BoxCollider colB);
 
 	inline static CollisionSystem get()
 	{

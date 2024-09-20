@@ -11,7 +11,7 @@ bool CollisionSystem::AABB(sf::FloatRect a, sf::FloatRect b)
 		a.top + a.height > b.top);
 }
 
-bool CollisionSystem::AABB(BoxCollider2D colA, BoxCollider2D colB)
+bool CollisionSystem::AABB(BoxCollider colA, BoxCollider colB)
 {
 	return AABB(colA.GetRect(), colB.GetRect());
 }

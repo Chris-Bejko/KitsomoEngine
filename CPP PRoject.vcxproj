@@ -148,6 +148,7 @@
     <ClCompile Include="InputSystem.h" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RenderContainer.cpp" />
+    <ClCompile Include="SerializableVariable.cpp" />
     <ClCompile Include="SystemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +178,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="RenderContainer.h" />
     <ClInclude Include="Rigidbody.h" />
+    <ClInclude Include="Serialization.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="SystemManager.h" />

@@ -13,7 +13,7 @@ public:
 		AssetManager::get().loadTexture("square", "square.png");
 		sprite = &entity->AddComponent<Sprite>("square");
 		entity->transform->scale = Vector2F(0.2, 0.2);
-		entity->AddComponent<BoxCollider2D>("floor", sf::FloatRect(0, 0, 125, 125), true);
+
 
 		return true;
 	}
@@ -23,18 +23,17 @@ public:
 		this->color = color;
 		std::cout << color.a << std::endl;
 		entity->transform->position = position;
+		entity->AddComponent<BoxCollider>("floor", sf::FloatRect(0, 0, 125, 125), true);
 		sprite->SetColor(color);
 	}
 
 
 	sf::Color GetColor()
 	{
-		//std::cout << color.g << std::endl;
-
 		return color;
 	}
 
-	void OnTriggerStay(BoxCollider2D& other) override final
+	void OnTriggerStay(BoxCollider& other) override final
 	{
 		std::cout << "On Trigger Stay" << std::endl;
 	}

@@ -39,7 +39,7 @@ void EntityManager::Collisions()
 {
 	for (auto& entity : entities)
 	{
-		if (!entity->HasComponent<BoxCollider2D>())
+		if (!entity->HasComponent<BoxCollider>())
 			continue;
 
 		for (auto& other : entities)
@@ -47,11 +47,11 @@ void EntityManager::Collisions()
 			if (entity == other)
 				continue;
 
-			if (!other->HasComponent<BoxCollider2D>())
+			if (!other->HasComponent<BoxCollider>())
 				continue;
 
-			auto  coll1 = &entity->GetComponent<BoxCollider2D>();
-			auto  coll2 = &other->GetComponent<BoxCollider2D>();
+			auto  coll1 = &entity->GetComponent<BoxCollider>();
+			auto  coll2 = &other->GetComponent<BoxCollider>();
 			if (!&coll1 || !&coll2)
 				return;
 
@@ -68,7 +68,7 @@ void EntityManager::Collisions()
 				}
 
 				CollisionSystem::get().SetActive(coll1->GetCollisionTag(), coll2->GetCollisionTag());
-				if (coll1->isTrigger)
+				if (coll1->IsTrigger())
 				{
 					coll1->entity->OnTriggerEnter(*coll2);
 				}
@@ -76,7 +76,7 @@ void EntityManager::Collisions()
 				{
 					coll1->entity->OnCollisionEnter(*coll2);
 				}
-				if (coll2->isTrigger)
+				if (coll2->IsTrigger())
 				{
 					coll2->entity->OnTriggerEnter(*coll1);
 				}
@@ -89,7 +89,7 @@ void EntityManager::Collisions()
 			{
 				if (CollisionSystem::get().ActiveCollision(coll1->GetCollisionTag(), coll2->GetCollisionTag()))
 				{
-					if (coll1->isTrigger)
+					if (coll1->IsTrigger())
 					{
 						coll1->entity->OnTriggerExit(*coll2);
 					}
@@ -97,7 +97,7 @@ void EntityManager::Collisions()
 					{
 						coll1->entity->OnCollisionExit(*coll2);
 					}
-					if (coll2->isTrigger)
+					if (coll2->IsTrigger())
 					{
 						coll2->entity->OnTriggerExit(*coll1);
 					}

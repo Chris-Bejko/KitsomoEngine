@@ -29,8 +29,8 @@ public:
 		std::unique_ptr<Component> uptr{ comp };
 		components.emplace_back(std::move(uptr));
 
-		comp->entity = this;
 
+		comp->entity = this;
 		if (comp->Init())
 		{
 			componentsList[getComponentTypeID<T>()] = comp;
@@ -78,14 +78,9 @@ public:
 		{
 			comp->update(dt);
 		}
-
-		//if (!displayComponents)
-			//return;
-
-		//DisplayComponents();
 	}
 
-	inline void OnCollisionEnter(BoxCollider2D& other)
+	inline void OnCollisionEnter(BoxCollider& other)
 	{
 		if (&other == nullptr)
 			return;
@@ -98,7 +93,7 @@ public:
 
 	}
 
-	inline void OnTriggerEnter(BoxCollider2D& other)
+	inline void OnTriggerEnter(BoxCollider& other)
 	{
 		if (&other == nullptr)
 			return;
@@ -110,7 +105,7 @@ public:
 			comp->OnTriggerEnter(other);
 		}
 	}
-	inline void OnTriggerStay(BoxCollider2D& other)
+	inline void OnTriggerStay(BoxCollider& other)
 	{
 		if (&other == nullptr)
 			return;
@@ -122,7 +117,7 @@ public:
 			comp->OnTriggerStay(other);
 		}
 	}
-	inline void OnTriggerExit(BoxCollider2D& other)
+	inline void OnTriggerExit(BoxCollider& other)
 	{
 		if (&other == nullptr)
 			return;
@@ -135,7 +130,7 @@ public:
 		}
 	}
 
-	inline void OnCollisionExit(BoxCollider2D& other)
+	inline void OnCollisionExit(BoxCollider& other)
 	{
 		if (&other == nullptr)
 			return;
@@ -163,7 +158,41 @@ public:
 		{
 			std::string str(typeid(*e).name());
 			str = std::regex_replace(str, std::regex("class "), "");
+			if (e->GetSerializedFields() == nullptr)
+				continue;
+
+
+			std::cout << e->GetSerializedFields()->size() << std::endl;
+			ImGui::BeginChild(str.c_str());
+
 			ImGui::Text(str.c_str());
+			for (auto it = e->GetSerializedFields()->begin(); it != e->GetSerializedFields()->end(); ++it) {
+				ImGui::Text(it->name);
+				switch (it->type)
+				{
+				case Int_Type:
+					break;
+				case Float_Type:
+				{
+					float temp = it->read();
+					ImGui::InputFloat(it->name, &temp);
+					it->assign(temp);
+					break;
+				}
+				case Char_Type:
+				{
+					auto temp1 = it->data;
+					auto temp = *((char*)temp1);
+					ImGui::InputText(it->name, &temp, 50);
+					break;
+				}
+				case Bool_Type:
+					break;
+				default:
+					assert(0);
+				}
+			}
+			ImGui::EndChild();
 		}
 	}
 

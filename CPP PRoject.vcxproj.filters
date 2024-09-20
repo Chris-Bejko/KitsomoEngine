@@ -52,6 +52,9 @@
     <Filter Include="Source Files\imguiHandler">
       <UniqueIdentifier>{0237ca5b-29ee-49b9-8b47-49e172808032}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ECS\Reflection">
+      <UniqueIdentifier>{14334d81-f68a-40c9-b7c1-972be8772697}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -101,6 +104,9 @@
     </ClCompile>
     <ClCompile Include="imguiHandler.cpp">
       <Filter>Source Files\imguiHandler</Filter>
+    </ClCompile>
+    <ClCompile Include="SerializableVariable.cpp">
+      <Filter>Source Files\ECS\Reflection</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Source Files\Game\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Serialization.h">
+      <Filter>Source Files\ECS\Reflection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
