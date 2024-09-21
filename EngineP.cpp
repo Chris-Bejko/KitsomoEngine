@@ -130,6 +130,10 @@ void Engine::Spawn(Entity* entity)
 	manager->addEntity(entity);
 }
 
+size_t Engine::GetTotalEntities()
+{
+	return manager->GetTotalEntities();
+}
 
 void Engine::Save()
 {
@@ -138,11 +142,9 @@ void Engine::Save()
 	myFile.open("saveFile.txt");
 	for (auto& e : entitiesAndComps)
 	{
-		std::cout << e.entityName << std::endl;
 		myFile << "ENTITY_NAME_" << e.entityName << "_ENTITY_NAME_E_";
 		for (auto& c : e.components)
 		{
-			std::cout << c.componentName << std::endl;
 			myFile << "_COMPONENTS_LIST_";
 			myFile << "_COMPONENT_NAME_" << c.componentName;
 			myFile << "_COMPONENT_NAME_E_";
@@ -152,15 +154,11 @@ void Engine::Save()
 				myFile << ":" << f.name << "::";
 				myFile << "," << f.read() << ",,";
 				myFile << ";" << f.type << ";;";
-				std::cout << f.name << " , " << f.read() << std::endl;
-				//myFile << "_FIELD_E_";
 			}
-			//myFile << "_COMPONENTS_LIST_";
 		}
 		myFile << "\n";
 	}
 	myFile.close();
-	std::cout << "FIle saved?" << std::endl;
 }
 
 void Engine::Load()
@@ -180,29 +178,16 @@ void Engine::Load()
 	{
 		SerializableEntity ent;
 		std::string delStart = "ENTITY_NAME_";
-		std::string delEnd = "ENTITY_NAME_E_";
-
-		auto first = line.find(delStart);
-		auto last = line.find(delEnd);
-		ent.entityName = line.substr(first + delStart.length(), last - delEnd.length() + 1);
-		//std::cout << first << "," << last << std::endl;
-		std::cout << ent.entityName << std::endl;
-		line.erase(first, last - first + delEnd.length() + 1);
+		std::string delEnd = "_ENTITY_NAME_E_";
+		ent.entityName = GetSubstring(line, delStart, delEnd, true);
 		std::size_t pos = 0;
 		std::string delimiter = "_COMPONENTS_LIST_";
-		//std::cout << line << std::endl;
 		while ((pos = line.find(delimiter)) != std::string::npos)
 		{
 			delStart = "_COMPONENT_NAME_";
 			delEnd = "_COMPONENT_NAME_E_";
-			first = line.find(delStart);
-			last = line.find(delEnd);
 			SerializableComponent comp;
-			std::cout << line.substr(first + delStart.length(), last - (first + delStart.length())) << std::endl;
-			std::cout << first << "," << last << std::endl;
-			comp.componentName = line.substr(first + delStart.length(), last - (first + delStart.length()));
-			std::cout << comp.componentName << std::endl;
-			line.erase(first, last - first + delEnd.length() + 1);
+			comp.componentName = GetSubstring(line, delStart, delEnd, true);
 
 			std::size_t fieldPos = 0;
 			std::string delField = "_FIELD_";
@@ -210,36 +195,28 @@ void Engine::Load()
 			{
 				delStart = ":";
 				delEnd = "::";
-				first = line.find(delStart);
-				last = line.find(delEnd);
-				std::cout << line.substr(first + delStart.length(), last - (first + delStart.length())) << std::endl;
-				//line.erase(first, last - first + delEnd.length() + 1);
+				auto fieldName = GetSubstring(line, delStart, delEnd, false);
 
 				delStart = ",";
 				delEnd = ",,";
-				first = line.find(delStart);
-				last = line.find(delEnd);
-				std::cout << line.substr(first + delStart.length(), last - (first + delStart.length())) << std::endl;
-				//line.erase(first, last - first + delEnd.length() + 1);
+				auto fieldValue = GetSubstring(line, delStart, delEnd, false);
 
 				delStart = ";";
 				delEnd = ";;";
-				first = line.find(delStart);
-				last = line.find(delEnd);
-				std::cout << line.substr(first + delStart.length(), last - (first + delStart.length())) << std::endl;
-				//line.erase(first, last - first + delEnd.length() + 1);
-				
-				
-				
+				auto fieldType = GetSubstring(line, delStart, delEnd, false);
+
+				SerializableVariable var;
+				var.name = fieldName.c_str();
+				var.type = std::stoi(fieldType);
+				var.data = &fieldValue;
+				comp.fields.push_back(var);
 				line.erase(0, fieldPos + delField.length());
 
 			}
-			//std::cout << line.substr(0, pos) << std::endl;
-			std::cout << "\n";
+			ent.components.push_back(comp);
 			line.erase(0, pos + delimiter.length());
 		}
-		std::cout << line.length() << std::endl;
-		//auto fieldsFirst = line.find_first_of("")
+		entities.push_back(ent);
 	}
 
 
@@ -267,5 +244,17 @@ void Engine::Load()
 		}
 		manager->addEntity(ent);
 	}
+}
+
+std::string Engine::GetSubstring(std::string& line, std::string& delStart, std::string& delEnd, bool erase = false)
+{
+	auto first = line.find(delStart);
+	auto last = line.find(delEnd);
+	SerializableComponent comp;
+	auto final = line.substr(first + delStart.length(), last - (first + delStart.length()));
+	if(erase)
+		line.erase(first, last - first + delEnd.length() + 1);
+
+	return final;
 }
 

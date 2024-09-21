@@ -25,6 +25,8 @@ public:
 
 	std::vector<SerializableEntity> SerializeEntities();
 
+	std::size_t GetTotalEntities();
+
 	std::vector<std::vector<std::string>> GetActiveCollisions()
 	{
 		return activeCollisions;

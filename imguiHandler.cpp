@@ -30,7 +30,7 @@ void ImguiHandler::Update(sf::Time rest)
 	ImGui::Begin("Entities");
 	if(ImGui::Button("+"))
 	{
-		Engine::get().Spawn(new Entity("New Entity"));
+		Engine::get().Spawn(new Entity("New Entity " + Engine::get().GetTotalEntities()));
 	}
 	Engine::get().GetManager()->DisplayEntities();
 	ImGui::End();

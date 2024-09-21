@@ -33,6 +33,11 @@ void EntityManager::update(float dt)
 		entities.end());
 }
 
+size_t EntityManager::GetTotalEntities()
+{
+	return entities.size();
+}
+
 void EntityManager::Collisions()
 {
 	if (Engine::get().isEngine)

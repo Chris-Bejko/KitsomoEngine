@@ -25,9 +25,13 @@ public:
 
     void Spawn(Entity* entity);
 
+    size_t GetTotalEntities();
+
     void Save();
 
     void Load();
+
+    std::string GetSubstring(std::string & line, std::string & delStart, std::string & delEnd, bool erase);
 
     inline static Engine& get()
     {
