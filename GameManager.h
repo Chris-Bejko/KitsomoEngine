@@ -1,6 +1,5 @@
 #pragma once
 #include "ECSEngine.h"
-#include "FloorSquare.h"
 
 class GameManager : public Component
 {

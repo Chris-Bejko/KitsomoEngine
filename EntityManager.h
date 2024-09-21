@@ -42,13 +42,15 @@ public:
 	{
 		for (auto& e : entities)
 		{
-			if(ImGui::Checkbox(e->GetName().c_str(), &e->displayComponents))
+			auto temp = e->GetName();
+			if(ImGui::Checkbox(temp.c_str(), &e->displayComponents))
 			{
 				for(auto& a : entities)
 				{
 					if(a->GetName() == e->GetName())
+					{
 						continue;
-
+					}
 					a->displayComponents = false;
 				}
 			}

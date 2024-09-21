@@ -4,10 +4,13 @@
 #include <vector>
 #include <memory>
 #include "Component.h"
-#include "Transform.h"
+#include "Components/Transform.h"
+
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include <regex>
+#include <filesystem>
+#include <iostream>
 
 class Entity
 {
@@ -16,8 +19,9 @@ public:
 	Transform* transform;
 	Entity(std::string name)
 	{
-		this->transform = &this->AddComponent<Transform>(0, 0);
+		//this->transform = &this->AddComponent<Transform>(0, 0);
 		isActive = true;
+		SaveAvailableComponents();
 		this->entityName = name;
 	}
 	virtual ~Entity() {}
@@ -78,6 +82,7 @@ public:
 		{
 			comp->update(dt);
 		}
+
 	}
 
 	inline void OnCollisionEnter(BoxCollider& other)
@@ -145,7 +150,27 @@ public:
 
 	inline std::string GetName()
 	{
+		if (entityName.empty())
+			return "##";
 		return entityName;
+	}
+
+	inline void SetName(std::string name)
+	{
+		if (name.empty())
+			entityName = "##";
+		else
+			entityName = name;
+	}
+
+	inline void SaveAvailableComponents()
+	{
+		std::string path = "Components/";
+		for (const auto& entry : std::filesystem::directory_iterator(path))
+		{
+			std::string path_string{ entry.path().u8string() };
+			availableComponents.push_back(path_string);
+		}
 	}
 
 	inline void DisplayComponents()
@@ -153,7 +178,16 @@ public:
 		if (!displayComponents)
 			return;
 
-		ImGui::Text(entityName.c_str());
+		ImGui::Checkbox("+", &addingNewComp);
+
+		auto windowWidth = ImGui::GetWindowSize().x;
+		auto textWidth = ImGui::CalcTextSize(GetName().c_str()).x;
+
+		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+		auto temp = GetName();
+		auto temp1 = &temp[0];
+		ImGui::InputText("Name", temp1, 55);
+		SetName(temp);
 		for (auto& e : components)
 		{
 			std::string str(typeid(*e).name());
@@ -161,17 +195,23 @@ public:
 			if (e->GetSerializedFields() == nullptr)
 				continue;
 
-
-			std::cout << e->GetSerializedFields()->size() << std::endl;
 			ImGui::BeginChild(str.c_str());
+			auto windowWidth = ImGui::GetWindowSize().x;
+			auto textWidth = ImGui::CalcTextSize(str.c_str()).x;
 
+			ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
 			ImGui::Text(str.c_str());
 			for (auto it = e->GetSerializedFields()->begin(); it != e->GetSerializedFields()->end(); ++it) {
 				ImGui::Text(it->name);
 				switch (it->type)
 				{
 				case Int_Type:
+				{
+					int temp = it->read();
+					ImGui::InputInt(it->name, &temp);
+					it->assign(temp);
 					break;
+				}
 				case Float_Type:
 				{
 					float temp = it->read();
@@ -187,9 +227,42 @@ public:
 					break;
 				}
 				case Bool_Type:
+				{
+					auto temp1 = it->data;
+					auto temp = *((bool*)temp1);
+					//ImGui::Checkbox(it->name, &temp);
 					break;
+				}
 				default:
 					assert(0);
+				}
+			}
+			ImGui::EndChild();
+		}
+		DisplayAvailableComponents();
+
+
+	}
+
+	void DisplayAvailableComponents()
+	{
+		if (addingNewComp)
+		{
+			ImGui::BeginChild("Add Component");
+			std::cout << components.size() << std::endl;
+			for (auto& comp : availableComponents)
+			{
+				std::string str(comp);
+				str = std::regex_replace(str, std::regex("Components/"), "");
+				str = std::regex_replace(str, std::regex(".h"), "");
+				auto temp = str.c_str();
+				if (ImGui::Button(temp))
+				{
+					if(str == "Transform")
+					{
+						std::cout << "Adding player" << std::endl;
+						this->AddComponent<Transform>();
+					}
 				}
 			}
 			ImGui::EndChild();
@@ -200,6 +273,8 @@ public:
 private:
 	bool isActive;
 
+	std::vector<std::string> availableComponents;
+	bool addingNewComp = false;
 	ComponentList componentsList;
 	ComponentBitset componentsBitset;
 

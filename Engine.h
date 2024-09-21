@@ -1,5 +1,4 @@
 #pragma once
-#include "Engine.h"
 #include "../EntityManager.h"
 #include "../InputSystem.h"
 

@@ -1,17 +1,17 @@
-#include "../Sprite.h"
+#include "Components/Sprite.h"
 #include "Engine.h"
 #include <iostream>
 #include "../AssetManager.h"
 #include "../EntityManager.h"
 #include "../Entity.h"
 #include "../RenderContainer.h"
-#include "../Rigidbody.h"
+#include "Components/Rigidbody.h"
 #include "SystemManager.h"
 #include "../InputSystem.h"
 //#include "Collision.h"
 #include <cassert>
 #include "Engine.h"
-#include "Player.h"
+#include "Components/Player.h"
 #include "GameManager.h"
 #include  "imgui.h"
 #include  "imgui-sfml.h"
@@ -51,7 +51,7 @@ void Engine::Init()
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
-	Entity* newEntity = new Entity("Player");
+	/*Entity* newEntity = new Entity("Player");
 	Entity* floorSquare = new Entity("floor Square");
 	Entity* floorSquare1 = new Entity("floor Square(1)");
 	Entity* floorSquare2 = new Entity("floor Square(2)");
@@ -65,7 +65,7 @@ void Engine::Init()
 	manager->addEntity(floorSquare);
 	manager->addEntity(floorSquare1);
 	manager->addEntity(floorSquare2);
-	manager->addEntity(floorSquare3);
+	manager->addEntity(floorSquare3);*/
 	isRunning = true;
 
 }
@@ -91,8 +91,8 @@ void Engine::Update()
 	bool checkBox;
 	sf::Clock deltaClock;
 	manager->update(dt);
-	SystemsManager::get().Update();
 	manager->Collisions();
+	SystemsManager::get().Update();
 	auto rest = deltaClock.restart();
 	ImguiHandler::get().Update(rest);
 	//ImGui::Begin("Entities");

@@ -66,7 +66,7 @@
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files\ECS\AssetManager</Filter>
     </ClCompile>
-    <ClCompile Include="BoxCollider2D.h">
+    <ClCompile Include="Components\BoxCollider2D.h">
       <Filter>Source Files\ECS\Base Components</Filter>
     </ClCompile>
     <ClCompile Include="InputSystem.h">
@@ -116,13 +116,13 @@
     <ClInclude Include="AssetManager.h">
       <Filter>Source Files\ECS\AssetManager</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
+    <ClInclude Include="Components\Transform.h">
       <Filter>Source Files\ECS\Base Components</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
+    <ClInclude Include="Components\Sprite.h">
       <Filter>Source Files\ECS\Base Components</Filter>
     </ClInclude>
-    <ClInclude Include="Rigidbody.h">
+    <ClInclude Include="Components\Rigidbody.h">
       <Filter>Source Files\ECS\Base Components</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
@@ -152,7 +152,7 @@
     <ClInclude Include="EntityManager.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="FloorSquare.h">
+    <ClInclude Include="Components\FloorSquare.h">
       <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
@@ -167,7 +167,7 @@
     <ClInclude Include="CollisionTuple.h">
       <Filter>Source Files\ECS\Base Data STr</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
+    <ClInclude Include="Components\Bullet.h">
       <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
@@ -200,7 +200,7 @@
     <ClInclude Include="imguiHandler.h">
       <Filter>Source Files\imguiHandler</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
+    <ClInclude Include="Components\Player.h">
       <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="Serialization.h">

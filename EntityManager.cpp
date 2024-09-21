@@ -1,8 +1,8 @@
 #include "EntityManager.h"
 #include "Entity.h"
-#include "Rigidbody.h"
+#include "Components/Rigidbody.h"
 #include "CollisionSystem.h"
-#include "BoxCollider2D.h"
+#include "Components/BoxCollider2D.h"
 
 void EntityManager::draw()
 {
@@ -14,9 +14,7 @@ void EntityManager::draw()
 
 void EntityManager::update(float dt)
 {
-
-
-	while(to_add.size() > 0)
+	while (to_add.size() > 0)
 	{
 		entities.push_back(std::move(to_add.back()));
 
@@ -30,13 +28,15 @@ void EntityManager::update(float dt)
 
 	entities.erase(std::remove_if(entities.begin(), entities.end(),
 		[](const std::unique_ptr<Entity>& entity) {
-			return !entity->IsActive(); 
+			return !entity->IsActive();
 		}),
 		entities.end());
 }
 
 void EntityManager::Collisions()
 {
+	if (Engine::get().isEngine)
+		return;
 	for (auto& entity : entities)
 	{
 		if (!entity->HasComponent<BoxCollider>())

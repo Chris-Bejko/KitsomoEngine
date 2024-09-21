@@ -13,15 +13,30 @@ void ImguiHandler::DisplayEntities(std::vector<std::unique_ptr<Entity>> entities
 void ImguiHandler::Update(sf::Time rest)
 {
 	ImGui::SFML::Update(Engine::get().GetWindow(), rest);
+	ImGui::Begin("!");
+	if(ImGui::Button("Pause"))
+	{
+		Engine::get().isEngine = true;
+	}
+	if(ImGui::Button("Play"))
+	{
+		Engine::get().isEngine = false;
+	}
 
+
+	ImGui::End();
+	if (!Engine::get().isEngine)
+		return;
 	ImGui::Begin("Entities");
-	ImGui::Button("+");
+	if(ImGui::Button("+"))
+	{
+		Engine::get().Spawn(new Entity("New Entity"));
+	}
 	Engine::get().GetManager()->DisplayEntities();
 	ImGui::End();
 
 
 	ImGui::Begin("Inspector");
 	Engine::get().GetManager()->DisplayComponents();
-	ImGui::Button("+");
 	ImGui::End();
 }

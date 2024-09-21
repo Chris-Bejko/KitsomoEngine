@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,6 +123,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)\include;$(SolutionDir)\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,7 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="BoxCollider2D.h" />
+    <ClCompile Include="Components\BoxCollider2D.h" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="EngineP.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -154,7 +156,7 @@
   <ItemGroup>
     <ClInclude Include="..\SDL ECS\ECS\Engine\Engine.h" />
     <ClInclude Include="AssetManager.h" />
-    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Components\Bullet.h" />
     <ClInclude Include="CollisionSystem.h" />
     <ClInclude Include="CollisionTuple.h" />
     <ClInclude Include="Component.h" />
@@ -163,7 +165,7 @@
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
-    <ClInclude Include="FloorSquare.h" />
+    <ClInclude Include="Components\FloorSquare.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="imguiHandler.h" />
     <ClInclude Include="imgui\imconfig-SFML.h" />
@@ -175,14 +177,14 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="Player.h" />
+    <ClInclude Include="Components\Player.h" />
     <ClInclude Include="RenderContainer.h" />
-    <ClInclude Include="Rigidbody.h" />
+    <ClInclude Include="Components\Rigidbody.h" />
     <ClInclude Include="Serialization.h" />
-    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Components\Sprite.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="SystemManager.h" />
-    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Components\Transform.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>
