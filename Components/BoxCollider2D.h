@@ -47,11 +47,11 @@ public:
 	void Serialize()
 	{
 		serializables.clear();
-		serializables.push_back({ "collider Top", &hitbox.top, Float_Type });
-		serializables.push_back({ "collider Left", &hitbox.left, Float_Type });
-		serializables.push_back({ "collider Width", &hitbox.width, Float_Type });
-		serializables.push_back({ "collider Height", &hitbox.height, Float_Type });
-		serializables.push_back({ "Tag", &collisionTag, Char_Type });
+		serializables.push_back({ "collider Top", &hitbox.top, float_Type });
+		serializables.push_back({ "collider Left", &hitbox.left, float_Type });
+		serializables.push_back({ "collider Width", &hitbox.width, float_Type });
+		serializables.push_back({ "collider Height", &hitbox.height, float_Type });
+		serializables.push_back({ "Tag", &collisionTag, char_Type });
 	}
 
 	std::vector<SerializableVariable> *GetSerializedFields() override final

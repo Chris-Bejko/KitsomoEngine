@@ -205,28 +205,28 @@ public:
 				ImGui::Text(it->name);
 				switch (it->type)
 				{
-				case Int_Type:
+				case int_Type:
 				{
 					int temp = it->read();
 					ImGui::InputInt(it->name, &temp);
 					it->assign(temp);
 					break;
 				}
-				case Float_Type:
+				case float_Type:
 				{
 					float temp = it->read();
 					ImGui::InputFloat(it->name, &temp);
 					it->assign(temp);
 					break;
 				}
-				case Char_Type:
+				case char_Type:
 				{
 					auto temp1 = it->data;
 					auto temp = *((char*)temp1);
 					ImGui::InputText(it->name, &temp, 50);
 					break;
 				}
-				case Bool_Type:
+				case bool_Type:
 				{
 					auto temp1 = it->data;
 					auto temp = *((bool*)temp1);
@@ -249,7 +249,6 @@ public:
 		if (addingNewComp)
 		{
 			ImGui::BeginChild("Add Component");
-			std::cout << components.size() << std::endl;
 			for (auto& comp : availableComponents)
 			{
 				std::string str(comp);
@@ -267,6 +266,24 @@ public:
 			}
 			ImGui::EndChild();
 		}
+	}
+
+	std::vector<SerializableComponent> GetAllComponentVariables()
+	{
+		std::vector<SerializableComponent> variables;
+		for(auto& c : components)
+		{
+			if(c->GetSerializedFields() != nullptr)
+			{
+				SerializableComponent ser;
+				std::string str(typeid(*c).name());
+				str = std::regex_replace(str, std::regex("class "), "");
+				ser.componentName = str;
+				ser.fields = *c->GetSerializedFields();
+				variables.push_back(ser);
+			}
+		}
+		return variables;
 	}
 
 

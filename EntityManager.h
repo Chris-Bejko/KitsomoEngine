@@ -23,6 +23,8 @@ public:
 
 	Entity* cloneEntity(Entity* ent);
 
+	std::vector<SerializableEntity> SerializeEntities();
+
 	std::vector<std::vector<std::string>> GetActiveCollisions()
 	{
 		return activeCollisions;

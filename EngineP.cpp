@@ -16,6 +16,7 @@
 #include  "imgui.h"
 #include  "imgui-sfml.h"
 #include "imguiHandler.h"
+#include <fstream>
 
 Engine* Engine::s_instance = nullptr;
 
@@ -51,6 +52,8 @@ void Engine::Init()
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
+	std::ofstream txtFile;
+	Load();
 	/*Entity* newEntity = new Entity("Player");
 	Entity* floorSquare = new Entity("floor Square");
 	Entity* floorSquare1 = new Entity("floor Square(1)");
@@ -112,6 +115,9 @@ void Engine::Events()
 	ImGui::SFML::ProcessEvent(event);
 	if (event.type == sf::Event::Closed)
 		Clean();
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		Save();
 }
 
 sf::RenderWindow& Engine::GetWindow()
@@ -122,4 +128,60 @@ sf::RenderWindow& Engine::GetWindow()
 void Engine::Spawn(Entity* entity)
 {
 	manager->addEntity(entity);
+}
+
+
+void Engine::Save()
+{
+	auto entitiesAndComps = manager->SerializeEntities();
+	std::ofstream myFile;
+	myFile.open("saveFile.txt");
+	for (auto& e : entitiesAndComps)
+	{
+		std::cout << e.entityName << std::endl;
+		myFile << e.entityName << "\n";
+		for (auto& c : e.components)
+		{
+			std::cout << c.componentName << std::endl;
+			myFile << c.componentName << "\n";
+			for (auto& f : c.fields)
+			{
+				myFile << f.name << " ";
+				myFile << f.read() << " ";
+				myFile << f.type << " ";
+				std::cout << f.name << " , " << f.read() << std::endl;
+			}
+		}
+	}
+	myFile.close();
+	std::cout << "FIle saved?" << std::endl;
+}
+
+void Engine::Load()
+{
+	//convert file to std::vector<SerializableEntity>();
+	std::vector<SerializableEntity> entities;
+	std::vector<SerializableComponent> components;
+	std::vector<SerializableVariable> variables;
+	variables.push_back({ "position.x", 0, float_Type });
+	variables.push_back({ "position.y", 0, float_Type });
+	variables.push_back({ "rotation", 0, float_Type });
+	variables.push_back({ "scale.x" , 0, float_Type });
+	variables.push_back({ "scale.y", 0, float_Type });
+
+
+	components.push_back({ "Transform", variables });
+	entities.push_back({ "New Entity", components });
+	for (auto& e : entities)
+	{
+		Entity* ent = new Entity(e.entityName);
+		for (auto& c : e.components)
+		{
+			if (c.componentName == "Transform")
+			{
+				ent->AddComponent<Transform>().SetSerializedFields(c.fields);
+			}
+		}
+		manager->addEntity(ent);
+	}
 }

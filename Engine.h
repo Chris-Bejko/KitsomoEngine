@@ -25,6 +25,10 @@ public:
 
     void Spawn(Entity* entity);
 
+    void Save();
+
+    void Load();
+
     inline static Engine& get()
     {
         if (s_instance == nullptr)

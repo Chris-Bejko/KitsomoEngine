@@ -34,7 +34,7 @@ public:
 
     void Serialize()
     {
-        variables.push_back({ "textureID", &textureID, Char_Type });
+        variables.push_back({ "textureID", &textureID, char_Type });
     }
     inline void draw() override final
     {

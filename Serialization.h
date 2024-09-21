@@ -8,10 +8,10 @@
 enum VariableType
 {
 	None = 0,
-	Int_Type,
-	Float_Type,
-	Char_Type,
-	Bool_Type,
+	int_Type,
+	float_Type,
+	char_Type,
+	bool_Type,
 };
 
 
@@ -23,4 +23,16 @@ struct SerializableVariable
 
 	void assign(double number);
 	double read(); 
+};
+
+struct SerializableComponent
+{
+	std::string componentName;
+	std::vector<SerializableVariable> fields;
+};
+
+struct SerializableEntity
+{
+	std::string entityName;
+	std::vector<SerializableComponent> components;
 };

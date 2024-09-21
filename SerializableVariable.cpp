@@ -6,16 +6,16 @@ double SerializableVariable::read()
 {
 	switch (type)
 	{
-	case Int_Type:
+	case int_Type:
 		return *((int*)data);
 		break;
-	case Float_Type:
+	case float_Type:
 		return *((float*)data);
 		break;
-	case Char_Type:
+	case char_Type:
 		return *((char*)data);
 		break;
-	case Bool_Type:
+	case bool_Type:
 		return *((bool*)data);
 		break;
 	default:
@@ -29,16 +29,16 @@ void SerializableVariable::assign(double number)
 {
 	switch (type)
 	{
-	case Int_Type:
+	case int_Type:
 		*((int*)data) = number;
 		break;
-	case Float_Type:
+	case float_Type:
 		*((float*)data) = number;
 		break;
-	case Char_Type:
+	case char_Type:
 		*((char*)data) = number;
 		break;
-	case Bool_Type:
+	case bool_Type:
 		*((bool*)data) = number;
 		break;
 	default:

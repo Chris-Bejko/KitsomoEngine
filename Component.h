@@ -18,6 +18,7 @@ public:
 	virtual void draw() { }
 	virtual void update(float dt) { }
 	virtual std::vector<SerializableVariable>* GetSerializedFields() { return nullptr; }
+	virtual void SetSerializedFields(std::vector<SerializableVariable> variables) { }
 
 
 	virtual void OnCollisionEnter(BoxCollider& other) { }

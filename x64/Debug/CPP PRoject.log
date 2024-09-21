@@ -1,4 +1,10 @@
-﻿  EngineP.cpp
+﻿  AssetManager.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(210,15): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(217,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  BoxCollider2D.h
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(210,15): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(217,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  EngineP.cpp
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(210,15): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(217,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\FloorSquare.h(15,1): warning C4305: 'argument': truncation from 'double' to 'T'
@@ -35,6 +41,16 @@ C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(117,
               T=float
           ]
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(142,40): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(91,7): warning C4101: 'checkBox': unreferenced local variable
-x64\Debug\InputSystem.obj : warning LNK4042: object specified more than once; extras ignored
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(94,7): warning C4101: 'checkBox': unreferenced local variable
+  EntityManager.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(210,15): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(217,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\CollisionSystem.h(4,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  imguiHandler.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(210,15): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(217,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  main.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(210,15): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(217,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe

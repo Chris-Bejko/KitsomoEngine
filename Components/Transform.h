@@ -2,7 +2,8 @@
 #include "../Component.h"
 #include "../Vector2.h"
 
-
+#define DECLARE(TYPE, NAME, VALUE) \
+variables.push_back({#NAME, & NAME, TYPE})
 class Transform : public Component
 {
 public:
@@ -34,13 +35,20 @@ public:
 
 	void SerializeVariables()
 	{
-		variables.push_back({ "xPos", &position.x, Float_Type });
-		variables.push_back({ "yPos", &position.x, Float_Type });
-		variables.push_back({ "rotation", &rotation, Float_Type });
-		variables.push_back({ "xScale", &scale.x, Float_Type });
-		variables.push_back({ "yScale", &scale.y, Float_Type });
+		variables.push_back({ "position.x", &position.x, float_Type });
+		variables.push_back({ "position.y", &position.x, float_Type });
+		variables.push_back({ "rotation", &rotation, float_Type });
+		variables.push_back({ "scale.x", &scale.x, float_Type });
+		variables.push_back({ "scale.y", &scale.y, float_Type });
 	}
 
+	void SetSerializedFields(std::vector<SerializableVariable> variables) override final
+	{
+		for (auto& f : variables)
+		{
+			DECLARE(f.type, f.name, f.read());
+		}
+	}
 	std::vector<SerializableVariable>* GetSerializedFields() override final
 	{
 		return &variables;

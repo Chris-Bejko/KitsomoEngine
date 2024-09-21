@@ -131,3 +131,17 @@ Entity* EntityManager::cloneEntity(Entity* ent)
 	return nullptr;
 }
 
+std::vector<SerializableEntity> EntityManager::SerializeEntities()
+{
+	std::vector<SerializableEntity> entitiesSerialized;
+
+	for (auto& e : entities)
+	{
+		SerializableEntity ser;
+		ser.entityName = e->GetName();
+		ser.components = e->GetAllComponentVariables();
+		entitiesSerialized.push_back(ser);
+	}
+
+	return entitiesSerialized;
+}
