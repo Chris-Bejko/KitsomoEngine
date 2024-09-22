@@ -1,7 +1,7 @@
 #pragma once
 #include "imgui.h"
 #include "imgui-SFML.h"
-#include "ECSEngine.h"
+#include "Engine.h"
 #include <vector>
 
 class ImguiHandler
@@ -11,9 +11,6 @@ public:
 	~ImguiHandler() = default;
 
 
-	void DisplayComponents(ComponentList list);
-
-	void DisplayEntities(std::vector<std::unique_ptr<Entity>> entities);
 	void Update(sf::Time rest);
 
 	inline static ImguiHandler& get()

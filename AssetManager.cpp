@@ -1,8 +1,4 @@
 #include "AssetManager.h"
-#include <iostream>
-#include "../Engine.h"
-#include "SFML/Graphics.hpp"
-
 AssetManager* AssetManager::s_instance = nullptr;
 
 AssetManager::AssetManager()

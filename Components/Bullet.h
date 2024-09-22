@@ -1,6 +1,5 @@
 #pragma once
-#include "ECSEngine.h"
-
+#include "BoxCollider2D.h"
 
 class Bullet : public Component
 {

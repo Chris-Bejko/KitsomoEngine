@@ -1,6 +1,7 @@
 #pragma once
-#include "../EntityManager.h"
-#include "../InputSystem.h"
+#include "EntityManager.h"
+#include "InputSystem.h"
+#include <SFML/Graphics.hpp>
 
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;

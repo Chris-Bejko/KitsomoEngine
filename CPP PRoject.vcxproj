@@ -154,11 +154,9 @@
     <ClCompile Include="SystemManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\SDL ECS\ECS\Engine\Engine.h" />
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Components\Bullet.h" />
     <ClInclude Include="CollisionSystem.h" />
-    <ClInclude Include="CollisionTuple.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="ECSEngine.h" />

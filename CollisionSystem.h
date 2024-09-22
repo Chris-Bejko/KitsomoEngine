@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "System.h"
-#include "SFML/Graphics.hpp"
 #include "Components/BoxCollider2D.h";
-#include "EntityManager.h"
 
 class CollisionSystem : public System
 {

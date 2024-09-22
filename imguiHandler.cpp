@@ -2,13 +2,6 @@
 
 ImguiHandler* ImguiHandler::s_instance = nullptr;
 
-void ImguiHandler::DisplayComponents(ComponentList list)
-{
-}
-
-void ImguiHandler::DisplayEntities(std::vector<std::unique_ptr<Entity>> entities)
-{
-}
 
 void ImguiHandler::Update(sf::Time rest)
 {

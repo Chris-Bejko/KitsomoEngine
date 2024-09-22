@@ -1,8 +1,5 @@
 #include "EntityManager.h"
-#include "Entity.h"
-#include "Components/Rigidbody.h"
 #include "CollisionSystem.h"
-#include "Components/BoxCollider2D.h"
 
 void EntityManager::draw()
 {

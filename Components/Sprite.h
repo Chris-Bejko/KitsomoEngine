@@ -1,11 +1,8 @@
 #pragma once
 
 #include <string>
-#include "../Entity.h"
 #include "../AssetManager.h"
-#include "../RenderContainer.h"
 #include "../Engine.h"
-#include "SFML/Graphics.hpp"
 
 class Sprite : public Component
 {

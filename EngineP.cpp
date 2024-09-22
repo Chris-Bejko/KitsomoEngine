@@ -1,18 +1,7 @@
-#include "Components/Sprite.h"
 #include "Engine.h"
 #include <iostream>
-#include "../AssetManager.h"
-#include "../EntityManager.h"
-#include "../Entity.h"
-#include "../RenderContainer.h"
-#include "Components/Rigidbody.h"
 #include "SystemManager.h"
-#include "../InputSystem.h"
-//#include "Collision.h"
 #include <cassert>
-#include "Engine.h"
-#include "Components/Player.h"
-#include "GameManager.h"
 #include  "imgui.h"
 #include  "imgui-sfml.h"
 #include "imguiHandler.h"
@@ -75,7 +64,6 @@ void Engine::Init()
 
 void Engine::Clean()
 {
-	AssetManager::get().clean();
 	window->clear();
 	window->close();
 	isRunning = false;

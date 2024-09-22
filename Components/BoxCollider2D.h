@@ -1,9 +1,6 @@
 #pragma once
 
 #include <string>
-#include "../Entity.h"
-#include "../Component.h"
-#include "SFML/Graphics.hpp"
 #include "Sprite.h"
 
 class BoxCollider : public Component
