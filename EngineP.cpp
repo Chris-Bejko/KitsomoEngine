@@ -266,17 +266,7 @@ void Engine::Load()
 
 
 	myFile.close();
-	//std::vector<SerializableComponent> components;
-	//std::vector<SerializableVariable> variables;
-	//variables.push_back({ "position.x", 0, float_Type });
-	//variables.push_back({ "position.y", 0, float_Type });
-	//variables.push_back({ "rotation", 0, float_Type });
-	//variables.push_back({ "scale.x" , 0, float_Type });
-	//variables.push_back({ "scale.y", 0, float_Type });
 
-
-	//components.push_back({ "Transform", variables });
-	//entities.push_back({ "New Entity", components });
 	for (auto& e : entities)
 	{
 		Entity* ent = new Entity(e.entityName);

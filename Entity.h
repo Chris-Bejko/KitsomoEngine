@@ -266,7 +266,6 @@ public:
 				{
 					if (str == "Transform")
 					{
-						std::cout << "Adding Transform" << std::endl;
 						if (!this->HasComponent<Transform>())
 							this->AddComponent<Transform>();
 					}
