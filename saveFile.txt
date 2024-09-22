@@ -1,1 +1,1 @@
-ENTITY_NAME_New Entity _ENTITY_NAME_E__COMPONENTS_LIST__COMPONENT_NAME_Transform_COMPONENT_NAME_E__FIELD_:position.x::,15,,;2;;_FIELD_:position.y::,15,,;2;;_FIELD_:rotation::,4,,;2;;_FIELD_:scale.x::,4,,;2;;_FIELD_:scale.y::,3,,;2;;
+ENTITY_NAME_New Entity _ENTITY_NAME_E__COMPONENTS_LIST__COMPONENT_NAME_Transform_COMPONENT_NAME_E__FIELD_:position.x::,149142,,;2;;_FIELD_:position.y::,332,,;2;;_FIELD_:rotation::,0,,;2;;_FIELD_:scale.x::,34,,;2;;_FIELD_:scale.y::,34,,;2;;_FIELD_:tag::,ffhfh,,;3;;_FIELD_:testBool::,1,,;4;;_FIELD_

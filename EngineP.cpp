@@ -152,9 +152,36 @@ void Engine::Save()
 			{
 				myFile << "_FIELD_";
 				myFile << ":" << f.name << "::";
-				myFile << "," << f.read() << ",,";
+				switch (f.type)
+				{
+				case 1:
+				{
+					myFile << "," << f.read() << ",,";
+					break;
+				}
+				case 2:
+				{
+					myFile << "," << f.read() << ",,";
+					break;
+				}
+				case 3:
+				{
+					std::string p = *reinterpret_cast<std::string*>(f.data);
+					myFile << "," << p << ",,";
+					break;
+				}
+				case 4:
+				{
+					bool p = *reinterpret_cast<bool*>(f.data);
+					myFile << "," << p << ",,";
+					break;
+				}
+				default:
+					break;
+				}
 				myFile << ";" << f.type << ";;";
 			}
+			myFile << "_FIELD_";
 		}
 		myFile << "\n";
 	}
@@ -180,7 +207,6 @@ void Engine::Load()
 		ent.entityName = GetSubstring(line, delStart, delEnd, true);
 		std::size_t pos = 0;
 		std::string delimiter = "_COMPONENTS_LIST_";
-		std::cout << line << std::endl;
 		while ((pos = line.find(delimiter)) != std::string::npos)
 		{
 			ReadableSerializableVariableMap fields;
@@ -189,11 +215,10 @@ void Engine::Load()
 			SerializableComponent comp;
 			comp.componentName = GetSubstring(line, delStart, delEnd, true);
 
-			std::cout << line << std::endl;
 			std::size_t fieldPos = 0;
 			std::string delField = "_FIELD_";
 			line.erase(0, pos + delimiter.length());
-			while((fieldPos = line.find(delField)) != std::string::npos)
+			while ((fieldPos = line.find(delField)) != std::string::npos)
 			{
 				delStart = ":";
 				delEnd = "::";
@@ -207,7 +232,7 @@ void Engine::Load()
 				delEnd = ";;";
 				auto fieldType = GetSubstring(line, delStart, delEnd, false);
 
-				switch(std::stoi(fieldType))
+				switch (std::stoi(fieldType))
 				{
 				case 1:
 				{
@@ -230,7 +255,6 @@ void Engine::Load()
 					break;
 				}
 				}
-				std::cout << fieldType << " " << fieldName << ":" << fieldValue << std::endl;
 				comp.fields = fields;
 				line.erase(0, fieldPos + delField.length());
 
@@ -273,7 +297,7 @@ std::string Engine::GetSubstring(std::string& line, std::string& delStart, std::
 	auto last = line.find(delEnd);
 	SerializableComponent comp;
 	auto final = line.substr(first + delStart.length(), last - (first + delStart.length()));
-	if(erase)
+	if (erase)
 		line.erase(first, last - first + delEnd.length());
 
 	return final;

@@ -40,6 +40,8 @@ public:
 		variables.push_back({ "rotation", &rotation, float_Type });
 		variables.push_back({ "scale.x", &scale.x, float_Type });
 		variables.push_back({ "scale.y", &scale.y, float_Type });
+		variables.push_back({ "tag", &tag, char_Type });
+		variables.push_back({ "testBool", &testBool, bool_Type });
 	}
 
 	void InitSerializedFields(ReadableSerializableVariableMap variables)
@@ -72,6 +74,22 @@ public:
 				//this->variables.push_back({ f.name , &scale.y, float_Type });
 			}
 		}
+
+		for(auto const& [key, value] : variables.stringFields)
+		{
+			if(key == "tag")
+			{
+				tag = value;
+			}
+		}
+
+		for(auto const& [key, value] : variables.boolFields)
+		{
+			if(key == "testBool")
+			{
+				testBool = value;
+			}
+		}
 	}
 	std::vector<SerializableVariable>* GetSerializedFields() override final
 	{
@@ -80,12 +98,15 @@ public:
 
 	bool Init() override final
 	{
+		//tag = "Test Tag";
 		SerializeVariables();
 		return true;
 	}
 	Vector2F position = Vector2F();
 	Vector2F scale = Vector2F(1.0f, 1.0f);
 	float rotation = 0.0f;
+	std::string tag;
+	bool testBool;
 
 	void Translate(const Vector2F velocity)
 	{

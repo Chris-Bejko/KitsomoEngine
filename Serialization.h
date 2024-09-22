@@ -23,7 +23,7 @@ struct SerializableVariable
 	int type = 0;
 
 	void assign(double number);
-	double read(); 
+	double read();
 };
 
 struct ReadableSerializableVariableMap

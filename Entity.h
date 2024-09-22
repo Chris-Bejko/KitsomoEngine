@@ -12,6 +12,8 @@
 #include <filesystem>
 #include <iostream>
 
+class BoxCollider;
+
 class Entity
 {
 public:
@@ -207,30 +209,35 @@ public:
 				{
 				case int_Type:
 				{
-					int temp = it->read();
+					auto p = reinterpret_cast<int*>(it->data);
+					int temp(*p);
 					ImGui::InputInt(it->name, &temp);
-					it->assign(temp);
+					*p = temp;
 					break;
 				}
 				case float_Type:
 				{
-					float temp = it->read();
+					auto p = reinterpret_cast<float*>(it->data);
+					float temp(*p);
 					ImGui::InputFloat(it->name, &temp);
-					it->assign(temp);
+					*p = temp;
 					break;
 				}
 				case char_Type:
 				{
-					auto temp1 = it->data;
-					auto temp = *((char*)temp1);
-					ImGui::InputText(it->name, &temp, 50);
+
+					auto p = reinterpret_cast<std::string*>(it->data);
+					std::string str(*p);
+					ImGui::InputText(it->name, &str[0], 50);
+					*p = &str[0];
 					break;
 				}
 				case bool_Type:
 				{
-					auto temp1 = it->data;
-					auto temp = *((bool*)temp1);
-					//ImGui::Checkbox(it->name, &temp);
+					auto p = reinterpret_cast<bool*>(it->data);
+					bool b(*p);
+					ImGui::Checkbox(it->name, &b);
+					*p = b;
 					break;
 				}
 				default:
@@ -257,11 +264,13 @@ public:
 				auto temp = str.c_str();
 				if (ImGui::Button(temp))
 				{
-					if(str == "Transform")
+					if (str == "Transform")
 					{
-						std::cout << "Adding player" << std::endl;
-						this->AddComponent<Transform>();
+						std::cout << "Adding Transform" << std::endl;
+						if (!this->HasComponent<Transform>())
+							this->AddComponent<Transform>();
 					}
+
 				}
 			}
 			ImGui::EndChild();
@@ -271,9 +280,9 @@ public:
 	std::vector<SerializableComponent> GetAllComponentVariables()
 	{
 		std::vector<SerializableComponent> variables;
-		for(auto& c : components)
+		for (auto& c : components)
 		{
-			if(c->GetSerializedFields() != nullptr)
+			if (c->GetSerializedFields() != nullptr)
 			{
 				SerializableComponent ser;
 				std::string str(typeid(*c).name());

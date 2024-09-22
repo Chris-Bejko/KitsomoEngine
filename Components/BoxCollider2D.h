@@ -47,16 +47,55 @@ public:
 	void Serialize()
 	{
 		serializables.clear();
-		serializables.push_back({ "collider Top", &hitbox.top, float_Type });
-		serializables.push_back({ "collider Left", &hitbox.left, float_Type });
-		serializables.push_back({ "collider Width", &hitbox.width, float_Type });
-		serializables.push_back({ "collider Height", &hitbox.height, float_Type });
-		serializables.push_back({ "Tag", &collisionTag, char_Type });
+		serializables.push_back({ "hitbox.top", &hitbox.top, float_Type });
+		serializables.push_back({ "hitbox.left", &hitbox.left, float_Type });
+		serializables.push_back({ "hitbox.width", &hitbox.width, float_Type });
+		serializables.push_back({ "hitbox.height", &hitbox.height, float_Type });
+		serializables.push_back({ "collisionTag", &collisionTag, char_Type });
+		serializables.push_back({ "isTrigger", &isTrigger, bool_Type });
 	}
 
 	std::vector<SerializableVariable> *GetSerializedFields() override final
 	{
 		return &serializables;
+	}
+
+	void InitSerializedFields(ReadableSerializableVariableMap map)
+	{
+		for(auto const& [key, value] : map.floatFields)
+		{
+			if(key == "hitbox.top")
+			{
+				hitbox.top = value;
+			}
+			if (key == "hitbox.left")
+			{
+				hitbox.left = value;
+			}
+			if (key == "hitbox.width")
+			{
+				hitbox.width = value;
+			}
+			if (key == "hitbox.height")
+			{
+				hitbox.height = value;
+			}
+		}
+		for(auto const& [key, value] : map.stringFields)
+		{
+			if(key == "collisionTag")
+			{
+				collisionTag = value;
+			}
+		}
+
+		for(auto const& [key, value] : map.boolFields)
+		{
+			if(key == "isTrigger")
+			{
+				isTrigger = value;
+			}
+		}
 	}
 	void SetUpColliderVisuals()
 	{

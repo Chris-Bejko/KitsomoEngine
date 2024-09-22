@@ -36,6 +36,17 @@ public:
     {
         variables.push_back({ "textureID", &textureID, char_Type });
     }
+
+    void InitSerializedFields(ReadableSerializableVariableMap map)
+    {
+        for(auto const& [key, value] : map.stringFields)
+        {
+            if(key == "textureID")
+            {
+                textureID = value;
+            }
+        }
+    }
     inline void draw() override final
     {
         Engine::get().GetWindow().draw(sprite);
