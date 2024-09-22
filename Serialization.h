@@ -3,6 +3,7 @@
 #include <cassert>
 #include <vector>
 #include <chrono>
+#include <map>
 
 
 enum VariableType
@@ -25,10 +26,19 @@ struct SerializableVariable
 	double read(); 
 };
 
+struct ReadableSerializableVariableMap
+{
+	std::map<std::string, int> intFields;
+	std::map<std::string, float> floatFields;
+	std::map<std::string, std::string> stringFields;
+	std::map<std::string, bool> boolFields;
+};
+
 struct SerializableComponent
 {
 	std::string componentName;
-	std::vector<SerializableVariable> fields;
+	ReadableSerializableVariableMap fields;
+	std::vector<SerializableVariable> variables;
 };
 
 struct SerializableEntity

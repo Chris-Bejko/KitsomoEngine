@@ -3,7 +3,7 @@
 #include "../Vector2.h"
 
 #define DECLARE(TYPE, NAME, VALUE) \
-variables.push_back({#NAME, & NAME, TYPE})
+variables.push_back({NAME, #NAME, TYPE})
 class Transform : public Component
 {
 public:
@@ -36,17 +36,41 @@ public:
 	void SerializeVariables()
 	{
 		variables.push_back({ "position.x", &position.x, float_Type });
-		variables.push_back({ "position.y", &position.x, float_Type });
+		variables.push_back({ "position.y", &position.y, float_Type });
 		variables.push_back({ "rotation", &rotation, float_Type });
 		variables.push_back({ "scale.x", &scale.x, float_Type });
 		variables.push_back({ "scale.y", &scale.y, float_Type });
 	}
 
-	void SetSerializedFields(std::vector<SerializableVariable> variables) override final
+	void InitSerializedFields(ReadableSerializableVariableMap variables)
 	{
-		for (auto& f : variables)
+		for (auto const& [key, value] : variables.floatFields)
 		{
-			DECLARE(f.type, f.name, f.read());
+			if(key == "position.x")
+			{
+				position.x = value;
+				//this->variables.push_back({ f.name , &position.x, float_Type });
+			}
+			if (key == "position.y")
+			{
+				position.y = value;
+				//this->variables.push_back({ f.name , &position.y, float_Type });
+			}
+			if (key == "rotation")
+			{
+				rotation = value;
+				//this->variables.push_back({ f.name , &rotation, float_Type });
+			}
+			if (key == "scale.x")
+			{
+				scale.x = value;
+				//this->variables.push_back({ f.name , &scale.x, float_Type });
+			}
+			if (key == "scale.y")
+			{
+				scale.y = value;
+				//this->variables.push_back({ f.name , &scale.y, float_Type });
+			}
 		}
 	}
 	std::vector<SerializableVariable>* GetSerializedFields() override final

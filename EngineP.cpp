@@ -148,7 +148,7 @@ void Engine::Save()
 			myFile << "_COMPONENTS_LIST_";
 			myFile << "_COMPONENT_NAME_" << c.componentName;
 			myFile << "_COMPONENT_NAME_E_";
-			for (auto& f : c.fields)
+			for (auto& f : c.variables)
 			{
 				myFile << "_FIELD_";
 				myFile << ":" << f.name << "::";
@@ -166,14 +166,12 @@ void Engine::Load()
 	//convert file to std::vector<SerializableEntity>();
 	std::vector<SerializableEntity> entities;
 	std::vector<SerializableComponent> components;
-	std::vector<SerializableVariable> fields;
 
 	std::fstream myFile;
 	std::string line;
 	myFile.open("saveFile.txt", std::ios::out | std::ios::in);
 
 	std::string entityName;
-	std::string token;
 	while (std::getline(myFile, line))
 	{
 		SerializableEntity ent;
@@ -182,15 +180,19 @@ void Engine::Load()
 		ent.entityName = GetSubstring(line, delStart, delEnd, true);
 		std::size_t pos = 0;
 		std::string delimiter = "_COMPONENTS_LIST_";
+		std::cout << line << std::endl;
 		while ((pos = line.find(delimiter)) != std::string::npos)
 		{
+			ReadableSerializableVariableMap fields;
 			delStart = "_COMPONENT_NAME_";
 			delEnd = "_COMPONENT_NAME_E_";
 			SerializableComponent comp;
 			comp.componentName = GetSubstring(line, delStart, delEnd, true);
 
+			std::cout << line << std::endl;
 			std::size_t fieldPos = 0;
 			std::string delField = "_FIELD_";
+			line.erase(0, pos + delimiter.length());
 			while((fieldPos = line.find(delField)) != std::string::npos)
 			{
 				delStart = ":";
@@ -205,16 +207,35 @@ void Engine::Load()
 				delEnd = ";;";
 				auto fieldType = GetSubstring(line, delStart, delEnd, false);
 
-				SerializableVariable var;
-				var.name = fieldName.c_str();
-				var.type = std::stoi(fieldType);
-				var.data = &fieldValue;
-				comp.fields.push_back(var);
+				switch(std::stoi(fieldType))
+				{
+				case 1:
+				{
+					fields.intFields.emplace(fieldName, std::stoi(fieldValue));
+					break;
+				}
+				case 2:
+				{
+					fields.floatFields.emplace(fieldName, std::stof(fieldValue));
+					break;
+				}
+				case 3:
+				{
+					fields.stringFields.emplace(fieldName, fieldValue);
+					break;
+				}
+				case 4:
+				{
+					fields.boolFields.emplace(fieldName, std::stoi(fieldValue));
+					break;
+				}
+				}
+				std::cout << fieldType << " " << fieldName << ":" << fieldValue << std::endl;
+				comp.fields = fields;
 				line.erase(0, fieldPos + delField.length());
 
 			}
 			ent.components.push_back(comp);
-			line.erase(0, pos + delimiter.length());
 		}
 		entities.push_back(ent);
 	}
@@ -239,7 +260,7 @@ void Engine::Load()
 		{
 			if (c.componentName == "Transform")
 			{
-				ent->AddComponent<Transform>().SetSerializedFields(c.fields);
+				ent->GetComponent<Transform>().InitSerializedFields(c.fields);
 			}
 		}
 		manager->addEntity(ent);
@@ -253,7 +274,7 @@ std::string Engine::GetSubstring(std::string& line, std::string& delStart, std::
 	SerializableComponent comp;
 	auto final = line.substr(first + delStart.length(), last - (first + delStart.length()));
 	if(erase)
-		line.erase(first, last - first + delEnd.length() + 1);
+		line.erase(first, last - first + delEnd.length());
 
 	return final;
 }

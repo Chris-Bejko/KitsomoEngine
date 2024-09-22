@@ -279,7 +279,7 @@ public:
 				std::string str(typeid(*c).name());
 				str = std::regex_replace(str, std::regex("class "), "");
 				ser.componentName = str;
-				ser.fields = *c->GetSerializedFields();
+				ser.variables = *c->GetSerializedFields();
 				variables.push_back(ser);
 			}
 		}
