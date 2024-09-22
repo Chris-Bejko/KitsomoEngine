@@ -1,18 +1,16 @@
 #pragma once
 
 #include "ECS.h"
-#include <vector>
-#include <memory>
 #include "Component.h"
+#include <vector>
 #include "Components/Transform.h"
-
+#include <memory>
 #include "imgui.h"
 #include "imgui-SFML.h"
 #include <regex>
 #include <filesystem>
 #include <iostream>
 
-class BoxCollider;
 
 class Entity
 {
@@ -264,12 +262,14 @@ public:
 				auto temp = str.c_str();
 				if (ImGui::Button(temp))
 				{
-					if (str == "Transform")
+					if (temp == "Transform")
 					{
 						if (!this->HasComponent<Transform>())
 							this->AddComponent<Transform>();
 					}
-
+					//if (temp == "BoxCollider2D")
+					//	if (!this->HasComponent<BoxCollider>())
+					//		this->AddComponent<BoxCollider>();
 				}
 			}
 			ImGui::EndChild();
