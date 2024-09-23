@@ -139,7 +139,9 @@
     <ClCompile Include="Components\BoxCollider.cpp" />
     <ClCompile Include="Components\BoxCollider.h" />
     <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="Components\Rigidbody.cpp" />
     <ClCompile Include="EngineP.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="imguiHandler.cpp" />
     <ClCompile Include="imgui\imgui-SFML.cpp" />

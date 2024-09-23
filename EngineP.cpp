@@ -118,6 +118,16 @@ sf::RenderWindow& Engine::GetWindow()
 	return *window;
 }
 
+EntityManager* Engine::GetManager()
+{
+	return manager;
+}
+
+bool Engine::IsPlayMode()
+{
+	return playMode;
+}
+
 void Engine::Spawn(Entity* entity)
 {
 	manager->addEntity(entity);

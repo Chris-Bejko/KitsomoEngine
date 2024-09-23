@@ -64,6 +64,15 @@
     <Filter Include="Source Files\ECS\Base Components\BoxCollider">
       <UniqueIdentifier>{8e3b8879-4290-449a-9880-e411fd8fdce6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ECS\Base Components\Rigidbody">
+      <UniqueIdentifier>{cd9a6c1f-fef6-4b02-84dd-93b41c3efb0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\Entity">
+      <UniqueIdentifier>{6fb85d48-ad7b-4a06-8508-9d9f173f2b25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\EntityManager">
+      <UniqueIdentifier>{093efbbf-ec29-437f-9444-967fb1efbc96}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -83,9 +92,6 @@
     </ClCompile>
     <ClCompile Include="SystemManager.cpp">
       <Filter>Source Files\ECS\SystemManager</Filter>
-    </ClCompile>
-    <ClCompile Include="EntityManager.cpp">
-      <Filter>Source Files\ECS</Filter>
     </ClCompile>
     <ClCompile Include="InputSystem.cpp">
       <Filter>Source Files\ECS\InputSystem</Filter>
@@ -126,6 +132,15 @@
     <ClCompile Include="Components\BoxCollider.cpp">
       <Filter>Source Files\ECS\Base Components\BoxCollider</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Rigidbody.cpp">
+      <Filter>Source Files\ECS\Base Components\Rigidbody</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\ECS\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityManager.cpp">
+      <Filter>Source Files\ECS\EntityManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -133,9 +148,6 @@
     </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Source Files\ECS\AssetManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Rigidbody.h">
-      <Filter>Source Files\ECS\Base Components</Filter>
     </ClInclude>
     <ClInclude Include="Vector2.h">
       <Filter>Source Files\ECS\Base Data STr</Filter>
@@ -155,13 +167,7 @@
     <ClInclude Include="ECSEngine.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Source Files\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="System.h">
-      <Filter>Source Files\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="EntityManager.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
     <ClInclude Include="Components\FloorSquare.h">
@@ -217,6 +223,15 @@
     </ClInclude>
     <ClInclude Include="Components\Sprite.h">
       <Filter>Source Files\ECS\Base Components\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Rigidbody.h">
+      <Filter>Source Files\ECS\Base Components\Rigidbody</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Source Files\ECS\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityManager.h">
+      <Filter>Source Files\ECS\EntityManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

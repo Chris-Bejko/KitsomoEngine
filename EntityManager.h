@@ -27,48 +27,15 @@ public:
 
 	std::size_t GetTotalEntities();
 
-	std::vector<std::vector<std::string>> GetActiveCollisions()
-	{
-		return activeCollisions;
-	}
+	std::vector<std::vector<std::string>> GetActiveCollisions();
 
-	void AddColliders(std::vector<std::string>& Colliders)
-	{
-		activeCollisions.push_back(Colliders);
-	}
+	void AddColliders(std::vector<std::string>& Colliders);
 
-	void RemoveActiveCollision(std::vector<std::string> it)
-	{
-		activeCollisions.erase(std::remove(activeCollisions.begin(), activeCollisions.end(), it), activeCollisions.end());
-	}
+	void RemoveActiveCollision(std::vector<std::string> it);
 
-	void DisplayEntities()
-	{
-		for (auto& e : entities)
-		{
-			auto temp = e->GetName();
-			if(ImGui::Checkbox(temp.c_str(), &e->displayComponents))
-			{
-				for(auto& a : entities)
-				{
-					if(a->GetName() == e->GetName())
-					{
-						continue;
-					}
-					a->displayComponents = false;
-				}
-			}
+	void DisplayEntities();
 
-		}
-	}
-
-	void DisplayComponents()
-	{
-		for (auto& e : entities)
-		{
-			e->DisplayComponents();
-		}
-	}
+	void DisplayComponents();
 
 
 private:

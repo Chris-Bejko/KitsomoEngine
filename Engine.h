@@ -48,15 +48,9 @@ public:
 
     sf::RenderWindow &GetWindow();
 
-    EntityManager* GetManager()
-    {
-        return manager;
-    }
+    EntityManager* GetManager();
 
-    inline bool IsPlayMode()
-    {
-        return playMode;
-    }
+    bool IsPlayMode();
 private:
     bool playMode;
     EntityManager* manager;

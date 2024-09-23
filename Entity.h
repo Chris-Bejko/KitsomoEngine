@@ -17,13 +17,8 @@ class Entity
 public:
 	bool displayComponents;
 	Transform* transform;
-	Entity(std::string name)
-	{
-		this->transform = &this->AddComponent<Transform>(0, 0);
-		isActive = true;
-		SaveAvailableComponents();
-		this->entityName = name;
-	}
+	Entity(std::string name);
+
 	virtual ~Entity() {}
 
 	template <typename T, typename... TArgs>

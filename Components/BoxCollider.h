@@ -1,7 +1,9 @@
 #pragma once
 
 #include <string>
-#include "Sprite.h"
+#include <vector>
+#include <../Component.h>
+#include <SFML/Graphics.hpp>
 
 class BoxCollider : public Component
 {
@@ -33,7 +35,6 @@ public:
 
 	sf::FloatRect GetRect();
 
-	sf::Sprite GetSprite();
 
 	bool IsTrigger();
 

@@ -1,7 +1,7 @@
 #include "EntityManager.h"
 #include "CollisionSystem.h"
-#include "Engine.h"
 #include "Components/BoxCollider.h"
+#include "Engine.h"
 
 void EntityManager::draw()
 {
@@ -35,6 +35,48 @@ void EntityManager::update(float dt)
 size_t EntityManager::GetTotalEntities()
 {
 	return entities.size();
+}
+
+std::vector<std::vector<std::string>> EntityManager::GetActiveCollisions()
+{
+	return activeCollisions;
+}
+
+void EntityManager::AddColliders(std::vector<std::string>& Colliders)
+{
+	activeCollisions.push_back(Colliders);
+}
+
+void EntityManager::RemoveActiveCollision(std::vector<std::string> it)
+{
+	activeCollisions.erase(std::remove(activeCollisions.begin(), activeCollisions.end(), it), activeCollisions.end());
+}
+
+void EntityManager::DisplayEntities()
+{
+	for (auto& e : entities)
+	{
+		auto temp = e->GetName();
+		if (ImGui::Checkbox(temp.c_str(), &e->displayComponents))
+		{
+			for (auto& a : entities)
+			{
+				if (a->GetName() == e->GetName())
+				{
+					continue;
+				}
+				a->displayComponents = false;
+			}
+		}
+	}
+}
+
+void EntityManager::DisplayComponents()
+{
+	for (auto& e : entities)
+	{
+		e->DisplayComponents();
+	}
 }
 
 void EntityManager::Collisions()

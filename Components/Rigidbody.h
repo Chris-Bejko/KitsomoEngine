@@ -8,48 +8,20 @@ constexpr float GRAVITY = 10.0f;
 class Rigidbody : public Component
 {
 public:
-    Rigidbody()
-    {
-        gravityScale = 1.0f;
-    }
+    Rigidbody();
     virtual ~Rigidbody() = default;
-    Rigidbody(float gravityScale)
-    {
-        this->gravityScale = gravityScale;
-    }
+    Rigidbody(float gravityScale);
 
-    bool Init() override final
-    {
-        transform = &entity->GetComponent<Transform>();
-        return true;
-    }
+    bool Init() override final;
 
-    void update(float dt) override final
-    {
-        velocity.x = force.x - drag.x * dt;
-        velocity.y = force.y + drag.y + gravityScale * GRAVITY * mass * dt;
-        transform->Translate(velocity);
-    }
+    void update(float dt) override final;
+    void SetForce(const Vector2F force);
 
-    void SetForce(const Vector2F force)
-    {
-        this->force = force;
-    }
+    void SetForce(float x, float y);
 
-    void SetForce(float x, float y)
-    {
-        this->force.x = x;
-        this->force.y = y;
-    }
-    void AddForce(const Vector2F force)
-    {
-        this->force += force;
-    }
+    void AddForce(const Vector2F force);
 
-    Vector2F GetVelocity()
-    {
-        return velocity;
-    }
+    Vector2F GetVelocity();
 private:
     float mass = 1.0f;
     float gravityScale = 1.0f;
@@ -57,5 +29,4 @@ private:
     Vector2F force = Vector2F();
 
     Vector2F velocity = Vector2F();
-    Transform* transform = nullptr;
 };

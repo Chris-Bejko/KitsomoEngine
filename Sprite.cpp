@@ -73,7 +73,7 @@ sf::FloatRect Sprite::TranslateHitbox(sf::FloatRect& hitbox)
 	return sprite.getTransform().transformRect(hitbox);
 }
 
-inline sf::Vector2f Sprite::GetPosition()
+sf::Vector2f Sprite::GetPosition()
 {
 	return sprite.getPosition();
 }

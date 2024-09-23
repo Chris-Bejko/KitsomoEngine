@@ -1,5 +1,6 @@
 #include "BoxCollider.h"
 #include "../Engine.h"
+#include "Sprite.h"
 
 BoxCollider::BoxCollider(std::string tag, bool isTrigger)
 {
@@ -123,10 +124,10 @@ sf::FloatRect BoxCollider::GetRect()
 	return entity->GetComponent<Sprite>().TranslateHitbox(hitbox);
 }
 
-sf::Sprite BoxCollider::GetSprite()
-{
-	return entity->GetComponent<Sprite>().GetSprite();
-}
+//sf::Sprite BoxCollider::GetSprite()
+//{
+//	return entity->GetComponent<Sprite>().GetSprite();
+//}
 
 bool BoxCollider::IsTrigger()
 {
