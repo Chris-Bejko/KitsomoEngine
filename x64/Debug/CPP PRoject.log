@@ -1,4 +1,16 @@
-﻿  BoxCollider2D.h
+﻿  CollisionSystem.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\CollisionSystem.h(3,10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(32,36): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,1): message : see reference to function template instantiation 'T &Entity::AddComponent<Transform,int,int>(int &&,int &&)' being compiled
+          with
+          [
+              T=Transform
+          ]
+  BoxCollider.cpp
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(32,36): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
@@ -33,6 +45,17 @@ C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,1): message 
           [
               T=Transform
           ]
+  Sprite.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(32,36): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,1): message : see reference to function template instantiation 'T &Entity::AddComponent<Transform,int,int>(int &&,int &&)' being compiled
+          with
+          [
+              T=Transform
+          ]
   imguiHandler.cpp
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(32,36): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
@@ -56,4 +79,6 @@ C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(22,1): message 
               T=Transform
           ]
   Generating Code...
+x64\Debug\BoxCollider.obj : warning LNK4042: object specified more than once; extras ignored
+x64\Debug\InputSystem.obj : warning LNK4042: object specified more than once; extras ignored
   CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe

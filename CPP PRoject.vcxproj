@@ -136,7 +136,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AssetManager.cpp" />
-    <ClCompile Include="Components\BoxCollider2D.h" />
+    <ClCompile Include="Components\BoxCollider.cpp" />
+    <ClCompile Include="Components\BoxCollider.h" />
     <ClCompile Include="CollisionSystem.cpp" />
     <ClCompile Include="EngineP.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -151,7 +152,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RenderContainer.cpp" />
     <ClCompile Include="SerializableVariable.cpp" />
+    <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SystemManager.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h" />

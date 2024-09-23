@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "System.h"
-#include "Components/BoxCollider2D.h";
+#include "Components/BoxCollider.h";
 
 class CollisionSystem : public System
 {

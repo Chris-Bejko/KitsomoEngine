@@ -2,120 +2,55 @@
 
 #include <string>
 #include "../AssetManager.h"
-#include "../Engine.h"
-
+#include "../Component.h"
+#include "../Vector2.h"
+#include "Transform.h"
 class Sprite : public Component
 {
 public:
     Sprite() = default;
     virtual ~Sprite() = default;
-    Sprite(std::string textureId)
-    {
-        textureID = textureId;
-    }
+    Sprite(std::string textureId);
 
-    bool Init() override final
-    {
-        Serialize();
-        transform = &entity->GetComponent<Transform>();
-        texture = AssetManager::get().getTexture(textureID);
-        sprite.setTexture(texture);
-        sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
-        return true;
-    }
-       
-    std::vector<SerializableVariable>* GetSerializedFields() override final
-    {
-        return &variables;
-    }
+    bool Init() override final;
 
-    void Serialize()
-    {
-        variables.push_back({ "textureID", &textureID, char_Type });
-    }
+    std::vector<SerializableVariable>* GetSerializedFields() override final;
 
-    void InitSerializedFields(ReadableSerializableVariableMap map)
-    {
-        for(auto const& [key, value] : map.stringFields)
-        {
-            if(key == "textureID")
-            {
-                textureID = value;
-            }
-        }
-    }
-    inline void draw() override final
-    {
-        Engine::get().GetWindow().draw(sprite);
-    }
+    void Serialize();
 
-    inline void update(float dt) override final
-    {
-        sprite.setPosition(transform->position.x, transform->position.y);
-        sprite.setRotation(transform->rotation);
-        sprite.setScale(sf::Vector2f(transform->scale.x, transform->scale.y));
-    }
+    void InitSerializedFields(ReadableSerializableVariableMap map);
 
-    inline int GetHeight()
-    {
-        return height;
-    }
+    void draw() override final;
+    void update(float dt) override final;
 
-    inline int GetWidth()
-    {
-        return width;
-    }
+    int GetHeight();
 
-    inline sf::Vector2f GetScale()
-    {
-        return sprite.getScale();
-    }
+    int GetWidth();
 
-    inline sf::FloatRect GetGlobalBounds()
-    {
-        return sprite.getGlobalBounds();
-    }
 
-    inline sf::FloatRect TranslateHitbox(sf::FloatRect& hitbox)
-    {
-        return sprite.getTransform().transformRect(hitbox);
-    }
+    sf::Vector2f GetScale();
 
-    inline sf::Vector2f GetPosition()
-    {
-        return sprite.getPosition();
-    }
+    sf::FloatRect GetGlobalBounds();
 
-    inline sf::Vector2f GetOrigin()
-    {
-        return (sf::Vector2f)texture.getSize() / 2.0f;
-    }
+    sf::FloatRect TranslateHitbox(sf::FloatRect& hitbox);
 
-    inline sf::Sprite GetSprite()
-    {
-        return sprite;
-    }
+    sf::Vector2f GetPosition();
 
-    inline void SetColor(const sf::Color &color)
-    {
-        sprite.setColor(color);
-    }
+    sf::Vector2f GetOrigin();
 
-    inline void SetOrigin(const Vector2F &origin)
-    {
-        sprite.setOrigin(sf::Vector2f(origin.x, origin.y));
-    }
+    sf::Sprite GetSprite();
 
-    inline sf::Vector2f GetRotation()
-    {
-    }
+    void SetColor(const sf::Color& color);
+
+    void SetOrigin(const Vector2F& origin);
+
+    sf::Vector2f GetRotation();
 private:
     std::vector<SerializableVariable> variables;
 
     int width = 0;
     int height = 0;
 
-    Transform* transform = nullptr;
     std::string textureID = "";
     sf::Sprite sprite;
     sf::Texture texture;

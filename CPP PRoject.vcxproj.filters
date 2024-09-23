@@ -55,6 +55,15 @@
     <Filter Include="Source Files\ECS\Reflection">
       <UniqueIdentifier>{14334d81-f68a-40c9-b7c1-972be8772697}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ECS\Base Components\Transform">
+      <UniqueIdentifier>{509a282e-e509-48e4-b558-24d15f4a0dfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\Base Components\Sprite">
+      <UniqueIdentifier>{f96f01a2-010b-4907-a08a-0a9364736445}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ECS\Base Components\BoxCollider">
+      <UniqueIdentifier>{8e3b8879-4290-449a-9880-e411fd8fdce6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
       <Filter>Source Files\ECS\AssetManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Components\BoxCollider2D.h">
-      <Filter>Source Files\ECS\Base Components</Filter>
     </ClCompile>
     <ClCompile Include="InputSystem.h">
       <Filter>Source Files\ECS\InputSystem</Filter>
@@ -83,9 +89,6 @@
     </ClCompile>
     <ClCompile Include="InputSystem.cpp">
       <Filter>Source Files\ECS\InputSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionSystem.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>Source Files</Filter>
@@ -108,6 +111,21 @@
     <ClCompile Include="SerializableVariable.cpp">
       <Filter>Source Files\ECS\Reflection</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Source Files\ECS\Base Components\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\ECS\Base Components\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionSystem.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\BoxCollider.h">
+      <Filter>Source Files\ECS\Base Components\BoxCollider</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\BoxCollider.cpp">
+      <Filter>Source Files\ECS\Base Components\BoxCollider</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -115,12 +133,6 @@
     </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Source Files\ECS\AssetManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Transform.h">
-      <Filter>Source Files\ECS\Base Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Sprite.h">
-      <Filter>Source Files\ECS\Base Components</Filter>
     </ClInclude>
     <ClInclude Include="Components\Rigidbody.h">
       <Filter>Source Files\ECS\Base Components</Filter>
@@ -158,14 +170,8 @@
     <ClInclude Include="GameManager.h">
       <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
-    <ClInclude Include="..\SDL ECS\ECS\Engine\Engine.h">
-      <Filter>Source Files\ECS</Filter>
-    </ClInclude>
     <ClInclude Include="CollisionSystem.h">
       <Filter>Source Files\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionTuple.h">
-      <Filter>Source Files\ECS\Base Data STr</Filter>
     </ClInclude>
     <ClInclude Include="Components\Bullet.h">
       <Filter>Source Files\Game\Scripts</Filter>
@@ -205,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="Serialization.h">
       <Filter>Source Files\ECS\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Transform.h">
+      <Filter>Source Files\ECS\Base Components\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Sprite.h">
+      <Filter>Source Files\ECS\Base Components\Sprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

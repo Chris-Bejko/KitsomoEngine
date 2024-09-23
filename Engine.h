@@ -44,10 +44,7 @@ public:
         return *s_instance;
     }
 
-    inline bool IsRunning()
-    {
-        return isRunning;
-    }
+    bool IsRunning();
 
     sf::RenderWindow &GetWindow();
 

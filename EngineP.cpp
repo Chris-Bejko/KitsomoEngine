@@ -108,6 +108,11 @@ void Engine::Events()
 		Save();
 }
 
+bool Engine::IsRunning()
+{
+	return isRunning;
+}
+
 sf::RenderWindow& Engine::GetWindow()
 {
 	return *window;
