@@ -32,6 +32,11 @@ void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
 		if (key == "textureID")
 		{
 			textureID = value;
+			AssetManager::get().loadTexture(textureID, textureID + ".png");
+			texture = AssetManager::get().getTexture(textureID);
+			std::cout << textureID << std::endl;
+			sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
+			sprite.setTexture(texture);
 		}
 	}
 }
@@ -43,6 +48,7 @@ void Sprite::draw()
 
 void Sprite::update(float dt)
 {
+	sprite.setTexture(texture);
 	sprite.setPosition(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y);
 	sprite.setRotation(entity->GetComponent<Transform>().rotation);
 	sprite.setScale(sf::Vector2f(entity->GetComponent<Transform>().scale.x, entity->GetComponent<Transform>().scale.y));

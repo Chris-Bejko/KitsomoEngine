@@ -19,7 +19,6 @@ void AssetManager::loadTexture(std::string id, std::string path)
 {
 	if (textures.count(id) <= 0)
 	{
-		//sf::Texture* texture.loadFromFile() = IMG_LoadTexture(Engine::get().GetRenderer(), path.c_str());
 		sf::Texture texture;
 		if (texture.loadFromFile(path.c_str()))
 		{

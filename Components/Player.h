@@ -3,11 +3,16 @@
 #include "FloorSquare.h"
 #include "Bullet.h"
 #include <math.h>
+#include "../Engine.h"
 
 class Player : public Component
 {
 public:
-	Player() = default;
+	Player()
+	{
+		useControls = true;
+		initTag = "Player";
+	}
 	virtual ~Player() = default;
 
 	Player(bool useControls, Vector2F position, std::string tag)

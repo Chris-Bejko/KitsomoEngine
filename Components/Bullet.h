@@ -1,6 +1,6 @@
 #pragma once
-#include "BoxCollider2D.h"
-
+#include "../Engine.h"
+#include "Rigidbody.h"
 class Bullet : public Component
 {
 

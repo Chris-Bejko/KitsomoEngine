@@ -9,6 +9,8 @@
 #include "imguiHandler.h"
 #include <fstream>
 #include "Components/Sprite.h"
+#include "Components/Rigidbody.h"
+#include "Components/Player.h"
 
 Engine* Engine::s_instance = nullptr;
 
@@ -149,7 +151,6 @@ void Engine::Save()
 	for (auto& e : entitiesAndComps)
 	{
 		myFile << "ENTITY_NAME_" << e.entityName << "_ENTITY_NAME_E_";
-		myFile << "_COMPONENTS_LIST_";
 		for (auto& c : e.components)
 		{
 			myFile << "_COMPONENT_NAME_" << c.componentName;
@@ -187,7 +188,7 @@ void Engine::Save()
 				}
 				myFile << ";" << f.type << ";;";
 			}
-			myFile << "_COMPONENTS_LIST_";
+			myFile << "_FIELD_";
 		}
 		myFile << "\n";
 	}
@@ -212,7 +213,7 @@ void Engine::Load()
 		std::string delEnd = "_ENTITY_NAME_E_";
 		ent.entityName = GetSubstring(line, delStart, delEnd, true);
 		std::size_t pos = 0;
-		std::string delimiter = "_COMPONENTS_LIST_";
+		std::string delimiter = "_COMPONENT_NAME_";
 		while ((pos = line.find(delimiter)) != std::string::npos)
 		{
 			ReadableSerializableVariableMap fields;
@@ -223,8 +224,8 @@ void Engine::Load()
 
 			std::size_t fieldPos = 0;
 			std::string delField = "_FIELD_";
-			std::cout << line << std::endl;
-			while ((fieldPos = line.find(delField)) != std::string::npos)
+			std::string delFIelds = "_FIELDS_";
+			while ((fieldPos = line.find(delField)) != std::string::npos && (fieldPos < line.find(delimiter)))
 			{
 				delStart = ":";
 				delEnd = "::";
@@ -265,7 +266,6 @@ void Engine::Load()
 				line.erase(0, fieldPos + delField.length());
 
 			}
-			line.erase(0, pos + delimiter.length());
 			ent.components.push_back(comp);
 		}
 		entities.push_back(ent);
@@ -285,11 +285,11 @@ void Engine::Load()
 			}
 			if (c.componentName == "BoxCollider")
 			{
-				ent->GetComponent<BoxCollider>().InitSerializedFields(c.fields);
+				ent->AddComponent<BoxCollider>().InitSerializedFields(c.fields);
 			}
 			if (c.componentName == "Sprite")
 			{
-				ent->GetComponent<Sprite>().InitSerializedFields(c.fields);
+				ent->AddComponent<Sprite>().InitSerializedFields(c.fields);
 			}
 			if (c.componentName == "Rigidbody")
 			{

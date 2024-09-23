@@ -2,6 +2,7 @@
 #include <vector>
 #include "Components/Transform.h"
 #include "Components/Sprite.h"
+#include "Components/Player.h"
 //#include "Components/BoxCollider.h"
 
 Entity::Entity(std::string name)
@@ -239,8 +240,10 @@ void Entity::DisplayAvailableComponents()
 					if (!this->HasComponent<Sprite>())
 						this->AddComponent<Sprite>();
 				}
-				else
+				else if (str == "Player")
 				{
+					if (!this->HasComponent<Player>())
+						this->AddComponent<Player>();
 				}
 			}
 		}
