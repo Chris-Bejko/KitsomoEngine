@@ -1,6 +1,8 @@
 #include "Entity.h"
 #include <vector>
 #include "Components/Transform.h"
+#include "Components/Sprite.h"
+//#include "Components/BoxCollider.h"
 
 Entity::Entity(std::string name)
 {
@@ -211,17 +213,35 @@ void Entity::DisplayAvailableComponents()
 			std::string str(comp);
 			str = std::regex_replace(str, std::regex("Components/"), "");
 			str = std::regex_replace(str, std::regex(".h"), "");
+			if (str.find(".cpp") != std::string::npos) {
+				continue;
+			}
 			auto temp = str.c_str();
 			if (ImGui::Button(temp))
 			{
-				if (temp == "Transform")
+				std::cout << temp << std::endl;
+				if (str == "Transform")
 				{
 					if (!this->HasComponent<Transform>())
 						this->AddComponent<Transform>();
 				}
-				//if (temp == "BoxCollider2D")
-				//	if (!this->HasComponent<BoxCollider>())
-				//		this->AddComponent<BoxCollider>();
+				else if (str == "BoxCollider")
+				{
+					std::cout << "should add box collider" << std::endl;
+					if (!this->HasComponent<BoxCollider>())
+					{
+						this->AddComponent<BoxCollider>();
+					}
+				}
+				else if (str == "Sprite")
+				{
+					std::cout << "Should add sprite" << std::endl;
+					if (!this->HasComponent<Sprite>())
+						this->AddComponent<Sprite>();
+				}
+				else
+				{
+				}
 			}
 		}
 		ImGui::EndChild();
@@ -243,7 +263,7 @@ std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 			variables.push_back(ser);
 		}
 	}
-	return variables;	
+	return variables;
 }
 
 

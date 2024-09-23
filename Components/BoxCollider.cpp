@@ -1,7 +1,13 @@
 #include "BoxCollider.h"
 #include "../Engine.h"
 #include "Sprite.h"
-
+BoxCollider::BoxCollider()
+{
+	configuredHitbox = true;
+	hitbox = sf::FloatRect(0, 0, 0, 0);
+	collisionTag = "Enter tag";
+	isTrigger = false;
+}
 BoxCollider::BoxCollider(std::string tag, bool isTrigger)
 {
 	collisionTag = tag;
@@ -111,7 +117,8 @@ void BoxCollider::update(float dt)
 {
 	//colliderVisual.setPosition(sprite->GetPosition());
 	//colliderVisual.setOrigin(sprite->GetOrigin());
-	colliderVisual.setPosition(GetRect().getPosition());
+	if (entity->HasComponent<Sprite>())
+		colliderVisual.setPosition(GetRect().getPosition());
 }
 
 std::string BoxCollider::GetCollisionTag()

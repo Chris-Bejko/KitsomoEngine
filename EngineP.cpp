@@ -8,6 +8,7 @@
 #include  "imgui-sfml.h"
 #include "imguiHandler.h"
 #include <fstream>
+#include "Components/Sprite.h"
 
 Engine* Engine::s_instance = nullptr;
 
@@ -148,9 +149,9 @@ void Engine::Save()
 	for (auto& e : entitiesAndComps)
 	{
 		myFile << "ENTITY_NAME_" << e.entityName << "_ENTITY_NAME_E_";
+		myFile << "_COMPONENTS_LIST_";
 		for (auto& c : e.components)
 		{
-			myFile << "_COMPONENTS_LIST_";
 			myFile << "_COMPONENT_NAME_" << c.componentName;
 			myFile << "_COMPONENT_NAME_E_";
 			for (auto& f : c.variables)
@@ -186,7 +187,7 @@ void Engine::Save()
 				}
 				myFile << ";" << f.type << ";;";
 			}
-			myFile << "_FIELD_";
+			myFile << "_COMPONENTS_LIST_";
 		}
 		myFile << "\n";
 	}
@@ -222,7 +223,7 @@ void Engine::Load()
 
 			std::size_t fieldPos = 0;
 			std::string delField = "_FIELD_";
-			line.erase(0, pos + delimiter.length());
+			std::cout << line << std::endl;
 			while ((fieldPos = line.find(delField)) != std::string::npos)
 			{
 				delStart = ":";
@@ -264,6 +265,7 @@ void Engine::Load()
 				line.erase(0, fieldPos + delField.length());
 
 			}
+			line.erase(0, pos + delimiter.length());
 			ent.components.push_back(comp);
 		}
 		entities.push_back(ent);
@@ -280,6 +282,18 @@ void Engine::Load()
 			if (c.componentName == "Transform")
 			{
 				ent->GetComponent<Transform>().InitSerializedFields(c.fields);
+			}
+			if (c.componentName == "BoxCollider")
+			{
+				ent->GetComponent<BoxCollider>().InitSerializedFields(c.fields);
+			}
+			if (c.componentName == "Sprite")
+			{
+				ent->GetComponent<Sprite>().InitSerializedFields(c.fields);
+			}
+			if (c.componentName == "Rigidbody")
+			{
+				//ent->GetComponent<Rigidbody>().InitSerializedFields(c.fields);
 			}
 		}
 		manager->addEntity(ent);

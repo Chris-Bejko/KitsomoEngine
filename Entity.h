@@ -9,6 +9,7 @@
 #include "Component.h"
 #include <filesystem>
 #include <iostream>
+#include "Components/BoxCollider.h"
 
 
 class Transform;

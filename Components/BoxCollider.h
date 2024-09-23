@@ -2,12 +2,14 @@
 
 #include <string>
 #include <vector>
-#include <../Component.h>
+#include "../Component.h"
 #include <SFML/Graphics.hpp>
+
 
 class BoxCollider : public Component
 {
 public:
+	BoxCollider();
 
 	BoxCollider(std::string tag, bool isTrigger = false);
 
