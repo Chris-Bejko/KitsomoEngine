@@ -79,6 +79,11 @@ void EntityManager::DisplayComponents()
 	}
 }
 
+void EntityManager::DestroyAllEntities()
+{
+	entities.clear();
+}
+
 void EntityManager::Collisions()
 {
 	if (Engine::get().isEngine)

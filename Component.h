@@ -14,6 +14,7 @@ public:
 	Entity* entity;
 
 	virtual bool Init() { return true; }
+	virtual bool InitEngine() { return true; }
 	virtual void draw() { }
 	virtual void update(float dt) { }
 	virtual std::vector<SerializableVariable>* GetSerializedFields() { return nullptr; }

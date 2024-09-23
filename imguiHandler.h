@@ -25,4 +25,5 @@ public:
 
 private:
 	static ImguiHandler * s_instance;
+	bool savePressed;
 };

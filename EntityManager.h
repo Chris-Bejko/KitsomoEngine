@@ -39,6 +39,7 @@ public:
 
 	void DisplayComponents();
 
+	void DestroyAllEntities();
 
 private:
 	std::vector<std::unique_ptr<Entity>> entities;

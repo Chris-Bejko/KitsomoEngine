@@ -91,13 +91,6 @@ void Engine::Update()
 	SystemsManager::get().Update();
 	auto rest = deltaClock.restart();
 	ImguiHandler::get().Update(rest);
-	//ImGui::Begin("Entities");
-	//ImGui::Button("+");
-	//manager->DisplayEntities();
-	//ImGui::End();
-
-
-
 	dt = rest.asSeconds();
 }
 
@@ -109,8 +102,6 @@ void Engine::Events()
 	if (event.type == sf::Event::Closed)
 		Clean();
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		Save();
 }
 
 bool Engine::IsRunning()
@@ -133,6 +124,11 @@ bool Engine::IsPlayMode()
 	return playMode;
 }
 
+void Engine::SetPlaymode(bool playMode)
+{
+	this->playMode = playMode;
+}
+
 void Engine::Spawn(Entity* entity)
 {
 	manager->addEntity(entity);
@@ -143,11 +139,15 @@ size_t Engine::GetTotalEntities()
 	return manager->GetTotalEntities();
 }
 
-void Engine::Save()
+void Engine::Save(std::string filename)
 {
+
+	if (playMode)
+		return;
+
 	auto entitiesAndComps = manager->SerializeEntities();
 	std::ofstream myFile;
-	myFile.open("saveFile.txt");
+	myFile.open(filename + ".txt");
 	for (auto& e : entitiesAndComps)
 	{
 		myFile << "ENTITY_NAME_" << e.entityName << "_ENTITY_NAME_E_";
@@ -312,3 +312,9 @@ std::string Engine::GetSubstring(std::string& line, std::string& delStart, std::
 	return final;
 }
 
+void Engine::Reset()
+{
+	manager->DestroyAllEntities();
+	Load();
+	isEngine = true;
+}

@@ -28,11 +28,13 @@ public:
 
     size_t GetTotalEntities();
 
-    void Save();
+    void Save(std::string fileName);
 
     void Load();
 
     std::string GetSubstring(std::string & line, std::string & delStart, std::string & delEnd, bool erase);
+
+    void Reset();
 
     inline static Engine& get()
     {
@@ -46,11 +48,15 @@ public:
 
     bool IsRunning();
 
+
     sf::RenderWindow &GetWindow();
 
     EntityManager* GetManager();
 
     bool IsPlayMode();
+
+    void SetPlaymode(bool playMode);
+
 private:
     bool playMode;
     EntityManager* manager;
