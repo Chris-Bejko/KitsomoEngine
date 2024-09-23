@@ -15,8 +15,10 @@ public:
 	~EntityManager() = default;
 
 	void draw();
+	void updateEngine(float dt);
 	void update(float dt);
 	void refresh();
+	void Awake();
 	void Collisions();
 
 

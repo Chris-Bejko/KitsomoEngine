@@ -24,27 +24,34 @@ public:
 
 	bool Init() override final
 	{
+		std::cout << "Init called" << std::endl;
 		entity->transform->position = initPos;
 		AssetManager::get().loadTexture("triangle", "triangle.png");
 		entity->AddComponent<Sprite>("triangle");
 		entity->AddComponent<BoxCollider>(initTag, sf::FloatRect(0, 0, 55, 50));
 		entity->transform->scale = Vector2F(0.05, 0.05);
+		return true;
+	}
+
+	void Awake() override final
+	{
+		std::cout << "Awake called" << std::endl;
 		Entity* bulletSpawnPoint = new Entity("spawnpoint");
 		AssetManager::get().loadTexture("circle", "circle.png");
 		bulletSpawnPoint->AddComponent<Sprite>("circle");
 		spawnPoint = bulletSpawnPoint->transform;
 		spawnPoint->scale = Vector2F(.03f, .03f);
 		Engine::get().Spawn(bulletSpawnPoint);
-
-		return true;
 	}
 
+	void updateEngine(float dt) override final
+	{
+
+	}
 
 	void update(float dt) override final
 	{
-		if (!useControls || Engine::get().isEngine)
-			return;
-
+		std::cout << "Updating Player" << std::endl;
 		SetSpawnPointPosition();
 		//spawnPoint->position = Vector2F(entity->transform->position.x, entity->transform->position.y - 10);
 		spawnPoint->rotation = entity->transform->rotation;
@@ -64,6 +71,7 @@ public:
 			Engine::get().GetManager()->addEntity(bullet);
 			spawned->AddForce(GetMouseVector());
 		}
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		{
 			Move(Vector2F(moveSpeed * dt, 0));

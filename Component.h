@@ -14,9 +14,11 @@ public:
 	Entity* entity;
 
 	virtual bool Init() { return true; }
-	virtual bool InitEngine() { return true; }
+
+	virtual void Awake() { }
 	virtual void draw() { }
 	virtual void update(float dt) { }
+	virtual void updateEngine(float dt) { }
 	virtual std::vector<SerializableVariable>* GetSerializedFields() { return nullptr; }
 	virtual void SetSerializedFields(std::vector<SerializableVariable> variables) { }
 

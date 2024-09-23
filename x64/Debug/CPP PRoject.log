@@ -1,6 +1,1 @@
-﻿  imguiHandler.cpp
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(17,28): warning C4099: 'SerializableComponent': type name first seen using 'struct' now seen using 'class'
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(37,8): message : see declaration of 'SerializableComponent'
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EntityManager.h(9,25): warning C4099: 'SerializableEntity': type name first seen using 'struct' now seen using 'class'
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(44,8): message : see declaration of 'SerializableEntity'
-  CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe
+﻿  CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe

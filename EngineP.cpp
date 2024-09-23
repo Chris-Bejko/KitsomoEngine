@@ -31,7 +31,6 @@ void Engine::Quit()
 
 void Engine::Init()
 {
-	playMode = false;
 	this->window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML works!");
 	this->window = window;
 	if (!ImGui::SFML::Init(GetWindow()))
@@ -84,10 +83,33 @@ void Engine::Render()
 
 void Engine::Update()
 {
+
+
 	bool checkBox;
 	sf::Clock deltaClock;
-	manager->update(dt);
-	manager->Collisions();
+	switch (currentState)
+	{
+	case EngineState::Running:
+	{
+		manager->updateEngine(dt);
+		break;
+	}
+	case EngineState::Paused:
+	{
+		manager->updateEngine(dt);
+		break;
+	}
+	case EngineState::PlayMode:
+	{
+		if (!entitiesAwaken)
+			break;
+
+		manager->update(dt);
+		manager->Collisions();
+		break;
+	}
+
+	}
 	SystemsManager::get().Update();
 	auto rest = deltaClock.restart();
 	ImguiHandler::get().Update(rest);
@@ -102,6 +124,41 @@ void Engine::Events()
 	if (event.type == sf::Event::Closed)
 		Clean();
 
+}
+
+EngineState Engine::GetCurrentState()
+{
+	return currentState;
+}
+
+void Engine::SetEngineState(EngineState engineState)
+{
+	previousState = currentState;
+	currentState = engineState;
+	switch (engineState)
+	{
+	case EngineState::Running:
+	{
+		if (previousState != EngineState::Running)
+		{
+			Reset();
+		}
+		break;
+	}
+	case EngineState::Paused:
+	{
+		break;
+	}
+	case EngineState::PlayMode:
+	{
+		if (previousState == EngineState::Running)
+		{
+			manager->Awake();
+			entitiesAwaken = true;
+		}
+		break;
+	}
+	}
 }
 
 bool Engine::IsRunning()
@@ -119,16 +176,6 @@ EntityManager* Engine::GetManager()
 	return manager;
 }
 
-bool Engine::IsPlayMode()
-{
-	return playMode;
-}
-
-void Engine::SetPlaymode(bool playMode)
-{
-	this->playMode = playMode;
-}
-
 void Engine::Spawn(Entity* entity)
 {
 	manager->addEntity(entity);
@@ -141,10 +188,6 @@ size_t Engine::GetTotalEntities()
 
 void Engine::Save(std::string filename)
 {
-
-	if (playMode)
-		return;
-
 	auto entitiesAndComps = manager->SerializeEntities();
 	std::ofstream myFile;
 	myFile.open(filename + ".txt");
@@ -195,7 +238,7 @@ void Engine::Save(std::string filename)
 	myFile.close();
 }
 
-void Engine::Load()
+void Engine::Load(std::string fileName)
 {
 	//convert file to std::vector<SerializableEntity>();
 	std::vector<SerializableEntity> entities;
@@ -203,7 +246,7 @@ void Engine::Load()
 
 	std::fstream myFile;
 	std::string line;
-	myFile.open("saveFile.txt", std::ios::out | std::ios::in);
+	myFile.open(fileName, std::ios::out | std::ios::in);
 
 	std::string entityName;
 	while (std::getline(myFile, line))
@@ -295,9 +338,14 @@ void Engine::Load()
 			{
 				//ent->GetComponent<Rigidbody>().InitSerializedFields(c.fields);
 			}
+			if (c.componentName == "Player")
+			{
+				ent->AddComponent<Player>();
+			}
 		}
 		manager->addEntity(ent);
 	}
+	currentState = EngineState::Running;
 }
 
 std::string Engine::GetSubstring(std::string& line, std::string& delStart, std::string& delEnd, bool erase = false)

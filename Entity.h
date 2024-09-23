@@ -57,6 +57,9 @@ public:
 		return componentsBitset[getComponentTypeID<T>()];
 	}
 
+
+	void Awake();
+
 	bool IsActive() const;
 
 	void Destroy();
@@ -64,6 +67,8 @@ public:
 	void Draw();
 
 	void Update(float dt);
+
+	void UpdateEngine(float dt);
 
 	void OnCollisionEnter(BoxCollider& other);
 

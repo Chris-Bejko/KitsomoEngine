@@ -7,35 +7,47 @@ void ImguiHandler::Update(sf::Time rest)
 {
 	ImGui::SFML::Update(Engine::get().GetWindow(), rest);
 	ImGui::Begin("!");
-	if (!Engine::get().isEngine)
+	switch (Engine::get().GetCurrentState())
 	{
-		if (ImGui::Button("Pause"))
-		{
-			savePressed = false;
-			Engine::get().isEngine = true;
-			Engine::get().SetPlaymode(true);
-		}
-
-	}else
+	case EngineState::Running:
 	{
 		if (ImGui::Button("Play"))
 		{
 			savePressed = false;
-			Engine::get().isEngine = false;
-			Engine::get().SetPlaymode(true);
+			Engine::get().SetEngineState(EngineState::PlayMode);
 		}
+		break;
+	}
+	case EngineState::PlayMode:
+	{
+		if (ImGui::Button("Pause"))
+		{
+			savePressed = false;
+			Engine::get().SetEngineState(EngineState::Paused);
+		}
+		break;
+	}
+	case EngineState::Paused:
+	{
+		if (ImGui::Button("Play"))
+		{
+			savePressed = false;
+			Engine::get().SetEngineState(EngineState::PlayMode);
+		}
+		break;
+	}
 	}
 	if (ImGui::Button("Reset"))
 	{
 		savePressed = false;
-		Engine::get().Reset();
-		Engine::get().SetPlaymode(false);
+		Engine::get().SetEngineState(EngineState::Running);
 	}
 
 
 	ImGui::End();
-	if (!Engine::get().isEngine)
+	if (Engine::get().GetCurrentState() == EngineState::PlayMode)
 		return;
+
 	ImGui::Begin("Entities");
 	if (ImGui::Button("+"))
 	{
@@ -54,7 +66,7 @@ void ImguiHandler::Update(sf::Time rest)
 
 	if (savePressed)
 	{
-		if (!Engine::get().IsPlayMode())
+		if (Engine::get().GetCurrentState() == EngineState::Running)
 		{
 			std::string str("Enter Filename (no extenstions)");
 			ImGui::Begin("Save as");

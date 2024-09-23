@@ -11,6 +11,27 @@ void EntityManager::draw()
 	}
 }
 
+
+void EntityManager::updateEngine(float dt)
+{
+	while (to_add.size() > 0)
+	{
+		entities.push_back(std::move(to_add.back()));
+
+		to_add.pop_back();
+	}
+	//to_add.clear();
+	for (auto& entity : entities)
+	{
+		entity->UpdateEngine(dt);
+	}
+
+	entities.erase(std::remove_if(entities.begin(), entities.end(),
+		[](const std::unique_ptr<Entity>& entity) {
+			return !entity->IsActive();
+		}),
+		entities.end());
+}
 void EntityManager::update(float dt)
 {
 	while (to_add.size() > 0)
@@ -164,6 +185,14 @@ void EntityManager::Collisions()
 }
 void EntityManager::refresh()
 {
+}
+
+void EntityManager::Awake()
+{
+	for(auto& e : entities)
+	{
+		e->Awake();
+	}
 }
 
 void EntityManager::addEntity(Entity* ent)

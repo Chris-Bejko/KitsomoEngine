@@ -23,6 +23,14 @@ void Entity::Destroy()
 	isActive = false;
 }
 
+void Entity::Awake()
+{
+	for (auto& comp : components)
+	{
+		comp->Awake();
+	}
+}
+
 void Entity::Draw()
 {
 	for (auto& comp : components)
@@ -36,6 +44,14 @@ void Entity::Update(float dt)
 	for (auto& comp : components)
 	{
 		comp->update(dt);
+	}
+}
+
+void Entity::UpdateEngine(float dt)
+{
+	for(auto& comp : components)
+	{
+		comp->updateEngine(dt);
 	}
 }
 

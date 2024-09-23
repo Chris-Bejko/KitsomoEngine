@@ -5,6 +5,12 @@
 
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
+enum EngineState
+{
+    Running,
+    PlayMode,
+    Paused
+};
 
 class Engine
 {
@@ -30,7 +36,7 @@ public:
 
     void Save(std::string fileName);
 
-    void Load();
+    void Load(std::string fileName = "saveFile.txt");
 
     std::string GetSubstring(std::string & line, std::string & delStart, std::string & delEnd, bool erase);
 
@@ -46,23 +52,27 @@ public:
         return *s_instance;
     }
 
-    bool IsRunning();
 
+    EngineState GetCurrentState();
+
+    void SetEngineState(EngineState engineState);
+
+    bool IsRunning();
 
     sf::RenderWindow &GetWindow();
 
     EntityManager* GetManager();
 
-    bool IsPlayMode();
-
-    void SetPlaymode(bool playMode);
 
 private:
-    bool playMode;
+    EngineState currentState;
+    EngineState previousState;
     EntityManager* manager;
     bool isRunning;
     sf::RenderWindow *window;
     static Engine* s_instance;
     InputSystem* inputSystem;
     float dt = 1.f;
+
+    bool entitiesAwaken;
 };
