@@ -123,13 +123,3 @@ sf::FloatRect BoxCollider::GetRect()
 {
 	return entity->GetComponent<Sprite>().TranslateHitbox(hitbox);
 }
-
-//sf::Sprite BoxCollider::GetSprite()
-//{
-//	return entity->GetComponent<Sprite>().GetSprite();
-//}
-
-bool BoxCollider::IsTrigger()
-{
-	return isTrigger;
-}

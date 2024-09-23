@@ -1,6 +1,8 @@
 #include "Engine.h"
 #include <iostream>
 #include "SystemManager.h"
+#include "Serialization.h"
+#include "Components/Transform.h"
 #include <cassert>
 #include  "imgui.h"
 #include  "imgui-sfml.h"

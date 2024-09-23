@@ -35,8 +35,10 @@ public:
 
 	sf::FloatRect GetRect();
 
-
-	bool IsTrigger();
+	inline bool IsTrigger()
+	{
+		return isTrigger;
+	}
 
 private:
 	std::vector<SerializableVariable> serializables;

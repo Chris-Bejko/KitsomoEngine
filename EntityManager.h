@@ -6,6 +6,8 @@
 #include "imgui.h"
 #include "imgui-SFML.h"
 
+class SerializableEntity;
+
 class EntityManager
 {
 public:
