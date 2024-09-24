@@ -62,7 +62,8 @@ void ImguiHandler::Update(sf::Time rest)
 	ImGui::End();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		savePressed = true;
+		if(!savePressed)
+			savePressed = true;
 
 	if (savePressed)
 	{

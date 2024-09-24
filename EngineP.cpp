@@ -282,6 +282,8 @@ void Engine::Load(std::string fileName)
 				delEnd = ";;";
 				auto fieldType = GetSubstring(line, delStart, delEnd, false);
 
+				if (fieldType == "_FIELD_")
+					break;
 				switch (std::stoi(fieldType))
 				{
 				case 1:
@@ -340,7 +342,7 @@ void Engine::Load(std::string fileName)
 			}
 			if (c.componentName == "Player")
 			{
-				ent->AddComponent<Player>();
+				ent->AddComponent<Player>().InitSerializedFields(c.fields);
 			}
 		}
 		manager->addEntity(ent);

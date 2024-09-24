@@ -25,17 +25,39 @@ public:
 	bool Init() override final
 	{
 		std::cout << "Init called" << std::endl;
-		entity->transform->position = initPos;
-		AssetManager::get().loadTexture("triangle", "triangle.png");
-		entity->AddComponent<Sprite>("triangle");
-		entity->AddComponent<BoxCollider>(initTag, sf::FloatRect(0, 0, 55, 50));
-		entity->transform->scale = Vector2F(0.05, 0.05);
+
 		return true;
 	}
 
+	void Serialize()
+	{
+		//variables.push_back({ "lastColor.r", &lastColor.r, float_Type });
+	}
+
+	std::vector<SerializableVariable>* GetSerializedFields() override final
+	{
+		return &variables;
+	}
+
+
+	void InitSerializedFields(ReadableSerializableVariableMap map)
+	{
+		for (auto const& [key, value] : map.floatFields)
+		{
+			if (key == "lastColor.r")
+			{
+				//lastColor.r = value;
+			}
+		}
+	}
 	void Awake() override final
 	{
+		entity->transform->position = initPos;
+		AssetManager::get().loadTexture("triangle", "triangle.png");
+		entity->AddComponent<Sprite>("triangle");
+		entity->transform->scale = Vector2F(0.05, 0.05);
 		std::cout << "Awake called" << std::endl;
+		entity->AddComponent<BoxCollider>(initTag, sf::FloatRect(0, 0, 55, 50));
 		Entity* bulletSpawnPoint = new Entity("spawnpoint");
 		AssetManager::get().loadTexture("circle", "circle.png");
 		bulletSpawnPoint->AddComponent<Sprite>("circle");
@@ -51,7 +73,6 @@ public:
 
 	void update(float dt) override final
 	{
-		std::cout << "Updating Player" << std::endl;
 		SetSpawnPointPosition();
 		//spawnPoint->position = Vector2F(entity->transform->position.x, entity->transform->position.y - 10);
 		spawnPoint->rotation = entity->transform->rotation;
@@ -131,6 +152,8 @@ public:
 	}
 
 private:
+	std::vector<SerializableVariable> variables;
+
 	bool useControls;
 	Vector2F initPos;
 	std::string initTag;
