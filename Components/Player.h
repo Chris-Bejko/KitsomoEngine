@@ -24,14 +24,20 @@ public:
 
 	bool Init() override final
 	{
+		Serialize();
 		std::cout << "Init called" << std::endl;
-
+		AssetManager::get().loadTexture("triangle", "triangle.png");
+		entity->AddComponent<Sprite>("triangle");
+		entity->transform->scale = Vector2F(0.05, 0.05);
 		return true;
 	}
 
 	void Serialize()
 	{
-		//variables.push_back({ "lastColor.r", &lastColor.r, float_Type });
+		variables.push_back({ "lastColor.r", &lastColor.r, int_Type });
+		variables.push_back({ "lastColor.g", &lastColor.g, int_Type });
+		variables.push_back({ "lastColor.b", &lastColor.b, int_Type });
+		variables.push_back({ "lastColor.a", &lastColor.a, int_Type });
 	}
 
 	std::vector<SerializableVariable>* GetSerializedFields() override final
@@ -46,18 +52,29 @@ public:
 		{
 			if (key == "lastColor.r")
 			{
-				//lastColor.r = value;
+				lastColor.r = value;
+			}
+			if (key == "lastColor.g")
+			{
+				lastColor.g = value;
+			}
+			if (key == "lastColor.b")
+			{
+				lastColor.b = value;
+			}
+			if (key == "lastColor.a")
+			{
+				lastColor.a = value;
 			}
 		}
 	}
 	void Awake() override final
 	{
 		entity->transform->position = initPos;
-		AssetManager::get().loadTexture("triangle", "triangle.png");
-		entity->AddComponent<Sprite>("triangle");
-		entity->transform->scale = Vector2F(0.05, 0.05);
+
 		std::cout << "Awake called" << std::endl;
 		entity->AddComponent<BoxCollider>(initTag, sf::FloatRect(0, 0, 55, 50));
+
 		Entity* bulletSpawnPoint = new Entity("spawnpoint");
 		AssetManager::get().loadTexture("circle", "circle.png");
 		bulletSpawnPoint->AddComponent<Sprite>("circle");
@@ -74,9 +91,9 @@ public:
 	void update(float dt) override final
 	{
 		SetSpawnPointPosition();
-		//spawnPoint->position = Vector2F(entity->transform->position.x, entity->transform->position.y - 10);
 		spawnPoint->rotation = entity->transform->rotation;
 		timer += dt;
+		//std::cout << "" << std::endl;
 		std::cout << sf::Mouse::isButtonPressed(sf::Mouse::Left) << " , " << (timer >= cooldown) << std::endl;
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && timer >= cooldown)
 		{

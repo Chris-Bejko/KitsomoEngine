@@ -344,6 +344,10 @@ void Engine::Load(std::string fileName)
 			{
 				ent->AddComponent<Player>().InitSerializedFields(c.fields);
 			}
+			if(c.componentName == "FloorSquare")
+			{
+				ent->AddComponent<FloorSquare>().InitSerializedFields(c.fields);
+			}
 		}
 		manager->addEntity(ent);
 	}

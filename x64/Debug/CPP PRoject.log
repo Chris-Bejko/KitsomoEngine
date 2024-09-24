@@ -1,8 +1,54 @@
-﻿  imguiHandler.cpp
+﻿  Entity.cpp
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(17,28): warning C4099: 'SerializableComponent': type name first seen using 'struct' now seen using 'class'
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(37,8): message : see declaration of 'SerializableComponent'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\FloorSquare.h(14,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EntityManager.h(9,25): warning C4099: 'SerializableEntity': type name first seen using 'struct' now seen using 'class'
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(44,8): message : see declaration of 'SerializableEntity'
-x64\Debug\BoxCollider.obj : warning LNK4042: object specified more than once; extras ignored
-x64\Debug\InputSystem.obj : warning LNK4042: object specified more than once; extras ignored
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(31,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(55,19): warning C4244: '=': conversion from 'const float' to 'sf::Uint8', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(59,19): warning C4244: '=': conversion from 'const float' to 'sf::Uint8', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(63,19): warning C4244: '=': conversion from 'const float' to 'sf::Uint8', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(67,19): warning C4244: '=': conversion from 'const float' to 'sf::Uint8', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(164,60): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(164,42): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(167,34): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(194,40): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(31,36): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.cpp(10,55): message : see reference to function template instantiation 'T &Entity::AddComponent<Transform,int,int>(int &&,int &&)' being compiled
+          with
+          [
+              T=Transform
+          ]
   CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe

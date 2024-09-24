@@ -64,6 +64,11 @@ int Sprite::GetWidth()
 	return width;
 }
 
+void Sprite::updateEngine(float dt)
+{
+	update(dt);
+}
+
 sf::Vector2f Sprite::GetScale()
 {
 	return sprite.getScale();

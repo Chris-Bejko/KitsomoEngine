@@ -27,6 +27,7 @@ public:
 
     int GetWidth();
 
+    void updateEngine(float dt) override final;
 
     sf::Vector2f GetScale();
 

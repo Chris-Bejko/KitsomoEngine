@@ -198,7 +198,7 @@ void Entity::DisplayComponents()
 
 				auto p = reinterpret_cast<std::string*>(it->data);
 				std::string str(*p);
-				ImGui::InputText(it->name, &str[0], 50);
+				ImGui::InputText(it->name, &str[0], 200);
 				*p = &str[0];
 				break;
 			}
@@ -260,6 +260,11 @@ void Entity::DisplayAvailableComponents()
 				{
 					if (!this->HasComponent<Player>())
 						this->AddComponent<Player>();
+				}
+				else if(str == "FloorSquare")
+				{
+					if (!this->HasComponent<FloorSquare>())
+						this->AddComponent<FloorSquare>();
 				}
 			}
 		}
