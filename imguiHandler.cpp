@@ -62,14 +62,16 @@ void ImguiHandler::Update(sf::Time rest)
 	ImGui::End();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
 		if(!savePressed)
+			str = "Enter filename (no extensions)";
 			savePressed = true;
+	}
 
 	if (savePressed)
 	{
 		if (Engine::get().GetCurrentState() == EngineState::Running)
 		{
-			std::string str("Enter Filename (no extenstions)");
 			ImGui::Begin("Save as");
 			ImGui::InputText("Save Project", &str[0], 55);
 			if (ImGui::Button("Save"))
