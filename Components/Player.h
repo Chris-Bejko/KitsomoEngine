@@ -24,10 +24,12 @@ public:
 
 	bool Init() override final
 	{
+		std::cout << "Should add sprite" << std::endl;
 		Serialize();
 		std::cout << "Init called" << std::endl;
 		AssetManager::get().loadTexture("triangle", "triangle.png");
-		entity->AddComponent<Sprite>("triangle");
+		if(!entity->HasComponent<Sprite>())
+			entity->AddComponent<Sprite>("triangle");
 		entity->transform->scale = Vector2F(0.05, 0.05);
 		return true;
 	}
