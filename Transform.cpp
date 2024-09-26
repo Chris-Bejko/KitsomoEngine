@@ -86,3 +86,9 @@ void Transform::LookAt(const float rotation)
 {
 	this->rotation = rotation;
 }
+
+void Transform::SetPosition(float x, float y)
+{
+	position.x = x;
+	position.y = y;
+}

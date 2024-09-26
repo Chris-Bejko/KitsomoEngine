@@ -25,12 +25,21 @@ void Entity::Destroy()
 
 void Entity::Awake()
 {
+	ValidateAddedComponents();
 	for (auto& comp : components)
 	{
 		comp->Awake();
 	}
 }
 
+void Entity::ValidateAddedComponents()
+{
+	for(auto& comp : to_Add)
+	{
+		components.push_back(std::move(to_Add.back()));
+		to_Add.pop_back();
+	}
+}
 void Entity::Draw()
 {
 	for (auto& comp : components)
@@ -41,6 +50,7 @@ void Entity::Draw()
 
 void Entity::Update(float dt)
 {
+	ValidateAddedComponents();
 	for (auto& comp : components)
 	{
 		comp->update(dt);
@@ -49,6 +59,7 @@ void Entity::Update(float dt)
 
 void Entity::UpdateEngine(float dt)
 {
+	ValidateAddedComponents();
 	for(auto& comp : components)
 	{
 		comp->updateEngine(dt);
@@ -57,6 +68,7 @@ void Entity::UpdateEngine(float dt)
 
 void Entity::OnCollisionEnter(BoxCollider& other)
 {
+	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 	for (auto& comp : components)
@@ -70,6 +82,7 @@ void Entity::OnCollisionEnter(BoxCollider& other)
 
 void Entity::OnTriggerEnter(BoxCollider& other)
 {
+	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 
@@ -83,6 +96,7 @@ void Entity::OnTriggerEnter(BoxCollider& other)
 
 void Entity::OnTriggerStay(BoxCollider& other)
 {
+	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 
@@ -96,6 +110,7 @@ void Entity::OnTriggerStay(BoxCollider& other)
 
 void Entity::OnTriggerExit(BoxCollider& other)
 {
+	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 
@@ -109,6 +124,7 @@ void Entity::OnTriggerExit(BoxCollider& other)
 
 void Entity::OnCollisionExit(BoxCollider& other)
 {
+	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 
@@ -150,6 +166,7 @@ void Entity::DisplayComponents()
 	if (!displayComponents)
 		return;
 
+	ValidateAddedComponents();
 	ImGui::Checkbox("+", &addingNewComp);
 
 	auto windowWidth = ImGui::GetWindowSize().x;

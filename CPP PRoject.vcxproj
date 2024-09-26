@@ -166,6 +166,7 @@
     <ClInclude Include="ECS.h" />
     <ClInclude Include="ECSEngine.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="EngineSprite.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="Components\FloorSquare.h" />

@@ -73,6 +73,9 @@
     <Filter Include="Source Files\ECS\EntityManager">
       <UniqueIdentifier>{093efbbf-ec29-437f-9444-967fb1efbc96}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ECS\Base Components\EngineSprite">
+      <UniqueIdentifier>{c0a834fd-25c9-474c-baac-4570e35fbb7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -232,6 +235,9 @@
     </ClInclude>
     <ClInclude Include="EntityManager.h">
       <Filter>Source Files\ECS\EntityManager</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineSprite.h">
+      <Filter>Source Files\ECS\Base Components\EngineSprite</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

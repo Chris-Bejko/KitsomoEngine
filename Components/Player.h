@@ -70,7 +70,8 @@ public:
 	}
 	void Awake() override final
 	{
-		entity->transform->position = initPos;
+
+		//entity->transform->position = initPos;
 
 		std::cout << "Awake called" << std::endl;
 		entity->AddComponent<BoxCollider>(initTag, sf::FloatRect(0, 0, 55, 50));

@@ -48,6 +48,9 @@ public:
     sf::Vector2f GetRotation();
 private:
     std::vector<SerializableVariable> variables;
+    bool dragging;
+    sf::Vector2f mouseRectOffset;
+    sf::Vector2i mousePos;
 
     int width = 0;
     int height = 0;

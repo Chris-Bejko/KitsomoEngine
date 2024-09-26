@@ -22,6 +22,11 @@ public:
 	void Collisions();
 
 
+
+	void ValidateAdded();
+
+	void ValidateRemoved();
+
 	void addEntity(Entity* ent);
 	void eraseEntity(Entity* ent);
 

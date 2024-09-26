@@ -30,6 +30,8 @@ public:
 
 	void LookAt(const float rotation);
 
+	void SetPosition(float x, float y);
+
 private:
 	std::vector<SerializableVariable> variables;
 };

@@ -14,25 +14,26 @@ void EntityManager::draw()
 
 void EntityManager::updateEngine(float dt)
 {
-	while (to_add.size() > 0)
-	{
-		entities.push_back(std::move(to_add.back()));
-
-		to_add.pop_back();
-	}
-	//to_add.clear();
+	ValidateAdded();
 	for (auto& entity : entities)
 	{
 		entity->UpdateEngine(dt);
 	}
-
-	entities.erase(std::remove_if(entities.begin(), entities.end(),
-		[](const std::unique_ptr<Entity>& entity) {
-			return !entity->IsActive();
-		}),
-		entities.end());
+	ValidateRemoved();
 }
 void EntityManager::update(float dt)
+{
+
+	ValidateAdded();
+	for (auto& entity : entities)
+	{
+		entity->Update(dt);
+	}
+	ValidateRemoved();
+
+}
+
+void EntityManager::ValidateAdded()
 {
 	while (to_add.size() > 0)
 	{
@@ -40,19 +41,16 @@ void EntityManager::update(float dt)
 
 		to_add.pop_back();
 	}
-	//to_add.clear();
-	for (auto& entity : entities)
-	{
-		entity->Update(dt);
-	}
+}
 
+void EntityManager::ValidateRemoved()
+{
 	entities.erase(std::remove_if(entities.begin(), entities.end(),
 		[](const std::unique_ptr<Entity>& entity) {
 			return !entity->IsActive();
 		}),
 		entities.end());
 }
-
 size_t EntityManager::GetTotalEntities()
 {
 	return entities.size();
@@ -189,10 +187,12 @@ void EntityManager::refresh()
 
 void EntityManager::Awake()
 {
+	ValidateAdded();
 	for(auto& e : entities)
 	{
 		e->Awake();
 	}
+	ValidateRemoved();
 }
 
 void EntityManager::addEntity(Entity* ent)

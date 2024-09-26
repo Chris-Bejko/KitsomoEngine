@@ -52,6 +52,11 @@ void Sprite::update(float dt)
 	sprite.setPosition(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y);
 	sprite.setRotation(entity->GetComponent<Transform>().rotation);
 	sprite.setScale(sf::Vector2f(entity->GetComponent<Transform>().scale.x, entity->GetComponent<Transform>().scale.y));
+
+	if (dragging == true)
+	{
+		entity->GetComponent<Transform>().SetPosition(mousePos.x - mouseRectOffset.x, mousePos.y - mouseRectOffset.y);
+	}
 }
 
 int Sprite::GetHeight()
@@ -67,6 +72,25 @@ int Sprite::GetWidth()
 void Sprite::updateEngine(float dt)
 {
 	update(dt);
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	{
+		mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
+		if (GetGlobalBounds().contains(mousePos.x, mousePos.y))
+		{
+			dragging = true;
+			mouseRectOffset.x = mousePos.x - GetGlobalBounds().left - GetOrigin().x;
+			mouseRectOffset.y = mousePos.y - GetGlobalBounds().top - GetOrigin().y;
+		}
+		else
+		{
+			dragging = false;
+		}
+	}
+	else
+	{
+		dragging = false;
+	}
 }
 
 sf::Vector2f Sprite::GetScale()

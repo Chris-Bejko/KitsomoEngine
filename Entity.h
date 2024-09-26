@@ -30,7 +30,7 @@ public:
 	{
 		T* comp(new T(std::forward<TArgs>(args)...));
 		std::unique_ptr<Component> uptr{ comp };
-		components.emplace_back(std::move(uptr));
+		to_Add.emplace_back(std::move(uptr));
 
 
 		comp->entity = this;
@@ -63,6 +63,8 @@ public:
 	bool IsActive() const;
 
 	void Destroy();
+
+	void ValidateAddedComponents();
 
 	void Draw();
 
@@ -105,4 +107,5 @@ private:
 	std::string entityName;
 
 	std::vector<std::unique_ptr<Component>> components;
+	std::vector<std::unique_ptr<Component>> to_Add;
 };
