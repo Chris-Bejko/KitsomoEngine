@@ -46,11 +46,12 @@ public:
     void SetOrigin(const Vector2F& origin);
 
     sf::Vector2f GetRotation();
+    bool isMouseOver(const sf::Sprite& sprite, int mouseX, int mouseY);
 private:
     std::vector<SerializableVariable> variables;
     bool dragging;
     sf::Vector2f mouseRectOffset;
-    sf::Vector2i mousePos;
+    sf::Vector2f mousePos;
 
     int width = 0;
     int height = 0;

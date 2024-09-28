@@ -53,8 +53,9 @@ void Sprite::update(float dt)
 	sprite.setRotation(entity->GetComponent<Transform>().rotation);
 	sprite.setScale(sf::Vector2f(entity->GetComponent<Transform>().scale.x, entity->GetComponent<Transform>().scale.y));
 
-	if (dragging == true)
+	if (dragging)
 	{
+		std::cout << "Should drag to entity: " << entity->GetName() << std::endl;
 		entity->GetComponent<Transform>().SetPosition(mousePos.x - mouseRectOffset.x, mousePos.y - mouseRectOffset.y);
 	}
 }
@@ -75,20 +76,17 @@ void Sprite::updateEngine(float dt)
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
-		if (GetGlobalBounds().contains(mousePos.x, mousePos.y))
+		mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
+
+		if (isMouseOver(sprite, mousePos.x, mousePos.y) && (!Engine::get().DraggingEntity() || Engine::get().GetDraggedEntity() == entity->GetName()))
 		{
+			Engine::get().TriggerDragging(entity->GetName());
 			dragging = true;
-			mouseRectOffset.x = mousePos.x - GetGlobalBounds().left - GetOrigin().x;
-			mouseRectOffset.y = mousePos.y - GetGlobalBounds().top - GetOrigin().y;
-		}
-		else
-		{
-			dragging = false;
 		}
 	}
 	else
 	{
+		Engine::get().TriggerDragging("");
 		dragging = false;
 	}
 }
@@ -136,4 +134,9 @@ void Sprite::SetOrigin(const Vector2F& origin)
 sf::Vector2f Sprite::GetRotation()
 {
 	return sf::Vector2f();
+}
+
+bool Sprite::isMouseOver(const sf::Sprite& sprite, int mouseX, int mouseY)
+{
+	return sprite.getGlobalBounds().contains(mouseX, mouseY);
 }

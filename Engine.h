@@ -63,8 +63,13 @@ public:
 
     EntityManager* GetManager();
 
+    bool DraggingEntity();
 
+    std::string GetDraggedEntity();
+
+    void TriggerDragging(std::string newDragged);
 private:
+
     EngineState currentState;
     EngineState previousState;
     EntityManager* manager;
@@ -75,4 +80,7 @@ private:
     float dt = 1.f;
 
     bool entitiesAwaken;
+
+    std::string draggedEntity = "";
+
 };

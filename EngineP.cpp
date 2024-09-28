@@ -176,6 +176,22 @@ EntityManager* Engine::GetManager()
 	return manager;
 }
 
+bool Engine::DraggingEntity()
+{
+	return draggedEntity != "";
+}
+
+
+std::string Engine::GetDraggedEntity()
+{
+	return draggedEntity;
+}
+
+void Engine::TriggerDragging(std::string newDragged)
+{
+	draggedEntity = newDragged;
+}
+
 void Engine::Spawn(Entity* entity)
 {
 	manager->addEntity(entity);
@@ -344,7 +360,7 @@ void Engine::Load(std::string fileName)
 			{
 				ent->AddComponent<Player>().InitSerializedFields(c.fields);
 			}
-			if(c.componentName == "FloorSquare")
+			if (c.componentName == "FloorSquare")
 			{
 				ent->AddComponent<FloorSquare>().InitSerializedFields(c.fields);
 			}

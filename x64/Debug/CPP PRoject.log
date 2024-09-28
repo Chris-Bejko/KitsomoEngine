@@ -1,1 +1,26 @@
-﻿  CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe
+﻿  Sprite.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(17,28): warning C4099: 'SerializableComponent': type name first seen using 'struct' now seen using 'class'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(37,8): message : see declaration of 'SerializableComponent'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EntityManager.h(9,25): warning C4099: 'SerializableEntity': type name first seen using 'struct' now seen using 'class'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(44,8): message : see declaration of 'SerializableEntity'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Sprite.cpp(81,47): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Sprite.cpp(81,35): warning C4244: 'argument': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Sprite.cpp(145,51): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Sprite.cpp(145,43): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe
