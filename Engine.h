@@ -36,7 +36,7 @@ public:
 
     void Save(std::string fileName);
 
-    void Load(std::string fileName = "saveFile.txt");
+    bool Load(std::string fileName = "saveFile.txt");
 
     std::string GetSubstring(std::string & line, std::string & delStart, std::string & delEnd, bool erase);
 

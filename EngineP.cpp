@@ -46,7 +46,7 @@ void Engine::Init()
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
 	std::ofstream txtFile;
-	Load();
+	//Load();
 	//Entity* newEntity = new Entity("Player");
 	//Entity* floorSquare = new Entity("floor Square");
 	//Entity* floorSquare1 = new Entity("floor Square(1)");
@@ -254,7 +254,7 @@ void Engine::Save(std::string filename)
 	myFile.close();
 }
 
-void Engine::Load(std::string fileName)
+bool Engine::Load(std::string fileName)
 {
 	//convert file to std::vector<SerializableEntity>();
 	std::vector<SerializableEntity> entities;
@@ -263,7 +263,10 @@ void Engine::Load(std::string fileName)
 	std::fstream myFile;
 	std::string line;
 	myFile.open(fileName, std::ios::out | std::ios::in);
-
+	if (!bool(myFile))
+	{
+		return false;
+	}
 	std::string entityName;
 	while (std::getline(myFile, line))
 	{
@@ -368,6 +371,7 @@ void Engine::Load(std::string fileName)
 		manager->addEntity(ent);
 	}
 	currentState = EngineState::Running;
+	return true;
 }
 
 std::string Engine::GetSubstring(std::string& line, std::string& delStart, std::string& delEnd, bool erase = false)

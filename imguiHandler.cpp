@@ -14,7 +14,16 @@ void ImguiHandler::Update(sf::Time rest)
 		if (ImGui::Button("Play"))
 		{
 			savePressed = false;
+			loadPressed = false;
 			Engine::get().SetEngineState(EngineState::PlayMode);
+		}
+		if(ImGui::Button("Save"))
+		{
+			savePressed = true;
+		}
+		if (ImGui::Button("Load"))
+		{
+			loadPressed = true;
 		}
 		break;
 	}
@@ -24,6 +33,14 @@ void ImguiHandler::Update(sf::Time rest)
 		{
 			savePressed = false;
 			Engine::get().SetEngineState(EngineState::Paused);
+		}
+		if (ImGui::Button("Save"))
+		{
+			savePressed = true;
+		}
+		if (ImGui::Button("Load"))
+		{
+			loadPressed = true;
 		}
 		break;
 	}
@@ -82,6 +99,29 @@ void ImguiHandler::Update(sf::Time rest)
 			if(ImGui::Button("Cancel"))
 			{
 				savePressed = false;
+			}
+			ImGui::End();
+		}
+	}
+	if(!loadPressed)
+		str = "Enter filename (no extensions)";
+
+	if(loadPressed)
+	{
+		if(Engine::get().GetCurrentState() == EngineState::Running)
+		{
+			ImGui::Begin("Load File");
+			ImGui::InputText("Load Project", &str[0], 255);
+			if(ImGui::Button("Load"))
+			{
+				if (Engine::get().Load(str))
+					loadPressed = false;
+				else
+					ImGui::Text("File does not exist!");
+			}
+			if(ImGui::Button("Cancel"))
+			{
+				loadPressed = false;
 			}
 			ImGui::End();
 		}

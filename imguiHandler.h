@@ -26,5 +26,7 @@ public:
 private:
 	static ImguiHandler * s_instance;
 	bool savePressed;
+	bool loadPressed;
+
 	std::string str;
 };
