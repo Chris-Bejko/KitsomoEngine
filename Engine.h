@@ -70,6 +70,8 @@ public:
     std::string GetDraggedEntity();
 
     void TriggerDragging(std::string newDragged);
+
+    void ClearInpsector();
 private:
 
     EngineState currentState;

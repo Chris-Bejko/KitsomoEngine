@@ -90,6 +90,14 @@ void EntityManager::DisplayEntities()
 	}
 }
 
+void EntityManager::ClearInspector()
+{
+	for(auto& e : entities)
+	{
+		e->displayComponents = false;
+	}
+}
+
 void EntityManager::DisplayComponents()
 {
 	for (auto& e : entities)

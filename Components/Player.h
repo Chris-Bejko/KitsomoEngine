@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include <math.h>
 #include "../Engine.h"
+#include "../Color.h"
 
 class Player : public Component
 {
@@ -28,7 +29,7 @@ public:
 		Serialize();
 		std::cout << "Init called" << std::endl;
 		AssetManager::get().loadTexture("triangle", "triangle.png");
-		if(!entity->HasComponent<Sprite>())
+		if (!entity->HasComponent<Sprite>())
 			entity->AddComponent<Sprite>("triangle");
 		entity->transform->scale = Vector2F(0.05, 0.05);
 		return true;
@@ -36,10 +37,7 @@ public:
 
 	void Serialize()
 	{
-		variables.push_back({ "lastColor.r", &lastColor.r, int_Type });
-		variables.push_back({ "lastColor.g", &lastColor.g, int_Type });
-		variables.push_back({ "lastColor.b", &lastColor.b, int_Type });
-		variables.push_back({ "lastColor.a", &lastColor.a, int_Type });
+		variables.push_back({ "lastColor", &lastColorString, char_Type });
 	}
 
 	std::vector<SerializableVariable>* GetSerializedFields() override final
@@ -50,23 +48,12 @@ public:
 
 	void InitSerializedFields(ReadableSerializableVariableMap map)
 	{
-		for (auto const& [key, value] : map.floatFields)
+		for (auto const& [key, value] : map.stringFields)
 		{
-			if (key == "lastColor.r")
+			if (key == "lastColor")
 			{
-				lastColor.r = value;
-			}
-			if (key == "lastColor.g")
-			{
-				lastColor.g = value;
-			}
-			if (key == "lastColor.b")
-			{
-				lastColor.b = value;
-			}
-			if (key == "lastColor.a")
-			{
-				lastColor.a = value;
+				lastColor.SetColor(value);
+				lastColorString = value;
 			}
 		}
 	}
@@ -88,11 +75,12 @@ public:
 
 	void updateEngine(float dt) override final
 	{
-
+		lastColor.SetColor(lastColorString);
 	}
 
 	void update(float dt) override final
 	{
+		lastColor.SetColor(lastColorString);
 		SetSpawnPointPosition();
 		spawnPoint->rotation = entity->transform->rotation;
 		timer += dt;
@@ -153,7 +141,7 @@ public:
 		if (other.entity->HasComponent<FloorSquare>())
 		{
 			lastColor = other.entity->GetComponent<FloorSquare>().GetColor();
-			entity->GetComponent<Sprite>().SetColor(lastColor);
+			entity->GetComponent<Sprite>().SetColor(lastColor.GetColor());
 		}
 	}
 
@@ -178,7 +166,8 @@ private:
 	Vector2F initPos;
 	std::string initTag;
 	Transform* spawnPoint;
-	sf::Color lastColor;
+	Color lastColor;
+	std::string lastColorString;
 	float cooldown = 0.2f;
 	float timer;
 	float moveSpeed = 1000;

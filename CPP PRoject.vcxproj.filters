@@ -239,6 +239,9 @@
     <ClInclude Include="EngineSprite.h">
       <Filter>Source Files\ECS\Base Components\EngineSprite</Filter>
     </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Source Files\ECS\Base Data STr</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="test.png">

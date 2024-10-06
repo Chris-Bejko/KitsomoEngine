@@ -127,3 +127,9 @@ void ImguiHandler::Update(sf::Time rest)
 		}
 	}
 }
+
+
+void ImguiHandler::ClearInspector()
+{
+	Engine::get().ClearInpsector();
+}

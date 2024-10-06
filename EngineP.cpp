@@ -192,6 +192,11 @@ void Engine::TriggerDragging(std::string newDragged)
 	draggedEntity = newDragged;
 }
 
+void Engine::ClearInpsector()
+{
+	manager->ClearInspector();
+}
+
 void Engine::Spawn(Entity* entity)
 {
 	manager->addEntity(entity);

@@ -44,6 +44,8 @@ public:
 
 	void DisplayEntities();
 
+	void ClearInspector();
+
 	void DisplayComponents();
 
 	void DestroyAllEntities();

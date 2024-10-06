@@ -43,10 +43,10 @@ public:
 		rb->AddForce(force * this->force);
 	}
 
-	void SetColor(sf::Color color)
+	void SetColor(Color color)
 	{
 		lastColor = color;
-		sprite->SetColor(color);
+		sprite->SetColor(color.GetColor());
 	}
 	void OnCollisionEnter(BoxCollider& other) override final
 	{
@@ -57,13 +57,13 @@ public:
 			if (lastColor == this->lastColor)
 				return;
 			this->lastColor = lastColor;
-			sprite->SetColor(lastColor);
+			sprite->SetColor(lastColor.GetColor());
 		}
 	}
 
 private:
 	float force = 0.4f;
-	sf::Color lastColor;
+	Color lastColor;
 	float timer = 0;
 	Sprite* sprite;
 	Rigidbody* rb;

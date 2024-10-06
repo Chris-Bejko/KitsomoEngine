@@ -10,6 +10,7 @@ public:
 	ImguiHandler() = default;
 	~ImguiHandler() = default;
 
+	void ClearInspector();
 
 	void Update(sf::Time rest);
 

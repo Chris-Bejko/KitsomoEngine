@@ -1,5 +1,6 @@
 #include "Components/Sprite.h"
 #include "../Engine.h"
+#include "../imguiHandler.h"
 
 Sprite::Sprite(std::string textureId)
 {
@@ -81,6 +82,8 @@ void Sprite::updateEngine(float dt)
 		if (isMouseOver(sprite, mousePos.x, mousePos.y) && (!Engine::get().DraggingEntity() || Engine::get().GetDraggedEntity() == entity->GetName()))
 		{
 			Engine::get().TriggerDragging(entity->GetName());
+			ImguiHandler::get().ClearInspector();
+			entity->displayComponents = true;
 			dragging = true;
 		}
 	}

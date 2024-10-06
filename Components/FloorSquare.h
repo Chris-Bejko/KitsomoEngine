@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Player.h"
+#include "../Color.h"
 class FloorSquare : public Component
 {
 public:
@@ -16,43 +17,37 @@ public:
 		return true;
 	}
 
-	void Config(Vector2F position, sf::Color color)
+	void Config(Vector2F position, Color color)
 	{
 		this->color = color;
-		std::cout << color.a << std::endl;
 		entity->transform->position = position;
 		entity->AddComponent<BoxCollider>("floor", sf::FloatRect(0, 0, 125, 125), true);
-		sprite->SetColor(color);
+		sprite->SetColor(color.GetColor());
 	}
 
 	void Serialize()
 	{
-		variables.push_back({ "color.r",&color.r, int_Type });
-		variables.push_back({ "color.g",&color.g, int_Type });
-		variables.push_back({ "color.b",&color.b, int_Type });
-		variables.push_back({ "color.a",&color.a, int_Type });
+		variables.push_back({ "color",&colorString, char_Type });
 	}
 	void InitSerializedFields(ReadableSerializableVariableMap map)
 	{
-		for(auto const& [key, value] : map.intFields)
+		for (auto const& [key, value] : map.stringFields)
 		{
-			if(key == "color.r")
+			if (key == "color")
 			{
-				color.r = value;
-			}
-			if (key == "color.g")
-			{
-				color.g = value;
-			}
-			if (key == "color.b")
-			{
-				color.b = value;
-			}
-			if (key == "color.a")
-			{
-				color.a = value;
+				color.SetColor(value);
 			}
 		}
+	}
+
+	void update(float dt) override final
+	{
+		color.SetColor(colorString);
+	}
+
+	void updateEngine(float dt) override final
+	{
+		color.SetColor(colorString);
 	}
 
 	std::vector<SerializableVariable>* GetSerializedFields() override final
@@ -60,7 +55,7 @@ public:
 		return &variables;
 	}
 
-	sf::Color GetColor()
+	Color GetColor()
 	{
 		return color;
 	}
@@ -71,6 +66,8 @@ public:
 	}
 private:
 	std::vector<SerializableVariable> variables;
-	sf::Color color;
+	Color color;
+	std::string colorString;
+
 	Sprite* sprite;
 };
