@@ -95,9 +95,11 @@ public:
 
 	std::vector<SerializableComponent> GetAllComponentVariables();
 
-
+	bool DeletePressed();
 private:
 	bool isActive;
+
+	bool deletePressed;
 
 	std::vector<std::string> availableComponents;
 	bool addingNewComp = false;

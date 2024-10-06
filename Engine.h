@@ -42,6 +42,8 @@ public:
 
     void Reset();
 
+    void RemoveEntity(Entity* entity);
+
     inline static Engine& get()
     {
         if (s_instance == nullptr)

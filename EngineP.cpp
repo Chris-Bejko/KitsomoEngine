@@ -388,3 +388,8 @@ void Engine::Reset()
 	Load();
 	isEngine = true;
 }
+
+void Engine::RemoveEntity(Entity* entity)
+{
+	manager->eraseEntity(entity);
+}

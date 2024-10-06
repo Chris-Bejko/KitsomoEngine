@@ -34,7 +34,7 @@ void Entity::Awake()
 
 void Entity::ValidateAddedComponents()
 {
-	for(auto& comp : to_Add)
+	for (auto& comp : to_Add)
 	{
 		components.push_back(std::move(to_Add.back()));
 		to_Add.pop_back();
@@ -60,7 +60,7 @@ void Entity::Update(float dt)
 void Entity::UpdateEngine(float dt)
 {
 	ValidateAddedComponents();
-	for(auto& comp : components)
+	for (auto& comp : components)
 	{
 		comp->updateEngine(dt);
 	}
@@ -166,6 +166,26 @@ void Entity::DisplayComponents()
 	if (!displayComponents)
 		return;
 
+	ImGui::Checkbox("Delete", &deletePressed);
+	if (deletePressed)
+	{
+		std::string warning = "Delete Entity: " + this->GetName() + " ?";
+		char* warningChar = &warning[0];
+		ImGui::OpenPopup(warningChar);
+		if (ImGui::BeginPopupModal(warningChar))
+		{
+			if (ImGui::Button("Cancel"))
+			{
+				deletePressed = false;
+			}
+			if (ImGui::Button("Confirm"))
+			{
+				Engine::get().RemoveEntity(this);
+				deletePressed = false;
+			}
+		}
+		ImGui::EndPopup();
+	}
 	ValidateAddedComponents();
 	ImGui::Checkbox("+", &addingNewComp);
 
@@ -278,7 +298,7 @@ void Entity::DisplayAvailableComponents()
 					if (!this->HasComponent<Player>())
 						this->AddComponent<Player>();
 				}
-				else if(str == "FloorSquare")
+				else if (str == "FloorSquare")
 				{
 					if (!this->HasComponent<FloorSquare>())
 						this->AddComponent<FloorSquare>();
@@ -305,6 +325,11 @@ std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 		}
 	}
 	return variables;
+}
+
+bool Entity::DeletePressed()
+{
+	return deletePressed;
 }
 
 

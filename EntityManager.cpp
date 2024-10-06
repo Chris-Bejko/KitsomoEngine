@@ -188,7 +188,7 @@ void EntityManager::refresh()
 void EntityManager::Awake()
 {
 	ValidateAdded();
-	for(auto& e : entities)
+	for (auto& e : entities)
 	{
 		e->Awake();
 	}

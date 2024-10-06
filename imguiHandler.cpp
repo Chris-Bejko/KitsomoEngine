@@ -79,6 +79,10 @@ void ImguiHandler::Update(sf::Time rest)
 				Engine::get().Save(str);
 				savePressed = false;
 			}
+			if(ImGui::Button("Cancel"))
+			{
+				savePressed = false;
+			}
 			ImGui::End();
 		}
 	}
