@@ -21,8 +21,8 @@ public:
 	void update(float dt) override final
 	{
 		timer += dt;
-		if (entity->transform->position.x < 0 || entity->transform->position.x > Engine::get().GetWindow().getSize().x
-			|| entity->transform->position.y < 0 || entity->transform->position.y > Engine::get().GetWindow().getSize().y)
+		if (entity->transform->position.x < Engine::get().GetView().left || entity->transform->position.x > Engine::get().GetView().width
+			|| entity->transform->position.y < Engine::get().GetView().top || entity->transform->position.y > Engine::get().GetView().height)
 		{
 			Engine::get().GetManager()->eraseEntity(entity);
 		}

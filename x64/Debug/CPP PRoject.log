@@ -38,12 +38,12 @@ C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(162,
           ]
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(191,40): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(89,7): warning C4101: 'checkBox': unreferenced local variable
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(404,53): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(416,53): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int
           ]
-C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(404,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(416,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
           with
           [
               T=unsigned int

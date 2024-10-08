@@ -203,6 +203,18 @@ void Engine::SetView(sf::View& view)
 	window->setView(view);
 }
 
+sf::FloatRect Engine::GetView()
+{
+	sf::FloatRect rt;
+	sf::View view(window->getView());
+	rt.left = view.getCenter().x - view.getSize().x / 2.f;
+	rt.top = view.getCenter().y - view.getSize().y / 2.f;
+	rt.width = view.getCenter().x + view.getSize().x / 2.f;
+	rt.height = view.getCenter().y + view.getSize().y / 2.f;
+
+	return rt;
+}
+
 void Engine::Spawn(Entity* entity)
 {
 	manager->addEntity(entity);

@@ -30,8 +30,6 @@ public:
 
     void Events();
 
-    sf::View GetView();
-
     void Spawn(Entity* entity);
 
     size_t GetTotalEntities();
@@ -76,6 +74,8 @@ public:
     void ClearInpsector();
 
     void SetView(sf::View& view);
+
+    sf::FloatRect GetView();
 
 private:
     EngineState currentState;
