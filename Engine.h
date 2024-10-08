@@ -30,6 +30,8 @@ public:
 
     void Events();
 
+    sf::View GetView();
+
     void Spawn(Entity* entity);
 
     size_t GetTotalEntities();
@@ -72,8 +74,10 @@ public:
     void TriggerDragging(std::string newDragged);
 
     void ClearInpsector();
-private:
 
+    void SetView(sf::View& view);
+
+private:
     EngineState currentState;
     EngineState previousState;
     EntityManager* manager;

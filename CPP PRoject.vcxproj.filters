@@ -144,6 +144,9 @@
     <ClCompile Include="EntityManager.cpp">
       <Filter>Source Files\ECS\EntityManager</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Source Files\ECS\Base Data STr</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

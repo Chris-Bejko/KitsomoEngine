@@ -1,6 +1,51 @@
-﻿  EntityManager.cpp
+﻿  EngineP.cpp
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(17,28): warning C4099: 'SerializableComponent': type name first seen using 'struct' now seen using 'class'
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(37,8): message : see declaration of 'SerializableComponent'
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EntityManager.h(9,25): warning C4099: 'SerializableEntity': type name first seen using 'struct' now seen using 'class'
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(44,8): message : see declaration of 'SerializableEntity'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\FloorSquare.h(15,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(35,1): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(159,60): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(159,42): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(162,34): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.h(191,40): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(89,7): warning C4101: 'checkBox': unreferenced local variable
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(404,53): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(404,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
   CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe

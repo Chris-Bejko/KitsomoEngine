@@ -81,7 +81,7 @@ void ImguiHandler::Update(sf::Time rest)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
 		if(!savePressed)
-			str = "Enter filename (no extensions)";
+			str = "saveFile.txt";
 			savePressed = true;
 	}
 
@@ -104,7 +104,7 @@ void ImguiHandler::Update(sf::Time rest)
 		}
 	}
 	if(!loadPressed)
-		str = "Enter filename (no extensions)";
+		str = "saveFile.txt";
 
 	if(loadPressed)
 	{

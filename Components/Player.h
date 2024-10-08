@@ -5,6 +5,7 @@
 #include <math.h>
 #include "../Engine.h"
 #include "../Color.h"
+#include "../Camera.h"
 
 class Player : public Component
 {
@@ -61,7 +62,9 @@ public:
 	{
 
 		//entity->transform->position = initPos;
-
+		Entity* camera = new Entity("Camera");
+		this->camera = &camera->AddComponent<Camera>();
+		Engine::get().Spawn(camera);
 		std::cout << "Awake called" << std::endl;
 		entity->AddComponent<BoxCollider>(initTag, sf::FloatRect(0, 0, 55, 50));
 
@@ -80,6 +83,7 @@ public:
 
 	void update(float dt) override final
 	{
+		camera->Follow(sf::Vector2f(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y));
 		lastColor.SetColor(lastColorString);
 		SetSpawnPointPosition();
 		spawnPoint->rotation = entity->transform->rotation;
@@ -95,7 +99,7 @@ public:
 
 			auto spawned = &bullet->AddComponent<Bullet>();
 			spawned->SetPosition(spawnPoint->position);
-			spawned->SetRotation(entity->transform->rotation);
+			//spawned->SetRotation(entity->transform->rotation);
 			spawned->SetColor(lastColor);
 			Engine::get().GetManager()->addEntity(bullet);
 			spawned->AddForce(GetMouseVector());
@@ -160,6 +164,7 @@ public:
 	}
 
 private:
+	Camera* camera;
 	std::vector<SerializableVariable> variables;
 
 	bool useControls;

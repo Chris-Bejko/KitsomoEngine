@@ -46,6 +46,7 @@ void Engine::Init()
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
 	std::ofstream txtFile;
+
 	//Load();
 	//Entity* newEntity = new Entity("Player");
 	//Entity* floorSquare = new Entity("floor Square");
@@ -195,6 +196,11 @@ void Engine::TriggerDragging(std::string newDragged)
 void Engine::ClearInpsector()
 {
 	manager->ClearInspector();
+}
+
+void Engine::SetView(sf::View& view)
+{
+	window->setView(view);
 }
 
 void Engine::Spawn(Entity* entity)
@@ -394,6 +400,9 @@ std::string Engine::GetSubstring(std::string& line, std::string& delStart, std::
 void Engine::Reset()
 {
 	manager->DestroyAllEntities();
+	sf::View view;
+	view.setSize(window->getSize().x, window->getSize().y);
+	window->setView(view);
 	Load();
 	isEngine = true;
 }
