@@ -1,6 +1,10 @@
 #pragma once
 #include "../Engine.h"
+#include "../Color.h"
+#include "../Vector2.h"
+#include "Sprite.h"
 #include "Rigidbody.h"
+
 class Bullet : public Component
 {
 
@@ -9,60 +13,22 @@ public:
 	virtual ~Bullet() = default;
 
 
-	bool Init() override final
-	{
-		sprite = &entity->AddComponent<Sprite>("circle");
-		entity->transform->scale = Vector2F(0.05f, 0.05f);
-		rb = &entity->AddComponent<Rigidbody>(0.f);
-		entity->AddComponent<BoxCollider>("bullet", sf::FloatRect(0, 0, 500, 500), true);
-		return true;
-	}
+	bool Init() override final;
 
-	void update(float dt) override final
-	{
-		timer += dt;
-		if (entity->transform->position.x < Engine::get().GetView().left || entity->transform->position.x > Engine::get().GetView().width
-			|| entity->transform->position.y < Engine::get().GetView().top || entity->transform->position.y > Engine::get().GetView().height)
-		{
-			Engine::get().GetManager()->eraseEntity(entity);
-		}
-		//if(timer > 5)
-			//Engine::get().GetManager()->eraseEntity(entity);
+	void update(float dt) override final;
 
-	}
-	void SetRotation(float rotation)
-	{
-		entity->transform->rotation = rotation;
-	}
-	void SetPosition(Vector2F position)
-	{
-		entity->transform->position = position;
-	}
-	void AddForce(Vector2F force)
-	{
-		rb->AddForce(force * this->force);
-	}
+	void SetRotation(float rotation);
 
-	void SetColor(Color color)
-	{
-		lastColor = color;
-		sprite->SetColor(color.GetColor());
-	}
-	void OnCollisionEnter(BoxCollider& other) override final
-	{
-		if (other.GetCollisionTag() == "floor")
-		{
+	void SetPosition(Vector2F position);
 
-			auto lastColor = other.entity->GetComponent<FloorSquare>().GetColor();
-			if (lastColor == this->lastColor)
-				return;
-			this->lastColor = lastColor;
-			sprite->SetColor(lastColor.GetColor());
-		}
-	}
+	void AddForce(Vector2F force);
+
+	void SetColor(Color color);
+
+	void OnCollisionEnter(BoxCollider& other) override final;
 
 private:
-	float force = 0.4f;
+	float force = 5.f;
 	Color lastColor;
 	float timer = 0;
 	Sprite* sprite;

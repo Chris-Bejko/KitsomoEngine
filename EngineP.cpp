@@ -11,7 +11,8 @@
 #include "Components/Sprite.h"
 #include "Components/Rigidbody.h"
 #include "Components/Player.h"
-
+#include "Components/FloorSquare.h"
+#include "Time.h"
 Engine* Engine::s_instance = nullptr;
 
 Engine::Engine()
@@ -33,6 +34,7 @@ void Engine::Init()
 {
 	this->window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML works!");
 	this->window = window;
+	window->setFramerateLimit(60);
 	if (!ImGui::SFML::Init(GetWindow()))
 	{
 		std::cerr << "Error initializing IMGUI window" << std::endl;
@@ -114,7 +116,8 @@ void Engine::Update()
 	SystemsManager::get().Update();
 	auto rest = deltaClock.restart();
 	ImguiHandler::get().Update(rest);
-	dt = rest.asSeconds();
+	dt = rest.asSeconds() * 100;
+	Time::deltaTime = dt;
 }
 
 void Engine::Events()

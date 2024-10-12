@@ -3,6 +3,8 @@
 #include "Components/Transform.h"
 #include "Components/Sprite.h"
 #include "Components/Player.h"
+#include "Engine.h"
+#include "Components/FloorSquare.h"
 //#include "Components/BoxCollider.h"
 
 Entity::Entity(std::string name)

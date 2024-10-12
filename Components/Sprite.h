@@ -10,7 +10,7 @@ class Sprite : public Component
 public:
     Sprite() = default;
     virtual ~Sprite() = default;
-    Sprite(std::string textureId);
+    Sprite(std::string textureId, int renderOrder = 0);
 
     bool Init() override final;
 
@@ -47,7 +47,11 @@ public:
 
     sf::Vector2f GetRotation();
     bool isMouseOver(const sf::Sprite& sprite, int mouseX, int mouseY);
+    int RenderOrder();
+
+    void SetRenderOrder(int i);
 private:
+    int renderOrder;
     std::vector<SerializableVariable> variables;
     bool dragging;
     sf::Vector2f mouseRectOffset;

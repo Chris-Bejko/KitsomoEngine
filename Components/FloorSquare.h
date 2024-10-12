@@ -1,69 +1,33 @@
 #pragma once
 
-#include "Player.h"
+#include "../Component.h"
 #include "../Color.h"
+#include "Sprite.h"
+
 class FloorSquare : public Component
 {
 public:
 	FloorSquare() = default;
 
 	virtual ~FloorSquare() = default;
-	bool Init() override final
-	{
-		AssetManager::get().loadTexture("square", "square.png");
-		sprite = &entity->AddComponent<Sprite>("square");
-		entity->transform->scale = Vector2F(0.2, 0.2);
-		Serialize();
-		return true;
-	}
+	bool Init() override final;
 
-	void Config(Vector2F position, Color color)
-	{
-		this->color = color;
-		entity->transform->position = position;
-		entity->AddComponent<BoxCollider>("floor", sf::FloatRect(0, 0, 125, 125), true);
-		sprite->SetColor(color.GetColor());
-	}
+	void Config(Vector2F position, Color color);
 
-	void Serialize()
-	{
-		variables.push_back({ "color",&colorString, char_Type });
-	}
-	void InitSerializedFields(ReadableSerializableVariableMap map)
-	{
-		for (auto const& [key, value] : map.stringFields)
-		{
-			if (key == "color")
-			{
-				color.SetColor(value);
-			}
-		}
-	}
+	void Serialize();
 
-	void update(float dt) override final
-	{
-		color.SetColor(colorString);
-	}
+	void InitSerializedFields(ReadableSerializableVariableMap map);
 
-	void updateEngine(float dt) override final
-	{
-		color.SetColor(colorString);
-	}
+	void update(float dt) override final;
 
-	std::vector<SerializableVariable>* GetSerializedFields() override final
-	{
-		return &variables;
-	}
+	void updateEngine(float dt) override final;
 
-	Color GetColor()
-	{
-		return color;
-	}
+	std::vector<SerializableVariable>* GetSerializedFields() override final;
 
-	void OnTriggerStay(BoxCollider& other) override final
-	{
-		std::cout << "On Trigger Stay" << std::endl;
-	}
+	Color GetColor();
+
+	void OnTriggerStay(BoxCollider& other) override final;
+
 private:
 	std::vector<SerializableVariable> variables;
 	Color color;

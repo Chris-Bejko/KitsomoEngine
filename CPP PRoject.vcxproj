@@ -140,6 +140,9 @@
     <ClCompile Include="Components\BoxCollider.cpp" />
     <ClCompile Include="Components\BoxCollider.h" />
     <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="Components\Bullet.cpp" />
+    <ClCompile Include="Components\FloorSquare.cpp" />
+    <ClCompile Include="Components\Player.cpp" />
     <ClCompile Include="Components\Rigidbody.cpp" />
     <ClCompile Include="EngineP.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -157,6 +160,7 @@
     <ClCompile Include="SerializableVariable.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SystemManager.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +196,7 @@
     <ClInclude Include="System.h" />
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="Components\Transform.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="Vector2.h" />
   </ItemGroup>
   <ItemGroup>

@@ -2,9 +2,10 @@
 #include "../Engine.h"
 #include "../imguiHandler.h"
 
-Sprite::Sprite(std::string textureId)
+Sprite::Sprite(std::string textureId, int renderOrder)
 {
 	textureID = textureId;
+	SetRenderOrder(renderOrder);
 }
 
 bool Sprite::Init()
@@ -142,4 +143,15 @@ sf::Vector2f Sprite::GetRotation()
 bool Sprite::isMouseOver(const sf::Sprite& sprite, int mouseX, int mouseY)
 {
 	return sprite.getGlobalBounds().contains(mouseX, mouseY);
+}
+
+int Sprite::RenderOrder()
+{
+	return renderOrder;
+}
+
+void Sprite::SetRenderOrder(int i)
+{
+	renderOrder = i;
+	//std::cout << entity->GetName() << " : " << i << std::endl;
 }

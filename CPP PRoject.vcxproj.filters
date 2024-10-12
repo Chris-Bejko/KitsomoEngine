@@ -76,6 +76,15 @@
     <Filter Include="Source Files\ECS\Base Components\EngineSprite">
       <UniqueIdentifier>{c0a834fd-25c9-474c-baac-4570e35fbb7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripts\Player">
+      <UniqueIdentifier>{d046e5aa-cb18-4cdd-964e-e1425361ed38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripts\Bullet">
+      <UniqueIdentifier>{794d8f96-2121-4e7c-b44d-5aed04f41029}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Scripts\FloorSquare">
+      <UniqueIdentifier>{a250fa18-4067-4a73-9e32-8be47466eace}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -147,6 +156,18 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Components\Bullet.cpp">
+      <Filter>Source Files\Game\Scripts\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\Player.cpp">
+      <Filter>Source Files\Game\Scripts\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\FloorSquare.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Source Files\ECS</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -176,17 +197,11 @@
     <ClInclude Include="System.h">
       <Filter>Source Files\ECS</Filter>
     </ClInclude>
-    <ClInclude Include="Components\FloorSquare.h">
-      <Filter>Source Files\Game\Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="CollisionSystem.h">
       <Filter>Source Files\ECS</Filter>
-    </ClInclude>
-    <ClInclude Include="Components\Bullet.h">
-      <Filter>Source Files\Game\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
       <Filter>Header Files</Filter>
@@ -218,9 +233,6 @@
     <ClInclude Include="imguiHandler.h">
       <Filter>Source Files\imguiHandler</Filter>
     </ClInclude>
-    <ClInclude Include="Components\Player.h">
-      <Filter>Source Files\Game\Scripts</Filter>
-    </ClInclude>
     <ClInclude Include="Serialization.h">
       <Filter>Source Files\ECS\Reflection</Filter>
     </ClInclude>
@@ -247,6 +259,18 @@
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Source Files\Game\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Player.h">
+      <Filter>Source Files\Game\Scripts\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\Bullet.h">
+      <Filter>Source Files\Game\Scripts\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Components\FloorSquare.h">
+      <Filter>Source Files\Game\Scripts\FloorSquare</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Source Files\ECS</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
