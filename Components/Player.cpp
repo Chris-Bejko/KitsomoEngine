@@ -156,14 +156,13 @@ Vector2F Player::GetMouseVector()
 {
 	std::cout << "GETTING MOUSE VETORRR" << std::endl;
 	//sf::Vector2f currmouse(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
-	auto mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
+	auto mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
+	//auto mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
 	//auto mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
 	auto origin = sf::Vector2f(entity->GetComponent<Sprite>().GetOrigin().x, entity->GetComponent<Sprite>().GetOrigin().y);
-	auto mousePosf = Vector2F(mousePos.x, mousePos.y);
-	auto originF = Vector2F(origin.x, origin.y);
-	auto aimDir = mousePosf - originF;
-	auto aimDirNorm = atan2(aimDir.y, aimDir.x);
-	auto finall = Vector2F(cos(aimDirNorm), sin(aimDirNorm));
+	auto aimDirNorm = atan2(mousePos.y - origin.y, mousePos.x - origin.x);
+	auto finall = Vector2F(cos(aimDirNorm) * 1.f, sin(aimDirNorm) * 1.0f);
+	std::cout << "Returning finall	" << std::endl;
 	return finall;
 }
 

@@ -47,7 +47,7 @@ private:
 	Transform* spawnPoint;
 	Color lastColor;
 	std::string lastColorString;
-	float cooldown = 2.f;
+	float cooldown = 0.5f;
 	float timer;
 	float moveSpeed = 3;
 	sf::Vector2f mousePos;
