@@ -38,13 +38,14 @@ void Bullet::SetPosition(Vector2F position)
 void Bullet::AddForce(Vector2F force)
 {
 	std::cout << Time::deltaTime << std::endl;
-	rb->AddForce(force * this->force);
+	rb->AddForce(force * this->force * Time::deltaTime);
 }
 
 void Bullet::SetColor(Color color)
 {
+	std::cout << color.SerializeColor() << std::endl;
 	lastColor = color;
-	sprite->SetColor(color.GetColor());
+	sprite->SetColor(color);
 
 }
 
@@ -56,6 +57,6 @@ void Bullet::OnCollisionEnter(BoxCollider& other)
 		if (lastColor == this->lastColor)
 			return;
 		this->lastColor = lastColor;
-		sprite->SetColor(lastColor.GetColor());
+		sprite->SetColor(lastColor);
 	}
 }

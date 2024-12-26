@@ -85,6 +85,9 @@
     <Filter Include="Source Files\Game\Scripts\FloorSquare">
       <UniqueIdentifier>{a250fa18-4067-4a73-9e32-8be47466eace}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Game\Scripts\Enemy">
+      <UniqueIdentifier>{1de96751-beb2-497f-b0f9-84a3159fdd9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -162,11 +165,14 @@
     <ClCompile Include="Components\Player.cpp">
       <Filter>Source Files\Game\Scripts\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Components\FloorSquare.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Time.cpp">
       <Filter>Source Files\ECS</Filter>
+    </ClCompile>
+    <ClCompile Include="Components\FloorSquare.cpp">
+      <Filter>Source Files\Game\Scripts\FloorSquare</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Source Files\Game\Scripts\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Source Files\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Source Files\Game\Scripts\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

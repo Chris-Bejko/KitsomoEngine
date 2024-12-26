@@ -2,9 +2,11 @@
 #include "../Engine.h"
 #include "../imguiHandler.h"
 
-Sprite::Sprite(std::string textureId, int renderOrder)
+Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 {
 	textureID = textureId;
+	ColorID = color.SerializeColor();
+	sprite.setColor(color.GetColor());
 	SetRenderOrder(renderOrder);
 }
 
@@ -25,12 +27,15 @@ std::vector<SerializableVariable>* Sprite::GetSerializedFields()
 void Sprite::Serialize()
 {
 	variables.push_back({ "textureID", &textureID, char_Type });
+	variables.push_back({ "ColorID", &ColorID, char_Type });
+	variables.push_back({"renderOrder", &renderOrder, int_Type});
 }
 
 void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
 {
 	for (auto const& [key, value] : map.stringFields)
 	{
+		std::cout << key << " , " << value << std::endl;
 		if (key == "textureID")
 		{
 			textureID = value;
@@ -40,11 +45,30 @@ void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
 			sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
 			sprite.setTexture(texture);
 		}
+
+		if(key == "ColorID")
+		{
+			ColorID = value;
+			Color color;
+			color.SetColor(value);
+			SetColor(color);
+		}
+	}
+
+	for(auto const& [key, value] : map.intFields)
+	{
+		if(key == "renderOrder")
+		{
+			renderOrder = value;
+		}
 	}
 }
 
 void Sprite::draw()
 {
+	Color color;
+	color.SetColor(ColorID);
+	SetColor(color);
 	Engine::get().GetWindow().draw(sprite);
 }
 
@@ -74,6 +98,7 @@ int Sprite::GetWidth()
 
 void Sprite::updateEngine(float dt)
 {
+	//std::cout << ColorID << std::endl;
 	update(dt);
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -128,6 +153,12 @@ sf::Sprite Sprite::GetSprite()
 void Sprite::SetColor(const sf::Color& color)
 {
 	sprite.setColor(color);
+}
+
+void Sprite::SetColor(Color color)
+{
+	ColorID = color.SerializeColor();
+	sprite.setColor(color.GetColor());
 }
 
 void Sprite::SetOrigin(const Vector2F& origin)

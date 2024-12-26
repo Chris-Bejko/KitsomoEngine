@@ -34,7 +34,7 @@ void Engine::Init()
 {
 	this->window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML works!");
 	this->window = window;
-	window->setFramerateLimit(60);
+	window->setFramerateLimit(1000);
 	if (!ImGui::SFML::Init(GetWindow()))
 	{
 		std::cerr << "Error initializing IMGUI window" << std::endl;
@@ -116,7 +116,7 @@ void Engine::Update()
 	SystemsManager::get().Update();
 	auto rest = deltaClock.restart();
 	ImguiHandler::get().Update(rest);
-	dt = rest.asSeconds() * 100;
+	dt = rest.asSeconds();
 	Time::deltaTime = dt;
 }
 
@@ -375,11 +375,13 @@ bool Engine::Load(std::string fileName)
 			}
 			if (c.componentName == "BoxCollider")
 			{
-				ent->AddComponent<BoxCollider>().InitSerializedFields(c.fields);
+				if(!ent->HasComponent<BoxCollider>())
+					ent->AddComponent<BoxCollider>().InitSerializedFields(c.fields);
 			}
 			if (c.componentName == "Sprite")
 			{
-				ent->AddComponent<Sprite>().InitSerializedFields(c.fields);
+				if (!ent->HasComponent<Sprite>())
+					ent->AddComponent<Sprite>().InitSerializedFields(c.fields);
 			}
 			if (c.componentName == "Rigidbody")
 			{
@@ -387,11 +389,13 @@ bool Engine::Load(std::string fileName)
 			}
 			if (c.componentName == "Player")
 			{
-				ent->AddComponent<Player>().InitSerializedFields(c.fields);
+				if (!ent->HasComponent<Player>())
+					ent->AddComponent<Player>().InitSerializedFields(c.fields);
 			}
 			if (c.componentName == "FloorSquare")
 			{
-				ent->AddComponent<FloorSquare>().InitSerializedFields(c.fields);
+				if (!ent->HasComponent<FloorSquare>())
+					ent->AddComponent<FloorSquare>().InitSerializedFields(c.fields);
 			}
 		}
 		manager->addEntity(ent);

@@ -23,7 +23,10 @@ public:
 		return color;
 	}
 
-	Color() = default;
+	Color()
+	{
+		SetColor(sf::Color::White);
+	}
 	~Color() = default;
 
 	void SetColor(sf::Color color)
@@ -90,37 +93,37 @@ public:
 
 		if (color == sf::Color::Red)
 		{
-			return "Black";
+			return "Red";
 		}
 
 		if (color == sf::Color::Green)
 		{
-			return "Black";
+			return "Green";
 		}
 
 		if (color == sf::Color::Blue)
 		{
-			return "Black";
+			return "Blue";
 		}
 
 		if (color == sf::Color::Yellow)
 		{
-			return "Black";
+			return "Yellow";
 		}
 
 		if (color == sf::Color::Magenta)
 		{
-			return "Black";
+			return "Magenta";
 		}
 
 		if (color == sf::Color::Cyan)
 		{
-			return "Black";
+			return "Cyan";
 		}
 
 		if (color == sf::Color::Transparent)
 		{
-			return "Black";
+			return "Transparent";
 		}
 		return "White";
 	}

@@ -5,12 +5,13 @@
 #include "../Component.h"
 #include "../Vector2.h"
 #include "Transform.h"
+#include "../Color.h"
 class Sprite : public Component
 {
 public:
     Sprite() = default;
     virtual ~Sprite() = default;
-    Sprite(std::string textureId, int renderOrder = 0);
+    Sprite(std::string textureId, int renderOrder = 0, Color color = Color());
 
     bool Init() override final;
 
@@ -43,6 +44,7 @@ public:
 
     void SetColor(const sf::Color& color);
 
+    void SetColor(Color color);
     void SetOrigin(const Vector2F& origin);
 
     sf::Vector2f GetRotation();
@@ -51,6 +53,7 @@ public:
 
     void SetRenderOrder(int i);
 private:
+    std::string ColorID = "";
     int renderOrder;
     std::vector<SerializableVariable> variables;
     bool dragging;

@@ -71,6 +71,19 @@ struct Vector2
         stream << "(" << v.x << "," << v.y << ")";
         return stream;
     }
+
+    inline Vector2<T> normalize(const Vector2<T>& vector)
+    {
+        constexpr auto units_in_last_place = 2;
+        auto norm = std::sqrt((vector.x * vector.x) + (vector.y * vector.y));
+        // Prevent division by zero
+        if (norm <= std::numeric_limits<float>::epsilon() * norm * units_in_last_place
+            || norm < std::numeric_limits<float>::min())
+        {
+            return Vector2<T>();
+        }
+        return vector / norm;
+    }
 };
 
 using Vector2I = Vector2<int>;

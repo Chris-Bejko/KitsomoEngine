@@ -28,7 +28,7 @@ bool Player::Init()
 	if (!entity->HasComponent<Sprite>())
 	{
 		std::cout << "ADDING SPRITE WITH RENDER ORDER 2" << std::endl;
-		entity->AddComponent<Sprite>("triangle", 2);
+		entity->AddComponent<Sprite>("triangle", 2, Color(ColorEnum::Red));
 	}
 	entity->transform->scale = Vector2F(0.05, 0.05);
 	return true;
@@ -36,7 +36,7 @@ bool Player::Init()
 
 void Player::Serialize()
 {
-	variables.push_back({ "lastColor", &lastColorString, char_Type });
+	variables.push_back({ "lastColorString", &lastColorString, char_Type });
 }
 
 std::vector<SerializableVariable>* Player::GetSerializedFields()
@@ -48,8 +48,9 @@ void Player::InitSerializedFields(ReadableSerializableVariableMap map)
 {
 	for (auto const& [key, value] : map.stringFields)
 	{
-		if (key == "lastColor")
+		if (key == "lastColorString")
 		{
+			std::cout << value << std::endl;
 			lastColor.SetColor(value);
 			lastColorString = value;
 		}
@@ -87,7 +88,8 @@ void Player::update(float dt)
 	spawnPoint->rotation = entity->transform->rotation;
 	timer += dt;
 	//std::cout << "" << std::endl;
-	std::cout << Time::deltaTime << std::endl;
+	//std::cout << Time::deltaTime << std::endl;
+	std::cout << dt << std::endl;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && timer >= cooldown)
 	{
 		timer = 0;
@@ -105,22 +107,22 @@ void Player::update(float dt)
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 	{
-		Move(Vector2F(moveSpeed, 0));
+		Move(Vector2F(moveSpeed * dt, 0));
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 	{
-		Move(Vector2F(-moveSpeed, 0));
+		Move(Vector2F(-moveSpeed * dt, 0));
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
 	{
-		Move(Vector2F(0, -moveSpeed));
+		Move(Vector2F(0, -moveSpeed * dt));
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		Move(Vector2F(0, moveSpeed));
+		Move(Vector2F(0, moveSpeed * dt));
 	}
 
 	LookAtMouse();
@@ -143,13 +145,14 @@ void Player::OnCollisionEnter(BoxCollider& other)
 	if (other.entity->HasComponent<FloorSquare>())
 	{
 		lastColor = other.entity->GetComponent<FloorSquare>().GetColor();
-		entity->GetComponent<Sprite>().SetColor(lastColor.GetColor());
+		entity->GetComponent<Sprite>().SetColor(lastColor);
 	}
 }
 
 void Player::OnCollisionExit(BoxCollider& other)
 {
-	entity->GetComponent<Sprite>().SetColor(sf::Color::Red);
+	Color color(ColorEnum::Red);
+	entity->GetComponent<Sprite>().SetColor(color);
 }
 
 Vector2F Player::GetMouseVector()

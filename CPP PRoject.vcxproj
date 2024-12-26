@@ -144,6 +144,7 @@
     <ClCompile Include="Components\FloorSquare.cpp" />
     <ClCompile Include="Components\Player.cpp" />
     <ClCompile Include="Components\Rigidbody.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EngineP.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Component.h" />
     <ClInclude Include="ECS.h" />
     <ClInclude Include="ECSEngine.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineSprite.h" />
     <ClInclude Include="Entity.h" />

@@ -46,10 +46,10 @@ private:
 	std::string initTag;
 	Transform* spawnPoint;
 	Color lastColor;
-	std::string lastColorString;
+	std::string lastColorString = "";
 	float cooldown = 0.5f;
 	float timer;
-	float moveSpeed = 3;
+	float moveSpeed = 350;
 	sf::Vector2f mousePos;
 
 	void Move(const Vector2F movement);

@@ -30,7 +30,6 @@ public:
 	void draw() override final;
 
 	void update(float dt) override final;
-
 	
 	std::string GetCollisionTag();
 

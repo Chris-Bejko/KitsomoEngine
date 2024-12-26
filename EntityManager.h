@@ -50,6 +50,12 @@ public:
 
 	void DestroyAllEntities();
 
+	bool cmp(std::pair<Entity*, int>& a,
+		std::pair<Entity*, int>& b)
+	{
+		return a.second < b.second;
+	}
+
 private:
 	std::vector<std::unique_ptr<Entity>> entities;
 	std::vector<std::unique_ptr<Entity>> to_add;

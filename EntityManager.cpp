@@ -6,42 +6,31 @@
 
 void EntityManager::draw()
 {
-	for(auto& entity : entities)
-	{
-		entity->Draw();
-	}
-	/*int maxOrder = 0;
-	int frameCounter = 0;
-	for (auto& entity : entities)
-	{
-		auto comp = &entity->GetComponent<Sprite>();
-		if (comp)
-		{
-			std::cout << frameCounter << ":" << entity->GetName() + " : " << comp->RenderOrder() << std::endl;
-			frameCounter++;
-			if (comp->RenderOrder() > maxOrder)
-				maxOrder = comp->RenderOrder();
+	std::map<int, std::vector<std::unique_ptr<Entity>*>> renderBuckets;
+	std::vector<std::unique_ptr<Entity>*> noRenderOrderEntities;
+
+	// Group entities by RenderOrder
+	for (auto& entity : entities) {
+		if (auto comp = &entity->GetComponent<Sprite>()) {
+			renderBuckets[comp->RenderOrder()].emplace_back(&entity); // Use a pointer to the unique_ptr
+		}
+		else {
+			noRenderOrderEntities.emplace_back(&entity); // Handle entities without Sprite component
 		}
 	}
-	frameCounter = 0;
-	for (int i = maxOrder; i > -1; i--)
-	{
-		for (auto& entity : entities)
-		{
-			auto comp = &entity->GetComponent<Sprite>();
-			if (comp)
-			{
-				std::cout << frameCounter << ":" << entity->GetName() + " : " << comp->RenderOrder() << "," << i << std::endl;
-				frameCounter++;
-				if (comp->RenderOrder() == i)
-					entity->Draw();
-			}
-			else if (i == 0)
-			{
-				entity->Draw();
-			}
+
+	// Draw entities by RenderOrder
+	for (auto& [order, bucket] : renderBuckets) {
+		for (auto* entityPtr : bucket) {
+			(*entityPtr)->Draw(); // Dereference to access the underlying object
 		}
-	}*/
+	}
+
+	// Draw entities with no RenderOrder last
+	for (auto* entityPtr : noRenderOrderEntities) {
+		(*entityPtr)->Draw(); // Dereference to access the underlying object
+	}
+
 
 }
 
