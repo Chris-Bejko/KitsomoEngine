@@ -98,7 +98,7 @@ void Player::update(float dt)
 		std::cout << "Space pressed" << std::endl;
 
 		auto spawned = &bullet->AddComponent<Bullet>();
-		spawned->SetPosition(Vector2F(entity->transform->position.x, spawnPoint->position.y));
+		spawned->SetPosition(Vector2F(spawnPoint->position.x, spawnPoint->position.y));
 		//spawned->SetRotation(entity->transform->rotation);
 		spawned->SetColor(lastColor);
 		Engine::get().GetManager()->addEntity(bullet);
@@ -162,7 +162,7 @@ Vector2F Player::GetMouseVector()
 	auto mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
 	//auto mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
 	//auto mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
-	auto origin = sf::Vector2f(entity->GetComponent<Sprite>().GetOrigin().x, entity->GetComponent<Sprite>().GetOrigin().y);
+	auto origin = sf::Vector2f(entity->transform->position.x, entity->transform->position.y);
 	auto aimDirNorm = atan2(mousePos.y - origin.y, mousePos.x - origin.x);
 	auto finall = Vector2F(cos(aimDirNorm) * 1.f, sin(aimDirNorm) * 1.0f);
 	std::cout << "Returning finall	" << std::endl;

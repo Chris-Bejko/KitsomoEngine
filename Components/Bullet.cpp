@@ -38,7 +38,7 @@ void Bullet::SetPosition(Vector2F position)
 void Bullet::AddForce(Vector2F force)
 {
 	std::cout << Time::deltaTime << std::endl;
-	rb->AddForce(force * this->force * Time::deltaTime);
+	rb->AddForce(force * this->force);
 }
 
 void Bullet::SetColor(Color color)

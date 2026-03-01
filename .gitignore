@@ -4,5 +4,23 @@
 .vs/CPP PRoject/v17/Browse.VC.db-wal
 .vs/CPP PRoject/v17/Browse.VC.opendb
 .vs/CPP PRoject/v17/Browse.VC.db
-x64/Debug/CPP PRoject.pdb
+# Debug symbols
 *.pdb
+*.idb
+
+# Build output
+*.obj
+*.exe
+*.dll
+*.lib
+*.ilk
+*.exp
+
+# Visual Studio
+.vs/
+x64/
+x86/
+Debug/
+Release/
+*.user
+*.suo

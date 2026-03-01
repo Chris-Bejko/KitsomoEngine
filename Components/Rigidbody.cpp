@@ -18,9 +18,10 @@ bool Rigidbody::Init()
 
 void Rigidbody::update(float dt)
 {
-	velocity.x = force.x - drag.x * dt;
-	velocity.y = force.y + drag.y + gravityScale * GRAVITY * mass * dt;
-	entity->GetComponent<Transform>().Translate(velocity);
+	velocity.x += force.x - drag.x * velocity.x * dt;
+	velocity.y += force.y + gravityScale * GRAVITY * mass * dt - drag.y * velocity.y * dt;
+	force = Vector2F(0, 0);
+	entity->GetComponent<Transform>().Translate(velocity * dt);
 }
 
 void Rigidbody::SetForce(const Vector2F force)
