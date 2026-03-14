@@ -103,8 +103,8 @@ void Player::update(float dt)
 		spawned->SetColor(lastColor);
 		spawned->Awake();
 		Vector2F mouseVec = GetMouseVector();
-		mouseVec.x += currentVelocity.x * dt;
-		mouseVec.y += currentVelocity.y * dt;
+		// mouseVec.x += currentVelocity.x * dt;
+		// mouseVec.y += currentVelocity.y * dt;
 		spawned->AddForce(mouseVec);
 	}
 

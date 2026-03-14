@@ -66,7 +66,7 @@ void Engine::Init()
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
 	std::ofstream txtFile;
-
+	RegisterComponents();
 	// Load();
 	// Entity* newEntity = new Entity("Player");
 	// Entity* floorSquare = new Entity("floor Square");
@@ -311,131 +311,66 @@ void Engine::Save(std::string filename)
 
 bool Engine::Load(std::string fileName)
 {
+    LOG_INFO("Loading file: ", fileName.c_str());
+    if (fileName.empty()) return true;
 
-	LOG_INFO("Loading file: ", fileName);
-	if (fileName == "")
-	{
-		Init();
-		return true;
-	}
-	// convert file to std::vector<SerializableEntity>();
-	std::vector<SerializableEntity> entities;
-	std::vector<SerializableComponent> components;
+    auto entities = ParseFile(fileName);
+    if (entities.empty()) return false;
 
-	std::fstream myFile;
-	std::string line;
-	myFile.open(fileName, std::ios::out | std::ios::in);
-	if (!bool(myFile))
-	{
-		return false;
-	}
-	std::string entityName;
-	while (std::getline(myFile, line))
-	{
-		SerializableEntity ent;
-		std::string delStart = "ENTITY_NAME_";
-		std::string delEnd = "_ENTITY_NAME_E_";
-		ent.entityName = GetSubstring(line, delStart, delEnd, true);
-		std::size_t pos = 0;
-		std::string delimiter = "_COMPONENT_NAME_";
-		while ((pos = line.find(delimiter)) != std::string::npos)
-		{
-			ReadableSerializableVariableMap fields;
-			delStart = "_COMPONENT_NAME_";
-			delEnd = "_COMPONENT_NAME_E_";
-			SerializableComponent comp;
-			comp.componentName = GetSubstring(line, delStart, delEnd, true);
+    SpawnEntities(entities);
+    currentState = EngineState::Running;
+    return true;
+}
 
-			std::size_t fieldPos = 0;
-			std::string delField = "_FIELD_";
-			std::string delFIelds = "_FIELDS_";
-			while ((fieldPos = line.find(delField)) != std::string::npos && (fieldPos < line.find(delimiter)))
-			{
-				delStart = ":";
-				delEnd = "::";
-				auto fieldName = GetSubstring(line, delStart, delEnd, false);
+bool Engine::LoadPrefab(std::string prefabName)
+{
+    std::string path = "prefabs/" + prefabName + ".prefab";
+    LOG_INFO("Loading prefab: ", path.c_str());
 
-				delStart = ",";
-				delEnd = ",,";
-				auto fieldValue = GetSubstring(line, delStart, delEnd, false);
+    auto entities = ParseFile(path);
+    if (entities.empty())
+    {
+        LOG_WARNING("Prefab not found: ", path.c_str());
+        return false;
+    }
 
-				delStart = ";";
-				delEnd = ";;";
-				auto fieldType = GetSubstring(line, delStart, delEnd, false);
+    // Rename to avoid conflicts
+    for (auto& e : entities)
+        e.entityName = manager->GetUniqueName(e.entityName);
 
-				if (fieldType == "_FIELD_")
-					break;
-				switch (std::stoi(fieldType))
-				{
-				case 1:
-				{
-					fields.intFields.emplace(fieldName, std::stoi(fieldValue));
-					break;
-				}
-				case 2:
-				{
-					fields.floatFields.emplace(fieldName, std::stof(fieldValue));
-					break;
-				}
-				case 3:
-				{
-					fields.stringFields.emplace(fieldName, fieldValue);
-					break;
-				}
-				case 4:
-				{
-					fields.boolFields.emplace(fieldName, std::stoi(fieldValue));
-					break;
-				}
-				}
-				comp.fields = fields;
-				line.erase(0, fieldPos + delField.length());
-			}
-			ent.components.push_back(comp);
-		}
-		entities.push_back(ent);
-	}
+    SpawnEntities(entities);
+    return true;
+}
 
-	myFile.close();
-
-	for (auto &e : entities)
-	{
-		Entity *ent = new Entity(e.entityName);
-		for (auto &c : e.components)
-		{
-			if (c.componentName == "Transform")
-			{
-				ent->GetComponent<Transform>().InitSerializedFields(c.fields);
-			}
-			if (c.componentName == "BoxCollider")
-			{
-				if (!ent->HasComponent<BoxCollider>())
-					ent->AddComponent<BoxCollider>().InitSerializedFields(c.fields);
-			}
-			if (c.componentName == "Sprite")
-			{
-				if (!ent->HasComponent<Sprite>())
-					ent->AddComponent<Sprite>().InitSerializedFields(c.fields);
-			}
-			if (c.componentName == "Rigidbody")
-			{
-				// ent->GetComponent<Rigidbody>().InitSerializedFields(c.fields);
-			}
-			if (c.componentName == "Player")
-			{
-				if (!ent->HasComponent<Player>())
-					ent->AddComponent<Player>().InitSerializedFields(c.fields);
-			}
-			if (c.componentName == "FloorSquare")
-			{
-				if (!ent->HasComponent<FloorSquare>())
-					ent->AddComponent<FloorSquare>().InitSerializedFields(c.fields);
-			}
-		}
-		manager->addEntity(ent);
-	}
-	currentState = EngineState::Running;
-	return true;
+void Engine::RegisterComponents()
+{
+    componentRegistry["Transform"] = [](Entity* e, ReadableSerializableVariableMap fields) {
+        e->GetComponent<Transform>().InitSerializedFields(fields);
+    };
+    componentRegistry["BoxCollider"] = [](Entity* e, ReadableSerializableVariableMap fields) {
+        if (!e->HasComponent<BoxCollider>())
+            e->AddComponent<BoxCollider>().InitSerializedFields(fields);
+        else
+            e->GetComponent<BoxCollider>().InitSerializedFields(fields);
+    };
+    componentRegistry["Sprite"] = [](Entity* e, ReadableSerializableVariableMap fields) {
+        if (!e->HasComponent<Sprite>())
+            e->AddComponent<Sprite>().InitSerializedFields(fields);
+        else
+            e->GetComponent<Sprite>().InitSerializedFields(fields);
+    };
+    componentRegistry["Player"] = [](Entity* e, ReadableSerializableVariableMap fields) {
+        if (!e->HasComponent<Player>())
+            e->AddComponent<Player>().InitSerializedFields(fields);
+        else
+            e->GetComponent<Player>().InitSerializedFields(fields);
+    };
+    componentRegistry["FloorSquare"] = [](Entity* e, ReadableSerializableVariableMap fields) {
+        if (!e->HasComponent<FloorSquare>())
+            e->AddComponent<FloorSquare>().InitSerializedFields(fields);
+        else
+            e->GetComponent<FloorSquare>().InitSerializedFields(fields);
+    };
 }
 
 std::string Engine::GetSubstring(std::string &line, std::string &delStart, std::string &delEnd, bool erase = false)
@@ -501,97 +436,6 @@ void Engine::SavePrefab(Entity *entity)
 	LOG_INFO("Saved prefab: ", filename);
 }
 
-bool Engine::LoadPrefab(std::string prefabName)
-{
-	std::string path = "prefabs/" + prefabName + ".prefab";
-	LOG_INFO("Looking for prefab at: ", std::filesystem::absolute(path).string().c_str());
-	ImguiHandler::get().Notify("Loading prefab: " + prefabName, ImVec4(0.9f, 0.9f, 0.9f, 1.0f), 1.5f);
-	std::fstream myFile;
-	myFile.open(path, std::ios::in);
-	if (!myFile)
-	{
-		LOG_WARNING("Prefab not found: ", path.c_str());
-		return false;
-	}
-
-	std::string line;
-	std::getline(myFile, line);
-	myFile.close();
-
-	// Reuse existing parsing logic
-	SerializableEntity ent;
-	std::string delStart = "ENTITY_NAME_";
-	std::string delEnd = "_ENTITY_NAME_E_";
-	ent.entityName = GetSubstring(line, delStart, delEnd, true);
-
-	std::size_t pos = 0;
-	std::string delimiter = "_COMPONENT_NAME_";
-	while ((pos = line.find(delimiter)) != std::string::npos)
-	{
-		ReadableSerializableVariableMap fields;
-		delStart = "_COMPONENT_NAME_";
-		delEnd = "_COMPONENT_NAME_E_";
-		SerializableComponent comp;
-		comp.componentName = GetSubstring(line, delStart, delEnd, true);
-
-		std::size_t fieldPos = 0;
-		std::string delField = "_FIELD_";
-		while ((fieldPos = line.find(delField)) != std::string::npos && (fieldPos < line.find(delimiter)))
-		{
-			delStart = ":";
-			delEnd = "::";
-			auto fieldName = GetSubstring(line, delStart, delEnd, false);
-			delStart = ",";
-			delEnd = ",,";
-			auto fieldValue = GetSubstring(line, delStart, delEnd, false);
-			delStart = ";";
-			delEnd = ";;";
-			auto fieldType = GetSubstring(line, delStart, delEnd, false);
-
-			if (fieldType == "_FIELD_")
-				break;
-			switch (std::stoi(fieldType))
-			{
-			case 1:
-				fields.intFields.emplace(fieldName, std::stoi(fieldValue));
-				break;
-			case 2:
-				fields.floatFields.emplace(fieldName, std::stof(fieldValue));
-				break;
-			case 3:
-				fields.stringFields.emplace(fieldName, fieldValue);
-				break;
-			case 4:
-				fields.boolFields.emplace(fieldName, std::stoi(fieldValue));
-				break;
-			}
-			comp.fields = fields;
-			line.erase(0, fieldPos + delField.length());
-		}
-		ent.components.push_back(comp);
-	}
-
-	// Spawn the entity
-	Entity *entity = new Entity(manager->GetUniqueName(ent.entityName));
-	for (auto &c : ent.components)
-	{
-		if (c.componentName == "Transform")
-			entity->GetComponent<Transform>().InitSerializedFields(c.fields);
-		if (c.componentName == "BoxCollider" && !entity->HasComponent<BoxCollider>())
-			entity->AddComponent<BoxCollider>().InitSerializedFields(c.fields);
-		if (c.componentName == "Sprite" && !entity->HasComponent<Sprite>())
-			entity->AddComponent<Sprite>().InitSerializedFields(c.fields);
-		if (c.componentName == "Player" && !entity->HasComponent<Player>())
-			entity->AddComponent<Player>().InitSerializedFields(c.fields);
-		if (c.componentName == "FloorSquare" && !entity->HasComponent<FloorSquare>())
-			entity->AddComponent<FloorSquare>().InitSerializedFields(c.fields);
-	}
-	manager->addEntity(entity);
-	LOG_INFO("Loaded prefab: ", entity->GetName().c_str());
-
-	return true;
-}
-
 void Engine::Reset()
 {
 	manager->DestroyAllEntities();
@@ -654,4 +498,78 @@ void Engine::UpdateEditorCamera(float dt)
     }
 
     window->setView(view);
+}
+
+
+std::vector<SerializableEntity> Engine::ParseFile(const std::string& fileName)
+{
+    std::vector<SerializableEntity> entities;
+    std::fstream myFile;
+    myFile.open(fileName, std::ios::in);
+    if (!myFile) return entities;
+
+    std::string line;
+    while (std::getline(myFile, line))
+    {
+        SerializableEntity ent;
+        std::string delStart = "ENTITY_NAME_";
+        std::string delEnd = "_ENTITY_NAME_E_";
+        ent.entityName = GetSubstring(line, delStart, delEnd, true);
+
+        std::string delimiter = "_COMPONENT_NAME_";
+        std::size_t pos = 0;
+        while ((pos = line.find(delimiter)) != std::string::npos)
+        {
+            ReadableSerializableVariableMap fields;
+            delStart = "_COMPONENT_NAME_";
+            delEnd = "_COMPONENT_NAME_E_";
+            SerializableComponent comp;
+            comp.componentName = GetSubstring(line, delStart, delEnd, true);
+
+            std::string delField = "_FIELD_";
+            std::size_t fieldPos = 0;
+            while ((fieldPos = line.find(delField)) != std::string::npos && 
+                   (fieldPos < line.find(delimiter)))
+            {
+                delStart = ":"; delEnd = "::";
+                auto fieldName = GetSubstring(line, delStart, delEnd, false);
+                delStart = ","; delEnd = ",,";
+                auto fieldValue = GetSubstring(line, delStart, delEnd, false);
+                delStart = ";"; delEnd = ";;";
+                auto fieldType = GetSubstring(line, delStart, delEnd, false);
+
+                if (fieldType == "_FIELD_") break;
+                switch (std::stoi(fieldType))
+                {
+                case 1: fields.intFields.emplace(fieldName, std::stoi(fieldValue)); break;
+                case 2: fields.floatFields.emplace(fieldName, std::stof(fieldValue)); break;
+                case 3: fields.stringFields.emplace(fieldName, fieldValue); break;
+                case 4: fields.boolFields.emplace(fieldName, std::stoi(fieldValue)); break;
+                }
+                comp.fields = fields;
+                line.erase(0, fieldPos + delField.length());
+            }
+            ent.components.push_back(comp);
+        }
+        entities.push_back(ent);
+    }
+    myFile.close();
+    return entities;
+}
+
+void Engine::SpawnEntities(const std::vector<SerializableEntity>& entities)
+{
+    for (auto& e : entities)
+    {
+        Entity* ent = new Entity(e.entityName);
+        for (auto& c : e.components)
+        {
+            auto it = componentRegistry.find(c.componentName);
+            if (it != componentRegistry.end())
+                it->second(ent, c.fields);
+            else
+                LOG_WARNING("Unknown component: ", c.componentName.c_str());
+        }
+        manager->addEntity(ent);
+    }
 }

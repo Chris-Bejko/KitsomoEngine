@@ -2,6 +2,9 @@
 #include "EntityManager.h"
 #include "InputSystem.h"
 #include <SFML/Graphics.hpp>
+#include <functional>
+
+using ComponentFactory = std::function<void(Entity *, ReadableSerializableVariableMap)>;
 
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
@@ -30,7 +33,7 @@ public:
 
     void Events();
 
-    void Spawn(Entity* entity);
+    void Spawn(Entity *entity);
 
     size_t GetTotalEntities();
 
@@ -38,13 +41,13 @@ public:
 
     bool Load(std::string fileName = "saveFile.txt");
 
-    std::string GetSubstring(std::string & line, std::string & delStart, std::string & delEnd, bool erase);
+    std::string GetSubstring(std::string &line, std::string &delStart, std::string &delEnd, bool erase);
 
     void Reset();
 
-    void RemoveEntity(Entity* entity);
+    void RemoveEntity(Entity *entity);
 
-    inline static Engine& get()
+    inline static Engine &get()
     {
         if (s_instance == nullptr)
         {
@@ -54,7 +57,6 @@ public:
         return *s_instance;
     }
 
-
     EngineState GetCurrentState();
 
     void SetEngineState(EngineState engineState);
@@ -63,7 +65,7 @@ public:
 
     sf::RenderWindow &GetWindow();
 
-    EntityManager* GetManager();
+    EntityManager *GetManager();
 
     bool DraggingEntity();
 
@@ -73,29 +75,34 @@ public:
 
     void ClearInpsector();
 
-    void SetView(sf::View& view);
+    void SetView(sf::View &view);
 
     sf::FloatRect GetView();
 
-    void SavePrefab(Entity* entity);
+    void SavePrefab(Entity *entity);
     bool LoadPrefab(std::string prefabName);
     float GetDt() { return dt; }
     void UpdateEditorCamera(float dt);
+    void RegisterComponents();
+    void SpawnEntities(const std::vector<SerializableEntity> &entities);
+    std::vector<SerializableEntity> ParseFile(const std::string &fileName);
+
 private:
     bool editorDragging = false;
     sf::Vector2f editorDragStart;
     EngineState currentState;
     EngineState previousState;
-    EntityManager* manager;
+    EntityManager *manager;
     bool isRunning;
     sf::RenderWindow *window;
-    static Engine* s_instance;
-    InputSystem* inputSystem;
+    static Engine *s_instance;
+    InputSystem *inputSystem;
     sf::Clock deltaClock;
     float dt = 1.f;
 
     bool entitiesAwaken;
 
     std::string draggedEntity = "";
+    std::unordered_map<std::string, ComponentFactory> componentRegistry;
 
 };
