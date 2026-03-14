@@ -11,7 +11,8 @@ void EntityManager::draw()
 
 	// Group entities by RenderOrder
 	for (auto& entity : entities) {
-		if (auto comp = &entity->GetComponent<Sprite>()) {
+		if (entity->HasComponent<Sprite>()) {
+			auto comp = &entity->GetComponent<Sprite>();
 			renderBuckets[comp->RenderOrder()].emplace_back(&entity); // Use a pointer to the unique_ptr
 		}
 		else {

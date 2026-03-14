@@ -1,7 +1,7 @@
 #include "Bullet.h"
 #include "Sprite.h"
 #include "FloorSquare.h"
-#include "../Time.h"
+#include "../Timedelta.h"
 #include "../Logger.h"
 
 bool Bullet::Init()

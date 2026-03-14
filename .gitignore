@@ -5,17 +5,12 @@
 .vs/CPP PRoject/v17/Browse.VC.opendb
 .vs/CPP PRoject/v17/Browse.VC.db
 # Debug symbols
-*.pdb
-*.idb
-
 # Build output
-*.obj
-*.exe
 *.dll
 *.lib
 *.ilk
 *.exp
-
+*.ipch
 # Visual Studio
 .vs/
 x64/
@@ -24,3 +19,13 @@ Debug/
 Release/
 *.user
 *.suo
+
+*.pdb
+*.idb
+*.obj
+*.exe
+build/
+.vs/
+x64/
+x64/Debug/*
+x64/*.pdb

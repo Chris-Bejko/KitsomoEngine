@@ -1,6 +1,53 @@
-﻿  EntityManager.cpp
+﻿  Bullet.cpp
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(17,28): warning C4099: 'SerializableComponent': type name first seen using 'struct' now seen using 'class'
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(37,8): message : see declaration of 'SerializableComponent'
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EntityManager.h(9,25): warning C4099: 'SerializableEntity': type name first seen using 'struct' now seen using 'class'
 C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(44,8): message : see declaration of 'SerializableEntity'
-  CPP PRoject.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\x64\Debug\CPP PRoject.exe
+  Player.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(17,28): warning C4099: 'SerializableComponent': type name first seen using 'struct' now seen using 'class'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(37,8): message : see declaration of 'SerializableComponent'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EntityManager.h(9,25): warning C4099: 'SerializableEntity': type name first seen using 'struct' now seen using 'class'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(44,8): message : see declaration of 'SerializableEntity'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.cpp(32,49): warning C4305: 'argument': truncation from 'double' to 'T'
+          with
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.cpp(176,77): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.cpp(176,49): warning C4244: 'argument': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=int
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Components\Player.cpp(184,39): warning C4244: 'argument': conversion from 'double' to 'const float', possible loss of data
+  EngineP.cpp
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Entity.h(17,28): warning C4099: 'SerializableComponent': type name first seen using 'struct' now seen using 'class'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(37,8): message : see declaration of 'SerializableComponent'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EntityManager.h(9,25): warning C4099: 'SerializableEntity': type name first seen using 'struct' now seen using 'class'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Serialization.h(44,8): message : see declaration of 'SerializableEntity'
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(92,7): warning C4101: 'checkBox': unreferenced local variable
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(424,53): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\EngineP.cpp(424,32): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=unsigned int
+          ]
+  Time.cpp
+c1xx : fatal  error C1083: Cannot open source file: 'Time.cpp': No such file or directory
+  Generating Code...

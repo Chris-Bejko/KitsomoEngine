@@ -12,7 +12,7 @@
 #include "Components/Rigidbody.h"
 #include "Components/Player.h"
 #include "Components/FloorSquare.h"
-#include "Time.h"
+#include "Timedelta.h"
 #include "Logger.h"
 Engine* Engine::s_instance = nullptr;
 
@@ -69,7 +69,6 @@ void Engine::Init()
 	//manager->addEntity(floorSquare2);
 	//manager->addEntity(floorSquare3);
 	isRunning = true;
-
 }
 
 void Engine::Clean()
@@ -115,20 +114,29 @@ void Engine::Update()
 	}
 	SystemsManager::get().Update();
 	auto rest = deltaClock.restart();
+	
+	if (rest.asSeconds() <= 0.f)
+	{
+		rest = sf::seconds(1.f / 60.f);
+	}
 	dt = rest.asSeconds();
+
 	//LOG_DEBUG("dt = ", dt, " | fps = ", 1.f / dt);
-	Time::deltaTime = dt;
+	Timedelta::deltaTime = dt;
 	ImguiHandler::get().Update(rest);
 }
 
 void Engine::Events()
 {
 	sf::Event event;
-	window->pollEvent(event);
-	ImGui::SFML::ProcessEvent(event);
-	if (event.type == sf::Event::Closed)
-		Clean();
-
+	
+	while(window->pollEvent(event))
+	{
+		if (event.type == sf::Event::Closed)
+			Clean();
+		
+		ImGui::SFML::ProcessEvent(event);
+	}
 }
 
 EngineState Engine::GetCurrentState()
@@ -233,7 +241,7 @@ void Engine::Save(std::string filename)
 {
 	auto entitiesAndComps = manager->SerializeEntities();
 	std::ofstream myFile;
-	myFile.open(filename + ".txt");
+	myFile.open(filename);
 	for (auto& e : entitiesAndComps)
 	{
 		myFile << "ENTITY_NAME_" << e.entityName << "_ENTITY_NAME_E_";
@@ -283,6 +291,12 @@ void Engine::Save(std::string filename)
 
 bool Engine::Load(std::string fileName)
 {
+
+	LOG_INFO("Loading file: ", fileName);	
+	if(fileName == ""){
+		Init();
+		return true;
+	}
 	//convert file to std::vector<SerializableEntity>();
 	std::vector<SerializableEntity> entities;
 	std::vector<SerializableComponent> components;
@@ -423,7 +437,6 @@ void Engine::Reset()
 	sf::View view;
 	view.setSize(window->getSize().x, window->getSize().y);
 	window->setView(view);
-	Load();
 	isEngine = true;
 }
 

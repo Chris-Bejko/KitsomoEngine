@@ -3,7 +3,7 @@
 #include "../Engine.h"
 #include "FloorSquare.h"
 #include "Bullet.h"
-#include "../Time.h"
+#include "../Timedelta.h"
 #include "../Logger.h"
 
 Player::Player()

@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run ECSEngine",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/ECSEngine.exe",
+            "cwd": "${workspaceFolder}",
+            "args": []
+        }
+    ]
+}

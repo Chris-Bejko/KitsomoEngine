@@ -1,33 +1,48 @@
 #pragma once
 #include "imgui.h"
-#include "imgui-SFML.h"
+#include "imgui-sfml.h"
 #include "Engine.h"
-#include <vector>
+
+enum class EditorPanel
+{
+    Toolbar,
+    Entities,
+    Inspector,
+    SaveDialog,
+    LoadDialog
+};
 
 class ImguiHandler
 {
 public:
-	ImguiHandler() = default;
-	~ImguiHandler() = default;
+    static ImguiHandler& get()
+    {
+        static ImguiHandler instance;
+        return instance;
+    }
 
-	void ClearInspector();
-
-	void Update(sf::Time rest);
-
-	inline static ImguiHandler& get()
-	{
-		if (s_instance == nullptr)
-		{
-			s_instance = new ImguiHandler();
-		}
-
-		return *s_instance;
-	}
+    void Update(sf::Time rest);
+    void ClearInspector();
 
 private:
-	static ImguiHandler * s_instance;
-	bool savePressed;
-	bool loadPressed;
+    ImguiHandler() = default;
+    static ImguiHandler* s_instance;
 
-	std::string str;
+    std::string str = "saveFile.txt";
+    bool savePressed = false;
+    bool loadPressed = false;
+
+    void DrawToolbar();
+    void DrawEntities();
+    void DrawInspector();
+    void DrawSaveDialog();
+    void DrawLoadDialog();
+
+    void OnPlay();
+    void OnPause();
+    void OnReset();
+    void OnSave();
+    void OnLoad();
+
+	bool loadError = false;
 };
