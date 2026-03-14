@@ -45,7 +45,19 @@ void Engine::Init()
 	{
 		LOG_INFO("Window initialized");
 	}
-    ImguiHandler::ApplyEditorStyle();
+	ImguiHandler::ApplyEditorStyle();
+	Logger::get().SetCallback([](LogLevel level, const std::string &message)
+							  {
+    ImVec4 color;
+    switch (level)
+    {
+    case LogLevel::Info:    color = ImVec4(0.9f, 0.9f, 0.9f, 1.0f); break;
+    case LogLevel::Warning: color = ImVec4(0.95f, 0.78f, 0.2f, 1.0f); break;
+    case LogLevel::Error:   color = ImVec4(1.0f, 0.3f, 0.3f, 1.0f); break;
+    case LogLevel::Debug:   color = ImVec4(0.4f, 0.85f, 1.0f, 1.0f); break;
+    default:                color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); break;
+    }
+    ImguiHandler::get().AddConsoleLog(message, color); });
 	auto inputSystem = new InputSystem();
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
@@ -436,7 +448,7 @@ void Engine::SavePrefab(Entity *entity)
 	std::ofstream myFile;
 	std::string name = entity->GetName();
 	name = name.c_str();
-	std::string filename = "prefabs/" + name  + ".prefab";
+	std::string filename = "prefabs/" + name + ".prefab";
 	myFile.open(filename);
 	LOG_INFO("Saving prefab to: ", std::filesystem::absolute(filename).string().c_str());
 	auto components = entity->GetAllComponentVariables();
@@ -483,6 +495,7 @@ bool Engine::LoadPrefab(std::string prefabName)
 {
 	std::string path = "prefabs/" + prefabName + ".prefab";
 	LOG_INFO("Looking for prefab at: ", std::filesystem::absolute(path).string().c_str());
+	ImguiHandler::get().Notify("Loading prefab: " + prefabName, ImVec4(0.9f, 0.9f, 0.9f, 1.0f), 1.5f);
 	std::fstream myFile;
 	myFile.open(path, std::ios::in);
 	if (!myFile)
@@ -549,7 +562,7 @@ bool Engine::LoadPrefab(std::string prefabName)
 	}
 
 	// Spawn the entity
-	Entity* entity = new Entity(manager->GetUniqueName(ent.entityName));
+	Entity *entity = new Entity(manager->GetUniqueName(ent.entityName));
 	for (auto &c : ent.components)
 	{
 		if (c.componentName == "Transform")
@@ -565,6 +578,7 @@ bool Engine::LoadPrefab(std::string prefabName)
 	}
 	manager->addEntity(entity);
 	LOG_INFO("Loaded prefab: ", entity->GetName().c_str());
+
 	return true;
 }
 

@@ -65,6 +65,8 @@ void ImguiHandler::Update(sf::Time rest)
     ImGui::SFML::Update(Engine::get().GetWindow(), rest);
 
     DrawToolbar();
+	DrawStatusWindow();
+	DrawConsole();
 
     if (Engine::get().GetCurrentState() != EngineState::PlayMode)
     {
@@ -287,3 +289,79 @@ void ImguiHandler::OnReset() { savePressed = false; loadPressed = false; Engine:
 void ImguiHandler::OnSave()  { str = "saveFile.txt"; str.resize(255, '\0'); savePressed = true; }
 void ImguiHandler::OnLoad()  { str = "saveFile.txt"; str.resize(255, '\0'); loadPressed = true; }
 void ImguiHandler::ClearInspector() { Engine::get().ClearInpsector(); }
+
+void ImguiHandler::Notify(const std::string& message, ImVec4 color, float lifetime)
+{
+	notifications.push_back({ message, color, lifetime, lifetime });
+	if (notifications.size() > 5)
+		notifications.pop_front();
+}
+
+void ImguiHandler::DrawStatusWindow()
+{
+	ImGui::SetNextWindowPos(ImVec2(10, 10), ImGuiCond_Always);
+	ImGui::SetNextWindowBgAlpha(0.0f);
+	ImGui::Begin("##status", nullptr,
+		ImGuiWindowFlags_NoTitleBar |
+		ImGuiWindowFlags_NoResize |
+		ImGuiWindowFlags_NoScrollbar |
+		ImGuiWindowFlags_AlwaysAutoResize);
+
+  float dt = Engine::get().GetDt(); // we'll add this
+    for (auto it = notifications.begin(); it != notifications.end();)
+    {
+        it->lifetime -= dt;
+        float alpha = std::min(1.0f, it->lifetime / 0.5f); // fade out last 0.5s
+        ImVec4 color = it->color;
+        color.w = alpha;
+
+        // Progress bar for lifetime
+        float progress = it->lifetime / it->maxLifetime;
+        ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(color.x, color.y, color.z, 0.4f));
+        ImGui::ProgressBar(progress, ImVec2(-1, 3), "");
+        ImGui::PopStyleColor();
+
+        ImGui::TextColored(color, it->message.c_str());
+        ImGui::Spacing();
+
+        if (it->lifetime <= 0.f)
+            it = notifications.erase(it);
+        else
+            ++it;
+    }
+	ImGui::End();
+};
+
+void ImguiHandler::AddConsoleLog(const std::string& message, ImVec4 color)
+{
+	consoleLogs.push_back({ message, color });
+	if (consoleLogs.size() > 200)
+		consoleLogs.pop_front();
+}
+
+void ImguiHandler::DrawConsole()
+{
+    ImGui::Begin("Console");
+
+    // Clear button
+    ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
+    if (ImGui::Button("Clear", ImVec2(70, 24)))
+        consoleLogs.clear();
+    ImGui::PopStyleColor();
+    ImGui::SameLine();
+    ImGui::TextColored(COLOR_TEXT_DIM, "%zu entries", consoleLogs.size());
+
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    ImGui::BeginChild("##consolescroll", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+    for (auto& [msg, color] : consoleLogs)
+        ImGui::TextColored(color, msg.c_str());
+
+    // Auto scroll to bottom
+    if (ImGui::GetScrollY() >= ImGui::GetScrollMaxY())
+        ImGui::SetScrollHereY(1.0f);
+
+    ImGui::EndChild();
+    ImGui::End();
+}

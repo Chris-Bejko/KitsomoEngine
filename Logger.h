@@ -1,3 +1,4 @@
+// Logger.h
 #pragma once
 #include <string>
 #include <sstream>
@@ -5,6 +6,7 @@
 #include <fstream>
 #include <chrono>
 #include <ctime>
+#include <functional>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -26,6 +28,13 @@ public:
         return instance;
     }
 
+    // Register a callback to receive log messages
+    using LogCallback = std::function<void(LogLevel, const std::string&)>;
+    void SetCallback(LogCallback callback)
+    {
+        this->callback = callback;
+    }
+
     template<typename... Args>
     void Log(LogLevel level, Args&&... args)
     {
@@ -45,6 +54,7 @@ private:
     Logger() = default;
     bool logToFile = false;
     std::ofstream fileStream;
+    LogCallback callback;
 
     std::string GetPrefix(LogLevel level)
     {
@@ -58,6 +68,18 @@ private:
         }
     }
 
+    ImVec4 GetColor(LogLevel level)
+    {
+        switch (level)
+        {
+        case LogLevel::Info:    return ImVec4(0.9f, 0.9f, 0.9f, 1.0f);
+        case LogLevel::Warning: return ImVec4(0.95f, 0.78f, 0.2f, 1.0f);
+        case LogLevel::Error:   return ImVec4(1.0f, 0.3f, 0.3f, 1.0f);
+        case LogLevel::Debug:   return ImVec4(0.4f, 0.85f, 1.0f, 1.0f);
+        default:                return ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+        }
+    }
+
     std::string GetTimestamp()
     {
         auto now = std::chrono::system_clock::now();
@@ -68,16 +90,17 @@ private:
         strftime(buf, sizeof(buf), "%H:%M:%S", &timeInfo);
         return std::string(buf);
     }
+
     void SetConsoleColor(LogLevel level)
     {
 #ifdef _WIN32
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         switch (level)
         {
-        case LogLevel::Info:    SetConsoleTextAttribute(hConsole, 15); break; // White
-        case LogLevel::Warning: SetConsoleTextAttribute(hConsole, 14); break; // Yellow
-        case LogLevel::Error:   SetConsoleTextAttribute(hConsole, 12); break; // Red
-        case LogLevel::Debug:   SetConsoleTextAttribute(hConsole, 11); break; // Cyan
+        case LogLevel::Info:    SetConsoleTextAttribute(hConsole, 15); break;
+        case LogLevel::Warning: SetConsoleTextAttribute(hConsole, 14); break;
+        case LogLevel::Error:   SetConsoleTextAttribute(hConsole, 12); break;
+        case LogLevel::Debug:   SetConsoleTextAttribute(hConsole, 11); break;
         }
 #endif
     }
@@ -97,10 +120,12 @@ private:
         ResetConsoleColor();
         if (logToFile && fileStream.is_open())
             fileStream << output << "\n";
+        // Fire callback if registered
+        if (callback)
+            callback(level, output);
     }
 };
 
-// Convenience macros
 #define LOG_INFO(...)    Logger::get().Log(LogLevel::Info,    __VA_ARGS__)
 #define LOG_WARNING(...) Logger::get().Log(LogLevel::Warning, __VA_ARGS__)
 #define LOG_ERROR(...)   Logger::get().Log(LogLevel::Error,   __VA_ARGS__)

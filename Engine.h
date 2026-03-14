@@ -79,7 +79,7 @@ public:
 
     void SavePrefab(Entity* entity);
     bool LoadPrefab(std::string prefabName);
-
+    float GetDt() { return dt; }
 private:
     EngineState currentState;
     EngineState previousState;
