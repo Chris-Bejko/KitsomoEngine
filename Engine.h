@@ -80,7 +80,10 @@ public:
     void SavePrefab(Entity* entity);
     bool LoadPrefab(std::string prefabName);
     float GetDt() { return dt; }
+    void UpdateEditorCamera(float dt);
 private:
+    bool editorDragging = false;
+    sf::Vector2f editorDragStart;
     EngineState currentState;
     EngineState previousState;
     EntityManager* manager;

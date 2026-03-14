@@ -109,11 +109,13 @@ void Engine::Update()
 	case EngineState::Running:
 	{
 		manager->updateEngine(dt);
+		UpdateEditorCamera(dt); 
 		break;
 	}
 	case EngineState::Paused:
 	{
 		manager->updateEngine(dt);
+		UpdateEditorCamera(dt); 
 		break;
 	}
 	case EngineState::PlayMode:
@@ -602,4 +604,54 @@ void Engine::Reset()
 void Engine::RemoveEntity(Entity *entity)
 {
 	manager->eraseEntity(entity);
+}
+
+void Engine::UpdateEditorCamera(float dt)
+{
+    float speed = 300.f * dt;
+    sf::View view = window->getView();
+
+    // Arrow keys always move camera in editor
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  view.move(-speed, 0);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) view.move(speed, 0);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    view.move(0, -speed);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  view.move(0, speed);
+
+    // Mouse drag when not dragging an entity
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+    {
+        sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
+        if (!editorDragging)
+        {
+            editorDragStart = mousePos;
+            editorDragging = true;
+        }
+        sf::Vector2f delta = editorDragStart - mousePos;
+        view.move(delta * 0.5f);
+        editorDragStart = mousePos;
+    }
+    else
+    {
+        editorDragging = false;
+    }
+
+    // Left mouse drag when not dragging an entity
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !DraggingEntity())
+    {
+        sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
+        if (!editorDragging)
+        {
+            editorDragStart = mousePos;
+            editorDragging = true;
+        }
+        sf::Vector2f delta = editorDragStart - mousePos;
+        view.move(delta);
+        editorDragStart = mousePos;
+    }
+    else if (!sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+    {
+        editorDragging = false;
+    }
+
+    window->setView(view);
 }
