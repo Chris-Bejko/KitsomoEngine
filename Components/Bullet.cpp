@@ -2,6 +2,7 @@
 #include "Sprite.h"
 #include "FloorSquare.h"
 #include "../Time.h"
+#include "../Logger.h"
 
 bool Bullet::Init()
 {
@@ -15,9 +16,17 @@ bool Bullet::Init()
 void Bullet::update(float dt)
 {
 	timer += dt;
+	LOG_DEBUG("Bullet pos: ", entity->transform->position.x, ", ", entity->transform->position.y);
+	if (entity->transform->position.x < Engine::get().GetView().left )
+	{
+		
+	}
+	timer += dt;
 	if (entity->transform->position.x < Engine::get().GetView().left || entity->transform->position.x > Engine::get().GetView().width
 		|| entity->transform->position.y < Engine::get().GetView().top || entity->transform->position.y > Engine::get().GetView().height)
 	{
+		Engine::get().GetManager()->eraseEntity(entity);
+		LOG_DEBUG("Bullet destroyed out of bounds!");
 		Engine::get().GetManager()->eraseEntity(entity);
 	}
 	//if(timer > 5)
@@ -37,13 +46,11 @@ void Bullet::SetPosition(Vector2F position)
 
 void Bullet::AddForce(Vector2F force)
 {
-	std::cout << Time::deltaTime << std::endl;
 	rb->AddForce(force * this->force);
 }
 
 void Bullet::SetColor(Color color)
 {
-	std::cout << color.SerializeColor() << std::endl;
 	lastColor = color;
 	sprite->SetColor(color);
 

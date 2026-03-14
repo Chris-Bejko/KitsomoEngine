@@ -85,6 +85,7 @@ private:
     sf::RenderWindow *window;
     static Engine* s_instance;
     InputSystem* inputSystem;
+    sf::Clock deltaClock;
     float dt = 1.f;
 
     bool entitiesAwaken;

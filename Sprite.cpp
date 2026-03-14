@@ -1,6 +1,7 @@
 #include "Components/Sprite.h"
 #include "../Engine.h"
 #include "../imguiHandler.h"
+#include "Logger.h"
 
 Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 {
@@ -35,13 +36,12 @@ void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
 {
 	for (auto const& [key, value] : map.stringFields)
 	{
-		std::cout << key << " , " << value << std::endl;
+		LOG_DEBUG(key, value);
 		if (key == "textureID")
 		{
 			textureID = value;
 			AssetManager::get().loadTexture(textureID, textureID + ".png");
 			texture = AssetManager::get().getTexture(textureID);
-			std::cout << textureID << std::endl;
 			sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
 			sprite.setTexture(texture);
 		}
@@ -81,7 +81,6 @@ void Sprite::update(float dt)
 
 	if (dragging)
 	{
-		std::cout << "Should drag to entity: " << entity->GetName() << std::endl;
 		entity->GetComponent<Transform>().SetPosition(mousePos.x - mouseRectOffset.x, mousePos.y - mouseRectOffset.y);
 	}
 }
@@ -98,7 +97,6 @@ int Sprite::GetWidth()
 
 void Sprite::updateEngine(float dt)
 {
-	//std::cout << ColorID << std::endl;
 	update(dt);
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
@@ -184,5 +182,4 @@ int Sprite::RenderOrder()
 void Sprite::SetRenderOrder(int i)
 {
 	renderOrder = i;
-	//std::cout << entity->GetName() << " : " << i << std::endl;
 }

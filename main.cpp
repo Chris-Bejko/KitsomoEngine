@@ -4,6 +4,7 @@
 #include "Engine.h"
 #include "imgui.h"
 #include "imgui-SFML.h"
+#include "Logger.h"
 
 int main()
 {
@@ -17,7 +18,7 @@ int main()
         engine.Update();
         engine.Render();
     }
-    std::cout << "Loop Broken" << std::endl;
+    LOG_INFO("EXITING");
     ImGui::SFML::Shutdown();
 
     return 0;

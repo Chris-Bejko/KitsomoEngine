@@ -13,6 +13,7 @@
 #include "Components/Player.h"
 #include "Components/FloorSquare.h"
 #include "Time.h"
+#include "Logger.h"
 Engine* Engine::s_instance = nullptr;
 
 Engine::Engine()
@@ -37,11 +38,13 @@ void Engine::Init()
 	window->setFramerateLimit(1000);
 	if (!ImGui::SFML::Init(GetWindow()))
 	{
-		std::cerr << "Error initializing IMGUI window" << std::endl;
+		//std::cerr << "Error initializing IMGUI window" << std::endl;
+		LOG_ERROR("Error initializing IMGUI window");
+
 	}
 	else
 	{
-		std::cout << "Window initialized" << std::endl;
+		LOG_INFO("Window initialized");
 	}
 	auto inputSystem = new InputSystem();
 	this->inputSystem = inputSystem;
@@ -86,10 +89,7 @@ void Engine::Render()
 
 void Engine::Update()
 {
-
-
 	bool checkBox;
-	sf::Clock deltaClock;
 	switch (currentState)
 	{
 	case EngineState::Running:
@@ -115,9 +115,10 @@ void Engine::Update()
 	}
 	SystemsManager::get().Update();
 	auto rest = deltaClock.restart();
-	ImguiHandler::get().Update(rest);
 	dt = rest.asSeconds();
+	//LOG_DEBUG("dt = ", dt, " | fps = ", 1.f / dt);
 	Time::deltaTime = dt;
+	ImguiHandler::get().Update(rest);
 }
 
 void Engine::Events()

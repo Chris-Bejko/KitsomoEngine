@@ -1,6 +1,6 @@
 #include "FloorSquare.h"
 #include "../Entity.h"
-
+#include "../Logger.h"
 bool FloorSquare::Init()
 {
 	AssetManager::get().loadTexture("square", "square.png");
@@ -59,5 +59,5 @@ Color FloorSquare::GetColor()
 
 void FloorSquare::OnTriggerStay(BoxCollider& other)
 {
-	std::cout << "On Trigger Stay" << std::endl;
+	LOG_DEBUG("ON TRIGGER STAY");
 }

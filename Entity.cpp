@@ -275,7 +275,6 @@ void Entity::DisplayAvailableComponents()
 			auto temp = str.c_str();
 			if (ImGui::Button(temp))
 			{
-				std::cout << temp << std::endl;
 				if (str == "Transform")
 				{
 					if (!this->HasComponent<Transform>())
@@ -283,7 +282,6 @@ void Entity::DisplayAvailableComponents()
 				}
 				else if (str == "BoxCollider")
 				{
-					std::cout << "should add box collider" << std::endl;
 					if (!this->HasComponent<BoxCollider>())
 					{
 						this->AddComponent<BoxCollider>();
@@ -291,7 +289,6 @@ void Entity::DisplayAvailableComponents()
 				}
 				else if (str == "Sprite")
 				{
-					std::cout << "Should add sprite" << std::endl;
 					if (!this->HasComponent<Sprite>())
 						this->AddComponent<Sprite>();
 				}
