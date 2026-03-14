@@ -27,8 +27,10 @@ public:
 
 	void OnCollisionEnter(BoxCollider& other) override final;
 
+	float GetForce() { return force; }	
+
 private:
-	float force = 1.5f;
+	float force = 850.f;
 	Color lastColor;
 	float timer = 0;
 	Sprite* sprite;

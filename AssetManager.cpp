@@ -1,4 +1,5 @@
 #include "AssetManager.h"
+#include "Logger.h"
 AssetManager* AssetManager::s_instance = nullptr;
 
 AssetManager::AssetManager()
@@ -23,10 +24,10 @@ void AssetManager::loadTexture(std::string id, std::string path)
 		if (texture.loadFromFile(path.c_str()))
 		{
 			textures[id] = texture;
-			std::cout << "texture: [" << path << "] loaded." << std::endl;
+			LOG_INFO("Texture: [" + path + "] loaded.");
 		}
 		else
-			std::cerr << "Error loading image " << std::endl;
+			LOG_ERROR("Error loading image: " + path);
 	}
 }
 

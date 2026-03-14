@@ -7,34 +7,40 @@ Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 {
 	textureID = textureId;
 	ColorID = color.SerializeColor();
-	sprite.setColor(color.GetColor());
+	sprite.setColor(color.GetColorEnum());
 	SetRenderOrder(renderOrder);
 }
 
 bool Sprite::Init()
 {
 	Serialize();
-	texture = AssetManager::get().getTexture(textureID);
-	sprite.setTexture(texture);
-	sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
+	if (!textureID.empty())
+	{
+		// Try to load texture if not already in AssetManager
+		AssetManager::get().loadTexture(textureID, textureID + ".png");
+		texture = AssetManager::get().getTexture(textureID);
+		sprite.setTexture(texture);
+		sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
+		LOG_DEBUG("Texture '", textureID, "' size: ", texture.getSize().x, "x", texture.getSize().y);
+	}
 	return true;
 }
 
-std::vector<SerializableVariable>* Sprite::GetSerializedFields()
+std::vector<SerializableVariable> *Sprite::GetSerializedFields()
 {
 	return &variables;
 }
 
 void Sprite::Serialize()
 {
-	variables.push_back({ "textureID", &textureID, char_Type });
-	variables.push_back({ "ColorID", &ColorID, char_Type });
+	variables.push_back({"textureID", &textureID, char_Type});
+	variables.push_back({"ColorID", &ColorID, char_Type});
 	variables.push_back({"renderOrder", &renderOrder, int_Type});
 }
 
 void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
 {
-	for (auto const& [key, value] : map.stringFields)
+	for (auto const &[key, value] : map.stringFields)
 	{
 		LOG_DEBUG(key, value);
 		if (key == "textureID")
@@ -46,7 +52,7 @@ void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
 			sprite.setTexture(texture);
 		}
 
-		if(key == "ColorID")
+		if (key == "ColorID")
 		{
 			ColorID = value;
 			Color color;
@@ -55,9 +61,9 @@ void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
 		}
 	}
 
-	for(auto const& [key, value] : map.intFields)
+	for (auto const &[key, value] : map.intFields)
 	{
-		if(key == "renderOrder")
+		if (key == "renderOrder")
 		{
 			renderOrder = value;
 		}
@@ -66,9 +72,7 @@ void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
 
 void Sprite::draw()
 {
-	Color color;
-	color.SetColor(ColorID);
-	SetColor(color);
+	// LOG_DEBUG("Drawing sprite at: ", sprite.getPosition().x, ", ", sprite.getPosition().y, " texture: ", textureID, " color: ", ColorID);
 	Engine::get().GetWindow().draw(sprite);
 }
 
@@ -87,7 +91,7 @@ void Sprite::update(float dt)
 
 int Sprite::GetHeight()
 {
-	return height;
+	return height; 
 }
 
 int Sprite::GetWidth()
@@ -128,7 +132,7 @@ sf::FloatRect Sprite::GetGlobalBounds()
 	return sprite.getGlobalBounds();
 }
 
-sf::FloatRect Sprite::TranslateHitbox(sf::FloatRect& hitbox)
+sf::FloatRect Sprite::TranslateHitbox(sf::FloatRect &hitbox)
 {
 	return sprite.getTransform().transformRect(hitbox);
 }
@@ -148,7 +152,7 @@ sf::Sprite Sprite::GetSprite()
 	return sprite;
 }
 
-void Sprite::SetColor(const sf::Color& color)
+void Sprite::SetColor(const sf::Color &color)
 {
 	sprite.setColor(color);
 }
@@ -156,10 +160,10 @@ void Sprite::SetColor(const sf::Color& color)
 void Sprite::SetColor(Color color)
 {
 	ColorID = color.SerializeColor();
-	sprite.setColor(color.GetColor());
+	sprite.setColor(color.GetColorEnum());
 }
 
-void Sprite::SetOrigin(const Vector2F& origin)
+void Sprite::SetOrigin(const Vector2F &origin)
 {
 	sprite.setOrigin(sf::Vector2f(origin.x, origin.y));
 }
@@ -169,7 +173,7 @@ sf::Vector2f Sprite::GetRotation()
 	return sf::Vector2f();
 }
 
-bool Sprite::isMouseOver(const sf::Sprite& sprite, int mouseX, int mouseY)
+bool Sprite::isMouseOver(const sf::Sprite &sprite, int mouseX, int mouseY)
 {
 	return sprite.getGlobalBounds().contains(mouseX, mouseY);
 }

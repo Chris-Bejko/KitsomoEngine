@@ -36,7 +36,7 @@ void Entity::Awake()
 
 void Entity::ValidateAddedComponents()
 {
-	for (auto& comp : to_Add)
+	while (!to_Add.empty())
 	{
 		components.push_back(std::move(to_Add.back()));
 		to_Add.pop_back();
@@ -298,7 +298,7 @@ void Entity::DisplayComponents()
                 assert(0);
             }
         }
-
+		e->DrawEditorButton();
         ImGui::EndChild();
         ImGui::PopStyleColor();
         ImGui::Spacing();

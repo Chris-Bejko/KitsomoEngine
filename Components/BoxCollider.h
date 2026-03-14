@@ -5,7 +5,6 @@
 #include "../Component.h"
 #include <SFML/Graphics.hpp>
 
-
 class BoxCollider : public Component
 {
 public:
@@ -21,7 +20,7 @@ public:
 
 	void Serialize();
 
-	std::vector<SerializableVariable>* GetSerializedFields() override final;
+	std::vector<SerializableVariable> *GetSerializedFields() override final;
 
 	void InitSerializedFields(ReadableSerializableVariableMap map);
 
@@ -30,7 +29,7 @@ public:
 	void draw() override final;
 
 	void update(float dt) override final;
-	
+
 	std::string GetCollisionTag();
 
 	sf::FloatRect GetRect();
@@ -39,6 +38,8 @@ public:
 	{
 		return isTrigger;
 	}
+	void DrawEditorButton() override;
+
 
 private:
 	std::vector<SerializableVariable> serializables;
@@ -50,4 +51,26 @@ private:
 	bool isTrigger;
 
 	sf::RectangleShape colliderVisual;
+	bool editMode = false;
+	enum class DragHandle
+	{
+		None,
+		Top,
+		Bottom,
+		Left,
+		Right,
+		TopLeft,
+		TopRight,
+		BottomLeft,
+		BottomRight,
+	};
+
+	DragHandle activeDrag = DragHandle::None;
+	sf::Vector2f dragStartMouse;
+	sf::FloatRect dragStartHitbox;
+	void UpdateEditMode();
+	DragHandle GetHoveredHandle(sf::Vector2f mousePos);
+	void DrawHandles();
+
 };
+

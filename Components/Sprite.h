@@ -56,7 +56,7 @@ private:
     std::string ColorID = "";
     int renderOrder;
     std::vector<SerializableVariable> variables;
-    bool dragging;
+    bool dragging = false;
     sf::Vector2f mouseRectOffset;
     sf::Vector2f mousePos;
 

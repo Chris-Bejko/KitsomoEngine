@@ -52,7 +52,7 @@ std::vector<SerializableVariable>* FloorSquare::GetSerializedFields()
 	return &variables;
 }
 
-Color FloorSquare::GetColor()
+Color FloorSquare::GetColorEnum()
 {
 	return color;
 }

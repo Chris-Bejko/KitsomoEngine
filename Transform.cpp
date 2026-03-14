@@ -1,4 +1,6 @@
 #include "Components/Transform.h"
+#include "Logger.h"
+#include "Entity.h"
 
 Transform::Transform(float x, float y)
 {

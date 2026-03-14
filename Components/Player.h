@@ -48,11 +48,12 @@ private:
 	Color lastColor;
 	std::string lastColorString = "";
 	float cooldown = 0.5f;
-	float timer;
+	float timer = 0.f;
 	float moveSpeed = 350;
 	sf::Vector2f mousePos;
 
 	void Move(const Vector2F movement);
 	void LookAtMouse();
+	Vector2F currentVelocity = Vector2F(0, 0);
 
 };

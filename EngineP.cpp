@@ -20,6 +20,9 @@ Engine::Engine()
 {
 	isRunning = false;
 	isEngine = true;
+	currentState = EngineState::Running;
+	previousState = EngineState::Paused;
+	entitiesAwaken = false;
 }
 
 Engine::~Engine()
@@ -115,6 +118,8 @@ void Engine::Update()
 	}
 	case EngineState::PlayMode:
 	{
+		LOG_DEBUG("entitiesAwaken: ", entitiesAwaken, " entities count: ", manager->GetTotalEntities());
+
 		if (!entitiesAwaken)
 			break;
 
@@ -159,6 +164,7 @@ void Engine::SetEngineState(EngineState engineState)
 {
 	previousState = currentState;
 	currentState = engineState;
+	isEngine = (engineState != EngineState::PlayMode);
 	switch (engineState)
 	{
 	case EngineState::Running:
@@ -166,6 +172,7 @@ void Engine::SetEngineState(EngineState engineState)
 		if (previousState != EngineState::Running)
 		{
 			Reset();
+			entitiesAwaken = false;
 		}
 		break;
 	}
@@ -175,7 +182,8 @@ void Engine::SetEngineState(EngineState engineState)
 	}
 	case EngineState::PlayMode:
 	{
-		if (previousState == EngineState::Running)
+		// manager->ValidateAdded();
+		if (!entitiesAwaken)
 		{
 			manager->Awake();
 			entitiesAwaken = true;

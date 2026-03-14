@@ -18,7 +18,7 @@ enum ColorEnum
 struct Color
 {
 public:
-	sf::Color GetColor()
+	sf::Color GetColorEnum()
 	{
 		return color;
 	}

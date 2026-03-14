@@ -24,7 +24,7 @@ public:
 
 	std::vector<SerializableVariable>* GetSerializedFields() override final;
 
-	Color GetColor();
+	Color GetColorEnum();
 
 	void OnTriggerStay(BoxCollider& other) override final;
 

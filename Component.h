@@ -28,4 +28,5 @@ public:
 	virtual void OnTriggerEnter(BoxCollider& other) { }
 	virtual void OnTriggerExit(BoxCollider& other) { }
 	virtual void OnTriggerStay(BoxCollider& other) { }
+	virtual void DrawEditorButton() {}
 };

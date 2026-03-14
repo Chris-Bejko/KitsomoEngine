@@ -68,18 +68,6 @@ private:
         }
     }
 
-    ImVec4 GetColor(LogLevel level)
-    {
-        switch (level)
-        {
-        case LogLevel::Info:    return ImVec4(0.9f, 0.9f, 0.9f, 1.0f);
-        case LogLevel::Warning: return ImVec4(0.95f, 0.78f, 0.2f, 1.0f);
-        case LogLevel::Error:   return ImVec4(1.0f, 0.3f, 0.3f, 1.0f);
-        case LogLevel::Debug:   return ImVec4(0.4f, 0.85f, 1.0f, 1.0f);
-        default:                return ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-        }
-    }
-
     std::string GetTimestamp()
     {
         auto now = std::chrono::system_clock::now();
