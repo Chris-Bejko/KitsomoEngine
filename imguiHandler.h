@@ -23,6 +23,7 @@ public:
 
     void Update(sf::Time rest);
     void ClearInspector();
+	static void ApplyEditorStyle();
 
 private:
     ImguiHandler() = default;

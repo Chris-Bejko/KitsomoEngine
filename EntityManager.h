@@ -55,10 +55,14 @@ public:
 	{
 		return a.second < b.second;
 	}
+	Entity* GetSelectedEntity() { return selectedEntity; }
+	void SetSelectedEntity(Entity* entity) { selectedEntity = entity; }
 
+	std::string GetUniqueName(const std::string& baseName);
 private:
 	std::vector<std::unique_ptr<Entity>> entities;
 	std::vector<std::unique_ptr<Entity>> to_add;
 
 	std::vector<std::vector<std::string>> activeCollisions;
+	Entity* selectedEntity = nullptr;
 };

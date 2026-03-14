@@ -165,100 +165,159 @@ void Entity::SaveAvailableComponents()
 
 void Entity::DisplayComponents()
 {
-	if (!displayComponents)
-		return;
+    if (!displayComponents)
+        return;
 
-	ImGui::Checkbox("Delete", &deletePressed);
-	if (deletePressed)
-	{
-		std::string warning = "Delete Entity: " + this->GetName() + " ?";
-		char* warningChar = &warning[0];
-		ImGui::OpenPopup(warningChar);
-		if (ImGui::BeginPopupModal(warningChar))
-		{
-			if (ImGui::Button("Cancel"))
-			{
-				deletePressed = false;
-			}
-			if (ImGui::Button("Confirm"))
-			{
-				Engine::get().RemoveEntity(this);
-				deletePressed = false;
-			}
-		}
-		ImGui::EndPopup();
-	}
-	ValidateAddedComponents();
-	ImGui::Checkbox("+", &addingNewComp);
+    // Delete entity button
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+    ImGui::Checkbox("Delete Entity", &deletePressed);
+    ImGui::PopStyleColor();
 
-	auto windowWidth = ImGui::GetWindowSize().x;
-	auto textWidth = ImGui::CalcTextSize(GetName().c_str()).x;
+    if (deletePressed)
+    {
+        std::string warning = "Delete Entity: " + this->GetName() + " ?";
+        char* warningChar = &warning[0];
+        ImGui::OpenPopup(warningChar);
+        if (ImGui::BeginPopupModal(warningChar))
+        {
+            ImGui::Text("This action cannot be undone.");
+            ImGui::Separator();
+            if (ImGui::Button("Cancel", ImVec2(120, 0)))
+                deletePressed = false;
+            ImGui::SameLine();
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+            if (ImGui::Button("Confirm", ImVec2(120, 0)))
+            {
+                Engine::get().RemoveEntity(this);
+                deletePressed = false;
+            }
+            ImGui::PopStyleColor();
+            ImGui::EndPopup();
+        }
+    }
 
-	ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-	auto temp = GetName();
-	auto temp1 = &temp[0];
-	ImGui::InputText("Name", temp1, 55);
-	SetName(temp);
-	for (auto& e : components)
-	{
-		std::string str(typeid(*e).name());
-		str = std::regex_replace(str, std::regex("class "), "");
-		if (e->GetSerializedFields() == nullptr)
-			continue;
+    ImGui::Separator();
 
-		ImGui::BeginChild(str.c_str());
-		auto windowWidth = ImGui::GetWindowSize().x;
-		auto textWidth = ImGui::CalcTextSize(str.c_str()).x;
+    // Entity name
+    auto windowWidth = ImGui::GetWindowSize().x;
+    auto textWidth = ImGui::CalcTextSize("Name").x;
+    ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+    auto temp = GetName();
+    temp.resize(55, '\0');
+    ImGui::InputText("##name", &temp[0], 55);
+    SetName(std::string(temp.c_str()));
 
-		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-		ImGui::Text(str.c_str());
-		for (auto it = e->GetSerializedFields()->begin(); it != e->GetSerializedFields()->end(); ++it) {
-			ImGui::Text(it->name);
-			switch (it->type)
-			{
-			case int_Type:
-			{
-				auto p = reinterpret_cast<int*>(it->data);
-				int temp(*p);
-				ImGui::InputInt(it->name, &temp);
-				*p = temp;
-				break;
-			}
-			case float_Type:
-			{
-				auto p = reinterpret_cast<float*>(it->data);
-				float temp(*p);
-				ImGui::InputFloat(it->name, &temp);
-				*p = temp;
-				break;
-			}
-			case char_Type:
-			{
+    ImGui::Separator();
 
-				auto p = reinterpret_cast<std::string*>(it->data);
-				std::string str(*p);
-				ImGui::InputText(it->name, &str[0], 200);
-				*p = &str[0];
-				break;
-			}
-			case bool_Type:
-			{
-				auto p = reinterpret_cast<bool*>(it->data);
-				bool b(*p);
-				ImGui::Checkbox(it->name, &b);
-				*p = b;
-				break;
-			}
-			default:
-				assert(0);
-			}
-		}
-		ImGui::EndChild();
-	}
-	DisplayAvailableComponents();
+    // Add component button
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.4f, 0.1f, 1.0f));
+    if (ImGui::Button("+ Add Component", ImVec2(-1, 0)))
+        addingNewComp = !addingNewComp;
+    ImGui::PopStyleColor();
 
+    if (addingNewComp)
+        DisplayAvailableComponents();
+
+    ImGui::Separator();
+    ValidateAddedComponents();
+
+    // Component to remove (deferred to avoid modifying list while iterating)
+    Component* toRemove = nullptr;
+
+    for (auto& e : components)
+    {
+        std::string str(typeid(*e).name());
+        str = std::regex_replace(str, std::regex("class "), "");
+        if (e->GetSerializedFields() == nullptr)
+            continue;
+
+        // Component header
+        ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
+        ImGui::BeginChild(str.c_str(), ImVec2(0, 0), true);
+
+        // Component name centered
+        auto windowWidth = ImGui::GetWindowSize().x;
+        auto textWidth = ImGui::CalcTextSize(str.c_str()).x;
+        ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+        ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), str.c_str());
+
+        // Remove button (skip Transform, it's required)
+        if (str != "Transform")
+        {
+            ImGui::SameLine();
+            ImGui::SetCursorPosX(windowWidth - 60);
+            std::string removeLabel = "X##" + str;
+            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+            if (ImGui::Button(removeLabel.c_str(), ImVec2(50, 0)))
+                toRemove = e.get();
+            ImGui::PopStyleColor();
+        }
+
+        ImGui::Separator();
+
+        // Fields
+        for (auto it = e->GetSerializedFields()->begin(); it != e->GetSerializedFields()->end(); ++it)
+        {
+            ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), it->name);
+            switch (it->type)
+            {
+            case int_Type:
+            {
+                auto p = reinterpret_cast<int*>(it->data);
+                int temp(*p);
+                ImGui::InputInt(it->name, &temp);
+                *p = temp;
+                break;
+            }
+            case float_Type:
+            {
+                auto p = reinterpret_cast<float*>(it->data);
+                float temp(*p);
+                ImGui::InputFloat(it->name, &temp);
+                *p = temp;
+                break;
+            }
+            case char_Type:
+            {
+                auto p = reinterpret_cast<std::string*>(it->data);
+                std::string str(*p);
+                str.resize(200, '\0');
+                ImGui::InputText(it->name, &str[0], 200);
+                *p = std::string(str.c_str());
+                break;
+            }
+            case bool_Type:
+            {
+                auto p = reinterpret_cast<bool*>(it->data);
+                bool b(*p);
+                ImGui::Checkbox(it->name, &b);
+                *p = b;
+                break;
+            }
+            default:
+                assert(0);
+            }
+        }
+
+        ImGui::EndChild();
+        ImGui::PopStyleColor();
+        ImGui::Spacing();
+    }
+
+    // Remove component after iteration
+    if (toRemove != nullptr)
+        RemoveComponent(toRemove);
 }
-
+void Entity::RemoveComponent(Component* comp)
+{
+    components.erase(
+        std::remove_if(components.begin(), components.end(),
+            [comp](const std::unique_ptr<Component>& c) {
+                return c.get() == comp;
+            }),
+        components.end()
+    );
+}
 void Entity::DisplayAvailableComponents()
 {
 	if (addingNewComp)

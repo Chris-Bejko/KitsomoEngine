@@ -57,6 +57,7 @@ public:
 		return componentsBitset[getComponentTypeID<T>()];
 	}
 
+	void RemoveComponent(Component* comp);
 
 	void Awake();
 
@@ -99,7 +100,7 @@ public:
 private:
 	bool isActive;
 
-	bool deletePressed;
+	bool deletePressed = false;
 
 	std::vector<std::string> availableComponents;
 	bool addingNewComp = false;

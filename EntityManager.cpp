@@ -97,23 +97,32 @@ void EntityManager::RemoveActiveCollision(std::vector<std::string> it)
 
 void EntityManager::DisplayEntities()
 {
-	for (auto& e : entities)
-	{
-		auto temp = e->GetName();
-		if (ImGui::Checkbox(temp.c_str(), &e->displayComponents))
-		{
-			for (auto& a : entities)
-			{
-				if (a->GetName() == e->GetName())
-				{
-					continue;
-				}
-				a->displayComponents = false;
-			}
-		}
-	}
-}
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 6));
 
+    for (auto& e : entities)
+    {
+        std::string name = e->GetName().c_str();
+        bool isSelected = (selectedEntity == e.get());
+
+        if (isSelected)
+            ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.4f, 0.7f, 0.6f));
+
+        if (ImGui::Checkbox(name.c_str(), &e->displayComponents))
+        {
+            for (auto& a : entities)
+            {
+                if (a->GetName() == e->GetName()) continue;
+                a->displayComponents = false;
+            }
+            selectedEntity = e->displayComponents ? e.get() : nullptr;
+        }
+
+        if (isSelected)
+            ImGui::PopStyleColor();
+    }
+
+    ImGui::PopStyleVar();
+}
 void EntityManager::ClearInspector()
 {
 	for (auto& e : entities)
@@ -256,4 +265,32 @@ std::vector<SerializableEntity> EntityManager::SerializeEntities()
 	}
 
 	return entitiesSerialized;
+}
+
+// EntityManager.cpp
+std::string EntityManager::GetUniqueName(const std::string& baseName)
+{
+    std::string cleanBase = baseName.c_str(); // strip null chars and garbage
+    
+    bool baseTaken = false;
+    for (auto& e : entities)
+        if (e->GetName() == cleanBase)
+            baseTaken = true;
+
+    if (!baseTaken)
+        return cleanBase;
+
+    int counter = 1;
+    while (true)
+    {
+        std::string candidate = cleanBase + " (" + std::to_string(counter) + ")";
+        bool taken = false;
+        for (auto& e : entities)
+            if (e->GetName() == candidate)
+                taken = true;
+
+        if (!taken)
+            return candidate;
+        counter++;
+    }
 }

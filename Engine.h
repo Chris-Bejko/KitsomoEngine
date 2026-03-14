@@ -77,6 +77,9 @@ public:
 
     sf::FloatRect GetView();
 
+    void SavePrefab(Entity* entity);
+    bool LoadPrefab(std::string prefabName);
+
 private:
     EngineState currentState;
     EngineState previousState;
