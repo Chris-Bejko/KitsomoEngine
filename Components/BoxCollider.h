@@ -39,7 +39,7 @@ public:
 		return isTrigger;
 	}
 	void DrawEditorButton() override;
-
+	bool IsInEditMode() { return editMode; }
 
 private:
 	std::vector<SerializableVariable> serializables;

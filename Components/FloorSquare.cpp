@@ -6,7 +6,6 @@ bool FloorSquare::Init()
 	AssetManager::get().loadTexture("square", "square.png");
 	Color color;
 	color.SetColor(colorString);
-	sprite = &entity->AddComponent<Sprite>("square", 1, color);
 	entity->transform->scale = Vector2F(0.2, 0.2);
 	Serialize();
 	return true;
@@ -17,7 +16,10 @@ void FloorSquare::Config(Vector2F position, Color color)
 	this->color = color;
 	entity->transform->position = position;
 	entity->AddComponent<BoxCollider>("floor", sf::FloatRect(0, 0, 125, 125), true);
-	sprite->SetColor(color);
+	if(entity->HasComponent<Sprite>())
+	{
+		entity->GetComponent<Sprite>().SetColor(color);
+	}
 }
 
 void FloorSquare::Serialize()
@@ -40,6 +42,10 @@ void FloorSquare::InitSerializedFields(ReadableSerializableVariableMap map)
 void FloorSquare::update(float dt)
 {
 	color.SetColor(colorString);
+	if(entity->HasComponent<Sprite>())
+	{
+		entity->GetComponent<Sprite>().SetColor(color);
+	}
 }
 
 void FloorSquare::updateEngine(float dt)

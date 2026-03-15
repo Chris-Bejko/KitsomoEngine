@@ -3,6 +3,7 @@
 #include "InputSystem.h"
 #include <SFML/Graphics.hpp>
 #include <functional>
+#include "Vector2.h"
 
 using ComponentFactory = std::function<void(Entity *, ReadableSerializableVariableMap)>;
 
@@ -86,6 +87,8 @@ public:
     void RegisterComponents();
     void SpawnEntities(const std::vector<SerializableEntity> &entities);
     std::vector<SerializableEntity> ParseFile(const std::string &fileName);
+
+    Entity* SpawnPrefab(const std::string prefabName, Vector2F position);
 
 private:
     bool editorDragging = false;

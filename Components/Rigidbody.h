@@ -25,8 +25,13 @@ public:
     Vector2F GetVelocity();
     Vector2F GetInitialForce() { return initialForce; }
     void AddInitialForce(Vector2F f);
+	void InitSerializedFields(ReadableSerializableVariableMap map);
+	std::vector<SerializableVariable>* GetSerializedFields() override final;
+	void Serialize();
+
 
 private:
+	std::vector<SerializableVariable> variables;
     float mass = 1.0f;
     float gravityScale = 1.0f;
     Vector2F drag = Vector2F();

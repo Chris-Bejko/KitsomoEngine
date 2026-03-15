@@ -102,7 +102,8 @@ int Sprite::GetWidth()
 void Sprite::updateEngine(float dt)
 {
 	update(dt);
-
+    if (entity->HasComponent<BoxCollider>() && entity->GetComponent<BoxCollider>().IsInEditMode())
+        return;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
@@ -160,6 +161,8 @@ void Sprite::SetColor(const sf::Color &color)
 void Sprite::SetColor(Color color)
 {
 	ColorID = color.SerializeColor();
+	if(entity->GetName().find("Bullet") != std::string::npos)
+		LOG_DEBUG("Setting bullet color to: ", ColorID);
 	sprite.setColor(color.GetColorEnum());
 }
 

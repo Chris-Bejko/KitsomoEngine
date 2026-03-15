@@ -36,6 +36,7 @@ bool Player::Init()
 void Player::Serialize()
 {
 	variables.push_back({"lastColorString", &lastColorString, char_Type});
+	variables.push_back({"bulletPrefab", &bulletPrefab, char_Type});
 }
 
 std::vector<SerializableVariable> *Player::GetSerializedFields()
@@ -52,6 +53,10 @@ void Player::InitSerializedFields(ReadableSerializableVariableMap map)
 			lastColor.SetColor(value);
 			lastColorString = value;
 		}
+		if(key == "bulletPrefab")
+		{
+			bulletPrefab = value;
+		}
 	}
 }
 
@@ -61,7 +66,6 @@ void Player::Awake()
 	Entity *camera = new Entity("Camera");
 	this->camera = &camera->AddComponent<Camera>();
 	Engine::get().Spawn(camera);
-	entity->AddComponent<BoxCollider>(initTag, sf::FloatRect(0, 0, 55, 50));
 	Entity *bulletSpawnPoint = new Entity("spawnpoint");
 	AssetManager::get().loadTexture("circle", "circle.png");
 	bulletSpawnPoint->AddComponent<Sprite>("circle");
@@ -80,7 +84,7 @@ void Player::update(float dt)
 {
 
 	camera->Follow(sf::Vector2f(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y));
-	lastColor.SetColor(lastColorString);
+	// lastColor.SetColor(lastColorString);
 	SetSpawnPointPosition();
 	spawnPoint->rotation = entity->transform->rotation;
 	timer += dt;
@@ -96,16 +100,21 @@ void Player::update(float dt)
 	{
 		timer = 0;
 
-		Entity *bullet = new Entity("Bullet");
+		Entity *bullet = Engine::get().SpawnPrefab(
+			bulletPrefab,
+			Vector2F(spawnPoint->position.x, spawnPoint->position.y));
+
+		if (bullet && bullet->HasComponent<Bullet>())
+		{
+			auto &spawned = bullet->GetComponent<Bullet>();
+			Vector2F mouseVec = GetMouseVector();
+			// mouseVec.x += currentVelocity.x * dt;
+			// mouseVec.y += currentVelocity.y * dt;
+			spawned.AddForce(mouseVec);
+			spawned.SetColor(lastColor);
+		}
+
 		Engine::get().GetManager()->addEntity(bullet);
-		auto spawned = &bullet->AddComponent<Bullet>();
-		spawned->SetPosition(Vector2F(spawnPoint->position.x, spawnPoint->position.y));
-		spawned->SetColor(lastColor);
-		spawned->Awake();
-		Vector2F mouseVec = GetMouseVector();
-		// mouseVec.x += currentVelocity.x * dt;
-		// mouseVec.y += currentVelocity.y * dt;
-		spawned->AddForce(mouseVec);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -147,19 +156,21 @@ void Player::SetSpawnPointPosition()
 	spawnPoint->rotation = entity->transform->rotation;
 }
 
-void Player::OnCollisionEnter(BoxCollider &other)
+void Player::OnTriggerEnter(BoxCollider &other)
 {
 	if (other.entity->HasComponent<FloorSquare>())
 	{
 		lastColor = other.entity->GetComponent<FloorSquare>().GetColorEnum();
-		entity->GetComponent<Sprite>().SetColor(lastColor);
+		lastColorString = lastColor.SerializeColor();
+		LOG_DEBUG("Player triggered with FloorSquare, changing color to match the floor square's color: ", lastColor.SerializeColor());
+		// entity->GetComponent<Sprite>().SetColor(lastColor);
 	}
 }
 
-void Player::OnCollisionExit(BoxCollider &other)
+void Player::OnTriggerExit(BoxCollider &other)
 {
-	Color color(ColorEnum::Red);
-	entity->GetComponent<Sprite>().SetColor(color);
+	// Color color(ColorEnum::Red);
+	// entity->GetComponent<Sprite>().SetColor(color);
 }
 
 Vector2F Player::GetMouseVector()

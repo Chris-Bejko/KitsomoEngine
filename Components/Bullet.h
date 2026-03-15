@@ -25,14 +25,21 @@ public:
 
 	void SetColor(Color color);
 
-	void OnCollisionEnter(BoxCollider& other) override final;
+	void OnTriggerEnter(BoxCollider& other) override final;
 
 	float GetForce() { return force; }	
 
+	void InitSerializedFields(ReadableSerializableVariableMap map);
+	std::vector<SerializableVariable>* GetSerializedFields() override final;
+
+	void Serialize();
 private:
 	float force = 850.f;
 	Color lastColor;
+	std::string lastColorString;
 	float timer = 0;
 	Sprite* sprite;
 	Rigidbody* rb;
+	std::vector<SerializableVariable> variables;
+
 };
