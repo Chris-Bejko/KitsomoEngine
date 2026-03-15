@@ -5,6 +5,9 @@
 #include "Components/Player.h"
 #include "Engine.h"
 #include "Components/FloorSquare.h"
+#include "Components/Bullet.h"
+#include "Components/Rigidbody.h"
+
 //#include "Components/BoxCollider.h"
 
 Entity::Entity(std::string name)
@@ -170,7 +173,8 @@ void Entity::DisplayComponents()
 
     // Delete entity button
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
-    ImGui::Checkbox("Delete Entity", &deletePressed);
+    if (ImGui::Button("-Delete Entity", ImVec2(-1, 0)))
+        deletePressed = true;
     ImGui::PopStyleColor();
 
     if (deletePressed)
@@ -360,6 +364,12 @@ void Entity::DisplayAvailableComponents()
 				{
 					if (!this->HasComponent<FloorSquare>())
 						this->AddComponent<FloorSquare>();
+				}else if(str == "Bullet"){
+					if(!this->HasComponent<Bullet>())
+						this->AddComponent<Bullet>();
+				}else if(str == "Rigidbody"){
+					if(!this->HasComponent<Rigidbody>())
+						this->AddComponent<Rigidbody>();
 				}
 			}
 		}

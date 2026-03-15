@@ -14,7 +14,33 @@ Rigidbody::Rigidbody(float gravityScale)
 
 bool Rigidbody::Init()
 {
+	Serialize();
 	return true;
+}
+void Rigidbody::Serialize()
+{
+	variables.push_back({"mass", &mass, float_Type});
+	variables.push_back({"gravityScale", &gravityScale, float_Type});
+}
+
+std::vector<SerializableVariable> *Rigidbody::GetSerializedFields()
+{
+	return &variables;
+}
+
+void Rigidbody::InitSerializedFields(ReadableSerializableVariableMap map)
+{
+	for (auto const &[key, value] : map.stringFields)
+	{
+		if (key == "mass")
+		{
+			mass = std::stof(value);
+		}
+		if (key == "gravityScale")
+		{
+			gravityScale = std::stof(value);
+		}
+	}
 }
 
 void Rigidbody::update(float dt)

@@ -30,10 +30,10 @@ public:
 
 	void SetSpawnPointPosition();
 
-	void OnCollisionEnter(BoxCollider& other) override final;
 	
-	void OnCollisionExit(BoxCollider& other) override final;
+	void OnTriggerEnter(BoxCollider& other) override final;
 
+	void OnTriggerExit(BoxCollider& other) override final;
 
 	Vector2F GetMouseVector();
 
@@ -51,6 +51,8 @@ private:
 	float timer = 0.f;
 	float moveSpeed = 350;
 	sf::Vector2f mousePos;
+
+	std::string bulletPrefab = "Bullet";
 
 	void Move(const Vector2F movement);
 	void LookAtMouse();

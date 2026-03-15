@@ -14,6 +14,9 @@
 #include "Components/FloorSquare.h"
 #include "Timedelta.h"
 #include "Logger.h"
+#include "Components/Bullet.h"
+#include "Components/Rigidbody.h"
+
 Engine *Engine::s_instance = nullptr;
 
 Engine::Engine()
@@ -109,19 +112,17 @@ void Engine::Update()
 	case EngineState::Running:
 	{
 		manager->updateEngine(dt);
-		UpdateEditorCamera(dt); 
+		UpdateEditorCamera(dt);
 		break;
 	}
 	case EngineState::Paused:
 	{
 		manager->updateEngine(dt);
-		UpdateEditorCamera(dt); 
+		UpdateEditorCamera(dt);
 		break;
 	}
 	case EngineState::PlayMode:
 	{
-		LOG_DEBUG("entitiesAwaken: ", entitiesAwaken, " entities count: ", manager->GetTotalEntities());
-
 		if (!entitiesAwaken)
 			break;
 
@@ -152,6 +153,18 @@ void Engine::Events()
 	{
 		if (event.type == sf::Event::Closed)
 			Clean();
+
+		if (event.type == sf::Event::MouseWheelScrolled &&
+			sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+		{
+			if (currentState == EngineState::Running || currentState == EngineState::Paused)
+			{
+				sf::View view = window->getView();
+				float zoomFactor = event.mouseWheelScroll.delta > 0 ? 0.9f : 1.1f;
+				view.zoom(zoomFactor);
+				window->setView(view);
+			}
+		}
 
 		ImGui::SFML::ProcessEvent(event);
 	}
@@ -311,66 +324,117 @@ void Engine::Save(std::string filename)
 
 bool Engine::Load(std::string fileName)
 {
-    LOG_INFO("Loading file: ", fileName.c_str());
-    if (fileName.empty()) return true;
+	LOG_INFO("Loading file: ", fileName.c_str());
+	if (fileName.empty())
+		return true;
 
-    auto entities = ParseFile(fileName);
-    if (entities.empty()) return false;
+	auto entities = ParseFile(fileName);
+	if (entities.empty())
+		return false;
 
-    SpawnEntities(entities);
-    currentState = EngineState::Running;
-    return true;
+	SpawnEntities(entities);
+	currentState = EngineState::Running;
+	return true;
 }
 
 bool Engine::LoadPrefab(std::string prefabName)
 {
-    std::string path = "prefabs/" + prefabName + ".prefab";
-    LOG_INFO("Loading prefab: ", path.c_str());
+	std::string path = "prefabs/" + prefabName + ".prefab";
+	LOG_INFO("Loading prefab: ", path.c_str());
 
+	auto entities = ParseFile(path);
+	if (entities.empty())
+	{
+		LOG_WARNING("Prefab not found: ", path.c_str());
+		return false;
+	}
+
+	// Rename to avoid conflicts
+	for (auto &e : entities)
+		e.entityName = manager->GetUniqueName(e.entityName);
+
+	SpawnEntities(entities);
+	return true;
+}
+
+Entity* Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
+{
+    std::string path = "prefabs/" + prefabName + ".prefab";
     auto entities = ParseFile(path);
     if (entities.empty())
     {
         LOG_WARNING("Prefab not found: ", path.c_str());
-        return false;
+        return nullptr;
     }
 
-    // Rename to avoid conflicts
-    for (auto& e : entities)
-        e.entityName = manager->GetUniqueName(e.entityName);
-
-    SpawnEntities(entities);
-    return true;
+    // Only spawn first entity from prefab
+    auto& e = entities[0];
+    e.entityName = manager->GetUniqueName(e.entityName);
+    
+    Entity* ent = new Entity(e.entityName);
+    for (auto& c : e.components)
+    {
+		LOG_DEBUG("Spawning component: ", c.componentName.c_str());
+        auto it = componentRegistry.find(c.componentName);
+        if (it != componentRegistry.end())
+            it->second(ent, c.fields);
+    }
+    
+    // Override position
+    ent->GetComponent<Transform>().position = position;
+    
+    LOG_INFO("Spawned prefab '", prefabName.c_str(), "' at ", position.x, ", ", position.y);
+    return ent;
 }
 
 void Engine::RegisterComponents()
 {
-    componentRegistry["Transform"] = [](Entity* e, ReadableSerializableVariableMap fields) {
-        e->GetComponent<Transform>().InitSerializedFields(fields);
-    };
-    componentRegistry["BoxCollider"] = [](Entity* e, ReadableSerializableVariableMap fields) {
-        if (!e->HasComponent<BoxCollider>())
-            e->AddComponent<BoxCollider>().InitSerializedFields(fields);
-        else
-            e->GetComponent<BoxCollider>().InitSerializedFields(fields);
-    };
-    componentRegistry["Sprite"] = [](Entity* e, ReadableSerializableVariableMap fields) {
-        if (!e->HasComponent<Sprite>())
-            e->AddComponent<Sprite>().InitSerializedFields(fields);
-        else
-            e->GetComponent<Sprite>().InitSerializedFields(fields);
-    };
-    componentRegistry["Player"] = [](Entity* e, ReadableSerializableVariableMap fields) {
-        if (!e->HasComponent<Player>())
-            e->AddComponent<Player>().InitSerializedFields(fields);
-        else
-            e->GetComponent<Player>().InitSerializedFields(fields);
-    };
-    componentRegistry["FloorSquare"] = [](Entity* e, ReadableSerializableVariableMap fields) {
-        if (!e->HasComponent<FloorSquare>())
-            e->AddComponent<FloorSquare>().InitSerializedFields(fields);
-        else
-            e->GetComponent<FloorSquare>().InitSerializedFields(fields);
-    };
+	componentRegistry["Transform"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		e->GetComponent<Transform>().InitSerializedFields(fields);
+	};
+	componentRegistry["BoxCollider"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<BoxCollider>())
+			e->AddComponent<BoxCollider>().InitSerializedFields(fields);
+		else
+			e->GetComponent<BoxCollider>().InitSerializedFields(fields);
+	};
+	componentRegistry["Sprite"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<Sprite>())
+			e->AddComponent<Sprite>().InitSerializedFields(fields);
+		else
+			e->GetComponent<Sprite>().InitSerializedFields(fields);
+	};
+	componentRegistry["Player"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<Player>())
+			e->AddComponent<Player>().InitSerializedFields(fields);
+		else
+			e->GetComponent<Player>().InitSerializedFields(fields);
+	};
+	componentRegistry["FloorSquare"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<FloorSquare>())
+			e->AddComponent<FloorSquare>().InitSerializedFields(fields);
+		else
+			e->GetComponent<FloorSquare>().InitSerializedFields(fields);
+	};
+	componentRegistry["Bullet"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<Bullet>())
+			e->AddComponent<Bullet>().InitSerializedFields(fields);
+		else
+			e->GetComponent<Bullet>().InitSerializedFields(fields);
+	};
+	componentRegistry["Rigidbody"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<Rigidbody>())
+			e->AddComponent<Rigidbody>().InitSerializedFields(fields);
+		else
+			e->GetComponent<Rigidbody>().InitSerializedFields(fields);
+	};
 }
 
 std::string Engine::GetSubstring(std::string &line, std::string &delStart, std::string &delEnd, bool erase = false)
@@ -452,124 +516,140 @@ void Engine::RemoveEntity(Entity *entity)
 
 void Engine::UpdateEditorCamera(float dt)
 {
-    float speed = 300.f * dt;
-    sf::View view = window->getView();
+	float speed = 300.f * dt;
+	sf::View view = window->getView();
 
-    // Arrow keys always move camera in editor
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))  view.move(-speed, 0);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) view.move(speed, 0);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))    view.move(0, -speed);
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))  view.move(0, speed);
+	// Arrow keys always move camera in editor
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		view.move(-speed, 0);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		view.move(speed, 0);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+		view.move(0, -speed);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+		view.move(0, speed);
 
-    // Mouse drag when not dragging an entity
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
-    {
-        sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
-        if (!editorDragging)
-        {
-            editorDragStart = mousePos;
-            editorDragging = true;
-        }
-        sf::Vector2f delta = editorDragStart - mousePos;
-        view.move(delta * 0.5f);
-        editorDragStart = mousePos;
-    }
-    else
-    {
-        editorDragging = false;
-    }
+	// Mouse drag when not dragging an entity
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+	{
+		sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
+		if (!editorDragging)
+		{
+			editorDragStart = mousePos;
+			editorDragging = true;
+		}
+		sf::Vector2f delta = editorDragStart - mousePos;
+		view.move(delta * 0.5f);
+		editorDragStart = mousePos;
+	}
+	else
+	{
+		editorDragging = false;
+	}
 
-    // Left mouse drag when not dragging an entity
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !DraggingEntity())
-    {
-        sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
-        if (!editorDragging)
-        {
-            editorDragStart = mousePos;
-            editorDragging = true;
-        }
-        sf::Vector2f delta = editorDragStart - mousePos;
-        view.move(delta);
-        editorDragStart = mousePos;
-    }
-    else if (!sf::Mouse::isButtonPressed(sf::Mouse::Middle))
-    {
-        editorDragging = false;
-    }
+	// Left mouse drag when not dragging an entity
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !DraggingEntity())
+	{
+		sf::Vector2f mousePos = (sf::Vector2f)sf::Mouse::getPosition(*window);
+		if (!editorDragging)
+		{
+			editorDragStart = mousePos;
+			editorDragging = true;
+		}
+		sf::Vector2f delta = editorDragStart - mousePos;
+		view.move(delta);
+		editorDragStart = mousePos;
+	}
+	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+	{
+		editorDragging = false;
+	}
 
-    window->setView(view);
+	window->setView(view);
 }
 
-
-std::vector<SerializableEntity> Engine::ParseFile(const std::string& fileName)
+std::vector<SerializableEntity> Engine::ParseFile(const std::string &fileName)
 {
-    std::vector<SerializableEntity> entities;
-    std::fstream myFile;
-    myFile.open(fileName, std::ios::in);
-    if (!myFile) return entities;
+	std::vector<SerializableEntity> entities;
+	std::fstream myFile;
+	myFile.open(fileName, std::ios::in);
+	if (!myFile)
+		return entities;
 
-    std::string line;
-    while (std::getline(myFile, line))
-    {
-        SerializableEntity ent;
-        std::string delStart = "ENTITY_NAME_";
-        std::string delEnd = "_ENTITY_NAME_E_";
-        ent.entityName = GetSubstring(line, delStart, delEnd, true);
+	std::string line;
+	while (std::getline(myFile, line))
+	{
+		SerializableEntity ent;
+		std::string delStart = "ENTITY_NAME_";
+		std::string delEnd = "_ENTITY_NAME_E_";
+		ent.entityName = GetSubstring(line, delStart, delEnd, true);
 
-        std::string delimiter = "_COMPONENT_NAME_";
-        std::size_t pos = 0;
-        while ((pos = line.find(delimiter)) != std::string::npos)
-        {
-            ReadableSerializableVariableMap fields;
-            delStart = "_COMPONENT_NAME_";
-            delEnd = "_COMPONENT_NAME_E_";
-            SerializableComponent comp;
-            comp.componentName = GetSubstring(line, delStart, delEnd, true);
+		std::string delimiter = "_COMPONENT_NAME_";
+		std::size_t pos = 0;
+		while ((pos = line.find(delimiter)) != std::string::npos)
+		{
+			ReadableSerializableVariableMap fields;
+			delStart = "_COMPONENT_NAME_";
+			delEnd = "_COMPONENT_NAME_E_";
+			SerializableComponent comp;
+			comp.componentName = GetSubstring(line, delStart, delEnd, true);
 
-            std::string delField = "_FIELD_";
-            std::size_t fieldPos = 0;
-            while ((fieldPos = line.find(delField)) != std::string::npos && 
-                   (fieldPos < line.find(delimiter)))
-            {
-                delStart = ":"; delEnd = "::";
-                auto fieldName = GetSubstring(line, delStart, delEnd, false);
-                delStart = ","; delEnd = ",,";
-                auto fieldValue = GetSubstring(line, delStart, delEnd, false);
-                delStart = ";"; delEnd = ";;";
-                auto fieldType = GetSubstring(line, delStart, delEnd, false);
+			std::string delField = "_FIELD_";
+			std::size_t fieldPos = 0;
+			while ((fieldPos = line.find(delField)) != std::string::npos &&
+				   (fieldPos < line.find(delimiter)))
+			{
+				delStart = ":";
+				delEnd = "::";
+				auto fieldName = GetSubstring(line, delStart, delEnd, false);
+				delStart = ",";
+				delEnd = ",,";
+				auto fieldValue = GetSubstring(line, delStart, delEnd, false);
+				delStart = ";";
+				delEnd = ";;";
+				auto fieldType = GetSubstring(line, delStart, delEnd, false);
 
-                if (fieldType == "_FIELD_") break;
-                switch (std::stoi(fieldType))
-                {
-                case 1: fields.intFields.emplace(fieldName, std::stoi(fieldValue)); break;
-                case 2: fields.floatFields.emplace(fieldName, std::stof(fieldValue)); break;
-                case 3: fields.stringFields.emplace(fieldName, fieldValue); break;
-                case 4: fields.boolFields.emplace(fieldName, std::stoi(fieldValue)); break;
-                }
-                comp.fields = fields;
-                line.erase(0, fieldPos + delField.length());
-            }
-            ent.components.push_back(comp);
-        }
-        entities.push_back(ent);
-    }
-    myFile.close();
-    return entities;
+				if (fieldType == "_FIELD_")
+					break;
+				switch (std::stoi(fieldType))
+				{
+				case 1:
+					fields.intFields.emplace(fieldName, std::stoi(fieldValue));
+					break;
+				case 2:
+					fields.floatFields.emplace(fieldName, std::stof(fieldValue));
+					break;
+				case 3:
+					fields.stringFields.emplace(fieldName, fieldValue);
+					break;
+				case 4:
+					fields.boolFields.emplace(fieldName, std::stoi(fieldValue));
+					break;
+				}
+				comp.fields = fields;
+				line.erase(0, fieldPos + delField.length());
+			}
+			ent.components.push_back(comp);
+		}
+		entities.push_back(ent);
+	}
+	myFile.close();
+	return entities;
 }
 
-void Engine::SpawnEntities(const std::vector<SerializableEntity>& entities)
+void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 {
-    for (auto& e : entities)
-    {
-        Entity* ent = new Entity(e.entityName);
-        for (auto& c : e.components)
-        {
-            auto it = componentRegistry.find(c.componentName);
-            if (it != componentRegistry.end())
-                it->second(ent, c.fields);
-            else
-                LOG_WARNING("Unknown component: ", c.componentName.c_str());
-        }
-        manager->addEntity(ent);
-    }
+	for (auto &e : entities)
+	{
+		Entity *ent = new Entity(e.entityName);
+		for (auto &c : e.components)
+		{
+			auto it = componentRegistry.find(c.componentName);
+			if (it != componentRegistry.end())
+				it->second(ent, c.fields);
+			else
+				LOG_WARNING("Unknown component: ", c.componentName.c_str());
+		}
+		manager->addEntity(ent);
+	}
 }
