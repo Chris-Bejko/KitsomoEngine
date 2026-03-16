@@ -61,6 +61,7 @@ public:
 	void SetSelectedEntity(Entity* entity) { selectedEntity = entity; }
 
 	std::string GetUniqueName(const std::string& baseName);
+	std::vector<std::unique_ptr<Entity>>& GetEntities() { return entities; }
 private:
 	// Track active collision pairs to ensure OnTriggerEnter/Stay/Exit called correctly
 	std::set<std::pair<Collider*, Collider*>> activeCollisionPairs;
