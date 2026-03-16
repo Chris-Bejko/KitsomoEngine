@@ -19,6 +19,7 @@
 #include "Components/CircleCollider.h"
 #include "Components/BoxCollider.h"
 #include "Components/PolygonCollider.h"
+#include "Components/AudioSource.h"
 
 Engine *Engine::s_instance = nullptr;
 
@@ -451,8 +452,14 @@ void Engine::RegisterComponents()
     if (!e->HasComponent<PolygonCollider>())
         e->AddComponent<PolygonCollider>().InitSerializedFields(fields);
     else
-        e->GetComponent<PolygonCollider>().InitSerializedFields(fields);
-};
+        e->GetComponent<PolygonCollider>().InitSerializedFields(fields);	
+	};
+	componentRegistry["AudioSource"] = [](Entity* e, ReadableSerializableVariableMap fields) {
+    if (!e->HasComponent<AudioSource>())
+        e->AddComponent<AudioSource>().InitSerializedFields(fields);
+    else
+        e->GetComponent<AudioSource>().InitSerializedFields(fields);	
+	};
 }
 
 std::string Engine::GetSubstring(std::string &line, std::string &delStart, std::string &delEnd, bool erase = false)

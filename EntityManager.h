@@ -5,6 +5,7 @@
 #include "Entity.h"
 #include "imgui.h"
 #include "imgui-SFML.h"
+#include <set>
 
 class SerializableEntity;
 
@@ -60,6 +61,10 @@ public:
 	void SetSelectedEntity(Entity* entity) { selectedEntity = entity; }
 
 	std::string GetUniqueName(const std::string& baseName);
+private:
+	// Track active collision pairs to ensure OnTriggerEnter/Stay/Exit called correctly
+	std::set<std::pair<Collider*, Collider*>> activeCollisionPairs;
+
 private:
 	std::vector<std::unique_ptr<Entity>> entities;
 	std::vector<std::unique_ptr<Entity>> to_add;

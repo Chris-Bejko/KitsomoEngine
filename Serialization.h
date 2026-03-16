@@ -43,6 +43,7 @@ struct SerializableComponent
 
 struct SerializableEntity
 {
+	public:
 	std::string entityName;
 	std::vector<SerializableComponent> components;
 };

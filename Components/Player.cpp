@@ -3,6 +3,7 @@
 #include "../Engine.h"
 #include "FloorSquare.h"
 #include "Bullet.h"
+#include "AudioSource.h"
 #include "../Timedelta.h"
 #include "../Logger.h"
 
@@ -37,6 +38,10 @@ void Player::Serialize()
 {
 	variables.push_back({"lastColorString", &lastColorString, char_Type});
 	variables.push_back({"bulletPrefab", &bulletPrefab, char_Type});
+	variables.push_back({"moveSpeed", &moveSpeed, float_Type});
+	variables.push_back({"cooldown", &cooldown, float_Type});
+	variables.push_back({"shootSound", &shootSound, char_Type});
+	variables.push_back({"floorTouchSound", &floorTouchSound, char_Type});
 }
 
 std::vector<SerializableVariable> *Player::GetSerializedFields()
@@ -56,6 +61,26 @@ void Player::InitSerializedFields(ReadableSerializableVariableMap map)
 		if (key == "bulletPrefab")
 		{
 			bulletPrefab = value;
+		}
+		if(key == "shootSound")
+		{
+			shootSound = value;
+		}
+		if(key == "floorTouchSound")
+		{
+			floorTouchSound = value;
+		}
+	}
+
+	for(auto const& [key, value] : map.floatFields)
+	{
+		if (key == "moveSpeed")
+		{
+			moveSpeed = value;
+		}
+		if (key == "cooldown")
+		{
+			cooldown = value;
 		}
 	}
 }
@@ -114,6 +139,12 @@ void Player::update(float dt)
 			spawned.SetColor(lastColor);
 		}
 
+		if(entity->HasComponent<AudioSource>())
+		{
+			auto& audio = entity->GetComponent<AudioSource>();	
+			audio.LoadAudio(shootSound);
+			audio.Play();
+		}
 		Engine::get().GetManager()->addEntity(bullet);
 	}
 
@@ -161,6 +192,12 @@ void Player::OnTriggerEnter(Collider &other)
 	LOG_DEBUG("Player triggered with something", other.GetCollisionTag().c_str());
 	if (other.entity->HasComponent<FloorSquare>())
 	{
+			if(entity->HasComponent<AudioSource>())
+		{
+			auto& audio = entity->GetComponent<AudioSource>();	
+			audio.LoadAudio(floorTouchSound);
+			audio.Play();
+		}
 		lastColor = other.entity->GetComponent<FloorSquare>().GetColorEnum();
 		lastColorString = lastColor.SerializeColor();
 		LOG_DEBUG("Player triggered with FloorSquare, changing color to match the floor square's color: ", lastColor.SerializeColor());

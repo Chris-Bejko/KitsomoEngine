@@ -153,6 +153,10 @@ void EntityManager::Collisions()
 	if (Engine::get().isEngine)
 		return;
 
+	// Track which pairs collided this frame
+	std::set<std::pair<Collider*, Collider*>> collidingThisFrame;
+
+	// Check all collisions
 	for (auto &entity : entities)
 	{
 		Collider *coll1 = entity->GetComponentOfType<Collider>();
@@ -168,53 +172,81 @@ void EntityManager::Collisions()
 			if (!coll2)
 				continue;
 
+			// Only process each pair once (in one direction)
+			if (collidingThisFrame.count({coll1, coll2}) || collidingThisFrame.count({coll2, coll1}))
+				continue;
+
 			bool hit = CollisionSystem::get().CheckCollision(coll1, coll2);
+			
 			if (hit)
 			{
-				bool alreadyActive = CollisionSystem::get().ActiveCollision(coll1, coll2);
-				LOG_DEBUG("Hit! active: ", alreadyActive,
-						  " tag-: ", coll1->GetCollisionTag().c_str(),
-						  "  tag--: ", coll2->GetCollisionTag().c_str());
-				if (CollisionSystem::get().ActiveCollision(coll1, coll2))
+				// Mark as colliding this frame
+				collidingThisFrame.insert({coll1, coll2});
+
+				// Check if this pair was already active last frame
+				bool wasActive = activeCollisionPairs.count({coll1, coll2}) || activeCollisionPairs.count({coll2, coll1});
+
+				if (wasActive)
 				{
+					// Collision continues - call OnTriggerStay
+					LOG_DEBUG("OnTriggerStay - collision continuous");
 					coll1->entity->OnTriggerStay(*coll2);
 					coll2->entity->OnTriggerStay(*coll1);
-					continue;
 				}
-
-				CollisionSystem::get().SetActive(coll1, coll2);
-
-				if (coll1->IsTrigger())
-					coll1->entity->OnTriggerEnter(*coll2);
 				else
-					coll1->entity->OnCollisionEnter(*coll2);
-
-				if (coll2->IsTrigger())
-					coll2->entity->OnTriggerEnter(*coll1);
-				else
-					coll2->entity->OnCollisionEnter(*coll1);
-
-				    if (!coll1->IsTrigger() && !coll2->IsTrigger())
-        				CollisionSystem::get().ResolveCollision(coll1, coll2);
-			}
-			else
-			{
-				if (CollisionSystem::get().ActiveCollision(coll1, coll2))
 				{
+					// New collision - call OnTriggerEnter (first time)
+					LOG_DEBUG("OnTriggerEnter - collision started");
+					activeCollisionPairs.insert({coll1, coll2});
+
 					if (coll1->IsTrigger())
-						coll1->entity->OnTriggerExit(*coll2);
+						coll1->entity->OnTriggerEnter(*coll2);
 					else
-						coll1->entity->OnCollisionExit(*coll2);
+						coll1->entity->OnCollisionEnter(*coll2);
 
 					if (coll2->IsTrigger())
-						coll2->entity->OnTriggerExit(*coll1);
+						coll2->entity->OnTriggerEnter(*coll1);
 					else
-						coll2->entity->OnCollisionExit(*coll1);
+						coll2->entity->OnCollisionEnter(*coll1);
 
-					CollisionSystem::get().SetInactive(coll1, coll2);
+					// Physics collision resolution
+					if (!coll1->IsTrigger() && !coll2->IsTrigger())
+						CollisionSystem::get().ResolveCollision(coll1, coll2);
 				}
 			}
 		}
+	}
+
+	// Check for collisions that ended (were active last frame but not this frame)
+	std::set<std::pair<Collider*, Collider*>> toRemove;
+	for (auto &pair : activeCollisionPairs)
+	{
+		if (!collidingThisFrame.count(pair) && !collidingThisFrame.count({pair.second, pair.first}))
+		{
+			// This collision ended
+			Collider* coll1 = pair.first;
+			Collider* coll2 = pair.second;
+
+			LOG_DEBUG("OnTriggerExit - collision ended");
+			
+			if (coll1->IsTrigger())
+				coll1->entity->OnTriggerExit(*coll2);
+			else
+				coll1->entity->OnCollisionExit(*coll2);
+
+			if (coll2->IsTrigger())
+				coll2->entity->OnTriggerExit(*coll1);
+			else
+				coll2->entity->OnCollisionExit(*coll1);
+
+			toRemove.insert(pair);
+		}
+	}
+
+	// Remove ended collisions
+	for (auto &pair : toRemove)
+	{
+		activeCollisionPairs.erase(pair);
 	}
 }
 void EntityManager::refresh()

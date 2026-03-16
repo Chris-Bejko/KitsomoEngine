@@ -50,9 +50,12 @@ private:
 	float cooldown = 0.5f;
 	float timer = 0.f;
 	float moveSpeed = 350;
+
 	sf::Vector2f mousePos;
 
 	std::string bulletPrefab = "Bullet";
+	std::string shootSound = "Audio/explosion.wav";
+	std::string floorTouchSound = "Audio/powerUp.wav";
 
 	void Move(const Vector2F movement);
 	void LookAtMouse();
