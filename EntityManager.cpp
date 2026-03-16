@@ -114,7 +114,7 @@ void EntityManager::DisplayEntities()
 		{
 			for (auto &a : entities)
 			{
-				if (a->GetName() == e->GetName())
+				if (a.get() == e.get())
 					continue;
 				a->displayComponents = false;
 			}

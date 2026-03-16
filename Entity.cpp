@@ -17,6 +17,7 @@ Entity::Entity(std::string name)
 {
 	this->transform = &this->AddComponent<Transform>(0, 0);
 	isActive = true;
+	displayComponents = false;
 	SaveAvailableComponents();
 	this->entityName = name;
 }
@@ -231,6 +232,9 @@ void Entity::DisplayComponents()
     // Component to remove (deferred to avoid modifying list while iterating)
     Component* toRemove = nullptr;
 
+    // Track component type counts for duplicate handling
+    std::map<std::string, int> componentTypeCount;
+
     for (auto& e : components)
     {
         std::string str(typeid(*e).name());
@@ -238,22 +242,30 @@ void Entity::DisplayComponents()
         if (e->GetSerializedFields() == nullptr)
             continue;
 
+        // Increment count for this component type
+        int componentIndex = componentTypeCount[str]++;
+
+        // Create unique ID for ImGui (append index if multiple of same type exist)
+        std::string uniqueId = str;
+        if (componentIndex > 0)
+            uniqueId += " (" + std::to_string(componentIndex + 1) + ")";
+
         // Component header
         ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
-        ImGui::BeginChild(str.c_str(), ImVec2(0, 0), true);
+        ImGui::BeginChild((uniqueId + "##child").c_str(), ImVec2(0, 0), true);
 
         // Component name centered
         auto windowWidth = ImGui::GetWindowSize().x;
-        auto textWidth = ImGui::CalcTextSize(str.c_str()).x;
+        auto textWidth = ImGui::CalcTextSize(uniqueId.c_str()).x;
         ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-        ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), str.c_str());
+        ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), uniqueId.c_str());
 
         // Remove button (skip Transform, it's required)
         if (str != "Transform")
         {
             ImGui::SameLine();
             ImGui::SetCursorPosX(windowWidth - 60);
-            std::string removeLabel = "X##" + str;
+            std::string removeLabel = "X##remove_" + uniqueId;
             ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
             if (ImGui::Button(removeLabel.c_str(), ImVec2(50, 0)))
                 toRemove = e.get();
@@ -266,13 +278,14 @@ void Entity::DisplayComponents()
         for (auto it = e->GetSerializedFields()->begin(); it != e->GetSerializedFields()->end(); ++it)
         {
             ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), it->name);
+            std::string fieldId = std::string(it->name) + "##" + uniqueId;
             switch (it->type)
             {
             case int_Type:
             {
                 auto p = reinterpret_cast<int*>(it->data);
                 int temp(*p);
-                ImGui::InputInt(it->name, &temp);
+                ImGui::InputInt(fieldId.c_str(), &temp);
                 *p = temp;
                 break;
             }
@@ -280,7 +293,7 @@ void Entity::DisplayComponents()
             {
                 auto p = reinterpret_cast<float*>(it->data);
                 float temp(*p);
-                ImGui::InputFloat(it->name, &temp);
+                ImGui::InputFloat(fieldId.c_str(), &temp);
                 *p = temp;
                 break;
             }
@@ -289,7 +302,7 @@ void Entity::DisplayComponents()
                 auto p = reinterpret_cast<std::string*>(it->data);
                 std::string str(*p);
                 str.resize(200, '\0');
-                ImGui::InputText(it->name, &str[0], 200);
+                ImGui::InputText(fieldId.c_str(), &str[0], 200);
                 *p = std::string(str.c_str());
                 break;
             }
@@ -297,7 +310,7 @@ void Entity::DisplayComponents()
             {
                 auto p = reinterpret_cast<bool*>(it->data);
                 bool b(*p);
-                ImGui::Checkbox(it->name, &b);
+                ImGui::Checkbox(fieldId.c_str(), &b);
                 *p = b;
                 break;
             }
@@ -351,49 +364,61 @@ void Entity::DisplayAvailableComponents()
 			auto temp = str.c_str();
 			if (ImGui::Button(temp))
 			{
-				if (str == "Transform")
-				{
-					if (!this->HasComponent<Transform>())
-						this->AddComponent<Transform>();
-				}
-				else if (str == "BoxCollider")
-				{
-					if (!this->HasComponent<BoxCollider>())
-					{
-						this->AddComponent<BoxCollider>();
-					}
-				}
-				else if (str == "Sprite")
-				{
-					if (!this->HasComponent<Sprite>())
-						this->AddComponent<Sprite>();
-				}
-				else if (str == "Player")
-				{
-					if (!this->HasComponent<Player>())
-						this->AddComponent<Player>();
-				}
-				else if (str == "FloorSquare")
-				{
-					if (!this->HasComponent<FloorSquare>())
-						this->AddComponent<FloorSquare>();
-				}else if(str == "Bullet"){
-					if(!this->HasComponent<Bullet>())
-						this->AddComponent<Bullet>();
-				}else if(str == "Rigidbody"){
-					if(!this->HasComponent<Rigidbody>())
-						this->AddComponent<Rigidbody>();
-				}else if(str == "CircleCollider"){
-					if(!this->HasComponent<CircleCollider>())
-						this->AddComponent<CircleCollider>();
-				}else if(str == "PolygonCollider"){
-					if(!this->HasComponent<PolygonCollider>())
-						this->AddComponent<PolygonCollider>();
-				}
+				AddComponentByName(str);
+				addingNewComp = false;
 			}
 		}
 		ImGui::EndChild();
 	}
+}
+
+// Component factory - create and add component by name
+void Entity::AddComponentByName(const std::string& componentName)
+{
+	// For single-instance components, check if already exists
+	bool allowsMultiple = ComponentAllowsMultiple(componentName);
+	if (!allowsMultiple)
+	{
+		for (auto& comp : components)
+		{
+			std::string str(typeid(*comp).name());
+			str = std::regex_replace(str, std::regex("class "), "");
+			if (str == componentName)
+				return;  // Already exists, don't add again
+		}
+	}
+
+	if (componentName == "Transform")
+		this->AddComponent<Transform>();
+	else if (componentName == "BoxCollider")
+		this->AddComponent<BoxCollider>();
+	else if (componentName == "Sprite")
+		this->AddComponent<Sprite>();
+	else if (componentName == "Player")
+		this->AddComponent<Player>();
+	else if (componentName == "FloorSquare")
+		this->AddComponent<FloorSquare>();
+	else if (componentName == "Bullet")
+		this->AddComponent<Bullet>();
+	else if (componentName == "Rigidbody")
+		this->AddComponent<Rigidbody>();
+	else if (componentName == "CircleCollider")
+		this->AddComponent<CircleCollider>();
+	else if (componentName == "PolygonCollider")
+		this->AddComponent<PolygonCollider>();
+}
+
+// Static metadata map defining which components allow multiple instances
+bool Entity::ComponentAllowsMultiple(const std::string& componentName)
+{
+	// Colliders allow multiple instances
+	if (componentName == "BoxCollider" || 
+		componentName == "CircleCollider" || 
+		componentName == "PolygonCollider")
+		return true;
+
+	// All others allow only one instance
+	return false;
 }
 
 std::vector<SerializableComponent> Entity::GetAllComponentVariables()
