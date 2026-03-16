@@ -5,7 +5,7 @@
 #include "Components/BoxCollider.h"
 #include "../Commands/MoveEntityCommand.h"
 #include "../Commands/CommandHistory.h"
-
+#include "GizmoSystem.h"
 Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 {
 	textureID = textureId;
@@ -172,6 +172,7 @@ void Sprite::updateEngine(float dt)
 	if (entity->HasComponent<BoxCollider>() && entity->GetComponent<BoxCollider>().editMode)
 		return;
 
+	if (GizmoSystem::get().IsGizmoDragging()) return;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));

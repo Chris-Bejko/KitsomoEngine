@@ -5,6 +5,7 @@
 #include "Commands/CopyEntityCommand.h"
 #include "Commands/PasteEntityCommand.h"
 #include "Commands/DuplicateEntityCommand.h"
+#include "GizmoSystem.h"
 
 ImguiHandler *ImguiHandler::s_instance = nullptr;
 
@@ -75,7 +76,7 @@ void ImguiHandler::Update(sf::Time rest)
 	DrawInspector();
 	DrawEntities();
 
-	if(Engine::get().GetCurrentState() == EngineState::Running)
+	if (Engine::get().GetCurrentState() == EngineState::Running)
 		DrawScenePanel();
 	if (savePressed)
 		DrawSaveDialog();
@@ -154,6 +155,36 @@ void ImguiHandler::DrawToolbar()
 		OnReset();
 	ImGui::PopStyleColor(2);
 
+	ImGui::SameLine();
+	ImGui::Separator();
+	ImGui::SameLine();
+
+	auto gizmoButton = [](const char *label, GizmoMode btnMode)
+	{
+		bool active = GizmoSystem::get().GetMode() == btnMode;
+		if (active)
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.25f, 0.52f, 0.95f, 1.0f));
+		if (ImGui::Button(label, ImVec2(40, 28)))
+			GizmoSystem::get().SetMode(btnMode);
+		if (active)
+			ImGui::PopStyleColor();
+	};
+
+	gizmoButton("W", GizmoMode::Move);
+	ImGui::SameLine();
+	gizmoButton("E", GizmoMode::Rotate);
+	ImGui::SameLine();
+	gizmoButton("R", GizmoMode::Scale);
+	ImGui::SameLine();
+
+	// Snap toggle
+	bool snap = GizmoSystem::get().snapEnabled;
+	if (snap)
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.85f, 0.60f, 0.10f, 1.0f));
+	if (ImGui::Button("Snap", ImVec2(50, 28)))
+		GizmoSystem::get().snapEnabled = !GizmoSystem::get().snapEnabled;
+	if (snap)
+		ImGui::PopStyleColor();
 	ImGui::End();
 }
 
@@ -483,110 +514,110 @@ void ImguiHandler::DrawConsole()
 
 void ImguiHandler::DrawScenePanel()
 {
-    ImGui::Begin("Scenes");
+	ImGui::Begin("Scenes");
 
-    // Current scene
-    ImGui::TextColored(COLOR_TEXT_DIM, "CURRENT SCENE");
-    std::string current = SceneManager::get().GetCurrentScene();
-    if (current.empty())
-        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Unsaved scene");
-    else
-        ImGui::TextColored(COLOR_ACCENT, current.c_str());
+	// Current scene
+	ImGui::TextColored(COLOR_TEXT_DIM, "CURRENT SCENE");
+	std::string current = SceneManager::get().GetCurrentScene();
+	if (current.empty())
+		ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Unsaved scene");
+	else
+		ImGui::TextColored(COLOR_ACCENT, current.c_str());
 
-    ImGui::Separator();
-    ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
 
-    // Save buttons
-    ImGui::PushStyleColor(ImGuiCol_Button, COLOR_SUCCESS);
-    if (ImGui::Button("Save Scene", ImVec2(-1, 28)))
-    {
-        if (current.empty())
-            saveScenePressed = true;
-        else
-            SceneManager::get().SaveCurrentScene();
-    }
-    ImGui::PopStyleColor();
+	// Save buttons
+	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_SUCCESS);
+	if (ImGui::Button("Save Scene", ImVec2(-1, 28)))
+	{
+		if (current.empty())
+			saveScenePressed = true;
+		else
+			SceneManager::get().SaveCurrentScene();
+	}
+	ImGui::PopStyleColor();
 
-    ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
-    if (ImGui::Button("Save Scene As...", ImVec2(-1, 28)))
-        saveScenePressed = true;
-    ImGui::PopStyleColor();
+	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
+	if (ImGui::Button("Save Scene As...", ImVec2(-1, 28)))
+		saveScenePressed = true;
+	ImGui::PopStyleColor();
 
-    if (saveScenePressed)
-    {
-        ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
-        ImGui::Begin("Save Scene As", &saveScenePressed);
-        ImGui::SetNextItemWidth(-1);
-        ImGui::InputText("##scenename", &sceneNameBuffer[0], 128);
-        ImGui::PushStyleColor(ImGuiCol_Button, COLOR_SUCCESS);
-        if (ImGui::Button("Save", ImVec2(-1, 28)))
-        {
-            SceneManager::get().SaveSceneAs(std::string(sceneNameBuffer.c_str()));
-            saveScenePressed = false;
-        }
-        ImGui::PopStyleColor();
-        ImGui::End();
-    }
+	if (saveScenePressed)
+	{
+		ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
+		ImGui::Begin("Save Scene As", &saveScenePressed);
+		ImGui::SetNextItemWidth(-1);
+		ImGui::InputText("##scenename", &sceneNameBuffer[0], 128);
+		ImGui::PushStyleColor(ImGuiCol_Button, COLOR_SUCCESS);
+		if (ImGui::Button("Save", ImVec2(-1, 28)))
+		{
+			SceneManager::get().SaveSceneAs(std::string(sceneNameBuffer.c_str()));
+			saveScenePressed = false;
+		}
+		ImGui::PopStyleColor();
+		ImGui::End();
+	}
 
-    ImGui::Spacing();
-    ImGui::TextColored(COLOR_TEXT_DIM, "AVAILABLE SCENES");
-    ImGui::Separator();
-    ImGui::Spacing();
+	ImGui::Spacing();
+	ImGui::TextColored(COLOR_TEXT_DIM, "AVAILABLE SCENES");
+	ImGui::Separator();
+	ImGui::Spacing();
 
-    // List available scenes
-    auto scenes = SceneManager::get().GetAvailableScenes();
-    if (scenes.empty())
-    {
-        ImGui::TextColored(COLOR_TEXT_DIM, "No scenes found");
-    }
-    else
-    {
-        for (auto& scene : scenes)
-        {
-            bool isLoaded = scene == current;
+	// List available scenes
+	auto scenes = SceneManager::get().GetAvailableScenes();
+	if (scenes.empty())
+	{
+		ImGui::TextColored(COLOR_TEXT_DIM, "No scenes found");
+	}
+	else
+	{
+		for (auto &scene : scenes)
+		{
+			bool isLoaded = scene == current;
 
-            if (isLoaded)
-                ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
-            else
-                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
+			if (isLoaded)
+				ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
+			else
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
 
-            std::string label = (isLoaded ? "* " : "  ") + scene + "##scene";
-            if (ImGui::Button(label.c_str(), ImVec2(-1, 24)))
-            {
-                // Show load options
-                selectedScene = scene;
-                showLoadOptions = true;
-            }
-            ImGui::PopStyleColor();
-        }
-    }
+			std::string label = (isLoaded ? "* " : "  ") + scene + "##scene";
+			if (ImGui::Button(label.c_str(), ImVec2(-1, 24)))
+			{
+				// Show load options
+				selectedScene = scene;
+				showLoadOptions = true;
+			}
+			ImGui::PopStyleColor();
+		}
+	}
 
-    // Load options popup
-    if (showLoadOptions && !selectedScene.empty())
-    {
-        ImGui::SetNextWindowSize(ImVec2(250, 0), ImGuiCond_Always);
-        ImGui::Begin(("Load: " + selectedScene).c_str(), &showLoadOptions);
-        
-        ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
-        if (ImGui::Button("Replace (clear current)", ImVec2(-1, 28)))
-        {
-            SceneManager::get().LoadScene(selectedScene, SceneLoadMode::Replace);
-            showLoadOptions = false;
-        }
-        ImGui::PopStyleColor();
+	// Load options popup
+	if (showLoadOptions && !selectedScene.empty())
+	{
+		ImGui::SetNextWindowSize(ImVec2(250, 0), ImGuiCond_Always);
+		ImGui::Begin(("Load: " + selectedScene).c_str(), &showLoadOptions);
 
-        ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
-        if (ImGui::Button("Additive (keep current)", ImVec2(-1, 28)))
-        {
-            SceneManager::get().LoadScene(selectedScene, SceneLoadMode::Additive);
-            showLoadOptions = false;
-        }
-        ImGui::PopStyleColor();
+		ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
+		if (ImGui::Button("Replace (clear current)", ImVec2(-1, 28)))
+		{
+			SceneManager::get().LoadScene(selectedScene, SceneLoadMode::Replace);
+			showLoadOptions = false;
+		}
+		ImGui::PopStyleColor();
 
-        ImGui::End();
-    }
+		ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
+		if (ImGui::Button("Additive (keep current)", ImVec2(-1, 28)))
+		{
+			SceneManager::get().LoadScene(selectedScene, SceneLoadMode::Additive);
+			showLoadOptions = false;
+		}
+		ImGui::PopStyleColor();
 
-    ImGui::End();
+		ImGui::End();
+	}
+
+	ImGui::End();
 }
 
 void ImguiHandler::HandleEntityKeyboardShortcuts()

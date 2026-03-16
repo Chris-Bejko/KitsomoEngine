@@ -56,7 +56,7 @@ public:
 		return a.second < b.second;
 	}
 	Entity *GetSelectedEntity() { return selectedEntity; }
-	void SetSelectedEntity(Entity *entity) { selectedEntity = entity; }
+	void SetSelectedEntity(Entity *entity);
 
 	std::string GetUniqueName(const std::string &baseName);
 	std::vector<std::unique_ptr<Entity>> &GetEntities() { return entities; }

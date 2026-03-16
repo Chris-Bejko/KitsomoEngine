@@ -20,6 +20,7 @@
 #include "Components/BoxCollider.h"
 #include "Components/PolygonCollider.h"
 #include "Components/AudioSource.h"
+#include "GizmoSystem.h"
 
 Engine *Engine::s_instance = nullptr;
 
@@ -104,6 +105,7 @@ void Engine::Render()
 {
 	window->clear();
 	manager->draw();
+	GizmoSystem::get().Draw();
 	ImGui::SFML::Render(GetWindow());
 	window->display();
 }
@@ -117,11 +119,13 @@ void Engine::Update()
 	{
 		manager->updateEngine(dt);
 		UpdateEditorCamera(dt);
+		GizmoSystem::get().Update(dt);
 		break;
 	}
 	case EngineState::Paused:
 	{
 		manager->updateEngine(dt);
+		GizmoSystem::get().Update(dt);
 		UpdateEditorCamera(dt);
 		break;
 	}
@@ -331,7 +335,7 @@ bool Engine::Load(std::string fileName)
 	auto entities = ParseFile(fileName);
 	if (entities.empty())
 		return false;
-
+	GizmoSystem::get().SetSelectedEntity(nullptr);
 	SpawnEntities(entities);
 	currentState = EngineState::Running;
 	openProject = fileName;
@@ -525,6 +529,7 @@ void Engine::SavePrefab(Entity *entity)
 void Engine::Reset()
 {
 	manager->DestroyAllEntities();
+	GizmoSystem::get().SetSelectedEntity(nullptr);
 	sf::View view;
 	view.setSize(window->getSize().x, window->getSize().y);
 	window->setView(view);

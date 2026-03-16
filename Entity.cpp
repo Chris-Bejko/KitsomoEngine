@@ -30,11 +30,20 @@ bool Entity::IsActive() const
 
 void Entity::Destroy()
 {
-	isActive = false;
-	if (parent)
-		parent->RemoveChild(this);
-	for (auto &child : children)
-		child->Destroy();
+    isActive = false;
+    
+    if (parent)
+    {
+        parent->RemoveChild(this);
+        parent = nullptr; 
+    }
+    
+    for (auto* child : children)
+    {
+        child->parent = nullptr;
+        child->transform->SetParent(nullptr);
+    }
+    children.clear();
 }
 
 void Entity::Awake()

@@ -5,6 +5,8 @@
 #include "Components/Sprite.h"
 #include "Logger.h"
 #include "Components/Rigidbody.h"
+#include "GizmoSystem.h"
+
 void EntityManager::draw()
 {
 	std::map<int, std::vector<std::unique_ptr<Entity> *>> renderBuckets;
@@ -100,88 +102,94 @@ void EntityManager::RemoveActiveCollision(std::vector<std::string> it)
 
 void EntityManager::DisplayEntities()
 {
-    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 6));
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 6));
 
-    for (auto& e : entities)
-    {
-        // Skip children - they'll be drawn under their parent
-        if (e->HasParent()) continue;
+	for (auto &e : entities)
+	{
+		// Skip children - they'll be drawn under their parent
+		if (e->HasParent())
+			continue;
 
-        DisplayEntityNode(e.get());
-    }
+		DisplayEntityNode(e.get());
+	}
 
-    ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
 }
 
-void EntityManager::DisplayEntityNode(Entity* e)
+void EntityManager::SetSelectedEntity(Entity *entity)
 {
-    std::string name = e->GetName().c_str();
-    bool isSelected = (selectedEntity == e);
-    bool hasChildren = !e->GetChildren().empty();
+	selectedEntity = entity;
+	GizmoSystem::get().SetSelectedEntity(entity);
+}
+void EntityManager::DisplayEntityNode(Entity *e)
+{
+	std::string name = e->GetName().c_str();
+	bool isSelected = (selectedEntity == e);
+	bool hasChildren = !e->GetChildren().empty();
 
-    if (isSelected)
-        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.4f, 0.7f, 0.6f));
+	if (isSelected)
+		ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.4f, 0.7f, 0.6f));
 
-    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | 
-                               ImGuiTreeNodeFlags_SpanAvailWidth;
-    if (!hasChildren)
-        flags |= ImGuiTreeNodeFlags_Leaf;
-    if (isSelected)
-        flags |= ImGuiTreeNodeFlags_Selected;
+	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow |
+							   ImGuiTreeNodeFlags_SpanAvailWidth;
+	if (!hasChildren)
+		flags |= ImGuiTreeNodeFlags_Leaf;
+	if (isSelected)
+		flags |= ImGuiTreeNodeFlags_Selected;
 
-    bool opened = ImGui::TreeNodeEx(name.c_str(), flags);
+	bool opened = ImGui::TreeNodeEx(name.c_str(), flags);
 
-    // Handle selection click
-    if (ImGui::IsItemClicked())
-    {
-        // Deselect all
-        for (auto& a : entities)
-            a->displayComponents = false;
+	// Handle selection click
+	if (ImGui::IsItemClicked())
+	{
+		// Deselect all
+		for (auto &a : entities)
+			a->displayComponents = false;
 
-        e->displayComponents = true;
-        selectedEntity = e;
+		e->displayComponents = true;
+		selectedEntity = e;
 
-        // Double click focus
-        float currentTime = ImGui::GetTime();
-        if (lastClickedEntity == e && (currentTime - lastClickTime) < 0.3f)
-        {
-            Engine::get().FocusOnEntity(e);
-            e->displayComponents = true;
-            selectedEntity = e;
-        }
-        lastClickedEntity = e;
-        lastClickTime = currentTime;
-    }
+		// Double click focus
+		float currentTime = ImGui::GetTime();
+		if (lastClickedEntity == e && (currentTime - lastClickTime) < 0.3f)
+		{
+			Engine::get().FocusOnEntity(e);
+			e->displayComponents = true;
+			selectedEntity = e;
+		}
+		lastClickedEntity = e;
+		lastClickTime = currentTime;
+	}
 
-    // Drag and drop to reparent
-    if (ImGui::BeginDragDropSource())
-    {
-        ImGui::SetDragDropPayload("ENTITY", &e, sizeof(Entity*));
-        ImGui::Text("Move: %s", name.c_str());
-        ImGui::EndDragDropSource();
-    }
+	// Drag and drop to reparent
+	if (ImGui::BeginDragDropSource())
+	{
+		ImGui::SetDragDropPayload("ENTITY", &e, sizeof(Entity *));
+		ImGui::Text("Move: %s", name.c_str());
+		ImGui::EndDragDropSource();
+	}
 
-    if (ImGui::BeginDragDropTarget())
-    {
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY"))
-        {
-            Entity* dragged = *(Entity**)payload->Data;
-            if (dragged != e) // don't parent to self
-                dragged->SetParent(e);
-        }
-        ImGui::EndDragDropTarget();
-    }
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
+		{
+			Entity *dragged = *(Entity **)payload->Data;
+			if (dragged != e) // don't parent to self
+				dragged->SetParent(e);
+		}
+		ImGui::EndDragDropTarget();
+	}
 
-    if (isSelected)
-        ImGui::PopStyleColor();
+	if (isSelected)
+		ImGui::PopStyleColor();
 
-    // Recursively draw children
-    if (opened)
-    {
-        for (auto* child : e->GetChildren())
-            DisplayEntityNode(child);
-        ImGui::TreePop();
-    }
+	// Recursively draw children
+	if (opened)
+	{
+		for (auto *child : e->GetChildren())
+			DisplayEntityNode(child);
+		ImGui::TreePop();
+	}
 }
 
 void EntityManager::ClearInspector()
@@ -202,7 +210,20 @@ void EntityManager::DisplayComponents()
 
 void EntityManager::DestroyAllEntities()
 {
+	for (auto &e : entities)
+	{
+		e->transform->ClearHierarchy();
+		e->SetParent(nullptr);
+		e->GetChildren().clear();
+	}
+	for (auto &e : entities)
+	{
+		e->SetParent(nullptr);
+		e->transform->SetParent(nullptr);
+		e->GetChildren().clear();
+	}
 	entities.clear();
+	to_add.clear();
 }
 
 void EntityManager::Collisions()
@@ -365,43 +386,46 @@ std::vector<SerializableEntity> EntityManager::SerializeEntities()
 	return entitiesSerialized;
 }
 
-std::string EntityManager::GetUniqueName(const std::string& baseName)
+std::string EntityManager::GetUniqueName(const std::string &baseName)
 {
-    std::string cleanBase = baseName.c_str();
+	std::string cleanBase = baseName.c_str();
 
-    // Strip existing (N) suffix
-    auto pos = cleanBase.rfind(" (");
-    if (pos != std::string::npos)
-    {
-        std::string suffix = cleanBase.substr(pos + 2);
-        if (!suffix.empty() && suffix.back() == ')')
-        {
-            suffix.pop_back();
-            bool isNumber = !suffix.empty() && 
-                            std::all_of(suffix.begin(), suffix.end(), ::isdigit);
-            if (isNumber)
-                cleanBase = cleanBase.substr(0, pos);
-        }
-    }
+	// Strip existing (N) suffix
+	auto pos = cleanBase.rfind(" (");
+	if (pos != std::string::npos)
+	{
+		std::string suffix = cleanBase.substr(pos + 2);
+		if (!suffix.empty() && suffix.back() == ')')
+		{
+			suffix.pop_back();
+			bool isNumber = !suffix.empty() &&
+							std::all_of(suffix.begin(), suffix.end(), ::isdigit);
+			if (isNumber)
+				cleanBase = cleanBase.substr(0, pos);
+		}
+	}
 
-    // Check both entities AND to_add
-    auto isTaken = [&](const std::string& name) {
-        for (auto& e : entities)
-            if (e->GetName() == name) return true;
-        for (auto& e : to_add)
-            if (e->GetName() == name) return true;
-        return false;
-    };
+	// Check both entities AND to_add
+	auto isTaken = [&](const std::string &name)
+	{
+		for (auto &e : entities)
+			if (e->GetName() == name)
+				return true;
+		for (auto &e : to_add)
+			if (e->GetName() == name)
+				return true;
+		return false;
+	};
 
-    if (!isTaken(cleanBase))
-        return cleanBase;
+	if (!isTaken(cleanBase))
+		return cleanBase;
 
-    int counter = 1;
-    while (true)
-    {
-        std::string candidate = cleanBase + " (" + std::to_string(counter) + ")";
-        if (!isTaken(candidate))
-            return candidate;
-        counter++;
-    }
+	int counter = 1;
+	while (true)
+	{
+		std::string candidate = cleanBase + " (" + std::to_string(counter) + ")";
+		if (!isTaken(candidate))
+			return candidate;
+		counter++;
+	}
 }

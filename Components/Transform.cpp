@@ -123,6 +123,12 @@ void Transform::RemoveChild(Transform* child)
     );
 }
 
+void Transform::ClearHierarchy()
+{
+    parent = nullptr;
+    children.clear();
+}
+
 Vector2F Transform::GetWorldPosition()
 {
     if (parent == nullptr)

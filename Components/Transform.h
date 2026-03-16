@@ -41,7 +41,7 @@ public:
 	Vector2F GetWorldPosition();
 	Vector2F GetWorldScale();
 	float GetWorldRotation();
-
+	void ClearHierarchy();
 	Transform* GetParent() { return parent; }
 	std::vector<Transform*>& GetChildren() { return children; }
 
