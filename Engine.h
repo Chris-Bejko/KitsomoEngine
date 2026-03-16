@@ -89,9 +89,10 @@ public:
     std::vector<SerializableEntity> ParseFile(const std::string &fileName);
 
     Entity* SpawnPrefab(const std::string prefabName, Vector2F position);
-
+    
 private:
     bool editorDragging = false;
+    std::string openProject = "";
     sf::Vector2f editorDragStart;
     EngineState currentState;
     EngineState previousState;
