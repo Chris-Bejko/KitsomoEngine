@@ -31,6 +31,10 @@ bool Entity::IsActive() const
 void Entity::Destroy()
 {
 	isActive = false;
+	if (parent)
+		parent->RemoveChild(this);
+	for (auto &child : children)
+		child->Destroy();
 }
 
 void Entity::Awake()
@@ -502,4 +506,37 @@ void Entity::InitializeComponentFields(const std::vector<SerializableComponent> 
 bool Entity::DeletePressed()
 {
 	return deletePressed;
+}
+
+
+void Entity::SetParent(Entity* newParent)
+{
+    if (parent)
+        parent->RemoveChild(this);
+
+    parent = newParent;
+
+    if (parent)
+    {
+        parent->AddChild(this);
+        // Link transforms
+        transform->SetParent(parent->transform);
+    }
+    else
+    {
+        transform->SetParent(nullptr);
+    }
+}
+
+void Entity::AddChild(Entity* child)
+{
+    children.push_back(child);
+}
+
+void Entity::RemoveChild(Entity* child)
+{
+    children.erase(
+        std::remove(children.begin(), children.end(), child),
+        children.end()
+    );
 }

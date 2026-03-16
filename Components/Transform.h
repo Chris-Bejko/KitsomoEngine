@@ -32,6 +32,24 @@ public:
 
 	void SetPosition(float x, float y);
 
+
+	void SetParent(Transform* newParent);
+
+	void AddChild(Transform* child);	
+	void RemoveChild(Transform* child);
+
+	Vector2F GetWorldPosition();
+	Vector2F GetWorldScale();
+	float GetWorldRotation();
+
+	Transform* GetParent() { return parent; }
+	std::vector<Transform*>& GetChildren() { return children; }
+
 private:
 	std::vector<SerializableVariable> variables;
+	Transform* parent = nullptr;
+	std::vector<Transform*> children;
+
+
+
 };

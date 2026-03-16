@@ -22,16 +22,14 @@ public:
 	void Awake();
 	void Collisions();
 
-
-
 	void ValidateAdded();
 
 	void ValidateRemoved();
 
-	void addEntity(Entity* ent);
-	void eraseEntity(Entity* ent);
+	void addEntity(Entity *ent);
+	void eraseEntity(Entity *ent);
 
-	Entity* cloneEntity(Entity* ent);
+	Entity *cloneEntity(Entity *ent);
 
 	std::vector<SerializableEntity> SerializeEntities();
 
@@ -39,7 +37,7 @@ public:
 
 	std::vector<std::vector<std::string>> GetActiveCollisions();
 
-	void AddColliders(std::vector<std::string>& Colliders);
+	void AddColliders(std::vector<std::string> &Colliders);
 
 	void RemoveActiveCollision(std::vector<std::string> it);
 
@@ -52,24 +50,28 @@ public:
 	void DestroyAllEntities();
 
 	bool IsInColliderEditMode();
-	bool cmp(std::pair<Entity*, int>& a,
-		std::pair<Entity*, int>& b)
+	bool cmp(std::pair<Entity *, int> &a,
+			 std::pair<Entity *, int> &b)
 	{
 		return a.second < b.second;
 	}
-	Entity* GetSelectedEntity() { return selectedEntity; }
-	void SetSelectedEntity(Entity* entity) { selectedEntity = entity; }
+	Entity *GetSelectedEntity() { return selectedEntity; }
+	void SetSelectedEntity(Entity *entity) { selectedEntity = entity; }
 
-	std::string GetUniqueName(const std::string& baseName);
-	std::vector<std::unique_ptr<Entity>>& GetEntities() { return entities; }
+	std::string GetUniqueName(const std::string &baseName);
+	std::vector<std::unique_ptr<Entity>> &GetEntities() { return entities; }
+	void DisplayEntityNode(Entity *e);
+
 private:
 	// Track active collision pairs to ensure OnTriggerEnter/Stay/Exit called correctly
-	std::set<std::pair<Collider*, Collider*>> activeCollisionPairs;
+	std::set<std::pair<Collider *, Collider *>> activeCollisionPairs;
 
 private:
 	std::vector<std::unique_ptr<Entity>> entities;
 	std::vector<std::unique_ptr<Entity>> to_add;
 
 	std::vector<std::vector<std::string>> activeCollisions;
-	Entity* selectedEntity = nullptr;
+	Entity *selectedEntity = nullptr;
+	Entity *lastClickedEntity = nullptr;
+	float lastClickTime = 0.f;
 };

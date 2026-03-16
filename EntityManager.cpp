@@ -100,49 +100,88 @@ void EntityManager::RemoveActiveCollision(std::vector<std::string> it)
 
 void EntityManager::DisplayEntities()
 {
-	static float lastClickTime = 0.f;
-	static Entity *lastClickedEntity = nullptr;
-	const float doubleClickThreshold = 0.3f;
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 6));
 
-	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 6));
+    for (auto& e : entities)
+    {
+        // Skip children - they'll be drawn under their parent
+        if (e->HasParent()) continue;
 
-	for (auto &e : entities)
-	{
-		std::string name = e->GetName().c_str();
-		bool isSelected = (selectedEntity == e.get());
+        DisplayEntityNode(e.get());
+    }
 
-		if (isSelected)
-			ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.4f, 0.7f, 0.6f));
+    ImGui::PopStyleVar();
+}
 
-		if (ImGui::Checkbox(name.c_str(), &e->displayComponents))
-		{
-			for (auto &a : entities)
-			{
-				if (a.get() == e.get())
-					continue;
-				a->displayComponents = false;
-			}
-			selectedEntity = e->displayComponents ? e.get() : nullptr;
+void EntityManager::DisplayEntityNode(Entity* e)
+{
+    std::string name = e->GetName().c_str();
+    bool isSelected = (selectedEntity == e);
+    bool hasChildren = !e->GetChildren().empty();
 
-			// Double click detection
-			float currentTime = ImGui::GetTime();
-			if (lastClickedEntity == e.get() &&
-				(currentTime - lastClickTime) < doubleClickThreshold)
-			{
-				// Double click! Focus camera on entity
-				e->displayComponents = true;
-				selectedEntity = e.get();
-				Engine::get().FocusOnEntity(e.get());
-			}
-			lastClickedEntity = e.get();
-			lastClickTime = currentTime;
-		}
+    if (isSelected)
+        ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.4f, 0.7f, 0.6f));
 
-		if (isSelected)
-			ImGui::PopStyleColor();
-	}
+    ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | 
+                               ImGuiTreeNodeFlags_SpanAvailWidth;
+    if (!hasChildren)
+        flags |= ImGuiTreeNodeFlags_Leaf;
+    if (isSelected)
+        flags |= ImGuiTreeNodeFlags_Selected;
 
-	ImGui::PopStyleVar();
+    bool opened = ImGui::TreeNodeEx(name.c_str(), flags);
+
+    // Handle selection click
+    if (ImGui::IsItemClicked())
+    {
+        // Deselect all
+        for (auto& a : entities)
+            a->displayComponents = false;
+
+        e->displayComponents = true;
+        selectedEntity = e;
+
+        // Double click focus
+        float currentTime = ImGui::GetTime();
+        if (lastClickedEntity == e && (currentTime - lastClickTime) < 0.3f)
+        {
+            Engine::get().FocusOnEntity(e);
+            e->displayComponents = true;
+            selectedEntity = e;
+        }
+        lastClickedEntity = e;
+        lastClickTime = currentTime;
+    }
+
+    // Drag and drop to reparent
+    if (ImGui::BeginDragDropSource())
+    {
+        ImGui::SetDragDropPayload("ENTITY", &e, sizeof(Entity*));
+        ImGui::Text("Move: %s", name.c_str());
+        ImGui::EndDragDropSource();
+    }
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY"))
+        {
+            Entity* dragged = *(Entity**)payload->Data;
+            if (dragged != e) // don't parent to self
+                dragged->SetParent(e);
+        }
+        ImGui::EndDragDropTarget();
+    }
+
+    if (isSelected)
+        ImGui::PopStyleColor();
+
+    // Recursively draw children
+    if (opened)
+    {
+        for (auto* child : e->GetChildren())
+            DisplayEntityNode(child);
+        ImGui::TreePop();
+    }
 }
 
 void EntityManager::ClearInspector()

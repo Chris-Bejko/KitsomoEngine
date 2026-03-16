@@ -118,15 +118,21 @@ public:
 	bool DeletePressed();
 
 	// Component factory - add component by name string
-	void AddComponentByName(const std::string& componentName);
+	void AddComponentByName(const std::string &componentName);
 
 	// Check if a component type allows multiple instances
-	static bool ComponentAllowsMultiple(const std::string& componentName);
+	static bool ComponentAllowsMultiple(const std::string &componentName);
 
 	// Initialize all components with their serialized field data
-	void InitializeComponentFields(const std::vector<SerializableComponent>& serializedComps);
+	void InitializeComponentFields(const std::vector<SerializableComponent> &serializedComps);
 
 	const std::vector<std::unique_ptr<Component>> &GetComponents() { return components; }
+	void SetParent(Entity *newParent);
+	void AddChild(Entity *child);
+	void RemoveChild(Entity *child);
+	bool HasParent() { return parent != nullptr; }
+	std::vector<Entity *> &GetChildren() { return children; }
+	Entity* GetParent() { return parent; }
 
 private:
 	bool isActive;
@@ -142,4 +148,7 @@ private:
 
 	std::vector<std::unique_ptr<Component>> components;
 	std::vector<std::unique_ptr<Component>> to_Add;
+
+	Entity *parent = nullptr;
+	std::vector<Entity *> children;
 };
