@@ -103,10 +103,26 @@ void Bullet::SetColor(Color color)
 	// LOG_INFO("Bullet color set to: ", color.SerializeColor());
 }
 
-void Bullet::OnTriggerEnter(BoxCollider &other)
+void Bullet::OnTriggerEnter(Collider &other)
 {
+	LOG_DEBUG("Bullet OnTriggerEnter called! other tag: ", other.GetCollisionTag().c_str());
+
 	if (other.GetCollisionTag() == "floor")
 	{
+		LOG_INFO("Bullet hit the floor, changing color to match the floor's color");
+		auto lastColor = other.entity->GetComponent<FloorSquare>().GetColorEnum();
+		if (lastColor == this->lastColor)
+			return;
+		SetColor(lastColor);
+	}
+}
+void Bullet::OnCollisionEnter(Collider &other)
+{
+	LOG_DEBUG("Bullet OnCollisionEnter called! other tag: ", other.GetCollisionTag().c_str());
+
+	if (other.GetCollisionTag() == "floor")
+	{
+		LOG_INFO("Bullet hit the floor, changing color to match the floor's color");
 		auto lastColor = other.entity->GetComponent<FloorSquare>().GetColorEnum();
 		if (lastColor == this->lastColor)
 			return;

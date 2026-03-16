@@ -4,7 +4,7 @@
 #include <vector>
 
 class Entity;
-class BoxCollider;
+class Collider;
 
 class Component
 {
@@ -23,10 +23,10 @@ public:
 	virtual void SetSerializedFields(std::vector<SerializableVariable> variables) { }
 
 
-	virtual void OnCollisionEnter(BoxCollider& other) { }
-	virtual void OnCollisionExit(BoxCollider& other) { }
-	virtual void OnTriggerEnter(BoxCollider& other) { }
-	virtual void OnTriggerExit(BoxCollider& other) { }
-	virtual void OnTriggerStay(BoxCollider& other) { }
+	virtual void OnCollisionEnter(Collider& other) { }
+	virtual void OnCollisionExit(Collider& other) { }
+	virtual void OnTriggerEnter(Collider& other) { }
+	virtual void OnTriggerExit(Collider& other) { }
+	virtual void OnTriggerStay(Collider& other) { }
 	virtual void DrawEditorButton() {}
 };

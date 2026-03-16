@@ -7,6 +7,9 @@
 #include "Components/FloorSquare.h"
 #include "Components/Bullet.h"
 #include "Components/Rigidbody.h"
+#include "Components/CircleCollider.h"
+#include "Components/BoxCollider.h"
+#include "Components/PolygonCollider.h"
 
 //#include "Components/BoxCollider.h"
 
@@ -71,7 +74,7 @@ void Entity::UpdateEngine(float dt)
 	}
 }
 
-void Entity::OnCollisionEnter(BoxCollider& other)
+void Entity::OnCollisionEnter(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -85,7 +88,7 @@ void Entity::OnCollisionEnter(BoxCollider& other)
 
 }
 
-void Entity::OnTriggerEnter(BoxCollider& other)
+void Entity::OnTriggerEnter(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -99,7 +102,7 @@ void Entity::OnTriggerEnter(BoxCollider& other)
 	}
 }
 
-void Entity::OnTriggerStay(BoxCollider& other)
+void Entity::OnTriggerStay(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -113,7 +116,7 @@ void Entity::OnTriggerStay(BoxCollider& other)
 	}
 }
 
-void Entity::OnTriggerExit(BoxCollider& other)
+void Entity::OnTriggerExit(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -127,7 +130,7 @@ void Entity::OnTriggerExit(BoxCollider& other)
 	}
 }
 
-void Entity::OnCollisionExit(BoxCollider& other)
+void Entity::OnCollisionExit(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -314,6 +317,16 @@ void Entity::DisplayComponents()
 }
 void Entity::RemoveComponent(Component* comp)
 {
+    for (size_t i = 0; i < componentsList.size(); i++)
+    {
+        if (componentsList[i] == comp)
+        {
+            componentsList[i] = nullptr;
+            componentsBitset[i] = false;
+            break;
+        }
+    }
+
     components.erase(
         std::remove_if(components.begin(), components.end(),
             [comp](const std::unique_ptr<Component>& c) {
@@ -370,6 +383,12 @@ void Entity::DisplayAvailableComponents()
 				}else if(str == "Rigidbody"){
 					if(!this->HasComponent<Rigidbody>())
 						this->AddComponent<Rigidbody>();
+				}else if(str == "CircleCollider"){
+					if(!this->HasComponent<CircleCollider>())
+						this->AddComponent<CircleCollider>();
+				}else if(str == "PolygonCollider"){
+					if(!this->HasComponent<PolygonCollider>())
+						this->AddComponent<PolygonCollider>();
 				}
 			}
 		}

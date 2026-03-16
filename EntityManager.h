@@ -50,6 +50,7 @@ public:
 
 	void DestroyAllEntities();
 
+	bool IsInColliderEditMode();
 	bool cmp(std::pair<Entity*, int>& a,
 		std::pair<Entity*, int>& b)
 	{

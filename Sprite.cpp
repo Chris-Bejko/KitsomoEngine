@@ -2,6 +2,7 @@
 #include "../Engine.h"
 #include "../imguiHandler.h"
 #include "Logger.h"
+#include "Components/BoxCollider.h"
 
 Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 {

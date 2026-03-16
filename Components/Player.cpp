@@ -53,7 +53,7 @@ void Player::InitSerializedFields(ReadableSerializableVariableMap map)
 			lastColor.SetColor(value);
 			lastColorString = value;
 		}
-		if(key == "bulletPrefab")
+		if (key == "bulletPrefab")
 		{
 			bulletPrefab = value;
 		}
@@ -156,8 +156,9 @@ void Player::SetSpawnPointPosition()
 	spawnPoint->rotation = entity->transform->rotation;
 }
 
-void Player::OnTriggerEnter(BoxCollider &other)
+void Player::OnTriggerEnter(Collider &other)
 {
+	LOG_DEBUG("Player triggered with something", other.GetCollisionTag().c_str());
 	if (other.entity->HasComponent<FloorSquare>())
 	{
 		lastColor = other.entity->GetComponent<FloorSquare>().GetColorEnum();
@@ -167,7 +168,7 @@ void Player::OnTriggerEnter(BoxCollider &other)
 	}
 }
 
-void Player::OnTriggerExit(BoxCollider &other)
+void Player::OnTriggerExit(Collider &other)
 {
 	// Color color(ColorEnum::Red);
 	// entity->GetComponent<Sprite>().SetColor(color);
