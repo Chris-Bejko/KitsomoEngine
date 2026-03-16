@@ -193,6 +193,9 @@ void EntityManager::Collisions()
 					coll2->entity->OnTriggerEnter(*coll1);
 				else
 					coll2->entity->OnCollisionEnter(*coll1);
+
+				    if (!coll1->IsTrigger() && !coll2->IsTrigger())
+        				CollisionSystem::get().ResolveCollision(coll1, coll2);
 			}
 			else
 			{

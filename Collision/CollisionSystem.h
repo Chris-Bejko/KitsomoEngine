@@ -35,6 +35,10 @@ public:
 	void SetActive(Collider* a, Collider* b);
 	void SetInactive(Collider* a, Collider* b);
 
+	void ResolveCollision(Collider* a, Collider* b);
+	sf::Vector2f GetCollisionNormal(Collider* a, Collider* b);
+	float GetPenetrationDepth(Collider* a, Collider* b);	
+
 private:
 	static CollisionSystem *s_instance;
 	std::set<std::pair<Collider*, Collider*>> activeCollisions;
