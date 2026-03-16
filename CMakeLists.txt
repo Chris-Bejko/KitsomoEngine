@@ -43,14 +43,19 @@ target_include_directories(ECSEngine PRIVATE
 # SFML
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR "${CMAKE_SOURCE_DIR}/lib/cmake/SFML")
-find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
-
+find_package(SFML 2.6 COMPONENTS graphics window system audio REQUIRED)
+add_custom_command(TARGET ECSEngine POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${CMAKE_SOURCE_DIR}/bin/OpenAL32.dll"
+    $<TARGET_FILE_DIR:ECSEngine>
+)
 target_link_directories(ECSEngine PRIVATE "${CMAKE_SOURCE_DIR}/lib")
 
 target_link_libraries(ECSEngine PRIVATE
     sfml-graphics-s-d
     sfml-window-s-d
     sfml-system-s-d
+    sfml-audio-s-d
     opengl32
     winmm
     gdi32
@@ -60,4 +65,5 @@ target_link_libraries(ECSEngine PRIVATE
     vorbisenc
     vorbisfile
     ogg
+    openal32
 )

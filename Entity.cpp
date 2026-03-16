@@ -10,6 +10,7 @@
 #include "Components/CircleCollider.h"
 #include "Components/BoxCollider.h"
 #include "Components/PolygonCollider.h"
+#include "Components/AudioSource.h"
 
 //#include "Components/BoxCollider.h"
 
@@ -406,6 +407,8 @@ void Entity::AddComponentByName(const std::string& componentName)
 		this->AddComponent<CircleCollider>();
 	else if (componentName == "PolygonCollider")
 		this->AddComponent<PolygonCollider>();
+	else if( componentName == "AudioSource")
+		this->AddComponent<AudioSource>();
 }
 
 // Static metadata map defining which components allow multiple instances
