@@ -1,4 +1,4 @@
-#include "Components/Transform.h"
+#include "Transform.h"
 #include "Logger.h"
 #include "Entity.h"
 
@@ -93,4 +93,71 @@ void Transform::SetPosition(float x, float y)
 {
 	position.x = x;
 	position.y = y;
+}
+
+void Transform::SetParent(Transform* newParent)
+{
+    // Remove from old parent
+    if (parent)
+        parent->RemoveChild(this);
+
+    parent = newParent;
+
+    if (parent)
+        parent->AddChild(this);
+}
+
+void Transform::AddChild(Transform* child)
+{
+    // Avoid duplicates
+    for (auto* c : children)
+        if (c == child) return;
+    children.push_back(child);
+}
+
+void Transform::RemoveChild(Transform* child)
+{
+    children.erase(
+        std::remove(children.begin(), children.end(), child),
+        children.end()
+    );
+}
+
+void Transform::ClearHierarchy()
+{
+    parent = nullptr;
+    children.clear();
+}
+
+Vector2F Transform::GetWorldPosition()
+{
+    if (parent == nullptr)
+        return position;
+
+    Vector2F parentWorld = parent->GetWorldPosition();
+    float parentRot = parent->GetWorldRotation() * 3.14159f / 180.f;
+    Vector2F parentScale = parent->GetWorldScale();
+
+    // Rotate and scale local position by parent's world transform
+    float rotatedX = position.x * parentScale.x * cos(parentRot) 
+                   - position.y * parentScale.y * sin(parentRot);
+    float rotatedY = position.x * parentScale.x * sin(parentRot) 
+                   + position.y * parentScale.y * cos(parentRot);
+
+    return Vector2F(parentWorld.x + rotatedX, parentWorld.y + rotatedY);
+}
+
+float Transform::GetWorldRotation()
+{
+    if (parent == nullptr)
+        return rotation;
+    return rotation + parent->GetWorldRotation();
+}
+
+Vector2F Transform::GetWorldScale()
+{
+    if (parent == nullptr)
+        return scale;
+    Vector2F parentScale = parent->GetWorldScale();
+    return Vector2F(scale.x * parentScale.x, scale.y * parentScale.y);
 }

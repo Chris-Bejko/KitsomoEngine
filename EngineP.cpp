@@ -20,6 +20,7 @@
 #include "Components/BoxCollider.h"
 #include "Components/PolygonCollider.h"
 #include "Components/AudioSource.h"
+#include "GizmoSystem.h"
 
 Engine *Engine::s_instance = nullptr;
 
@@ -104,6 +105,7 @@ void Engine::Render()
 {
 	window->clear();
 	manager->draw();
+	GizmoSystem::get().Draw();
 	ImGui::SFML::Render(GetWindow());
 	window->display();
 }
@@ -117,11 +119,13 @@ void Engine::Update()
 	{
 		manager->updateEngine(dt);
 		UpdateEditorCamera(dt);
+		GizmoSystem::get().Update(dt);
 		break;
 	}
 	case EngineState::Paused:
 	{
 		manager->updateEngine(dt);
+		GizmoSystem::get().Update(dt);
 		UpdateEditorCamera(dt);
 		break;
 	}
@@ -278,56 +282,50 @@ size_t Engine::GetTotalEntities()
 
 void Engine::Save(std::string filename)
 {
-	auto entitiesAndComps = manager->SerializeEntities();
-	std::ofstream myFile;
-	myFile.open(filename);
-	for (auto &e : entitiesAndComps)
-	{
-		myFile << "ENTITY_NAME_" << e.entityName << "_ENTITY_NAME_E_";
-		for (auto &c : e.components)
-		{
-			myFile << "_COMPONENT_NAME_" << c.componentName;
-			myFile << "_COMPONENT_NAME_E_";
-			for (auto &f : c.variables)
-			{
-				myFile << "_FIELD_";
-				myFile << ":" << f.name << "::";
-				switch (f.type)
-				{
-				case 1:
-				{
-					myFile << "," << f.read() << ",,";
-					break;
-				}
-				case 2:
-				{
-					myFile << "," << f.read() << ",,";
-					break;
-				}
-				case 3:
-				{
-					std::string p = *reinterpret_cast<std::string *>(f.data);
-					myFile << "," << p << ",,";
-					break;
-				}
-				case 4:
-				{
-					bool p = *reinterpret_cast<bool *>(f.data);
-					myFile << "," << p << ",,";
-					break;
-				}
-				default:
-					break;
-				}
-				myFile << ";" << f.type << ";;";
-			}
-			myFile << "_FIELD_";
-		}
-		myFile << "\n";
-	}
-	myFile.close();
-}
+    std::ofstream myFile;
+    myFile.open(filename);
+    
+    for (auto& e : manager->GetEntities())  // iterate Entity* directly
+    {
+        myFile << "ENTITY_NAME_" << e->GetName() << "_ENTITY_NAME_E_";
+        
+        if (e->HasParent())
+            myFile << "_PARENT_" << e->GetParent()->GetName() << "_PARENT_E_";
 
+        auto components = e->GetAllComponentVariables();
+        for (auto& c : components)
+        {
+            myFile << "_COMPONENT_NAME_" << c.componentName;
+            myFile << "_COMPONENT_NAME_E_";
+            for (auto& f : c.variables)
+            {
+                myFile << "_FIELD_";
+                myFile << ":" << f.name << "::";
+                switch (f.type)
+                {
+                case 1: myFile << "," << f.read() << ",,"; break;
+                case 2: myFile << "," << f.read() << ",,"; break;
+                case 3:
+                {
+                    std::string p = *reinterpret_cast<std::string*>(f.data);
+                    myFile << "," << p << ",,";
+                    break;
+                }
+                case 4:
+                {
+                    bool p = *reinterpret_cast<bool*>(f.data);
+                    myFile << "," << p << ",,";
+                    break;
+                }
+                }
+                myFile << ";" << f.type << ";;";
+            }
+            myFile << "_FIELD_";
+        }
+        myFile << "\n";
+    }
+    myFile.close();
+}
 bool Engine::Load(std::string fileName)
 {
 	LOG_INFO("Loading file: ", fileName.c_str());
@@ -337,7 +335,7 @@ bool Engine::Load(std::string fileName)
 	auto entities = ParseFile(fileName);
 	if (entities.empty())
 		return false;
-
+	GizmoSystem::get().SetSelectedEntity(nullptr);
 	SpawnEntities(entities);
 	currentState = EngineState::Running;
 	openProject = fileName;
@@ -531,6 +529,7 @@ void Engine::SavePrefab(Entity *entity)
 void Engine::Reset()
 {
 	manager->DestroyAllEntities();
+	GizmoSystem::get().SetSelectedEntity(nullptr);
 	sf::View view;
 	view.setSize(window->getSize().x, window->getSize().y);
 	window->setView(view);
@@ -582,15 +581,14 @@ void Engine::UpdateEditorCamera(float dt)
 
 			if (target == nullptr)
 			{
-				focusTargetName = ""; // entity not found, cancel focus
+				focusTargetName = "";
 			}
 			else
 			{
-				LOG_DEBUG("Focusing target pos: ", target->transform->position.x, 
-                      ", ", target->transform->position.y);
-				sf::Vector2f targetPos(
-					target->transform->position.x,
-					target->transform->position.y);
+				// Use world position instead of local position
+				Vector2F worldPos = target->transform->GetWorldPosition();
+				sf::Vector2f targetPos(worldPos.x, worldPos.y);
+
 				sf::Vector2f currentCenter = view.getCenter();
 				sf::Vector2f diff = targetPos - currentCenter;
 				float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
@@ -671,7 +669,12 @@ std::vector<SerializableEntity> Engine::ParseFile(const std::string &fileName)
 		std::string delStart = "ENTITY_NAME_";
 		std::string delEnd = "_ENTITY_NAME_E_";
 		ent.entityName = GetSubstring(line, delStart, delEnd, true);
-
+		if (line.find("_PARENT_") != std::string::npos)
+		{
+			delStart = "_PARENT_";
+			delEnd = "_PARENT_E_";
+			ent.parentName = GetSubstring(line, delStart, delEnd, true);
+		}
 		std::string delimiter = "_COMPONENT_NAME_";
 		std::size_t pos = 0;
 		while ((pos = line.find(delimiter)) != std::string::npos)
@@ -732,6 +735,7 @@ std::vector<SerializableEntity> Engine::ParseFile(const std::string &fileName)
 
 void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 {
+	// First pass - spawn all entities
 	for (auto &e : entities)
 	{
 		Entity *ent = new Entity(e.entityName);
@@ -745,8 +749,32 @@ void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 		}
 		manager->addEntity(ent);
 	}
-}
 
+	// Second pass - link parents after all entities exist
+	manager->ValidateAdded();
+	for (auto &e : entities)
+	{
+		if (e.parentName.empty())
+			continue;
+
+		Entity *child = nullptr;
+		Entity *parent = nullptr;
+
+		for (auto &ent : manager->GetEntities())
+		{
+			if (ent->GetName() == e.entityName)
+				child = ent.get();
+			if (ent->GetName() == e.parentName)
+				parent = ent.get();
+		}
+
+		if (child && parent)
+		{
+			child->SetParent(parent);
+			LOG_DEBUG("Parented '", e.entityName.c_str(), "' to '", e.parentName.c_str(), "'");
+		}
+	}
+}
 void Engine::FocusOnEntity(Entity *entity)
 {
 	focusTargetName = entity->GetName();

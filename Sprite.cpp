@@ -5,7 +5,7 @@
 #include "Components/BoxCollider.h"
 #include "../Commands/MoveEntityCommand.h"
 #include "../Commands/CommandHistory.h"
-
+#include "GizmoSystem.h"
 Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 {
 	textureID = textureId;
@@ -97,9 +97,13 @@ void Sprite::update(float dt)
 		lastColorID = ColorID;
 	}
 	sprite.setTexture(texture);
-	sprite.setPosition(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y);
-	sprite.setRotation(entity->GetComponent<Transform>().rotation);
-	sprite.setScale(sf::Vector2f(entity->GetComponent<Transform>().scale.x, entity->GetComponent<Transform>().scale.y));
+	auto worldPos = entity->transform->GetWorldPosition();
+	auto worldRot = entity->transform->GetWorldRotation();
+	auto worldScale = entity->transform->GetWorldScale();
+
+	sprite.setPosition(worldPos.x, worldPos.y);
+	sprite.setRotation(worldRot);
+	sprite.setScale(worldScale.x, worldScale.y);
 
 	// Track drag start
 	if (dragging && !wasDragging)
@@ -109,7 +113,31 @@ void Sprite::update(float dt)
 
 	if (dragging)
 	{
-		entity->GetComponent<Transform>().SetPosition(mousePos.x - mouseRectOffset.x, mousePos.y - mouseRectOffset.y);
+		sf::Vector2f worldTarget(mousePos.x - mouseRectOffset.x,
+								 mousePos.y - mouseRectOffset.y);
+
+		if (entity->transform->GetParent() != nullptr)
+		{
+			// Convert world position to local space
+			Vector2F parentWorld = entity->transform->GetParent()->GetWorldPosition();
+			float parentRot = entity->transform->GetParent()->GetWorldRotation() * 3.14159f / 180.f;
+			Vector2F parentScale = entity->transform->GetParent()->GetWorldScale();
+
+			float dx = worldTarget.x - parentWorld.x;
+			float dy = worldTarget.y - parentWorld.y;
+
+			// Inverse rotate and scale
+			float cosR = cos(-parentRot);
+			float sinR = sin(-parentRot);
+			float localX = (dx * cosR - dy * sinR) / parentScale.x;
+			float localY = (dx * sinR + dy * cosR) / parentScale.y;
+
+			entity->GetComponent<Transform>().SetPosition(localX, localY);
+		}
+		else
+		{
+			entity->GetComponent<Transform>().SetPosition(worldTarget.x, worldTarget.y);
+		}
 	}
 
 	// Track drag end and create command
@@ -144,17 +172,7 @@ void Sprite::updateEngine(float dt)
 	if (entity->HasComponent<BoxCollider>() && entity->GetComponent<BoxCollider>().editMode)
 		return;
 
-	if (forceDrag)
-    {
-        mousePos = Engine::get().GetWindow().mapPixelToCoords(
-            sf::Mouse::getPosition(Engine::get().GetWindow()));
-        Engine::get().TriggerDragging(entity->GetName());
-        entity->displayComponents = true;
-        Engine::get().GetManager()->SetSelectedEntity(entity);
-        dragging = true;
-        forceDrag = false; // only trigger once
-    }
-	
+	if (GizmoSystem::get().IsGizmoDragging()) return;
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
@@ -182,6 +200,20 @@ void Sprite::updateEngine(float dt)
 				dragTimer += dt;
 				if (dragTimer >= dragDelay)
 				{
+					if (entity->transform->GetParent() != nullptr)
+					{
+						// offset in local space
+						Vector2F worldPos = entity->transform->GetWorldPosition();
+						mouseRectOffset = sf::Vector2f(
+							mousePos.x - worldPos.x,
+							mousePos.y - worldPos.y);
+					}
+					else
+					{
+						mouseRectOffset = sf::Vector2f(
+							mousePos.x - entity->transform->position.x,
+							mousePos.y - entity->transform->position.y);
+					}
 					Engine::get().TriggerDragging(entity->GetName());
 					ImguiHandler::get().ClearInspector();
 					entity->displayComponents = true;
