@@ -31,9 +31,9 @@ public:
 	void SetSpawnPointPosition();
 
 	
-	void OnTriggerEnter(BoxCollider& other) override final;
+	void OnTriggerEnter(Collider& other) override final;
 
-	void OnTriggerExit(BoxCollider& other) override final;
+	void OnTriggerExit(Collider& other) override final;
 
 	Vector2F GetMouseVector();
 

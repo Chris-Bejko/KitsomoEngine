@@ -25,7 +25,8 @@ public:
 
 	void SetColor(Color color);
 
-	void OnTriggerEnter(BoxCollider& other) override final;
+	void OnTriggerEnter(Collider& other) override final;
+	void OnCollisionEnter(Collider& other) override final;
 
 	float GetForce() { return force; }	
 

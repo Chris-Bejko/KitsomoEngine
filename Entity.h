@@ -9,29 +9,27 @@
 #include "Component.h"
 #include <filesystem>
 #include <iostream>
-#include "Components/BoxCollider.h"
-
+#include "Collision/Collider.h"
 
 class Transform;
-class BoxCollider;
+class Collider;
 class SerializableComponent;
 
 class Entity
 {
 public:
 	bool displayComponents;
-	Transform* transform;
+	Transform *transform;
 	Entity(std::string name);
 
 	virtual ~Entity() {}
 
 	template <typename T, typename... TArgs>
-	inline T& AddComponent(TArgs &&...args)
+	inline T &AddComponent(TArgs &&...args)
 	{
-		T* comp(new T(std::forward<TArgs>(args)...));
-		std::unique_ptr<Component> uptr{ comp };
+		T *comp(new T(std::forward<TArgs>(args)...));
+		std::unique_ptr<Component> uptr{comp};
 		to_Add.emplace_back(std::move(uptr));
-
 
 		comp->entity = this;
 		if (comp->Init())
@@ -41,14 +39,14 @@ public:
 			return *comp;
 		}
 
-		return *static_cast<T*>(nullptr);
+		return *static_cast<T *>(nullptr);
 	}
 
 	template <typename T>
-	inline T& GetComponent() const
+	inline T &GetComponent() const
 	{
 		auto ptr(componentsList[getComponentTypeID<T>()]);
-		return *static_cast<T*>(ptr);
+		return *static_cast<T *>(ptr);
 	}
 
 	template <typename T>
@@ -57,7 +55,29 @@ public:
 		return componentsBitset[getComponentTypeID<T>()];
 	}
 
-	void RemoveComponent(Component* comp);
+	template <typename T>
+	inline bool HasComponentOfType() const
+	{
+		for (auto &comp : components)
+		{
+			if (dynamic_cast<T *>(comp.get()) != nullptr)
+				return true;
+		}
+		return false;
+	}
+
+	template <typename T>
+	inline T *GetComponentOfType() const
+	{
+		for (auto &comp : components)
+		{
+			T *casted = dynamic_cast<T *>(comp.get());
+			if (casted != nullptr)
+				return casted;
+		}
+		return nullptr;
+	}
+	void RemoveComponent(Component *comp);
 
 	void Awake();
 
@@ -73,16 +93,15 @@ public:
 
 	void UpdateEngine(float dt);
 
-	void OnCollisionEnter(BoxCollider& other);
+	void OnCollisionEnter(Collider &other);
 
-	void OnTriggerEnter(BoxCollider& other);
+	void OnTriggerEnter(Collider &other);
 
-	void OnTriggerStay(BoxCollider& other);
+	void OnTriggerStay(Collider &other);
 
-	void OnTriggerExit(BoxCollider& other);
+	void OnTriggerExit(Collider &other);
 
-	void OnCollisionExit(BoxCollider& other);
-
+	void OnCollisionExit(Collider &other);
 
 	std::string GetName();
 
@@ -97,6 +116,7 @@ public:
 	std::vector<SerializableComponent> GetAllComponentVariables();
 
 	bool DeletePressed();
+
 private:
 	bool isActive;
 

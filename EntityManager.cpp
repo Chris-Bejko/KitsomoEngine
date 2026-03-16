@@ -1,5 +1,5 @@
 #include "EntityManager.h"
-#include "CollisionSystem.h"
+#include "Collision/CollisionSystem.h"
 #include "Components/BoxCollider.h"
 #include "Engine.h"
 #include "Components/Sprite.h"
@@ -152,9 +152,11 @@ void EntityManager::Collisions()
 {
 	if (Engine::get().isEngine)
 		return;
+
 	for (auto &entity : entities)
 	{
-		if (!entity->HasComponent<BoxCollider>())
+		Collider *coll1 = entity->GetComponentOfType<Collider>();
+		if (!coll1)
 			continue;
 
 		for (auto &other : entities)
@@ -162,65 +164,51 @@ void EntityManager::Collisions()
 			if (entity == other)
 				continue;
 
-			if (!other->HasComponent<BoxCollider>())
+			Collider *coll2 = other->GetComponentOfType<Collider>();
+			if (!coll2)
 				continue;
 
-			auto coll1 = &entity->GetComponent<BoxCollider>();
-			auto coll2 = &other->GetComponent<BoxCollider>();
-			if (!&coll1 || !&coll2)
-				return;
-
-			if (CollisionSystem::get().AABB(coll1->GetRect(), coll2->GetRect()))
+			bool hit = CollisionSystem::get().CheckCollision(coll1, coll2);
+			if (hit)
 			{
-
-				////std::cout << coll1.GetCollisionTag() << " , " << coll2.GetCollisionTag() << std::endl;
-				if (CollisionSystem::get().ActiveCollision(coll1->GetCollisionTag(), coll2->GetCollisionTag()))
+				bool alreadyActive = CollisionSystem::get().ActiveCollision(coll1, coll2);
+				LOG_DEBUG("Hit! active: ", alreadyActive,
+						  " tag-: ", coll1->GetCollisionTag().c_str(),
+						  "  tag--: ", coll2->GetCollisionTag().c_str());
+				if (CollisionSystem::get().ActiveCollision(coll1, coll2))
 				{
-
 					coll1->entity->OnTriggerStay(*coll2);
 					coll2->entity->OnTriggerStay(*coll1);
-					return;
+					continue;
 				}
 
-				CollisionSystem::get().SetActive(coll1->GetCollisionTag(), coll2->GetCollisionTag());
+				CollisionSystem::get().SetActive(coll1, coll2);
+
 				if (coll1->IsTrigger())
-				{
 					coll1->entity->OnTriggerEnter(*coll2);
-				}
 				else
-				{
 					coll1->entity->OnCollisionEnter(*coll2);
-				}
+
 				if (coll2->IsTrigger())
-				{
 					coll2->entity->OnTriggerEnter(*coll1);
-				}
 				else
-				{
 					coll2->entity->OnCollisionEnter(*coll1);
-				}
 			}
 			else
 			{
-				if (CollisionSystem::get().ActiveCollision(coll1->GetCollisionTag(), coll2->GetCollisionTag()))
+				if (CollisionSystem::get().ActiveCollision(coll1, coll2))
 				{
 					if (coll1->IsTrigger())
-					{
 						coll1->entity->OnTriggerExit(*coll2);
-					}
 					else
-					{
 						coll1->entity->OnCollisionExit(*coll2);
-					}
+
 					if (coll2->IsTrigger())
-					{
 						coll2->entity->OnTriggerExit(*coll1);
-					}
 					else
-					{
 						coll2->entity->OnCollisionExit(*coll1);
-					}
-					CollisionSystem::get().SetInactive(coll1->GetCollisionTag(), coll2->GetCollisionTag());
+
+					CollisionSystem::get().SetInactive(coll1, coll2);
 				}
 			}
 		}

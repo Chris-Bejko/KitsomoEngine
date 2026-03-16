@@ -3,6 +3,7 @@
 #include "../Component.h"
 #include "../Color.h"
 #include "Sprite.h"
+#include "Collision/Collider.h"
 
 class FloorSquare : public Component
 {
@@ -22,16 +23,17 @@ public:
 
 	void updateEngine(float dt) override final;
 
-	std::vector<SerializableVariable>* GetSerializedFields() override final;
+	std::vector<SerializableVariable> *GetSerializedFields() override final;
 
 	Color GetColorEnum();
 
-	void OnTriggerStay(BoxCollider& other) override final;
+	void OnTriggerStay(Collider &other) override final;
+	void OnTriggerEnter(Collider &other) override final;
 
 private:
 	std::vector<SerializableVariable> variables;
 	Color color;
 	std::string colorString;
 
-	Sprite* sprite;
+	Sprite *sprite;
 };

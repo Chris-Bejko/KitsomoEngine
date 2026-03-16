@@ -7,6 +7,8 @@
 #include "Components/FloorSquare.h"
 #include "Components/Bullet.h"
 #include "Components/Rigidbody.h"
+#include "Components/CircleCollider.h"
+#include "Components/BoxCollider.h"
 
 //#include "Components/BoxCollider.h"
 
@@ -71,7 +73,7 @@ void Entity::UpdateEngine(float dt)
 	}
 }
 
-void Entity::OnCollisionEnter(BoxCollider& other)
+void Entity::OnCollisionEnter(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -85,7 +87,7 @@ void Entity::OnCollisionEnter(BoxCollider& other)
 
 }
 
-void Entity::OnTriggerEnter(BoxCollider& other)
+void Entity::OnTriggerEnter(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -99,7 +101,7 @@ void Entity::OnTriggerEnter(BoxCollider& other)
 	}
 }
 
-void Entity::OnTriggerStay(BoxCollider& other)
+void Entity::OnTriggerStay(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -113,7 +115,7 @@ void Entity::OnTriggerStay(BoxCollider& other)
 	}
 }
 
-void Entity::OnTriggerExit(BoxCollider& other)
+void Entity::OnTriggerExit(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -127,7 +129,7 @@ void Entity::OnTriggerExit(BoxCollider& other)
 	}
 }
 
-void Entity::OnCollisionExit(BoxCollider& other)
+void Entity::OnCollisionExit(Collider& other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
@@ -370,6 +372,9 @@ void Entity::DisplayAvailableComponents()
 				}else if(str == "Rigidbody"){
 					if(!this->HasComponent<Rigidbody>())
 						this->AddComponent<Rigidbody>();
+				}else if(str == "CircleCollider"){
+					if(!this->HasComponent<CircleCollider>())
+						this->AddComponent<CircleCollider>();
 				}
 			}
 		}

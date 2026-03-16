@@ -16,6 +16,8 @@
 #include "Logger.h"
 #include "Components/Bullet.h"
 #include "Components/Rigidbody.h"
+#include "Components/CircleCollider.h"
+#include "Components/BoxCollider.h"
 
 Engine *Engine::s_instance = nullptr;
 
@@ -435,6 +437,12 @@ void Engine::RegisterComponents()
 		else
 			e->GetComponent<Rigidbody>().InitSerializedFields(fields);
 	};
+	componentRegistry["CircleCollider"] = [](Entity* e, ReadableSerializableVariableMap fields) {
+    if (!e->HasComponent<CircleCollider>())
+        e->AddComponent<CircleCollider>().InitSerializedFields(fields);
+    else
+        e->GetComponent<CircleCollider>().InitSerializedFields(fields);
+};
 }
 
 std::string Engine::GetSubstring(std::string &line, std::string &delStart, std::string &delEnd, bool erase = false)

@@ -11,6 +11,7 @@ add_compile_definitions(NOMINMAX WIN32_LEAN_AND_MEAN)
 
 # Source files in root
 file(GLOB SOURCES "*.cpp")
+file(GLOB COLLISION_SOURCES "Collision/*.cpp")
 
 # Components folder
 file(GLOB COMPONENTS_SOURCES "Components/*.cpp")
@@ -26,6 +27,7 @@ set(IMGUI_SOURCES
 
 add_executable(ECSEngine
     ${SOURCES}
+    ${COLLISION_SOURCES}
     ${COMPONENTS_SOURCES}
     ${IMGUI_SOURCES}
 )
@@ -35,6 +37,7 @@ target_include_directories(ECSEngine PRIVATE
     .
     imgui/
     include/
+    Collision/  
 )
 
 # SFML

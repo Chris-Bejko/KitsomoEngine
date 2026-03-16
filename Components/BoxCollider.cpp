@@ -1,6 +1,7 @@
 #include "BoxCollider.h"
 #include "../Engine.h"
 #include "Sprite.h"
+#include "../Collision/CollisionSystem.h"
 BoxCollider::BoxCollider()
 {
 	configuredHitbox = true;
@@ -285,4 +286,30 @@ void BoxCollider::DrawEditorButton()
             editMode = true;
         ImGui::PopStyleColor();
     }
+}
+
+bool BoxCollider::Intersects(Collider& other)
+{
+    if (other.GetType() == ColliderType::Box)
+        return CollisionSystem::get().AABB(GetBounds(), other.GetBounds());
+    
+    if (other.GetType() == ColliderType::Circle)
+        return CollisionSystem::get().AABBvsCircle(
+            GetBounds(), 
+            other.GetBounds().getPosition() + sf::Vector2f(other.GetBounds().width / 2.f, other.GetBounds().height / 2.f),
+            other.GetBounds().width / 2.f
+        );
+
+    return false;
+}
+
+sf::FloatRect BoxCollider::GetBounds()
+{
+    return GetRect();
+}
+
+void BoxCollider::DrawDebug()
+{
+    colliderVisual.setRotation(entity->transform->rotation);
+    Engine::get().GetWindow().draw(colliderVisual);
 }

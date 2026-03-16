@@ -4,8 +4,9 @@
 #include <vector>
 #include "../Component.h"
 #include <SFML/Graphics.hpp>
+#include "../Collision/Collider.h"
 
-class BoxCollider : public Component
+class BoxCollider : public Collider
 {
 public:
 	BoxCollider();
@@ -17,6 +18,11 @@ public:
 	virtual ~BoxCollider() = default;
 
 	bool Init() override;
+
+    bool Intersects(Collider& other) override;
+    sf::FloatRect GetBounds() override;
+    void DrawDebug() override;
+    ColliderType GetType() override { return ColliderType::Box; }
 
 	void Serialize();
 
@@ -34,22 +40,14 @@ public:
 
 	sf::FloatRect GetRect();
 
-	inline bool IsTrigger()
-	{
-		return isTrigger;
-	}
 	void DrawEditorButton() override;
-	bool IsInEditMode() { return editMode; }
 
 private:
 	std::vector<SerializableVariable> serializables;
 	friend class Collision;
 	float offset_x, offset_y;
-	std::string collisionTag;
 	sf::FloatRect hitbox;
 	bool configuredHitbox;
-	bool isTrigger;
-
 	sf::RectangleShape colliderVisual;
 	bool editMode = false;
 	enum class DragHandle
