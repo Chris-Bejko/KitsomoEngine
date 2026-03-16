@@ -1,6 +1,10 @@
 #include "imguiHandler.h"
 #include "Logger.h"
-#include "SceneManager.h"	
+#include "SceneManager.h"
+#include "Commands/DeleteEntityCommand.h"
+#include "Commands/CopyEntityCommand.h"
+#include "Commands/PasteEntityCommand.h"
+#include "Commands/DuplicateEntityCommand.h"
 
 ImguiHandler *ImguiHandler::s_instance = nullptr;
 
@@ -69,13 +73,16 @@ void ImguiHandler::Update(sf::Time rest)
 	DrawStatusWindow();
 	DrawConsole();
 	DrawInspector();
-	DrawScenePanel();
 	DrawEntities();
 
+	if(Engine::get().GetCurrentState() == EngineState::Running)
+		DrawScenePanel();
 	if (savePressed)
 		DrawSaveDialog();
 	if (loadPressed)
 		DrawLoadDialog();
+	if (showDeleteDialog)
+		DrawDeleteConfirmDialog();
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
 		sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !savePressed)
@@ -83,6 +90,12 @@ void ImguiHandler::Update(sf::Time rest)
 		str = "saveFile.txt";
 		str.resize(255, '\0');
 		savePressed = true;
+	}
+
+	// Handle entity keyboard shortcuts only in editor mode
+	if (Engine::get().GetCurrentState() == EngineState::Running)
+	{
+		HandleEntityKeyboardShortcuts();
 	}
 }
 
@@ -199,6 +212,62 @@ void ImguiHandler::DrawInspector()
 	}
 
 	Engine::get().GetManager()->DisplayComponents();
+
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
+
+	// Entity operations
+	ImGui::TextColored(COLOR_TEXT_DIM, "ENTITY OPERATIONS");
+	ImGui::Spacing();
+
+	// Copy button (Ctrl+C)
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.35f, 0.55f, 1.0f));
+	if (ImGui::Button("  Copy (Ctrl+C)", ImVec2(-1, 24)))
+		OnCopyEntity();
+	ImGui::PopStyleColor(2);
+
+	// Paste button (Ctrl+V) - only if clipboard has content
+	ImGui::PushStyleColor(ImGuiCol_Button, EntityClipboard::get().HasContent() ? ImVec4(0.18f, 0.22f, 0.35f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, EntityClipboard::get().HasContent() ? ImVec4(0.25f, 0.35f, 0.55f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
+	if (ImGui::Button("  Paste (Ctrl+V)", ImVec2(-1, 24)) && EntityClipboard::get().HasContent())
+		OnPasteEntity();
+	ImGui::PopStyleColor(2);
+
+	// Duplicate button (Ctrl+D)
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.35f, 0.55f, 1.0f));
+	if (ImGui::Button("  Duplicate (Ctrl+D)", ImVec2(-1, 24)))
+		OnDuplicateEntity();
+	ImGui::PopStyleColor(2);
+
+	// Delete button (Delete key)
+	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.85f, 0.28f, 0.28f, 1.0f));
+	if (ImGui::Button("  Delete (Delete)", ImVec2(-1, 24)))
+		OnDeleteEntity();
+	ImGui::PopStyleColor(2);
+
+	ImGui::Spacing();
+	ImGui::Separator();
+	ImGui::Spacing();
+
+	// Undo/Redo info
+	ImGui::TextColored(COLOR_TEXT_DIM, "UNDO/REDO");
+	ImGui::Spacing();
+
+	ImGui::PushStyleColor(ImGuiCol_Button, CommandHistory::get().CanUndo() ? ImVec4(0.18f, 0.22f, 0.35f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, CommandHistory::get().CanUndo() ? ImVec4(0.25f, 0.35f, 0.55f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
+	if (ImGui::Button("  Undo (Ctrl+Z)", ImVec2(-1, 24)) && CommandHistory::get().CanUndo())
+		OnUndo();
+	ImGui::PopStyleColor(2);
+
+	ImGui::PushStyleColor(ImGuiCol_Button, CommandHistory::get().CanRedo() ? ImVec4(0.18f, 0.22f, 0.35f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, CommandHistory::get().CanRedo() ? ImVec4(0.25f, 0.35f, 0.55f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
+	if (ImGui::Button("  Redo (Ctrl+Y)", ImVec2(-1, 24)) && CommandHistory::get().CanRedo())
+		OnRedo();
+	ImGui::PopStyleColor(2);
 
 	ImGui::Spacing();
 	ImGui::Separator();
@@ -518,4 +587,163 @@ void ImguiHandler::DrawScenePanel()
     }
 
     ImGui::End();
+}
+
+void ImguiHandler::HandleEntityKeyboardShortcuts()
+{
+	if (ImGui::GetIO().WantCaptureKeyboard)
+		return; // Don't handle shortcuts if imgui wants keyboard focus
+
+	bool ctrlDown = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) || sf::Keyboard::isKeyPressed(sf::Keyboard::RControl);
+
+	auto selected = Engine::get().GetManager()->GetSelectedEntity();
+
+	// Ctrl+C: Copy - only on key press transition
+	bool currentCtrlC = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::C);
+	if (currentCtrlC && !prevCtrlC && selected != nullptr)
+	{
+		OnCopyEntity();
+		Notify("Entity copied to clipboard", COLOR_SUCCESS);
+	}
+	prevCtrlC = currentCtrlC;
+
+	// Ctrl+V: Paste - only on key press transition
+	bool currentCtrlV = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::V);
+	if (currentCtrlV && !prevCtrlV && EntityClipboard::get().HasContent())
+	{
+		OnPasteEntity();
+		Notify("Entity pasted", COLOR_SUCCESS);
+	}
+	prevCtrlV = currentCtrlV;
+
+	// Ctrl+D: Duplicate - only on key press transition
+	bool currentCtrlD = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::D);
+	if (currentCtrlD && !prevCtrlD && selected != nullptr)
+	{
+		OnDuplicateEntity();
+		Notify("Entity duplicated", COLOR_SUCCESS);
+	}
+	prevCtrlD = currentCtrlD;
+
+	// Delete: Show delete dialog - only on key press transition
+	bool currentDelete = sf::Keyboard::isKeyPressed(sf::Keyboard::Delete);
+	if (currentDelete && !prevDelete && selected != nullptr)
+	{
+		OnDeleteEntity();
+	}
+	prevDelete = currentDelete;
+
+	// Ctrl+Z: Undo - only on key press transition
+	bool currentCtrlZ = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
+	if (currentCtrlZ && !prevCtrlZ)
+	{
+		OnUndo();
+		Notify("Undo: " + CommandHistory::get().GetUndoDescription(), COLOR_ACCENT);
+	}
+	prevCtrlZ = currentCtrlZ;
+
+	// Ctrl+Y: Redo - only on key press transition
+	bool currentCtrlY = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Y);
+	if (currentCtrlY && !prevCtrlY)
+	{
+		OnRedo();
+		Notify("Redo: " + CommandHistory::get().GetRedoDescription(), COLOR_ACCENT);
+	}
+	prevCtrlY = currentCtrlY;
+}
+
+void ImguiHandler::DrawDeleteConfirmDialog()
+{
+	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
+	ImGui::Begin("Delete Entity", &showDeleteDialog, ImGuiWindowFlags_AlwaysAutoResize);
+
+	if (entityToDelete)
+	{
+		ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), "Delete entity:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), entityToDelete->GetName().c_str());
+		ImGui::Text("This action cannot be undone.");
+		ImGui::Spacing();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.95f, 0.38f, 0.38f, 1.0f));
+		if (ImGui::Button("Delete", ImVec2(140, 28)))
+		{
+			// Create and execute the delete command
+			auto deleteCmd = std::make_unique<DeleteEntityCommand>(entityToDelete);
+			CommandHistory::get().Execute(std::move(deleteCmd));
+			Notify("Entity deleted", COLOR_DANGER);
+			showDeleteDialog = false;
+			entityToDelete = nullptr;
+		}
+		ImGui::PopStyleColor(2);
+
+		ImGui::SameLine();
+
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
+		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.35f, 0.55f, 1.0f));
+		if (ImGui::Button("Cancel", ImVec2(140, 28)))
+		{
+			showDeleteDialog = false;
+			entityToDelete = nullptr;
+		}
+		ImGui::PopStyleColor(2);
+	}
+
+	ImGui::End();
+}
+
+void ImguiHandler::OnDeleteEntity()
+{
+	auto selected = Engine::get().GetManager()->GetSelectedEntity();
+	if (selected != nullptr)
+	{
+		entityToDelete = selected;
+		showDeleteDialog = true;
+	}
+}
+
+void ImguiHandler::OnCopyEntity()
+{
+	auto selected = Engine::get().GetManager()->GetSelectedEntity();
+	if (selected != nullptr)
+	{
+		auto copyCmd = std::make_unique<CopyEntityCommand>(selected);
+		CommandHistory::get().Execute(std::move(copyCmd));
+	}
+}
+
+void ImguiHandler::OnPasteEntity()
+{
+	if (EntityClipboard::get().HasContent())
+	{
+		auto pasteCmd = std::make_unique<PasteEntityCommand>(10.0f, 0.0f);
+		CommandHistory::get().Execute(std::move(pasteCmd));
+	}
+}
+
+void ImguiHandler::OnDuplicateEntity()
+{
+	auto selected = Engine::get().GetManager()->GetSelectedEntity();
+	if (selected != nullptr)
+	{
+		auto dupCmd = std::make_unique<DuplicateEntityCommand>(selected, 10.0f, 0.0f);
+		CommandHistory::get().Execute(std::move(dupCmd));
+	}
+}
+
+void ImguiHandler::OnUndo()
+{
+	if (CommandHistory::get().CanUndo())
+	{
+		CommandHistory::get().Undo();
+	}
+}
+
+void ImguiHandler::OnRedo()
+{
+	if (CommandHistory::get().CanRedo())
+	{
+		CommandHistory::get().Redo();
+	}
 }

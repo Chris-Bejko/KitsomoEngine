@@ -192,14 +192,22 @@ void Player::OnTriggerEnter(Collider &other)
 	LOG_DEBUG("Player triggered with something", other.GetCollisionTag().c_str());
 	if (other.entity->HasComponent<FloorSquare>())
 	{
-			if(entity->HasComponent<AudioSource>())
+
+		Color otherColor = other.entity->GetComponent<FloorSquare>().GetColorEnum();
+		if (otherColor.SerializeColor() == lastColorString)
+		{
+			LOG_DEBUG("Player triggered with floor square of the same color, no color change");
+			return;
+		}
+		if(entity->HasComponent<AudioSource>())
 		{
 			auto& audio = entity->GetComponent<AudioSource>();	
 			audio.LoadAudio(floorTouchSound);
 			audio.Play();
 		}
-		lastColor = other.entity->GetComponent<FloorSquare>().GetColorEnum();
+		lastColor = otherColor;
 		lastColorString = lastColor.SerializeColor();
+		
 		LOG_DEBUG("Player triggered with FloorSquare, changing color to match the floor square's color: ", lastColor.SerializeColor());
 		// entity->GetComponent<Sprite>().SetColor(lastColor);
 	}

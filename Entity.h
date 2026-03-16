@@ -123,6 +123,11 @@ public:
 	// Check if a component type allows multiple instances
 	static bool ComponentAllowsMultiple(const std::string& componentName);
 
+	// Initialize all components with their serialized field data
+	void InitializeComponentFields(const std::vector<SerializableComponent>& serializedComps);
+
+	const std::vector<std::unique_ptr<Component>> &GetComponents() { return components; }
+
 private:
 	bool isActive;
 

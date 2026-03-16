@@ -11,8 +11,8 @@
 #include "Components/BoxCollider.h"
 #include "Components/PolygonCollider.h"
 #include "Components/AudioSource.h"
-
-//#include "Components/BoxCollider.h"
+#include "Logger.h"
+// #include "Components/BoxCollider.h"
 
 Entity::Entity(std::string name)
 {
@@ -36,7 +36,7 @@ void Entity::Destroy()
 void Entity::Awake()
 {
 	ValidateAddedComponents();
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		comp->Awake();
 	}
@@ -52,7 +52,7 @@ void Entity::ValidateAddedComponents()
 }
 void Entity::Draw()
 {
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		comp->draw();
 	}
@@ -61,7 +61,7 @@ void Entity::Draw()
 void Entity::Update(float dt)
 {
 	ValidateAddedComponents();
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		comp->update(dt);
 	}
@@ -70,33 +70,32 @@ void Entity::Update(float dt)
 void Entity::UpdateEngine(float dt)
 {
 	ValidateAddedComponents();
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		comp->updateEngine(dt);
 	}
 }
 
-void Entity::OnCollisionEnter(Collider& other)
+void Entity::OnCollisionEnter(Collider &other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		if (!comp || !&other)
 			continue;
 		comp->OnCollisionEnter(other);
 	}
-
 }
 
-void Entity::OnTriggerEnter(Collider& other)
+void Entity::OnTriggerEnter(Collider &other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		if (!comp || !&other)
 			continue;
@@ -104,13 +103,13 @@ void Entity::OnTriggerEnter(Collider& other)
 	}
 }
 
-void Entity::OnTriggerStay(Collider& other)
+void Entity::OnTriggerStay(Collider &other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		if (!comp || !&other)
 			continue;
@@ -118,13 +117,13 @@ void Entity::OnTriggerStay(Collider& other)
 	}
 }
 
-void Entity::OnTriggerExit(Collider& other)
+void Entity::OnTriggerExit(Collider &other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		if (!comp || !&other)
 			continue;
@@ -132,13 +131,13 @@ void Entity::OnTriggerExit(Collider& other)
 	}
 }
 
-void Entity::OnCollisionExit(Collider& other)
+void Entity::OnCollisionExit(Collider &other)
 {
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
 
-	for (auto& comp : components)
+	for (auto &comp : components)
 	{
 		if (!comp || !&other)
 			continue;
@@ -150,7 +149,8 @@ std::string Entity::GetName()
 {
 	if (entityName.empty())
 		return "##";
-	return entityName;	return std::string();
+	return entityName;
+	return std::string();
 }
 
 void Entity::SetName(std::string name)
@@ -164,202 +164,203 @@ void Entity::SetName(std::string name)
 void Entity::SaveAvailableComponents()
 {
 	std::string path = "Components/";
-	for (const auto& entry : std::filesystem::directory_iterator(path))
+	for (const auto &entry : std::filesystem::directory_iterator(path))
 	{
-		std::string path_string{ entry.path().u8string() };
+		std::string path_string{entry.path().u8string()};
 		availableComponents.push_back(path_string);
 	}
 }
 
 void Entity::DisplayComponents()
 {
-    if (!displayComponents)
-        return;
+	if (!displayComponents)
+		return;
 
-    // Delete entity button
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
-    if (ImGui::Button("-Delete Entity", ImVec2(-1, 0)))
-        deletePressed = true;
-    ImGui::PopStyleColor();
+	// Delete entity button
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+	if (ImGui::Button("-Delete Entity", ImVec2(-1, 0)))
+		deletePressed = true;
+	ImGui::PopStyleColor();
 
-    if (deletePressed)
-    {
-        std::string warning = "Delete Entity: " + this->GetName() + " ?";
-        char* warningChar = &warning[0];
-        ImGui::OpenPopup(warningChar);
-        if (ImGui::BeginPopupModal(warningChar))
-        {
-            ImGui::Text("This action cannot be undone.");
-            ImGui::Separator();
-            if (ImGui::Button("Cancel", ImVec2(120, 0)))
-                deletePressed = false;
-            ImGui::SameLine();
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
-            if (ImGui::Button("Confirm", ImVec2(120, 0)))
-            {
-                Engine::get().RemoveEntity(this);
-                deletePressed = false;
-            }
-            ImGui::PopStyleColor();
-            ImGui::EndPopup();
-        }
-    }
+	if (deletePressed)
+	{
+		std::string warning = "Delete Entity: " + this->GetName() + " ?";
+		char *warningChar = &warning[0];
+		ImGui::OpenPopup(warningChar);
+		if (ImGui::BeginPopupModal(warningChar))
+		{
+			ImGui::Text("This action cannot be undone.");
+			ImGui::Separator();
+			if (ImGui::Button("Cancel", ImVec2(120, 0)))
+				deletePressed = false;
+			ImGui::SameLine();
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+			if (ImGui::Button("Confirm", ImVec2(120, 0)))
+			{
+				Engine::get().RemoveEntity(this);
+				deletePressed = false;
+			}
+			ImGui::PopStyleColor();
+			ImGui::EndPopup();
+		}
+	}
 
-    ImGui::Separator();
+	ImGui::Separator();
 
-    // Entity name
-    auto windowWidth = ImGui::GetWindowSize().x;
-    auto textWidth = ImGui::CalcTextSize("Name").x;
-    ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-    auto temp = GetName();
-    temp.resize(55, '\0');
-    ImGui::InputText("##name", &temp[0], 55);
-    SetName(std::string(temp.c_str()));
+	// Entity name
+	auto windowWidth = ImGui::GetWindowSize().x;
+	auto textWidth = ImGui::CalcTextSize("Name").x;
+	ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+	auto temp = GetName();
+	temp.resize(55, '\0');
+	ImGui::InputText("##name", &temp[0], 55);
+	SetName(std::string(temp.c_str()));
 
-    ImGui::Separator();
+	ImGui::Separator();
 
-    // Add component button
-    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.4f, 0.1f, 1.0f));
-    if (ImGui::Button("+ Add Component", ImVec2(-1, 0)))
-        addingNewComp = !addingNewComp;
-    ImGui::PopStyleColor();
+	// Add component button
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.4f, 0.1f, 1.0f));
+	if (ImGui::Button("+ Add Component", ImVec2(-1, 0)))
+		addingNewComp = !addingNewComp;
+	ImGui::PopStyleColor();
 
-    if (addingNewComp)
-        DisplayAvailableComponents();
+	if (addingNewComp)
+		DisplayAvailableComponents();
 
-    ImGui::Separator();
-    ValidateAddedComponents();
+	ImGui::Separator();
+	ValidateAddedComponents();
 
-    // Component to remove (deferred to avoid modifying list while iterating)
-    Component* toRemove = nullptr;
+	// Component to remove (deferred to avoid modifying list while iterating)
+	Component *toRemove = nullptr;
 
-    // Track component type counts for duplicate handling
-    std::map<std::string, int> componentTypeCount;
+	// Track component type counts for duplicate handling
+	std::map<std::string, int> componentTypeCount;
 
-    for (auto& e : components)
-    {
-        std::string str(typeid(*e).name());
-        str = std::regex_replace(str, std::regex("class "), "");
-        if (e->GetSerializedFields() == nullptr)
-            continue;
+	for (auto &e : components)
+	{
+		std::string str(typeid(*e).name());
+		str = std::regex_replace(str, std::regex("class "), "");
+		if (e->GetSerializedFields() == nullptr)
+			continue;
 
-        // Increment count for this component type
-        int componentIndex = componentTypeCount[str]++;
+		// Increment count for this component type
+		int componentIndex = componentTypeCount[str]++;
 
-        // Create unique ID for ImGui (append index if multiple of same type exist)
-        std::string uniqueId = str;
-        if (componentIndex > 0)
-            uniqueId += " (" + std::to_string(componentIndex + 1) + ")";
+		// Create unique ID for ImGui (append index if multiple of same type exist)
+		std::string uniqueId = str;
+		if (componentIndex > 0)
+			uniqueId += " (" + std::to_string(componentIndex + 1) + ")";
 
-        // Component header
-        ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
-        ImGui::BeginChild((uniqueId + "##child").c_str(), ImVec2(0, 0), true);
+		// Component header
+		ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.15f, 0.15f, 0.15f, 1.0f));
+		ImGui::BeginChild((uniqueId + "##child").c_str(), ImVec2(0, 0), true);
 
-        // Component name centered
-        auto windowWidth = ImGui::GetWindowSize().x;
-        auto textWidth = ImGui::CalcTextSize(uniqueId.c_str()).x;
-        ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
-        ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), uniqueId.c_str());
+		// Component name centered
+		auto windowWidth = ImGui::GetWindowSize().x;
+		auto textWidth = ImGui::CalcTextSize(uniqueId.c_str()).x;
+		ImGui::SetCursorPosX((windowWidth - textWidth) * 0.5f);
+		ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), uniqueId.c_str());
 
-        // Remove button (skip Transform, it's required)
-        if (str != "Transform")
-        {
-            ImGui::SameLine();
-            ImGui::SetCursorPosX(windowWidth - 60);
-            std::string removeLabel = "X##remove_" + uniqueId;
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
-            if (ImGui::Button(removeLabel.c_str(), ImVec2(50, 0)))
-                toRemove = e.get();
-            ImGui::PopStyleColor();
-        }
+		// Remove button (skip Transform, it's required)
+		if (str != "Transform")
+		{
+			ImGui::SameLine();
+			ImGui::SetCursorPosX(windowWidth - 60);
+			std::string removeLabel = "X##remove_" + uniqueId;
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+			if (ImGui::Button(removeLabel.c_str(), ImVec2(50, 0)))
+				toRemove = e.get();
+			ImGui::PopStyleColor();
+		}
 
-        ImGui::Separator();
+		ImGui::Separator();
 
-        // Fields
-        for (auto it = e->GetSerializedFields()->begin(); it != e->GetSerializedFields()->end(); ++it)
-        {
-            ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), it->name);
-            std::string fieldId = std::string(it->name) + "##" + uniqueId;
-            switch (it->type)
-            {
-            case int_Type:
-            {
-                auto p = reinterpret_cast<int*>(it->data);
-                int temp(*p);
-                ImGui::InputInt(fieldId.c_str(), &temp);
-                *p = temp;
-                break;
-            }
-            case float_Type:
-            {
-                auto p = reinterpret_cast<float*>(it->data);
-                float temp(*p);
-                ImGui::InputFloat(fieldId.c_str(), &temp);
-                *p = temp;
-                break;
-            }
-            case char_Type:
-            {
-                auto p = reinterpret_cast<std::string*>(it->data);
-                std::string str(*p);
-                str.resize(200, '\0');
-                ImGui::InputText(fieldId.c_str(), &str[0], 200);
-                *p = std::string(str.c_str());
-                break;
-            }
-            case bool_Type:
-            {
-                auto p = reinterpret_cast<bool*>(it->data);
-                bool b(*p);
-                ImGui::Checkbox(fieldId.c_str(), &b);
-                *p = b;
-                break;
-            }
-            default:
-                assert(0);
-            }
-        }
+		// Fields
+		for (auto it = e->GetSerializedFields()->begin(); it != e->GetSerializedFields()->end(); ++it)
+		{
+			ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), it->name);
+			std::string fieldId = std::string(it->name) + "##" + uniqueId;
+			switch (it->type)
+			{
+			case int_Type:
+			{
+				auto p = reinterpret_cast<int *>(it->data);
+				int temp(*p);
+				ImGui::InputInt(fieldId.c_str(), &temp);
+				*p = temp;
+				break;
+			}
+			case float_Type:
+			{
+				auto p = reinterpret_cast<float *>(it->data);
+				float temp(*p);
+				ImGui::InputFloat(fieldId.c_str(), &temp);
+				*p = temp;
+				break;
+			}
+			case char_Type:
+			{
+				auto p = reinterpret_cast<std::string *>(it->data);
+				std::string str(*p);
+				str.resize(200, '\0');
+				ImGui::InputText(fieldId.c_str(), &str[0], 200);
+				*p = std::string(str.c_str());
+				break;
+			}
+			case bool_Type:
+			{
+				auto p = reinterpret_cast<bool *>(it->data);
+				bool b(*p);
+				ImGui::Checkbox(fieldId.c_str(), &b);
+				*p = b;
+				break;
+			}
+			default:
+				assert(0);
+			}
+		}
 		e->DrawEditorButton();
-        ImGui::EndChild();
-        ImGui::PopStyleColor();
-        ImGui::Spacing();
-    }
+		ImGui::EndChild();
+		ImGui::PopStyleColor();
+		ImGui::Spacing();
+	}
 
-    // Remove component after iteration
-    if (toRemove != nullptr)
-        RemoveComponent(toRemove);
+	// Remove component after iteration
+	if (toRemove != nullptr)
+		RemoveComponent(toRemove);
 }
-void Entity::RemoveComponent(Component* comp)
+void Entity::RemoveComponent(Component *comp)
 {
-    for (size_t i = 0; i < componentsList.size(); i++)
-    {
-        if (componentsList[i] == comp)
-        {
-            componentsList[i] = nullptr;
-            componentsBitset[i] = false;
-            break;
-        }
-    }
+	for (size_t i = 0; i < componentsList.size(); i++)
+	{
+		if (componentsList[i] == comp)
+		{
+			componentsList[i] = nullptr;
+			componentsBitset[i] = false;
+			break;
+		}
+	}
 
-    components.erase(
-        std::remove_if(components.begin(), components.end(),
-            [comp](const std::unique_ptr<Component>& c) {
-                return c.get() == comp;
-            }),
-        components.end()
-    );
+	components.erase(
+		std::remove_if(components.begin(), components.end(),
+					   [comp](const std::unique_ptr<Component> &c)
+					   {
+						   return c.get() == comp;
+					   }),
+		components.end());
 }
 void Entity::DisplayAvailableComponents()
 {
 	if (addingNewComp)
 	{
 		ImGui::BeginChild("Add Component");
-		for (auto& comp : availableComponents)
+		for (auto &comp : availableComponents)
 		{
 			std::string str(comp);
 			str = std::regex_replace(str, std::regex("Components/"), "");
 			str = std::regex_replace(str, std::regex(".h"), "");
-			if (str.find(".cpp") != std::string::npos) {
+			if (str.find(".cpp") != std::string::npos)
+			{
 				continue;
 			}
 			auto temp = str.c_str();
@@ -374,18 +375,18 @@ void Entity::DisplayAvailableComponents()
 }
 
 // Component factory - create and add component by name
-void Entity::AddComponentByName(const std::string& componentName)
+void Entity::AddComponentByName(const std::string &componentName)
 {
 	// For single-instance components, check if already exists
 	bool allowsMultiple = ComponentAllowsMultiple(componentName);
 	if (!allowsMultiple)
 	{
-		for (auto& comp : components)
+		for (auto &comp : components)
 		{
 			std::string str(typeid(*comp).name());
 			str = std::regex_replace(str, std::regex("class "), "");
 			if (str == componentName)
-				return;  // Already exists, don't add again
+				return; // Already exists, don't add again
 		}
 	}
 
@@ -407,16 +408,16 @@ void Entity::AddComponentByName(const std::string& componentName)
 		this->AddComponent<CircleCollider>();
 	else if (componentName == "PolygonCollider")
 		this->AddComponent<PolygonCollider>();
-	else if( componentName == "AudioSource")
+	else if (componentName == "AudioSource")
 		this->AddComponent<AudioSource>();
 }
 
 // Static metadata map defining which components allow multiple instances
-bool Entity::ComponentAllowsMultiple(const std::string& componentName)
+bool Entity::ComponentAllowsMultiple(const std::string &componentName)
 {
 	// Colliders allow multiple instances
-	if (componentName == "BoxCollider" || 
-		componentName == "CircleCollider" || 
+	if (componentName == "BoxCollider" ||
+		componentName == "CircleCollider" ||
 		componentName == "PolygonCollider")
 		return true;
 
@@ -427,7 +428,7 @@ bool Entity::ComponentAllowsMultiple(const std::string& componentName)
 std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 {
 	std::vector<SerializableComponent> variables;
-	for (auto& c : components)
+	for (auto &c : components)
 	{
 		if (c->GetSerializedFields() != nullptr)
 		{
@@ -436,15 +437,69 @@ std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 			str = std::regex_replace(str, std::regex("class "), "");
 			ser.componentName = str;
 			ser.variables = *c->GetSerializedFields();
+
+			// Also build the fields map from variables
+			for (const auto &var : ser.variables)
+			{
+				if (var.name && var.data)
+				{
+					switch (var.type)
+					{
+					case int_Type:
+						ser.fields.intFields[var.name] = *(int *)var.data;
+						break;
+					case float_Type:
+						ser.fields.floatFields[var.name] = *(float *)var.data;
+						break;
+					case char_Type:
+						ser.fields.stringFields[var.name] = *reinterpret_cast<std::string *>(var.data);	
+						break;
+					case bool_Type:
+						ser.fields.boolFields[var.name] = *(bool *)var.data;
+						break;
+					}
+				}
+			}
+
 			variables.push_back(ser);
 		}
 	}
 	return variables;
 }
 
+void Entity::InitializeComponentFields(const std::vector<SerializableComponent> &serializedComps)
+{
+	ValidateAddedComponents();
+
+	// Match components by type name to handle any order differences
+	for (const auto &serialComp : serializedComps)
+	{
+		LOG_DEBUG("Initializing component: ", serialComp.componentName.c_str());
+		LOG_DEBUG("  float fields count: ", serialComp.fields.floatFields.size());
+		for (auto const &[key, value] : serialComp.fields.floatFields)
+			LOG_DEBUG("  float field: ", key.c_str(), " = ", value);
+		// Find the component in this entity that matches the serialized component's type
+		for (auto &comp : components)
+		{
+			if (comp)
+			{
+				// Get the type name of the component
+				std::string compTypeName(typeid(*comp).name());
+				compTypeName = std::regex_replace(compTypeName, std::regex("class "), "");
+
+				// If names match, initialize this component with the serialized fields
+				if (compTypeName == serialComp.componentName)
+				{
+					comp->InitSerializedFields(serialComp.fields);
+					break; // Found and initialized, move to next serialized component
+				}
+			}
+		}
+	}
+	ValidateAddedComponents();
+}
+
 bool Entity::DeletePressed()
 {
 	return deletePressed;
 }
-
-

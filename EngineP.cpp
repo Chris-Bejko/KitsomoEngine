@@ -364,34 +364,34 @@ bool Engine::LoadPrefab(std::string prefabName)
 	return true;
 }
 
-Entity* Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
+Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 {
-    std::string path = "prefabs/" + prefabName + ".prefab";
-    auto entities = ParseFile(path);
-    if (entities.empty())
-    {
-        LOG_WARNING("Prefab not found: ", path.c_str());
-        return nullptr;
-    }
+	std::string path = "prefabs/" + prefabName + ".prefab";
+	auto entities = ParseFile(path);
+	if (entities.empty())
+	{
+		LOG_WARNING("Prefab not found: ", path.c_str());
+		return nullptr;
+	}
 
-    // Only spawn first entity from prefab
-    auto& e = entities[0];
-    e.entityName = manager->GetUniqueName(e.entityName);
-    
-    Entity* ent = new Entity(e.entityName);
-    for (auto& c : e.components)
-    {
+	// Only spawn first entity from prefab
+	auto &e = entities[0];
+	e.entityName = manager->GetUniqueName(e.entityName);
+
+	Entity *ent = new Entity(e.entityName);
+	for (auto &c : e.components)
+	{
 		LOG_DEBUG("Spawning component: ", c.componentName.c_str());
-        auto it = componentRegistry.find(c.componentName);
-        if (it != componentRegistry.end())
-            it->second(ent, c.fields);
-    }
-    
-    // Override position
-    ent->GetComponent<Transform>().position = position;
-    
-    LOG_INFO("Spawned prefab '", prefabName.c_str(), "' at ", position.x, ", ", position.y);
-    return ent;
+		auto it = componentRegistry.find(c.componentName);
+		if (it != componentRegistry.end())
+			it->second(ent, c.fields);
+	}
+
+	// Override position
+	ent->GetComponent<Transform>().position = position;
+
+	LOG_INFO("Spawned prefab '", prefabName.c_str(), "' at ", position.x, ", ", position.y);
+	return ent;
 }
 
 void Engine::RegisterComponents()
@@ -442,23 +442,26 @@ void Engine::RegisterComponents()
 		else
 			e->GetComponent<Rigidbody>().InitSerializedFields(fields);
 	};
-	componentRegistry["CircleCollider"] = [](Entity* e, ReadableSerializableVariableMap fields) {
-    if (!e->HasComponent<CircleCollider>())
-        e->AddComponent<CircleCollider>().InitSerializedFields(fields);
-    else
-        e->GetComponent<CircleCollider>().InitSerializedFields(fields);
-	};	
-	componentRegistry["PolygonCollider"] = [](Entity* e, ReadableSerializableVariableMap fields) {
-    if (!e->HasComponent<PolygonCollider>())
-        e->AddComponent<PolygonCollider>().InitSerializedFields(fields);
-    else
-        e->GetComponent<PolygonCollider>().InitSerializedFields(fields);	
+	componentRegistry["CircleCollider"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<CircleCollider>())
+			e->AddComponent<CircleCollider>().InitSerializedFields(fields);
+		else
+			e->GetComponent<CircleCollider>().InitSerializedFields(fields);
 	};
-	componentRegistry["AudioSource"] = [](Entity* e, ReadableSerializableVariableMap fields) {
-    if (!e->HasComponent<AudioSource>())
-        e->AddComponent<AudioSource>().InitSerializedFields(fields);
-    else
-        e->GetComponent<AudioSource>().InitSerializedFields(fields);	
+	componentRegistry["PolygonCollider"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<PolygonCollider>())
+			e->AddComponent<PolygonCollider>().InitSerializedFields(fields);
+		else
+			e->GetComponent<PolygonCollider>().InitSerializedFields(fields);
+	};
+	componentRegistry["AudioSource"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<AudioSource>())
+			e->AddComponent<AudioSource>().InitSerializedFields(fields);
+		else
+			e->GetComponent<AudioSource>().InitSerializedFields(fields);
 	};
 }
 
@@ -532,14 +535,14 @@ void Engine::Reset()
 	view.setSize(window->getSize().x, window->getSize().y);
 	window->setView(view);
 	isEngine = true;
- 	if(openProject != "")
-    {
-        if(!Load(openProject))
-        {
-            LOG_ERROR("Failed to reload project: ", openProject.c_str());
-        }
-        return;
-    }
+	if (openProject != "")
+	{
+		if (!Load(openProject))
+		{
+			LOG_ERROR("Failed to reload project: ", openProject.c_str());
+		}
+		return;
+	}
 }
 
 void Engine::RemoveEntity(Entity *entity)
@@ -549,8 +552,60 @@ void Engine::RemoveEntity(Entity *entity)
 
 void Engine::UpdateEditorCamera(float dt)
 {
-	float speed = 300.f * dt;
 	sf::View view = window->getView();
+
+	// Cancel focus if user moves manually
+	if (!focusTargetName.empty())
+	{
+		bool userInput = sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
+						 sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
+						 sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
+						 sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
+						 sf::Mouse::isButtonPressed(sf::Mouse::Middle) ||
+						 DraggingEntity();
+
+		if (userInput)
+		{
+			focusTargetName = "";
+		}
+		else
+		{
+			Entity *target = nullptr;
+			for (auto &e : manager->GetEntities())
+			{
+				if (e->GetName() == focusTargetName)
+				{
+					target = e.get();
+					break;
+				}
+			}
+
+			if (target == nullptr)
+			{
+				focusTargetName = ""; // entity not found, cancel focus
+			}
+			else
+			{
+				LOG_DEBUG("Focusing target pos: ", target->transform->position.x, 
+                      ", ", target->transform->position.y);
+				sf::Vector2f targetPos(
+					target->transform->position.x,
+					target->transform->position.y);
+				sf::Vector2f currentCenter = view.getCenter();
+				sf::Vector2f diff = targetPos - currentCenter;
+				float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+
+				if (dist < 1.f)
+					focusTargetName = "";
+				else
+					view.setCenter(currentCenter + diff * focusSpeed * dt);
+
+				window->setView(view);
+				return;
+			}
+		}
+	}
+	float speed = 300.f * dt;
 
 	// Arrow keys always move camera in editor
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -638,7 +693,7 @@ std::vector<SerializableEntity> Engine::ParseFile(const std::string &fileName)
 				delStart = ",";
 				delEnd = ",,";
 				auto fieldValue = GetSubstring(line, delStart, delEnd, false);
-				
+
 				// Find the position of the value end delimiter (,,)
 				size_t valueEndPos = line.find(",,");
 				// Search for field type AFTER the value ends
@@ -690,4 +745,11 @@ void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 		}
 		manager->addEntity(ent);
 	}
+}
+
+void Engine::FocusOnEntity(Entity *entity)
+{
+	focusTargetName = entity->GetName();
+
+	LOG_INFO("Focusing on: ", focusTargetName.c_str());
 }

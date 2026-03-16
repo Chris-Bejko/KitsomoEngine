@@ -17,7 +17,7 @@ public:
 
 	void Serialize();
 
-	void InitSerializedFields(ReadableSerializableVariableMap map);
+	void InitSerializedFields(ReadableSerializableVariableMap map) override final;
 
 	void update(float dt) override final;
 

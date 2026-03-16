@@ -30,7 +30,7 @@ public:
 
 	float GetForce() { return force; }	
 
-	void InitSerializedFields(ReadableSerializableVariableMap map);
+	void InitSerializedFields(ReadableSerializableVariableMap map) override final;
 	std::vector<SerializableVariable>* GetSerializedFields() override final;
 
 	void Serialize();

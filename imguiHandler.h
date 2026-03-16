@@ -3,6 +3,8 @@
 #include "imgui-sfml.h"
 #include "Engine.h"
 #include <deque>
+#include "Commands/CommandHistory.h"
+#include "Commands/EntityClipboard.h"
 
 struct Notification
 {
@@ -63,8 +65,28 @@ private:
 
     void DrawStatusWindow();
     void DrawConsole();
+    void DrawDeleteConfirmDialog();
+    void HandleEntityKeyboardShortcuts();
+    void OnDeleteEntity();
+    void OnCopyEntity();
+    void OnPasteEntity();
+    void OnDuplicateEntity();
+    void OnUndo();
+    void OnRedo();
+    
     std::deque<Notification> notifications;
 
     std::deque<std::pair<std::string, ImVec4>> consoleLogs;
     bool loadError = false;
+    
+    bool showDeleteDialog = false;
+    Entity* entityToDelete = nullptr;
+    
+    // Keyboard state tracking for single-key-press detection
+    bool prevCtrlC = false;
+    bool prevCtrlV = false;
+    bool prevCtrlD = false;
+    bool prevDelete = false;
+    bool prevCtrlZ = false;
+    bool prevCtrlY = false;
 };

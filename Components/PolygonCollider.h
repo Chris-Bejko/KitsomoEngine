@@ -22,7 +22,7 @@ public:
     std::vector<sf::Vector2f> &GetLocalVertices() { return vertices; }
 
     void Serialize() override;
-    void InitSerializedFields(ReadableSerializableVariableMap map) override;
+    void InitSerializedFields(ReadableSerializableVariableMap map) override final;
     void DrawEditorButton() override;
 
 private:

@@ -100,6 +100,10 @@ void EntityManager::RemoveActiveCollision(std::vector<std::string> it)
 
 void EntityManager::DisplayEntities()
 {
+	static float lastClickTime = 0.f;
+	static Entity *lastClickedEntity = nullptr;
+	const float doubleClickThreshold = 0.3f;
+
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 6));
 
 	for (auto &e : entities)
@@ -119,6 +123,19 @@ void EntityManager::DisplayEntities()
 				a->displayComponents = false;
 			}
 			selectedEntity = e->displayComponents ? e.get() : nullptr;
+
+			// Double click detection
+			float currentTime = ImGui::GetTime();
+			if (lastClickedEntity == e.get() &&
+				(currentTime - lastClickTime) < doubleClickThreshold)
+			{
+				// Double click! Focus camera on entity
+				e->displayComponents = true;
+				selectedEntity = e.get();
+				Engine::get().FocusOnEntity(e.get());
+			}
+			lastClickedEntity = e.get();
+			lastClickTime = currentTime;
 		}
 
 		if (isSelected)
@@ -127,6 +144,7 @@ void EntityManager::DisplayEntities()
 
 	ImGui::PopStyleVar();
 }
+
 void EntityManager::ClearInspector()
 {
 	for (auto &e : entities)
@@ -154,7 +172,7 @@ void EntityManager::Collisions()
 		return;
 
 	// Track which pairs collided this frame
-	std::set<std::pair<Collider*, Collider*>> collidingThisFrame;
+	std::set<std::pair<Collider *, Collider *>> collidingThisFrame;
 
 	// Check all collisions
 	for (auto &entity : entities)
@@ -177,7 +195,7 @@ void EntityManager::Collisions()
 				continue;
 
 			bool hit = CollisionSystem::get().CheckCollision(coll1, coll2);
-			
+
 			if (hit)
 			{
 				// Mark as colliding this frame
@@ -218,17 +236,17 @@ void EntityManager::Collisions()
 	}
 
 	// Check for collisions that ended (were active last frame but not this frame)
-	std::set<std::pair<Collider*, Collider*>> toRemove;
+	std::set<std::pair<Collider *, Collider *>> toRemove;
 	for (auto &pair : activeCollisionPairs)
 	{
 		if (!collidingThisFrame.count(pair) && !collidingThisFrame.count({pair.second, pair.first}))
 		{
 			// This collision ended
-			Collider* coll1 = pair.first;
-			Collider* coll2 = pair.second;
+			Collider *coll1 = pair.first;
+			Collider *coll2 = pair.second;
 
 			LOG_DEBUG("OnTriggerExit - collision ended");
-			
+
 			if (coll1->IsTrigger())
 				coll1->entity->OnTriggerExit(*coll2);
 			else
@@ -252,7 +270,6 @@ void EntityManager::Collisions()
 void EntityManager::refresh()
 {
 }
-
 
 bool EntityManager::IsInColliderEditMode()
 {
@@ -309,30 +326,43 @@ std::vector<SerializableEntity> EntityManager::SerializeEntities()
 	return entitiesSerialized;
 }
 
-// EntityManager.cpp
-std::string EntityManager::GetUniqueName(const std::string &baseName)
+std::string EntityManager::GetUniqueName(const std::string& baseName)
 {
-	std::string cleanBase = baseName.c_str(); // strip null chars and garbage
+    std::string cleanBase = baseName.c_str();
 
-	bool baseTaken = false;
-	for (auto &e : entities)
-		if (e->GetName() == cleanBase)
-			baseTaken = true;
+    // Strip existing (N) suffix
+    auto pos = cleanBase.rfind(" (");
+    if (pos != std::string::npos)
+    {
+        std::string suffix = cleanBase.substr(pos + 2);
+        if (!suffix.empty() && suffix.back() == ')')
+        {
+            suffix.pop_back();
+            bool isNumber = !suffix.empty() && 
+                            std::all_of(suffix.begin(), suffix.end(), ::isdigit);
+            if (isNumber)
+                cleanBase = cleanBase.substr(0, pos);
+        }
+    }
 
-	if (!baseTaken)
-		return cleanBase;
+    // Check both entities AND to_add
+    auto isTaken = [&](const std::string& name) {
+        for (auto& e : entities)
+            if (e->GetName() == name) return true;
+        for (auto& e : to_add)
+            if (e->GetName() == name) return true;
+        return false;
+    };
 
-	int counter = 1;
-	while (true)
-	{
-		std::string candidate = cleanBase + " (" + std::to_string(counter) + ")";
-		bool taken = false;
-		for (auto &e : entities)
-			if (e->GetName() == candidate)
-				taken = true;
+    if (!isTaken(cleanBase))
+        return cleanBase;
 
-		if (!taken)
-			return candidate;
-		counter++;
-	}
+    int counter = 1;
+    while (true)
+    {
+        std::string candidate = cleanBase + " (" + std::to_string(counter) + ")";
+        if (!isTaken(candidate))
+            return candidate;
+        counter++;
+    }
 }

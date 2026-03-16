@@ -3,6 +3,8 @@
 #include "../imguiHandler.h"
 #include "Logger.h"
 #include "Components/BoxCollider.h"
+#include "../Commands/MoveEntityCommand.h"
+#include "../Commands/CommandHistory.h"
 
 Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 {
@@ -79,20 +81,55 @@ void Sprite::draw()
 
 void Sprite::update(float dt)
 {
+	if (textureID != lastTextureID)
+	{
+		AssetManager::get().loadTexture(textureID, textureID + ".png");
+		texture = AssetManager::get().getTexture(textureID);
+		sprite.setTexture(texture);
+		sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
+		lastTextureID = textureID;
+	}
+	if (ColorID != lastColorID)
+	{
+		Color color;
+		color.SetColor(ColorID);
+		sprite.setColor(color.GetColorEnum());
+		lastColorID = ColorID;
+	}
 	sprite.setTexture(texture);
 	sprite.setPosition(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y);
 	sprite.setRotation(entity->GetComponent<Transform>().rotation);
 	sprite.setScale(sf::Vector2f(entity->GetComponent<Transform>().scale.x, entity->GetComponent<Transform>().scale.y));
 
+	// Track drag start
+	if (dragging && !wasDragging)
+	{
+		dragStartPosition = entity->GetComponent<Transform>().position;
+	}
+
 	if (dragging)
 	{
 		entity->GetComponent<Transform>().SetPosition(mousePos.x - mouseRectOffset.x, mousePos.y - mouseRectOffset.y);
 	}
+
+	// Track drag end and create command
+	if (!dragging && wasDragging)
+	{
+		Vector2F currentPos = entity->GetComponent<Transform>().position;
+		// Only create a command if the position actually changed
+		if (currentPos.x != dragStartPosition.x || currentPos.y != dragStartPosition.y)
+		{
+			auto moveCmd = std::make_unique<MoveEntityCommand>(entity, dragStartPosition, currentPos);
+			CommandHistory::get().Execute(std::move(moveCmd));
+		}
+	}
+
+	wasDragging = dragging;
 }
 
 int Sprite::GetHeight()
 {
-	return height; 
+	return height;
 }
 
 int Sprite::GetWidth()
@@ -103,24 +140,64 @@ int Sprite::GetWidth()
 void Sprite::updateEngine(float dt)
 {
 	update(dt);
-    if (entity->HasComponent<BoxCollider>() && entity->GetComponent<BoxCollider>().IsInEditMode())
-        return;
+
+	if (entity->HasComponent<BoxCollider>() && entity->GetComponent<BoxCollider>().editMode)
+		return;
+
+	if (forceDrag)
+    {
+        mousePos = Engine::get().GetWindow().mapPixelToCoords(
+            sf::Mouse::getPosition(Engine::get().GetWindow()));
+        Engine::get().TriggerDragging(entity->GetName());
+        entity->displayComponents = true;
+        Engine::get().GetManager()->SetSelectedEntity(entity);
+        dragging = true;
+        forceDrag = false; // only trigger once
+    }
+	
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
 
 		if (isMouseOver(sprite, mousePos.x, mousePos.y) && (!Engine::get().DraggingEntity() || Engine::get().GetDraggedEntity() == entity->GetName()))
 		{
-			Engine::get().TriggerDragging(entity->GetName());
-			ImguiHandler::get().ClearInspector();
-			entity->displayComponents = true;
-			dragging = true;
+			if (!dragging && !pendingDrag)
+			{
+				float currentTime = ImGui::GetTime();
+				if (lastClickTime > 0.f && (currentTime - lastClickTime) < 0.3f)
+				{
+					Engine::get().FocusOnEntity(entity);
+					lastClickTime = 0.f;
+				}
+				else
+				{
+					lastClickTime = currentTime;
+				}
+				pendingDrag = true;
+				dragTimer = 0.f;
+			}
+
+			if (pendingDrag)
+			{
+				dragTimer += dt;
+				if (dragTimer >= dragDelay)
+				{
+					Engine::get().TriggerDragging(entity->GetName());
+					ImguiHandler::get().ClearInspector();
+					entity->displayComponents = true;
+					Engine::get().GetManager()->SetSelectedEntity(entity);
+					dragging = true;
+					pendingDrag = false;
+				}
+			}
 		}
 	}
 	else
 	{
 		Engine::get().TriggerDragging("");
 		dragging = false;
+		pendingDrag = false;
+		dragTimer = 0.f;
 	}
 }
 
@@ -162,7 +239,7 @@ void Sprite::SetColor(const sf::Color &color)
 void Sprite::SetColor(Color color)
 {
 	ColorID = color.SerializeColor();
-	if(entity->GetName().find("Bullet") != std::string::npos)
+	if (entity->GetName().find("Bullet") != std::string::npos)
 		LOG_DEBUG("Setting bullet color to: ", ColorID);
 	sprite.setColor(color.GetColorEnum());
 }
