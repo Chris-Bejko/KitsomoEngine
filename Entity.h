@@ -117,6 +117,12 @@ public:
 
 	bool DeletePressed();
 
+	// Component factory - add component by name string
+	void AddComponentByName(const std::string& componentName);
+
+	// Check if a component type allows multiple instances
+	static bool ComponentAllowsMultiple(const std::string& componentName);
+
 private:
 	bool isActive;
 
