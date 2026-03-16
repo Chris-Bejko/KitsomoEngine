@@ -34,7 +34,7 @@ public:
 
 	void draw() override final;
 
-	void update(float dt) override final;
+	void updateEngine(float dt) override final;
 
 	std::string GetCollisionTag();
 
@@ -49,7 +49,6 @@ private:
 	sf::FloatRect hitbox;
 	bool configuredHitbox;
 	sf::RectangleShape colliderVisual;
-	bool editMode = false;
 	enum class DragHandle
 	{
 		None,

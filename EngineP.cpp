@@ -237,6 +237,8 @@ std::string Engine::GetDraggedEntity()
 
 void Engine::TriggerDragging(std::string newDragged)
 {
+	if (manager->IsInColliderEditMode())
+		return;
 	draggedEntity = newDragged;
 }
 

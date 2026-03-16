@@ -218,6 +218,20 @@ void EntityManager::refresh()
 {
 }
 
+
+bool EntityManager::IsInColliderEditMode()
+{
+	for (auto &entity : entities)
+	{
+		Collider *coll = entity->GetComponentOfType<Collider>();
+		if (!coll)
+			continue;
+		if (coll->IsInEditMode())
+			return true;
+	}
+	return false;
+}
+
 void EntityManager::Awake()
 {
 	ValidateAdded();
