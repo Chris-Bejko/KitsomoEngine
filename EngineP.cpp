@@ -339,6 +339,7 @@ bool Engine::Load(std::string fileName)
 
 	SpawnEntities(entities);
 	currentState = EngineState::Running;
+	openProject = fileName;
 	return true;
 }
 
@@ -524,6 +525,14 @@ void Engine::Reset()
 	view.setSize(window->getSize().x, window->getSize().y);
 	window->setView(view);
 	isEngine = true;
+ 	if(openProject != "")
+    {
+        if(!Load(openProject))
+        {
+            LOG_ERROR("Failed to reload project: ", openProject.c_str());
+        }
+        return;
+    }
 }
 
 void Engine::RemoveEntity(Entity *entity)
