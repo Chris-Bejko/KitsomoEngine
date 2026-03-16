@@ -28,7 +28,7 @@ public:
 
 	std::vector<SerializableVariable> *GetSerializedFields() override final;
 
-	void InitSerializedFields(ReadableSerializableVariableMap map);
+	void InitSerializedFields(ReadableSerializableVariableMap map) override final;
 
 	void SetUpColliderVisuals();
 

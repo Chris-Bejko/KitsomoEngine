@@ -50,7 +50,7 @@ public:
     void SetUseGravity(bool g) { useGravity = g; }
 
     
-    void InitSerializedFields(ReadableSerializableVariableMap map);
+    void InitSerializedFields(ReadableSerializableVariableMap map) override final;
 	std::vector<SerializableVariable>* GetSerializedFields() override final;
 	void Serialize();
 

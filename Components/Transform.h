@@ -16,7 +16,7 @@ public:
 
 	void SerializeVariables();
 
-	void InitSerializedFields(ReadableSerializableVariableMap variables);
+	void InitSerializedFields(ReadableSerializableVariableMap variables) override final;
 
 	std::vector<SerializableVariable>* GetSerializedFields() override final;
 

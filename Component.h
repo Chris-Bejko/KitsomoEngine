@@ -21,6 +21,7 @@ public:
 	virtual void updateEngine(float dt) { }
 	virtual std::vector<SerializableVariable>* GetSerializedFields() { return nullptr; }
 	virtual void SetSerializedFields(std::vector<SerializableVariable> variables) { }
+	virtual void InitSerializedFields(ReadableSerializableVariableMap map) { }
 
 
 	virtual void OnCollisionEnter(Collider& other) { }

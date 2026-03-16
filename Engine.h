@@ -88,8 +88,9 @@ public:
     void SpawnEntities(const std::vector<SerializableEntity> &entities);
     std::vector<SerializableEntity> ParseFile(const std::string &fileName);
 
-    Entity* SpawnPrefab(const std::string prefabName, Vector2F position);
-    
+    Entity *SpawnPrefab(const std::string prefabName, Vector2F position);
+    void FocusOnEntity(Entity *entity);
+
 private:
     bool editorDragging = false;
     std::string openProject = "";
@@ -103,10 +104,11 @@ private:
     InputSystem *inputSystem;
     sf::Clock deltaClock;
     float dt = 1.f;
+    std::string focusTargetName = "";
+    float focusSpeed = 5.f;
 
     bool entitiesAwaken;
 
     std::string draggedEntity = "";
     std::unordered_map<std::string, ComponentFactory> componentRegistry;
-
 };
