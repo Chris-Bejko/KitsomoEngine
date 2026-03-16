@@ -90,7 +90,14 @@ void CircleCollider::update(float dt)
         colliderVisual.setOrigin(radius, radius);
     }
 }
-
+void CircleCollider::updateEngine(float dt)
+{
+    if (editMode)
+    {
+        colliderVisual.setRadius(radius);
+        colliderVisual.setOrigin(radius, radius);
+    }
+}
 void CircleCollider::UpdateEditMode()
 {
     if (!editMode) return;
@@ -106,7 +113,7 @@ void CircleCollider::UpdateEditMode()
     // Drag the edge to resize
     bool nearEdge = std::abs(distToMouse - radius) < 8.f;
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !draggingRadius)
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && !draggingRadius)
     {
         if (nearEdge)
         {
@@ -116,7 +123,7 @@ void CircleCollider::UpdateEditMode()
         }
     }
 
-    if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    if (!sf::Mouse::isButtonPressed(sf::Mouse::Right))
         draggingRadius = false;
 
     if (draggingRadius)

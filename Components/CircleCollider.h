@@ -9,6 +9,7 @@ public:
 
     bool Init() override;
     void update(float dt) override;
+    void updateEngine(float dt) override;
     void draw() override;
 
     bool Intersects(Collider& other) override;

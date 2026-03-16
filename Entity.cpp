@@ -9,6 +9,7 @@
 #include "Components/Rigidbody.h"
 #include "Components/CircleCollider.h"
 #include "Components/BoxCollider.h"
+#include "Components/PolygonCollider.h"
 
 //#include "Components/BoxCollider.h"
 
@@ -316,6 +317,16 @@ void Entity::DisplayComponents()
 }
 void Entity::RemoveComponent(Component* comp)
 {
+    for (size_t i = 0; i < componentsList.size(); i++)
+    {
+        if (componentsList[i] == comp)
+        {
+            componentsList[i] = nullptr;
+            componentsBitset[i] = false;
+            break;
+        }
+    }
+
     components.erase(
         std::remove_if(components.begin(), components.end(),
             [comp](const std::unique_ptr<Component>& c) {
@@ -375,6 +386,9 @@ void Entity::DisplayAvailableComponents()
 				}else if(str == "CircleCollider"){
 					if(!this->HasComponent<CircleCollider>())
 						this->AddComponent<CircleCollider>();
+				}else if(str == "PolygonCollider"){
+					if(!this->HasComponent<PolygonCollider>())
+						this->AddComponent<PolygonCollider>();
 				}
 			}
 		}

@@ -42,6 +42,14 @@ bool CollisionSystem::CheckCollision(Collider *a, Collider *b)
 		return AABBvsCircle(box->GetBounds(), center, radius);
 	}
 
+	 if (typeA == ColliderType::Polygon || typeB == ColliderType::Polygon)
+    {
+        Collider* poly = typeA == ColliderType::Polygon ? a : b;
+        Collider* other = typeA == ColliderType::Polygon ? b : a;
+        return poly->Intersects(*other);
+    }
+
+
 	return false;
 }
 

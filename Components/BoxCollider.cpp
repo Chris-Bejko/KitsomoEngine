@@ -209,7 +209,7 @@ void BoxCollider::UpdateEditMode()
     auto mouseWorld = Engine::get().GetWindow().mapPixelToCoords(mousePixel);
 
     // Start drag
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && activeDrag == DragHandle::None)
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && activeDrag == DragHandle::None)
     {
         DragHandle hovered = GetHoveredHandle(mouseWorld);
         if (hovered != DragHandle::None)
@@ -221,7 +221,7 @@ void BoxCollider::UpdateEditMode()
     }
 
     // Release drag
-    if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    if (!sf::Mouse::isButtonPressed(sf::Mouse::Right))
     {
         activeDrag = DragHandle::None;
     }

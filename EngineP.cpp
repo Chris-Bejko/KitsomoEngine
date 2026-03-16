@@ -18,6 +18,7 @@
 #include "Components/Rigidbody.h"
 #include "Components/CircleCollider.h"
 #include "Components/BoxCollider.h"
+#include "Components/PolygonCollider.h"
 
 Engine *Engine::s_instance = nullptr;
 
@@ -444,6 +445,12 @@ void Engine::RegisterComponents()
         e->AddComponent<CircleCollider>().InitSerializedFields(fields);
     else
         e->GetComponent<CircleCollider>().InitSerializedFields(fields);
+	};	
+	componentRegistry["PolygonCollider"] = [](Entity* e, ReadableSerializableVariableMap fields) {
+    if (!e->HasComponent<PolygonCollider>())
+        e->AddComponent<PolygonCollider>().InitSerializedFields(fields);
+    else
+        e->GetComponent<PolygonCollider>().InitSerializedFields(fields);
 };
 }
 
@@ -615,9 +622,14 @@ std::vector<SerializableEntity> Engine::ParseFile(const std::string &fileName)
 				delStart = ",";
 				delEnd = ",,";
 				auto fieldValue = GetSubstring(line, delStart, delEnd, false);
+				
+				// Find the position of the value end delimiter (,,)
+				size_t valueEndPos = line.find(",,");
+				// Search for field type AFTER the value ends
+				std::string remainingLine = line.substr(valueEndPos);
 				delStart = ";";
 				delEnd = ";;";
-				auto fieldType = GetSubstring(line, delStart, delEnd, false);
+				auto fieldType = GetSubstring(remainingLine, delStart, delEnd, false);
 
 				if (fieldType == "_FIELD_")
 					break;
