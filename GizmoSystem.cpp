@@ -9,6 +9,7 @@
 #include "Commands/RotateEntityCommand.h"
 #include "Commands/CommandHistory.h"
 #include "../UI/UIRect.h"
+#include "../Components/Canvas.h"
 sf::Vector2f GizmoSystem::GetMouseWorld()
 {
     return Engine::get().GetWindow().mapPixelToCoords(
@@ -27,86 +28,96 @@ void GizmoSystem::Update(float dt)
     if (ImGui::GetIO().WantCaptureMouse)
         return;
 
-    // Keyboard shortcuts
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         mode = GizmoMode::Move;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
         mode = GizmoMode::Rotate;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
         mode = GizmoMode::Scale;
-
-    // Toggle snap with Ctrl
     snapEnabled = sf::Keyboard::isKeyPressed(sf::Keyboard::LControl);
 
-    Vector2F worldPosV = selectedEntity->transform->GetWorldPosition();
-    sf::Vector2f entityWorld(worldPosV.x, worldPosV.y);
-    sf::Vector2f mouseWorld = GetMouseWorld();
+    bool isUI = selectedEntity->HasComponent<UIRect>();
+
+    // Use SCREEN space for UI, WORLD space for everything else
+    sf::Vector2f mousePos = isUI
+                                ? (sf::Vector2f)sf::Mouse::getPosition(Engine::get().GetWindow())
+                                : GetMouseWorld();
+
+    sf::Vector2f entityCenter;
+    if (isUI)
+    {
+        auto &ui = selectedEntity->GetComponent<UIRect>();
+        auto rect = ui.GetScreenRect();
+        entityCenter = {rect.left + rect.width * 0.5f, rect.top + rect.height * 0.5f};
+    }
+    else
+    {
+        Vector2F wp = selectedEntity->transform->GetWorldPosition();
+        entityCenter = {wp.x, wp.y};
+    }
 
     // Start drag
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && activeDrag == GizmoAxis::None)
     {
-        GizmoAxis hovered = GetHoveredAxis(mouseWorld, entityWorld);
+        GizmoAxis hovered = GetHoveredAxis(mousePos, entityCenter);
         if (hovered != GizmoAxis::None)
         {
             activeDrag = hovered;
-            dragStartMouse = mouseWorld;
-            dragStartPosition = selectedEntity->transform->position;
+            dragStartMouse = mousePos;
+            dragStartPosition = isUI
+                                    ? Vector2F(selectedEntity->GetComponent<UIRect>().anchorOffset.x,
+                                               selectedEntity->GetComponent<UIRect>().anchorOffset.y)
+                                    : selectedEntity->transform->position;
             dragStartRotation = selectedEntity->transform->rotation;
-            dragStartScale = selectedEntity->transform->scale;
+            dragStartScale = isUI
+                                 ? Vector2F(selectedEntity->GetComponent<UIRect>().sizeDelta.x,
+                                            selectedEntity->GetComponent<UIRect>().sizeDelta.y)
+                                 : selectedEntity->transform->scale;
         }
     }
 
+    // Release - register command
     if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && activeDrag != GizmoAxis::None)
     {
         if (mode == GizmoMode::Move)
         {
-            Vector2F currentPos = selectedEntity->transform->position;
-            if (currentPos.x != dragStartPosition.x || currentPos.y != dragStartPosition.y)
-            {
-                auto cmd = std::make_unique<MoveEntityCommand>(
-                    selectedEntity, dragStartPosition, currentPos);
-                CommandHistory::get().Execute(std::move(cmd));
-            }
+            Vector2F cur = selectedEntity->transform->position;
+            if (cur.x != dragStartPosition.x || cur.y != dragStartPosition.y)
+                CommandHistory::get().Execute(std::make_unique<MoveEntityCommand>(
+                    selectedEntity, dragStartPosition, cur));
         }
         if (mode == GizmoMode::Rotate)
         {
-            float currentRot = selectedEntity->transform->rotation;
-            if (currentRot != dragStartRotation)
-            {
-                auto cmd = std::make_unique<RotateEntityCommand>(
-                    selectedEntity, dragStartRotation, currentRot);
-                CommandHistory::get().Execute(std::move(cmd));
-            }
+            float cur = selectedEntity->transform->rotation;
+            if (cur != dragStartRotation)
+                CommandHistory::get().Execute(std::make_unique<RotateEntityCommand>(
+                    selectedEntity, dragStartRotation, cur));
         }
         if (mode == GizmoMode::Scale)
         {
-            Vector2F currentScale = selectedEntity->transform->scale;
-            if (currentScale.x != dragStartScale.x || currentScale.y != dragStartScale.y)
-            {
-                auto cmd = std::make_unique<ScaleEntityCommand>(
-                    selectedEntity, dragStartScale, currentScale);
-                CommandHistory::get().Execute(std::move(cmd));
-            }
+            Vector2F cur = selectedEntity->transform->scale;
+            if (cur.x != dragStartScale.x || cur.y != dragStartScale.y)
+                CommandHistory::get().Execute(std::make_unique<ScaleEntityCommand>(
+                    selectedEntity, dragStartScale, cur));
         }
         activeDrag = GizmoAxis::None;
     }
-    // Release drag
+
     if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
         activeDrag = GizmoAxis::None;
 
-    // Apply drag
     if (activeDrag != GizmoAxis::None)
     {
         switch (mode)
         {
         case GizmoMode::Move:
-            UpdateMove(mouseWorld, entityWorld);
+            UpdateMove(mousePos, entityCenter);
             break;
         case GizmoMode::Rotate:
-            UpdateRotate(mouseWorld, entityWorld);
+            UpdateRotate(mousePos, entityCenter);
             break;
         case GizmoMode::Scale:
-            UpdateScale(mouseWorld, entityWorld);
+            UpdateScale(mousePos, entityCenter);
             break;
         }
     }
@@ -168,29 +179,51 @@ GizmoAxis GizmoSystem::GetHoveredAxis(sf::Vector2f mouseWorld, sf::Vector2f enti
     return GizmoAxis::None;
 }
 
-void GizmoSystem::UpdateMove(sf::Vector2f mouseWorld, sf::Vector2f entityWorld)
+void GizmoSystem::UpdateMove(sf::Vector2f mousePos, sf::Vector2f entityCenter)
 {
-    sf::Vector2f delta = mouseWorld - dragStartMouse;
+    if (selectedEntity->HasComponent<Canvas>())
+        return;
+
+    sf::Vector2f delta = mousePos - dragStartMouse;
+
+    if (selectedEntity->HasComponent<UIRect>())
+    {
+        auto &ui = selectedEntity->GetComponent<UIRect>();
+        LOG_DEBUG("Before set - anchorOffset: ", ui.anchorOffset.x, ", ", ui.anchorOffset.y,
+                  " dragStart: ", dragStartPosition.x, ", ", dragStartPosition.y,
+                  " delta: ", delta.x, ", ", delta.y);
+        if (activeDrag == GizmoAxis::X || activeDrag == GizmoAxis::XY)
+            ui.anchorOffset.x = dragStartPosition.x + delta.x;
+        if (activeDrag == GizmoAxis::Y || activeDrag == GizmoAxis::XY)
+            ui.anchorOffset.y = dragStartPosition.y + delta.y;
+
+        if (snapEnabled)
+        {
+            ui.anchorOffset.x = Snap(ui.anchorOffset.x, snapSize);
+            ui.anchorOffset.y = Snap(ui.anchorOffset.y, snapSize);
+        }
+        LOG_DEBUG("After set - anchorOffset: ", ui.anchorOffset.x, ", ", ui.anchorOffset.y);
+        return;
+    }
 
     float newX = dragStartPosition.x;
     float newY = dragStartPosition.y;
-
     if (activeDrag == GizmoAxis::X || activeDrag == GizmoAxis::XY)
-        newX = dragStartPosition.x + delta.x;
+        newX += delta.x;
     if (activeDrag == GizmoAxis::Y || activeDrag == GizmoAxis::XY)
-        newY = dragStartPosition.y + delta.y;
-
+        newY += delta.y;
     if (snapEnabled)
     {
         newX = Snap(newX, snapSize);
         newY = Snap(newY, snapSize);
     }
-
     selectedEntity->transform->position = Vector2F(newX, newY);
 }
 
 void GizmoSystem::UpdateRotate(sf::Vector2f mouseWorld, sf::Vector2f entityWorld)
 {
+    if (selectedEntity->HasComponent<Canvas>())
+        return; // Canvas cant be manipulated
     float angle = atan2(mouseWorld.y - entityWorld.y,
                         mouseWorld.x - entityWorld.x) *
                   180.f / 3.14159f;
@@ -210,18 +243,53 @@ void GizmoSystem::UpdateRotate(sf::Vector2f mouseWorld, sf::Vector2f entityWorld
 
 void GizmoSystem::UpdateScale(sf::Vector2f mouseWorld, sf::Vector2f entityWorld)
 {
+    if (selectedEntity->HasComponent<Canvas>())
+        return;
+
     sf::Vector2f delta = mouseWorld - dragStartMouse;
+
+    if (selectedEntity->HasComponent<UIRect>())
+    {
+        auto &ui = selectedEntity->GetComponent<UIRect>();
+        float scaleSensitivity = 1.0f; // screen space so 1:1
+
+        if (activeDrag == GizmoAxis::X)
+            ui.sizeDelta.x = std::max(1.f, dragStartScale.x + delta.x * scaleSensitivity);
+        else if (activeDrag == GizmoAxis::Y)
+            ui.sizeDelta.y = std::max(1.f, dragStartScale.y - delta.y * scaleSensitivity);
+        else if (activeDrag == GizmoAxis::XY)
+        {
+            float uniform = (delta.x - delta.y) * scaleSensitivity;
+            ui.sizeDelta.x = std::max(1.f, dragStartScale.x + uniform);
+            ui.sizeDelta.y = std::max(1.f, dragStartScale.y + uniform);
+        }
+
+        if (snapEnabled)
+        {
+            ui.sizeDelta.x = Snap(ui.sizeDelta.x, 10.f);
+            ui.sizeDelta.y = Snap(ui.sizeDelta.y, 10.f);
+        }
+        return;
+    }
+
     float scaleSensitivity = 0.01f;
 
     if (activeDrag == GizmoAxis::X)
-        selectedEntity->transform->scale.x = std::max(0.01f,
-                                                      dragStartScale.x + delta.x * scaleSensitivity);
+    {
+        selectedEntity->transform->scale.x = std::max(
+            0.01f,
+            dragStartScale.x + delta.x * scaleSensitivity);
+    }
     else if (activeDrag == GizmoAxis::Y)
-        selectedEntity->transform->scale.y = std::max(0.01f,
-                                                      dragStartScale.y - delta.y * scaleSensitivity);
+    {
+        selectedEntity->transform->scale.y = std::max(
+            0.01f,
+            dragStartScale.y - delta.y * scaleSensitivity);
+    }
     else if (activeDrag == GizmoAxis::XY)
     {
         float uniform = (delta.x - delta.y) * scaleSensitivity;
+
         selectedEntity->transform->scale.x = std::max(0.01f, dragStartScale.x + uniform);
         selectedEntity->transform->scale.y = std::max(0.01f, dragStartScale.y + uniform);
     }
@@ -349,12 +417,46 @@ void GizmoSystem::Draw()
     if (!Engine::get().isEngine)
         return;
 
-    if (selectedEntity->HasComponent<UIRect>())
+    bool isUI = selectedEntity->HasComponent<UIRect>();
+
+    if (isUI)
     {
-        DrawUIRectGizmo();
+        // Switch to screen space view
+        sf::View prevView = Engine::get().GetWindow().getView();
+        Engine::get().GetWindow().setView(Engine::get().GetWindow().getDefaultView());
+
+        auto &ui = selectedEntity->GetComponent<UIRect>();
+        auto rect = ui.GetScreenRect();
+        sf::Vector2f entityCenter(rect.left + rect.width * 0.5f,
+                                  rect.top + rect.height * 0.5f);
+
+        // Draw UIRect outline
+        sf::RectangleShape outline(sf::Vector2f(rect.width, rect.height));
+        outline.setPosition(rect.left, rect.top);
+        outline.setFillColor(sf::Color::Transparent);
+        outline.setOutlineColor(sf::Color(0, 200, 255, 200));
+        outline.setOutlineThickness(1.f);
+        Engine::get().GetWindow().draw(outline);
+
+        // Draw normal gizmo arrows in screen space
+        switch (mode)
+        {
+        case GizmoMode::Move:
+            DrawMove(entityCenter);
+            break;
+        case GizmoMode::Rotate:
+            DrawRotate(entityCenter);
+            break;
+        case GizmoMode::Scale:
+            DrawScale(entityCenter);
+            break;
+        }
+
+        Engine::get().GetWindow().setView(prevView);
         return;
     }
 
+    // Normal world space
     Vector2F worldPosV = selectedEntity->transform->GetWorldPosition();
     sf::Vector2f entityWorld(worldPosV.x, worldPosV.y);
 
@@ -370,46 +472,4 @@ void GizmoSystem::Draw()
         DrawScale(entityWorld);
         break;
     }
-}
-
-
-void GizmoSystem::DrawUIRectGizmo()
-{
-    auto& rect = selectedEntity->GetComponent<UIRect>();
-    sf::FloatRect screenRect = rect.GetScreenRect();
-
-    // Switch to screen space view
-    sf::View prevView = Engine::get().GetWindow().getView();
-    Engine::get().GetWindow().setView(Engine::get().GetWindow().getDefaultView());
-
-    // Draw rect outline
-    sf::RectangleShape outline(sf::Vector2f(screenRect.width, screenRect.height));
-    outline.setPosition(screenRect.left, screenRect.top);
-    outline.setFillColor(sf::Color::Transparent);
-    outline.setOutlineColor(sf::Color(0, 200, 255, 200));
-    outline.setOutlineThickness(1.f);
-    Engine::get().GetWindow().draw(outline);
-
-    // Draw corner/edge handles for resizing
-    auto drawHandle = [&](sf::Vector2f pos) {
-        sf::RectangleShape h(sf::Vector2f(8.f, 8.f));
-        h.setOrigin(4.f, 4.f);
-        h.setPosition(pos);
-        h.setFillColor(sf::Color::White);
-        h.setOutlineColor(sf::Color(0, 200, 255));
-        h.setOutlineThickness(1.f);
-        Engine::get().GetWindow().draw(h);
-    };
-
-    // 8 handles - corners and edges
-    drawHandle({screenRect.left,                          screenRect.top});
-    drawHandle({screenRect.left + screenRect.width / 2,   screenRect.top});
-    drawHandle({screenRect.left + screenRect.width,        screenRect.top});
-    drawHandle({screenRect.left + screenRect.width,        screenRect.top + screenRect.height / 2});
-    drawHandle({screenRect.left + screenRect.width,        screenRect.top + screenRect.height});
-    drawHandle({screenRect.left + screenRect.width / 2,   screenRect.top + screenRect.height});
-    drawHandle({screenRect.left,                          screenRect.top + screenRect.height});
-    drawHandle({screenRect.left,                          screenRect.top + screenRect.height / 2});
-
-    Engine::get().GetWindow().setView(prevView);
 }

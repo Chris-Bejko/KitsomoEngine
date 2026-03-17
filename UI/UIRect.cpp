@@ -3,6 +3,7 @@
 #include "../Engine.h"
 #include "../Components/Transform.h"
 #include "../GizmoSystem.h"
+#include "Logger.h"
 bool UIRect::Init()
 {
     Serialize();
@@ -67,7 +68,7 @@ sf::Vector2f UIRect::ResolveAnchor(AnchorPreset anchor, sf::Vector2f screenSize)
 
 sf::Vector2f UIRect::GetScreenPosition()
 {
-    Canvas *canvas = GetCanvas();
+    Canvas* canvas = GetCanvas();
     sf::Vector2f screenSize;
 
     if (canvas && canvas->GetRenderMode() == CanvasRenderMode::ScreenSpace)
@@ -77,14 +78,32 @@ sf::Vector2f UIRect::GetScreenPosition()
     }
     else
     {
-        // World space - use world coordinates
         return {entity->transform->GetWorldPosition().x,
                 entity->transform->GetWorldPosition().y};
     }
 
+    // Check if parent entity has a UIRect - position relative to it
+    if (entity->GetParent() != nullptr && 
+        entity->GetParent()->HasComponent<UIRect>())
+    {
+        auto& parentRect = entity->GetParent()->GetComponent<UIRect>();
+        sf::FloatRect parentScreenRect = parentRect.GetScreenRect();
+        
+        // Anchor relative to parent rect instead of screen
+        sf::Vector2f parentAnchorPos = ResolveAnchor(anchor, 
+            sf::Vector2f(parentScreenRect.width, parentScreenRect.height));
+        
+        sf::Vector2f pivotOffset = {sizeDelta.x * pivot.x, sizeDelta.y * pivot.y};
+        
+        return sf::Vector2f(
+            parentScreenRect.left + parentAnchorPos.x + anchorOffset.x - pivotOffset.x,
+            parentScreenRect.top  + parentAnchorPos.y + anchorOffset.y - pivotOffset.y
+        );
+    }
+
+    // Normal screen space positioning
     sf::Vector2f anchorPos = ResolveAnchor(anchor, screenSize);
     sf::Vector2f pivotOffset = {sizeDelta.x * pivot.x, sizeDelta.y * pivot.y};
-
     return anchorPos + anchorOffset - pivotOffset;
 }
 
@@ -126,25 +145,7 @@ void UIRect::InitSerializedFields(ReadableSerializableVariableMap map)
 
 void UIRect::updateEngine(float dt)
 {
-    if (GizmoSystem::get().GetSelectedEntity() == entity &&
-        GizmoSystem::get().IsGizmoDragging())
-    {
-        // Convert transform position back to anchored position
-        Canvas *canvas = GetCanvas();
-        if (canvas)
-        {
-            auto windowSize = Engine::get().GetWindow().getSize();
-            sf::Vector2f anchorPos = ResolveAnchor(anchor,
-                                                   sf::Vector2f(windowSize.x, windowSize.y));
-            anchorOffset.x = entity->transform->position.x - anchorPos.x;
-            anchorOffset.y = entity->transform->position.y - anchorPos.y;
-        }
-    }
-    else
-    {
-
         SyncToTransform();
-    }
 }
 
 void UIRect::update(float dt)

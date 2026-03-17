@@ -8,16 +8,16 @@ class EditorSprite : public Component
 {
 public:
     EditorSprite() = default;
-    EditorSprite(const std::string& textureId);
+    EditorSprite(const std::string &textureId);
 
     bool Init() override;
     void draw() override;
     void updateEngine(float dt) override;
 
     sf::FloatRect GetGlobalBounds() { return sprite.getGlobalBounds(); }
-    bool IsMouseOver(const sf::Sprite& _sprite, sf::Vector2f mousePos) 
-    { 
-        return _sprite.getGlobalBounds().contains(mousePos); 
+    bool IsMouseOver(const sf::Sprite &_sprite, sf::Vector2f mousePos)
+    {
+        return _sprite.getGlobalBounds().contains(mousePos);
     }
 
     std::string textureId = "editor_entity"; // default editor icon
@@ -32,4 +32,6 @@ private:
     float lastClickTime = 0.f;
     sf::Vector2f mouseRectOffset;
     bool forceDrag = false;
+    sf::Vector2f dragStartAnchorOffset;
+    sf::Vector2f dragStartMousePos;
 };

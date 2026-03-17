@@ -3,6 +3,9 @@
 #include "Components/Transform.h"
 #include "imguiHandler.h"
 #include "GizmoSystem.h"
+#include "UIRect.h"
+#include "Components/Canvas.h"
+
 EditorSprite::EditorSprite(const std::string &texId) : textureId(texId) {}
 
 bool EditorSprite::Init()
@@ -24,33 +27,57 @@ void EditorSprite::draw()
 
 void EditorSprite::updateEngine(float dt)
 {
-    sprite.setScale(
-        entity->transform->scale.x * 0.05f,
-        entity->transform->scale.y * 0.05f);
-    auto worldPos = entity->transform->GetWorldPosition();
-    sprite.setPosition(worldPos.x, worldPos.y);
-    sprite.setRotation(entity->transform->GetWorldRotation());
+    bool isUI = entity->HasComponent<UIRect>();
 
-    // Skip if gizmo is active or collider in edit mode
-    // if (GizmoSystem::get().IsGizmoDragging())
-    //     return;
+    // Update sprite position
+    if (isUI)
+    {
+        // For UI, position sprite in screen space
+        auto& ui = entity->GetComponent<UIRect>();
+        auto rect = ui.GetScreenRect();
+        sf::Vector2f center(rect.left + rect.width * 0.5f,
+                            rect.top  + rect.height * 0.5f);
+        // Convert screen pos to world pos for sprite rendering
+        auto worldPos = Engine::get().GetWindow().mapPixelToCoords(
+            sf::Vector2i((int)center.x, (int)center.y));
+        sprite.setPosition(worldPos);
+    }
+    else
+    {
+        auto worldPos = entity->transform->GetWorldPosition();
+        sprite.setPosition(worldPos.x, worldPos.y);
+    }
+
+    sprite.setScale(entity->transform->scale.x * 0.01f,
+                    entity->transform->scale.y * 0.01f);
+    sprite.setRotation(entity->transform->GetWorldRotation());
 
     if (entity->HasComponentOfType<Collider>() &&
         entity->GetComponentOfType<Collider>()->editMode)
         return;
 
-    sf::Sprite reference;
-    if (entity->HasComponent<Sprite>())
-        reference = entity->GetComponent<Sprite>().GetSprite();
+    // Mouse position
+    sf::Vector2f mouseScreen = (sf::Vector2f)sf::Mouse::getPosition(
+        Engine::get().GetWindow());
+    sf::Vector2f mouseWorld = Engine::get().GetWindow().mapPixelToCoords(
+        sf::Mouse::getPosition(Engine::get().GetWindow()));
+
+    // Hit detection
+    bool mouseOver = false;
+    if (isUI)
+    {
+        // Use UIRect screen bounds for hit detection
+        auto& ui = entity->GetComponent<UIRect>();
+        mouseOver = ui.GetScreenRect().contains(mouseScreen);
+    }
+    else if (entity->HasComponent<Sprite>())
+        mouseOver = entity->GetComponent<Sprite>().GetGlobalBounds().contains(mouseWorld);
     else
-        reference = sprite; // fallback to editor icon
+        mouseOver = sprite.getGlobalBounds().contains(mouseWorld);
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
-        auto mousePos = Engine::get().GetWindow().mapPixelToCoords(
-            sf::Mouse::getPosition(Engine::get().GetWindow()));
-
-        if (IsMouseOver(reference, mousePos) &&
+        if (mouseOver &&
             (!Engine::get().DraggingEntity() ||
              Engine::get().GetDraggedEntity() == entity->GetName()))
         {
@@ -68,9 +95,20 @@ void EditorSprite::updateEngine(float dt)
 
                 pendingDrag = true;
                 dragTimer = 0.f;
-                mouseRectOffset = sf::Vector2f(
-                    mousePos.x - worldPos.x,
-                    mousePos.y - worldPos.y);
+
+                // Store drag start
+                if (isUI)
+                {
+                    auto& ui = entity->GetComponent<UIRect>();
+                    dragStartAnchorOffset = {ui.anchorOffset.x, ui.anchorOffset.y};
+                    dragStartMousePos = mouseScreen;
+                }
+                else
+                {
+                    mouseRectOffset = mouseWorld - sf::Vector2f(
+                        entity->transform->GetWorldPosition().x,
+                        entity->transform->GetWorldPosition().y);
+                }
             }
 
             if (pendingDrag)
@@ -98,31 +136,36 @@ void EditorSprite::updateEngine(float dt)
 
     if (dragging)
     {
-        auto mousePos = Engine::get().GetWindow().mapPixelToCoords(
-            sf::Mouse::getPosition(Engine::get().GetWindow()));
+        if (entity->HasComponent<Canvas>()) return;
 
-        sf::Vector2f worldTarget(
-            mousePos.x - mouseRectOffset.x,
-            mousePos.y - mouseRectOffset.y);
-
-        if (entity->transform->GetParent() != nullptr)
+        if (isUI)
         {
-            Vector2F parentWorld = entity->transform->GetParent()->GetWorldPosition();
-            float parentRot = entity->transform->GetParent()->GetWorldRotation() * 3.14159f / 180.f;
-            Vector2F parentScale = entity->transform->GetParent()->GetWorldScale();
-
-            float dx = worldTarget.x - parentWorld.x;
-            float dy = worldTarget.y - parentWorld.y;
-            float cosR = cos(-parentRot);
-            float sinR = sin(-parentRot);
-
-            entity->transform->position = Vector2F(
-                (dx * cosR - dy * sinR) / parentScale.x,
-                (dx * sinR + dy * cosR) / parentScale.y);
+            auto& ui = entity->GetComponent<UIRect>();
+            sf::Vector2f delta = mouseScreen - dragStartMousePos;
+            ui.anchorOffset.x = dragStartAnchorOffset.x + delta.x;
+            ui.anchorOffset.y = dragStartAnchorOffset.y + delta.y;
         }
         else
         {
-            entity->transform->position = Vector2F(worldTarget.x, worldTarget.y);
+            sf::Vector2f worldTarget = mouseWorld - mouseRectOffset;
+
+            if (entity->transform->GetParent() != nullptr)
+            {
+                Vector2F parentWorld = entity->transform->GetParent()->GetWorldPosition();
+                float parentRot = entity->transform->GetParent()->GetWorldRotation() * 3.14159f / 180.f;
+                Vector2F parentScale = entity->transform->GetParent()->GetWorldScale();
+                float dx = worldTarget.x - parentWorld.x;
+                float dy = worldTarget.y - parentWorld.y;
+                float cosR = cos(-parentRot);
+                float sinR = sin(-parentRot);
+                entity->transform->position = Vector2F(
+                    (dx * cosR - dy * sinR) / parentScale.x,
+                    (dx * sinR + dy * cosR) / parentScale.y);
+            }
+            else
+            {
+                entity->transform->position = Vector2F(worldTarget.x, worldTarget.y);
+            }
         }
     }
 }

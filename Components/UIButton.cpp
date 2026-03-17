@@ -19,19 +19,18 @@ bool UIButton::Init()
 {
     Serialize();
 
-    sf::Vector2f size = entity->GetComponent<UIRect>().sizeDelta;
     if (!entity->HasComponent<UIRect>())
         entity->AddComponent<UIRect>();
 
-    Entity *imageEntity = new Entity("Image");
-    imageEntity->AddComponent<UIImage>();
-    imageEntity->SetParent(entity);
-    Engine::get().Spawn(imageEntity);
+    if(!entity->HasComponent<UIImage>())
+        entity->AddComponent<UIImage>();
 
     Entity *textEntity = new Entity("Text");
     textEntity->AddComponent<UIText>();
     textEntity->SetParent(entity);
     Engine::get().Spawn(textEntity);
+    sf::Vector2f size = entity->GetComponent<UIRect>().sizeDelta;
+
     background.setSize(sf::Vector2f(size.x, size.y));
     background.setFillColor(normalColor);
     background.setOutlineColor(sf::Color(100, 100, 100, 200));
