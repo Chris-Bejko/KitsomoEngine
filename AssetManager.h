@@ -14,8 +14,8 @@ public:
     sf::Texture getTexture(std::string id);
     void loadTexture(std::string id, std::string path);
 
-    //TTF_Font* getFont(std::string id);
-    void loadFont(std::string id, std::string path, int fontSize);
+    sf::Font* getFont(const std::string& id);
+    void loadFont(const std::string& id, const std::string& path);
 
     void clean();
     inline static AssetManager& get()
@@ -30,7 +30,7 @@ public:
 
 private:
     static AssetManager* s_instance;
-    //std::map<std::string, TTF_Font*> fonts;
+    std::map<std::string, sf::Font> fonts;
     std::map<std::string, sf::Texture> textures;
 
 };

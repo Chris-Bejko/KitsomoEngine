@@ -38,9 +38,11 @@ public:
     bool snapEnabled = false;
     float snapSize = 16.f;
     bool IsGizmoDragging() { return activeDrag != GizmoAxis::None; }
-
+    Entity* GetSelectedEntity() { return selectedEntity; }
+    
 private:
     GizmoSystem() = default;
+    void DrawUIRectGizmo();
 
     Entity *selectedEntity = nullptr;
     GizmoMode mode = GizmoMode::Move;

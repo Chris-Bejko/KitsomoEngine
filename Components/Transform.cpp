@@ -26,7 +26,7 @@ Transform::Transform(float x, float y, float scX, float scY, float roation)
 	this->rotation = rotation;
 }
 
-void Transform::SerializeVariables()
+void Transform::Serialize()
 {
 	variables.push_back({ "position.x", &position.x, float_Type });
 	variables.push_back({ "position.y", &position.y, float_Type });
@@ -75,7 +75,7 @@ std::vector<SerializableVariable>* Transform::GetSerializedFields()
 bool Transform::Init()
 {
 	//tag = "Test Tag";
-	SerializeVariables();
+	Serialize();
 	return true;
 }
 

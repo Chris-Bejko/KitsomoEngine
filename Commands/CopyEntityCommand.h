@@ -22,7 +22,6 @@ public:
     }
     void Undo() override
     {
-        // Copying doesn't have an undo effect - just clear the clipboard
         EntityClipboard::get().Clear();
     }
 

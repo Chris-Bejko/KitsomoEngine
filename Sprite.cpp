@@ -105,54 +105,54 @@ void Sprite::update(float dt)
 	sprite.setRotation(worldRot);
 	sprite.setScale(worldScale.x, worldScale.y);
 
-	// Track drag start
-	if (dragging && !wasDragging)
-	{
-		dragStartPosition = entity->GetComponent<Transform>().position;
-	}
+	// // Track drag start
+	// if (dragging && !wasDragging)
+	// {
+	// 	dragStartPosition = entity->GetComponent<Transform>().position;
+	// }
 
-	if (dragging)
-	{
-		sf::Vector2f worldTarget(mousePos.x - mouseRectOffset.x,
-								 mousePos.y - mouseRectOffset.y);
+	// if (dragging)
+	// {
+	// 	sf::Vector2f worldTarget(mousePos.x - mouseRectOffset.x,
+	// 							 mousePos.y - mouseRectOffset.y);
 
-		if (entity->transform->GetParent() != nullptr)
-		{
-			// Convert world position to local space
-			Vector2F parentWorld = entity->transform->GetParent()->GetWorldPosition();
-			float parentRot = entity->transform->GetParent()->GetWorldRotation() * 3.14159f / 180.f;
-			Vector2F parentScale = entity->transform->GetParent()->GetWorldScale();
+	// 	if (entity->transform->GetParent() != nullptr)
+	// 	{
+	// 		// Convert world position to local space
+	// 		Vector2F parentWorld = entity->transform->GetParent()->GetWorldPosition();
+	// 		float parentRot = entity->transform->GetParent()->GetWorldRotation() * 3.14159f / 180.f;
+	// 		Vector2F parentScale = entity->transform->GetParent()->GetWorldScale();
 
-			float dx = worldTarget.x - parentWorld.x;
-			float dy = worldTarget.y - parentWorld.y;
+	// 		float dx = worldTarget.x - parentWorld.x;
+	// 		float dy = worldTarget.y - parentWorld.y;
 
-			// Inverse rotate and scale
-			float cosR = cos(-parentRot);
-			float sinR = sin(-parentRot);
-			float localX = (dx * cosR - dy * sinR) / parentScale.x;
-			float localY = (dx * sinR + dy * cosR) / parentScale.y;
+	// 		// Inverse rotate and scale
+	// 		float cosR = cos(-parentRot);
+	// 		float sinR = sin(-parentRot);
+	// 		float localX = (dx * cosR - dy * sinR) / parentScale.x;
+	// 		float localY = (dx * sinR + dy * cosR) / parentScale.y;
 
-			entity->GetComponent<Transform>().SetPosition(localX, localY);
-		}
-		else
-		{
-			entity->GetComponent<Transform>().SetPosition(worldTarget.x, worldTarget.y);
-		}
-	}
+	// 		entity->GetComponent<Transform>().SetPosition(localX, localY);
+	// 	}
+	// 	else
+	// 	{
+	// 		entity->GetComponent<Transform>().SetPosition(worldTarget.x, worldTarget.y);
+	// 	}
+	// }
 
-	// Track drag end and create command
-	if (!dragging && wasDragging)
-	{
-		Vector2F currentPos = entity->GetComponent<Transform>().position;
-		// Only create a command if the position actually changed
-		if (currentPos.x != dragStartPosition.x || currentPos.y != dragStartPosition.y)
-		{
-			auto moveCmd = std::make_unique<MoveEntityCommand>(entity, dragStartPosition, currentPos);
-			CommandHistory::get().Execute(std::move(moveCmd));
-		}
-	}
+	// // Track drag end and create command
+	// if (!dragging && wasDragging)
+	// {
+	// 	Vector2F currentPos = entity->GetComponent<Transform>().position;
+	// 	// Only create a command if the position actually changed
+	// 	if (currentPos.x != dragStartPosition.x || currentPos.y != dragStartPosition.y)
+	// 	{
+	// 		auto moveCmd = std::make_unique<MoveEntityCommand>(entity, dragStartPosition, currentPos);
+	// 		CommandHistory::get().Execute(std::move(moveCmd));
+	// 	}
+	// }
 
-	wasDragging = dragging;
+	// wasDragging = dragging;
 }
 
 int Sprite::GetHeight()
@@ -169,68 +169,68 @@ void Sprite::updateEngine(float dt)
 {
 	update(dt);
 
-	if (entity->HasComponent<BoxCollider>() && entity->GetComponent<BoxCollider>().editMode)
-		return;
+	// if (entity->HasComponent<BoxCollider>() && entity->GetComponent<BoxCollider>().editMode)
+	// 	return;
 
-	if (GizmoSystem::get().IsGizmoDragging()) return;
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
+	// if (GizmoSystem::get().IsGizmoDragging()) return;
+	// if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	// {
+	// 	mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
 
-		if (isMouseOver(sprite, mousePos.x, mousePos.y) && (!Engine::get().DraggingEntity() || Engine::get().GetDraggedEntity() == entity->GetName()))
-		{
-			if (!dragging && !pendingDrag)
-			{
-				float currentTime = ImGui::GetTime();
-				if (lastClickTime > 0.f && (currentTime - lastClickTime) < 0.3f)
-				{
-					Engine::get().FocusOnEntity(entity);
-					lastClickTime = 0.f;
-				}
-				else
-				{
-					lastClickTime = currentTime;
-				}
-				pendingDrag = true;
-				dragTimer = 0.f;
-			}
+	// 	if (isMouseOver(sprite, mousePos.x, mousePos.y) && (!Engine::get().DraggingEntity() || Engine::get().GetDraggedEntity() == entity->GetName()))
+	// 	{
+	// 		if (!dragging && !pendingDrag)
+	// 		{
+	// 			float currentTime = ImGui::GetTime();
+	// 			if (lastClickTime > 0.f && (currentTime - lastClickTime) < 0.3f)
+	// 			{
+	// 				Engine::get().FocusOnEntity(entity);
+	// 				lastClickTime = 0.f;
+	// 			}
+	// 			else
+	// 			{
+	// 				lastClickTime = currentTime;
+	// 			}
+	// 			pendingDrag = true;
+	// 			dragTimer = 0.f;
+	// 		}
 
-			if (pendingDrag)
-			{
-				dragTimer += dt;
-				if (dragTimer >= dragDelay)
-				{
-					if (entity->transform->GetParent() != nullptr)
-					{
-						// offset in local space
-						Vector2F worldPos = entity->transform->GetWorldPosition();
-						mouseRectOffset = sf::Vector2f(
-							mousePos.x - worldPos.x,
-							mousePos.y - worldPos.y);
-					}
-					else
-					{
-						mouseRectOffset = sf::Vector2f(
-							mousePos.x - entity->transform->position.x,
-							mousePos.y - entity->transform->position.y);
-					}
-					Engine::get().TriggerDragging(entity->GetName());
-					ImguiHandler::get().ClearInspector();
-					entity->displayComponents = true;
-					Engine::get().GetManager()->SetSelectedEntity(entity);
-					dragging = true;
-					pendingDrag = false;
-				}
-			}
-		}
-	}
-	else
-	{
-		Engine::get().TriggerDragging("");
-		dragging = false;
-		pendingDrag = false;
-		dragTimer = 0.f;
-	}
+	// 		if (pendingDrag)
+	// 		{
+	// 			dragTimer += dt;
+	// 			if (dragTimer >= dragDelay)
+	// 			{
+	// 				if (entity->transform->GetParent() != nullptr)
+	// 				{
+	// 					// offset in local space
+	// 					Vector2F worldPos = entity->transform->GetWorldPosition();
+	// 					mouseRectOffset = sf::Vector2f(
+	// 						mousePos.x - worldPos.x,
+	// 						mousePos.y - worldPos.y);
+	// 				}
+	// 				else
+	// 				{
+	// 					mouseRectOffset = sf::Vector2f(
+	// 						mousePos.x - entity->transform->position.x,
+	// 						mousePos.y - entity->transform->position.y);
+	// 				}
+	// 				Engine::get().TriggerDragging(entity->GetName());
+	// 				ImguiHandler::get().ClearInspector();
+	// 				entity->displayComponents = true;
+	// 				Engine::get().GetManager()->SetSelectedEntity(entity);
+	// 				dragging = true;
+	// 				pendingDrag = false;
+	// 			}
+	// 		}
+	// 	}
+	// }
+	// else
+	// {
+	// 	Engine::get().TriggerDragging("");
+	// 	dragging = false;
+	// 	pendingDrag = false;
+	// 	dragTimer = 0.f;
+	// }
 }
 
 sf::Vector2f Sprite::GetScale()

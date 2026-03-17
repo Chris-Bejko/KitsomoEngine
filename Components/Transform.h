@@ -14,7 +14,7 @@ public:
 	Transform(float x, float y, float scX, float scY, float roation);
 	virtual ~Transform() = default;
 
-	void SerializeVariables();
+	void Serialize() override final;
 
 	void InitSerializedFields(ReadableSerializableVariableMap variables) override final;
 
@@ -44,12 +44,12 @@ public:
 	void ClearHierarchy();
 	Transform* GetParent() { return parent; }
 	std::vector<Transform*>& GetChildren() { return children; }
-
+	bool isUITransform = false;
 private:
 	std::vector<SerializableVariable> variables;
 	Transform* parent = nullptr;
 	std::vector<Transform*> children;
-
+	
 
 
 };

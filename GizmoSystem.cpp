@@ -8,6 +8,7 @@
 #include "Commands/ScaleEntityCommand.h"
 #include "Commands/RotateEntityCommand.h"
 #include "Commands/CommandHistory.h"
+#include "../UI/UIRect.h"
 sf::Vector2f GizmoSystem::GetMouseWorld()
 {
     return Engine::get().GetWindow().mapPixelToCoords(
@@ -348,6 +349,12 @@ void GizmoSystem::Draw()
     if (!Engine::get().isEngine)
         return;
 
+    if (selectedEntity->HasComponent<UIRect>())
+    {
+        DrawUIRectGizmo();
+        return;
+    }
+
     Vector2F worldPosV = selectedEntity->transform->GetWorldPosition();
     sf::Vector2f entityWorld(worldPosV.x, worldPosV.y);
 
@@ -363,4 +370,46 @@ void GizmoSystem::Draw()
         DrawScale(entityWorld);
         break;
     }
+}
+
+
+void GizmoSystem::DrawUIRectGizmo()
+{
+    auto& rect = selectedEntity->GetComponent<UIRect>();
+    sf::FloatRect screenRect = rect.GetScreenRect();
+
+    // Switch to screen space view
+    sf::View prevView = Engine::get().GetWindow().getView();
+    Engine::get().GetWindow().setView(Engine::get().GetWindow().getDefaultView());
+
+    // Draw rect outline
+    sf::RectangleShape outline(sf::Vector2f(screenRect.width, screenRect.height));
+    outline.setPosition(screenRect.left, screenRect.top);
+    outline.setFillColor(sf::Color::Transparent);
+    outline.setOutlineColor(sf::Color(0, 200, 255, 200));
+    outline.setOutlineThickness(1.f);
+    Engine::get().GetWindow().draw(outline);
+
+    // Draw corner/edge handles for resizing
+    auto drawHandle = [&](sf::Vector2f pos) {
+        sf::RectangleShape h(sf::Vector2f(8.f, 8.f));
+        h.setOrigin(4.f, 4.f);
+        h.setPosition(pos);
+        h.setFillColor(sf::Color::White);
+        h.setOutlineColor(sf::Color(0, 200, 255));
+        h.setOutlineThickness(1.f);
+        Engine::get().GetWindow().draw(h);
+    };
+
+    // 8 handles - corners and edges
+    drawHandle({screenRect.left,                          screenRect.top});
+    drawHandle({screenRect.left + screenRect.width / 2,   screenRect.top});
+    drawHandle({screenRect.left + screenRect.width,        screenRect.top});
+    drawHandle({screenRect.left + screenRect.width,        screenRect.top + screenRect.height / 2});
+    drawHandle({screenRect.left + screenRect.width,        screenRect.top + screenRect.height});
+    drawHandle({screenRect.left + screenRect.width / 2,   screenRect.top + screenRect.height});
+    drawHandle({screenRect.left,                          screenRect.top + screenRect.height});
+    drawHandle({screenRect.left,                          screenRect.top + screenRect.height / 2});
+
+    Engine::get().GetWindow().setView(prevView);
 }

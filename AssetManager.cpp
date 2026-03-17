@@ -31,27 +31,29 @@ void AssetManager::loadTexture(std::string id, std::string path)
 	}
 }
 
-//TTF_Font* AssetManager::getFont(std::string id)
-//{
-//	if (fonts.count(id) > 0)
-//	{
-//		return fonts[id];
-//	}
-//	return nullptr;
-//}
-
-void AssetManager::loadFont(std::string id, std::string path, int fontSize)
+void AssetManager::loadFont(const std::string& id, const std::string& path)
 {
-	/* TTF_Font *newFont = TTF_OpenFont(path.c_str(), fontSize);
-	 if (newFont != nullptr)
-	 {
-		 fonts.emplace(id, newFont);
-		 std::cout << "font: [" << path << "] loaded." << std::endl;
-	 }
-	 else
-		 std::cerr << TTF_GetError() << std::endl;
-		 */
+    if (fonts.count(id) == 0)
+    {
+        sf::Font font;
+        if (font.loadFromFile(path))
+        {
+            fonts[id] = font;
+            LOG_INFO("Font loaded: ", id.c_str());
+        }
+        else
+            LOG_ERROR("Failed to load font: ", path.c_str());
+    }
 }
+
+sf::Font* AssetManager::getFont(const std::string& id)
+{
+    if (fonts.count(id) > 0)
+        return &fonts[id];
+    LOG_WARNING("Font not found: ", id.c_str());
+    return nullptr;
+}
+
 void AssetManager::clean()
 {
 	/*for (auto it = textures.begin(); it != textures.end(); it++)

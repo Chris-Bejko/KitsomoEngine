@@ -29,9 +29,9 @@ public:
     bool IsTrigger() { return isTrigger; }
     bool editMode = false;
 
-    virtual void Serialize() {}
+    virtual void Serialize() override {}
     virtual std::vector<SerializableVariable>* GetSerializedFields() override { return &serializables; }
-    virtual void InitSerializedFields(ReadableSerializableVariableMap map) {}
+    virtual void InitSerializedFields(ReadableSerializableVariableMap map) override {}
 
     virtual void DrawEditorButton() override;
 

@@ -20,7 +20,13 @@
 #include "Components/BoxCollider.h"
 #include "Components/PolygonCollider.h"
 #include "Components/AudioSource.h"
+#include "Components/UIButton.h"
+#include "Components/UIImage.h"
+#include "Components/UIText.h"
+#include "Components/Canvas.h"
 #include "GizmoSystem.h"
+#include "UI/UIEventSystem.h"
+#include "AssetManager.h"
 
 Engine *Engine::s_instance = nullptr;
 
@@ -73,6 +79,7 @@ void Engine::Init()
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
+	AssetManager::get().loadFont("dmPrison", "fonts/Domestic Prison.ttf");
 	std::ofstream txtFile;
 	RegisterComponents();
 	// Load();
@@ -136,6 +143,8 @@ void Engine::Update()
 
 		manager->update(dt);
 		manager->Collisions();
+		UIEventSystem::get().Update();
+
 		break;
 	}
 	}
@@ -282,49 +291,53 @@ size_t Engine::GetTotalEntities()
 
 void Engine::Save(std::string filename)
 {
-    std::ofstream myFile;
-    myFile.open(filename);
-    
-    for (auto& e : manager->GetEntities())  // iterate Entity* directly
-    {
-        myFile << "ENTITY_NAME_" << e->GetName() << "_ENTITY_NAME_E_";
-        
-        if (e->HasParent())
-            myFile << "_PARENT_" << e->GetParent()->GetName() << "_PARENT_E_";
+	std::ofstream myFile;
+	myFile.open(filename);
 
-        auto components = e->GetAllComponentVariables();
-        for (auto& c : components)
-        {
-            myFile << "_COMPONENT_NAME_" << c.componentName;
-            myFile << "_COMPONENT_NAME_E_";
-            for (auto& f : c.variables)
-            {
-                myFile << "_FIELD_";
-                myFile << ":" << f.name << "::";
-                switch (f.type)
-                {
-                case 1: myFile << "," << f.read() << ",,"; break;
-                case 2: myFile << "," << f.read() << ",,"; break;
-                case 3:
-                {
-                    std::string p = *reinterpret_cast<std::string*>(f.data);
-                    myFile << "," << p << ",,";
-                    break;
-                }
-                case 4:
-                {
-                    bool p = *reinterpret_cast<bool*>(f.data);
-                    myFile << "," << p << ",,";
-                    break;
-                }
-                }
-                myFile << ";" << f.type << ";;";
-            }
-            myFile << "_FIELD_";
-        }
-        myFile << "\n";
-    }
-    myFile.close();
+	for (auto &e : manager->GetEntities()) // iterate Entity* directly
+	{
+		myFile << "ENTITY_NAME_" << e->GetName() << "_ENTITY_NAME_E_";
+
+		if (e->HasParent())
+			myFile << "_PARENT_" << e->GetParent()->GetName() << "_PARENT_E_";
+
+		auto components = e->GetAllComponentVariables();
+		for (auto &c : components)
+		{
+			myFile << "_COMPONENT_NAME_" << c.componentName;
+			myFile << "_COMPONENT_NAME_E_";
+			for (auto &f : c.variables)
+			{
+				myFile << "_FIELD_";
+				myFile << ":" << f.name << "::";
+				switch (f.type)
+				{
+				case 1:
+					myFile << "," << f.read() << ",,";
+					break;
+				case 2:
+					myFile << "," << f.read() << ",,";
+					break;
+				case 3:
+				{
+					std::string p = *reinterpret_cast<std::string *>(f.data);
+					myFile << "," << p << ",,";
+					break;
+				}
+				case 4:
+				{
+					bool p = *reinterpret_cast<bool *>(f.data);
+					myFile << "," << p << ",,";
+					break;
+				}
+				}
+				myFile << ";" << f.type << ";;";
+			}
+			myFile << "_FIELD_";
+		}
+		myFile << "\n";
+	}
+	myFile.close();
 }
 bool Engine::Load(std::string fileName)
 {
@@ -461,6 +474,34 @@ void Engine::RegisterComponents()
 		else
 			e->GetComponent<AudioSource>().InitSerializedFields(fields);
 	};
+	componentRegistry["UIButton"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<UIButton>())
+			e->AddComponent<UIButton>().InitSerializedFields(fields);
+		else
+			e->GetComponent<UIButton>().InitSerializedFields(fields);
+	};
+	componentRegistry["UIImage"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<UIImage>())
+			e->AddComponent<UIImage>().InitSerializedFields(fields);
+		else
+			e->GetComponent<UIImage>().InitSerializedFields(fields);
+	};
+	componentRegistry["UIText"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<UIText>())
+			e->AddComponent<UIText>().InitSerializedFields(fields);
+		else
+			e->GetComponent<UIText>().InitSerializedFields(fields);
+	};
+		componentRegistry["Canvas"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	{
+		if (!e->HasComponent<Canvas>())
+			e->AddComponent<Canvas>().InitSerializedFields(fields);
+		else
+			e->GetComponent<Canvas>().InitSerializedFields(fields);
+	};
 }
 
 std::string Engine::GetSubstring(std::string &line, std::string &delStart, std::string &delEnd, bool erase = false)
@@ -529,6 +570,7 @@ void Engine::SavePrefab(Entity *entity)
 void Engine::Reset()
 {
 	manager->DestroyAllEntities();
+	UIEventSystem::get().Clear();
 	GizmoSystem::get().SetSelectedEntity(nullptr);
 	sf::View view;
 	view.setSize(window->getSize().x, window->getSize().y);

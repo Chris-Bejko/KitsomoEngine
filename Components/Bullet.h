@@ -33,7 +33,7 @@ public:
 	void InitSerializedFields(ReadableSerializableVariableMap map) override final;
 	std::vector<SerializableVariable>* GetSerializedFields() override final;
 
-	void Serialize();
+	void Serialize() override final;
 private:
 	float force = 850.f;
 	Color lastColor;

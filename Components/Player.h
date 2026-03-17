@@ -15,7 +15,7 @@ public:
 
 	bool Init() override final;
 
-	void Serialize();
+	void Serialize() override final;
 
 	std::vector<SerializableVariable>* GetSerializedFields() override final;
 
