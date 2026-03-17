@@ -11,12 +11,19 @@
 #include "Components/BoxCollider.h"
 #include "Components/PolygonCollider.h"
 #include "Components/AudioSource.h"
+#include "UI/UIRect.h"
+#include "Components/UIButton.h"
+#include "Components/UIImage.h"
+#include "Components/UIText.h"
+#include "Components/Canvas.h"
 #include "Logger.h"
+#include "EditorSprite.h"
 // #include "Components/BoxCollider.h"
 
 Entity::Entity(std::string name)
 {
 	this->transform = &this->AddComponent<Transform>(0, 0);
+	this->AddComponent<EditorSprite>();
 	isActive = true;
 	displayComponents = false;
 	SaveAvailableComponents();
@@ -30,20 +37,20 @@ bool Entity::IsActive() const
 
 void Entity::Destroy()
 {
-    isActive = false;
-    
-    if (parent)
-    {
-        parent->RemoveChild(this);
-        parent = nullptr; 
-    }
-    
-    for (auto* child : children)
-    {
-        child->parent = nullptr;
-        child->transform->SetParent(nullptr);
-    }
-    children.clear();
+	isActive = false;
+
+	if (parent)
+	{
+		parent->RemoveChild(this);
+		parent = nullptr;
+	}
+
+	for (auto *child : children)
+	{
+		child->parent = nullptr;
+		child->transform->SetParent(nullptr);
+	}
+	children.clear();
 }
 
 void Entity::Awake()
@@ -256,6 +263,12 @@ void Entity::DisplayComponents()
 		if (e->GetSerializedFields() == nullptr)
 			continue;
 
+		if (str == "Transform")
+		{
+			auto *t = dynamic_cast<Transform *>(e.get());
+			if (t && t->isUITransform)
+				continue; // skip rendering
+		}
 		// Increment count for this component type
 		int componentIndex = componentTypeCount[str]++;
 
@@ -275,7 +288,7 @@ void Entity::DisplayComponents()
 		ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), uniqueId.c_str());
 
 		// Remove button (skip Transform, it's required)
-		if (str != "Transform")
+		if (str != "Transform" && str != "UIRect") // UIRect is also required for UI elements
 		{
 			ImGui::SameLine();
 			ImGui::SetCursorPosX(windowWidth - 60);
@@ -423,6 +436,16 @@ void Entity::AddComponentByName(const std::string &componentName)
 		this->AddComponent<PolygonCollider>();
 	else if (componentName == "AudioSource")
 		this->AddComponent<AudioSource>();
+	else if (componentName == "UIButton")
+		this->AddComponent<UIButton>();
+	else if (componentName == "UIImage")
+		this->AddComponent<UIImage>();
+	else if (componentName == "UIText")
+		this->AddComponent<UIText>();
+	else if (componentName == "Canvas")
+		this->AddComponent<Canvas>();
+	else
+		LOG_ERROR("Unknown component: ", componentName.c_str());
 }
 
 // Static metadata map defining which components allow multiple instances
@@ -465,7 +488,7 @@ std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 						ser.fields.floatFields[var.name] = *(float *)var.data;
 						break;
 					case char_Type:
-						ser.fields.stringFields[var.name] = *reinterpret_cast<std::string *>(var.data);	
+						ser.fields.stringFields[var.name] = *reinterpret_cast<std::string *>(var.data);
 						break;
 					case bool_Type:
 						ser.fields.boolFields[var.name] = *(bool *)var.data;
@@ -517,35 +540,33 @@ bool Entity::DeletePressed()
 	return deletePressed;
 }
 
-
-void Entity::SetParent(Entity* newParent)
+void Entity::SetParent(Entity *newParent)
 {
-    if (parent)
-        parent->RemoveChild(this);
+	if (parent)
+		parent->RemoveChild(this);
 
-    parent = newParent;
+	parent = newParent;
 
-    if (parent)
-    {
-        parent->AddChild(this);
-        // Link transforms
-        transform->SetParent(parent->transform);
-    }
-    else
-    {
-        transform->SetParent(nullptr);
-    }
+	if (parent)
+	{
+		parent->AddChild(this);
+		// Link transforms
+		transform->SetParent(parent->transform);
+	}
+	else
+	{
+		transform->SetParent(nullptr);
+	}
 }
 
-void Entity::AddChild(Entity* child)
+void Entity::AddChild(Entity *child)
 {
-    children.push_back(child);
+	children.push_back(child);
 }
 
-void Entity::RemoveChild(Entity* child)
+void Entity::RemoveChild(Entity *child)
 {
-    children.erase(
-        std::remove(children.begin(), children.end(), child),
-        children.end()
-    );
+	children.erase(
+		std::remove(children.begin(), children.end(), child),
+		children.end());
 }

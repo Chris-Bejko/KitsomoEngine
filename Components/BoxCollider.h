@@ -24,7 +24,7 @@ public:
     void DrawDebug() override;
     ColliderType GetType() override { return ColliderType::Box; }
 
-	void Serialize();
+	void Serialize() override final;
 
 	std::vector<SerializableVariable> *GetSerializedFields() override final;
 

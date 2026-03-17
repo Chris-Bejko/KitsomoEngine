@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "../Entity.h"
 #include "Vector2.h"
+#include "Components/BoxCollider.h"
+
 enum class GizmoMode
 {
     Move,
@@ -38,7 +40,8 @@ public:
     bool snapEnabled = false;
     float snapSize = 16.f;
     bool IsGizmoDragging() { return activeDrag != GizmoAxis::None; }
-
+    Entity* GetSelectedEntity() { return selectedEntity; }
+    
 private:
     GizmoSystem() = default;
 
@@ -69,4 +72,18 @@ private:
     void DrawScale(sf::Vector2f entityWorld);
 
     void DrawArrow(sf::Vector2f from, sf::Vector2f to, sf::Color color, float thickness);
+	enum class DragHandle
+	{
+		None,
+		Top,
+		Bottom,
+		Left,
+		Right,
+		TopLeft,
+		TopRight,
+		BottomLeft,
+		BottomRight,
+	};
+    GizmoSystem::DragHandle activeDragHandle = GizmoSystem::DragHandle::None;
+    GizmoSystem::DragHandle GetHoveredHandle(sf::Vector2f pos, sf::FloatRect rect);
 };

@@ -22,7 +22,7 @@ public:
 	virtual std::vector<SerializableVariable>* GetSerializedFields() { return nullptr; }
 	virtual void SetSerializedFields(std::vector<SerializableVariable> variables) { }
 	virtual void InitSerializedFields(ReadableSerializableVariableMap map) { }
-
+	virtual void Serialize() { }
 
 	virtual void OnCollisionEnter(Collider& other) { }
 	virtual void OnCollisionExit(Collider& other) { }

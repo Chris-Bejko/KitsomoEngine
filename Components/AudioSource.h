@@ -38,7 +38,7 @@ class AudioSource : public Component
         // Serialization
         std::vector<SerializableVariable>* GetSerializedFields() override;
         void InitSerializedFields(ReadableSerializableVariableMap map) override final;
-        void Serialize();
+        void Serialize() override final;
 
         // Editor
         void DrawEditorButton() override;
