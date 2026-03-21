@@ -11,7 +11,9 @@ UIImage::UIImage(const std::string &texId)
 
 bool UIImage::Init()
 {
-    Serialize();
+    Field("textureId", textureId);
+    Field("color", colorString);
+    Field("alpha", alpha);
     if (!entity->HasComponent<UIRect>())
         entity->AddComponent<UIRect>();
     if (!textureId.empty())
@@ -77,28 +79,4 @@ void UIImage::SetAlpha(float a)
     sf::Color c = uiSprite.getColor();
     c.a = (sf::Uint8)(a * 255);
     uiSprite.setColor(c);
-}
-
-void UIImage::Serialize()
-{
-    serializables.push_back({"textureId", &textureId, char_Type});
-    serializables.push_back({"color", &colorString, char_Type});
-    serializables.push_back({"alpha", &alpha, float_Type});
-}
-
-void UIImage::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    for (auto const &[key, value] : map.stringFields)
-    {
-        if (key == "textureId")
-        {
-            textureId = value;
-            UpdateSprite();
-        }
-        if (key == "color")
-            colorString = value;
-    }
-    for (auto const &[key, value] : map.floatFields)
-        if (key == "alpha")
-            SetAlpha(value);
 }

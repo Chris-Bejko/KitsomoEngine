@@ -1,10 +1,11 @@
 #pragma once
-#include "../Component.h"
 #include <SFML/Audio.hpp>
 #include <memory>
 #include <string>
+#include "../SerializableScript.h"
 
-class AudioSource : public Component
+
+class AudioSource : public SerializableScript
 {
     public:
         AudioSource();
@@ -35,11 +36,6 @@ class AudioSource : public Component
         // Setters
         void SetPlayingOffset(float offset);
 
-        // Serialization
-        std::vector<SerializableVariable>* GetSerializedFields() override;
-        void InitSerializedFields(ReadableSerializableVariableMap map) override final;
-        void Serialize() override final;
-
         // Editor
         void DrawEditorButton() override;
 
@@ -47,7 +43,6 @@ class AudioSource : public Component
         std::unique_ptr<sf::Sound> sound;
         std::unique_ptr<sf::SoundBuffer> soundBuffer;
         std::string currentFilePath;
-        std::vector<SerializableVariable> serializables;
         float volume = 80.0f;
         bool isLooping = false;
         float pitch = 1.0f;

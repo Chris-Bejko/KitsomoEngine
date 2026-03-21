@@ -1,0 +1,48 @@
+[
+  {
+    "components": [
+      {
+        "fields": {
+          "interactable": true
+        },
+        "guid": "",
+        "type": "UIButton"
+      },
+      {
+        "fields": {
+          "anchorOffset.x": 0.0,
+          "anchorOffset.y": 0.0,
+          "pivot.x": 0.5,
+          "pivot.y": 0.5,
+          "sizeDelta.x": 100.0,
+          "sizeDelta.y": 50.0
+        },
+        "guid": "",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alpha": 1.0,
+          "color": "White",
+          "textureId": "circle"
+        },
+        "guid": "",
+        "type": "UIImage"
+      },
+      {
+        "fields": {
+          "position.x": 830.0,
+          "position.y": 434.5,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "guid": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5",
+    "name": "UIButton",
+    "parent": ""
+  }
+]

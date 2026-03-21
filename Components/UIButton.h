@@ -2,9 +2,9 @@
 #include <functional>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "../Component.h"
+#include "../SerializableScript.h"
 
-class UIButton : public Component
+class UIButton : public SerializableScript
 {
 public:
     UIButton();
@@ -37,17 +37,13 @@ public:
     bool isHovered = false;
     bool isPressed = false;
 
-    void Serialize() override;
-    void InitSerializedFields(ReadableSerializableVariableMap map) override;
     void DrawEditorButton() override;
-    std::vector<SerializableVariable>* GetSerializedFields() override { return &serializables; }    
 private:
     std::vector<std::function<void()>> onClickListeners;
     std::vector<std::function<void()>> onHoverListeners;
     std::vector<std::function<void()>> onHoverExitListeners;
 
     sf::RectangleShape background;
-	std::vector<SerializableVariable> serializables;
 
     void UpdateVisualState();
 };

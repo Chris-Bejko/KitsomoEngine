@@ -100,27 +100,28 @@ void EntityManager::RemoveActiveCollision(std::vector<std::string> it)
 	activeCollisions.erase(std::remove(activeCollisions.begin(), activeCollisions.end(), it), activeCollisions.end());
 }
 
+void EntityManager::SetSelectedEntity(Entity *entity)
+{
+	selectedEntity = entity;
+	GizmoSystem::get().SetSelectedEntity(entity);
+}
 void EntityManager::DisplayEntities()
 {
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 6));
 
+	if (ImGui::GetDragDropPayload() == nullptr)
+		dragHoveredEntity = nullptr;
+
 	for (auto &e : entities)
 	{
-		// Skip children - they'll be drawn under their parent
 		if (e->HasParent())
 			continue;
-
 		DisplayEntityNode(e.get());
 	}
 
 	ImGui::PopStyleVar();
 }
 
-void EntityManager::SetSelectedEntity(Entity *entity)
-{
-	selectedEntity = entity;
-	GizmoSystem::get().SetSelectedEntity(entity);
-}
 void EntityManager::DisplayEntityNode(Entity *e)
 {
 	std::string name = e->GetName().c_str();
@@ -139,42 +140,44 @@ void EntityManager::DisplayEntityNode(Entity *e)
 
 	bool opened = ImGui::TreeNodeEx(name.c_str(), flags);
 
-	// Handle selection click
 	if (ImGui::IsItemClicked())
 	{
-		// Deselect all
 		for (auto &a : entities)
 			a->displayComponents = false;
 
 		e->displayComponents = true;
 		selectedEntity = e;
+		GizmoSystem::get().SetSelectedEntity(e);
 
-		// Double click focus
 		float currentTime = ImGui::GetTime();
 		if (lastClickedEntity == e && (currentTime - lastClickTime) < 0.3f)
 		{
 			Engine::get().FocusOnEntity(e);
 			e->displayComponents = true;
-			selectedEntity = e;
 		}
 		lastClickedEntity = e;
 		lastClickTime = currentTime;
 	}
 
-	// Drag and drop to reparent
+	// Track hover for preview
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && ImGui::GetDragDropPayload() != nullptr)
+		dragHoveredEntity = e;
+
 	if (ImGui::BeginDragDropSource())
 	{
-		ImGui::SetDragDropPayload("ENTITY", &e, sizeof(Entity *));
-		ImGui::Text("Move: %s", name.c_str());
+		Entity *ptr = e;
+		ImGui::SetDragDropPayload("ENTITY", &ptr, sizeof(Entity *));
+		ImGui::Text("%s", name.c_str());
 		ImGui::EndDragDropSource();
 	}
 
+	// Drop target - reparent only
 	if (ImGui::BeginDragDropTarget())
 	{
 		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
 		{
 			Entity *dragged = *(Entity **)payload->Data;
-			if (dragged != e) // don't parent to self
+			if (dragged != e)
 				dragged->SetParent(e);
 		}
 		ImGui::EndDragDropTarget();
@@ -183,7 +186,6 @@ void EntityManager::DisplayEntityNode(Entity *e)
 	if (isSelected)
 		ImGui::PopStyleColor();
 
-	// Recursively draw children
 	if (opened)
 	{
 		for (auto *child : e->GetChildren())
@@ -428,4 +430,14 @@ std::string EntityManager::GetUniqueName(const std::string &baseName)
 			return candidate;
 		counter++;
 	}
+}
+
+void EntityManager::DisplayComponentsOf(Entity *e)
+{
+	if (!e)
+		return;
+	bool prev = e->displayComponents;
+	e->displayComponents = true; // force show
+	e->DisplayComponents();
+	e->displayComponents = prev; // restore
 }

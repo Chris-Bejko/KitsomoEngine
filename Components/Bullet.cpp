@@ -3,10 +3,12 @@
 #include "FloorSquare.h"
 #include "../Timedelta.h"
 #include "../Logger.h"
+#include "../Engine.h"
 
 bool Bullet::Init()
 {
-	Serialize();
+	Field("lastColorString", lastColorString);
+	Field("force", force);
 	entity->transform->scale = Vector2F(0.05f, 0.05f);
 	// if (!entity->HasComponent<Sprite>())
 	// {
@@ -24,31 +26,6 @@ bool Bullet::Init()
 	return true;
 }
 
-std::vector<SerializableVariable> *Bullet::GetSerializedFields()
-{
-	return &variables;
-}
-
-void Bullet::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-	for (auto const &[key, value] : map.stringFields)
-	{
-		if (key == "lastColorString")
-		{
-			lastColor.SetColor(value);
-			lastColorString = value;
-		}
-		if (key == "force")
-		{
-			force = std::stof(value);
-		}
-	}
-}
-void Bullet::Serialize()
-{
-	variables.push_back({"force", &force, float_Type});
-	variables.push_back({"lastColorString", &lastColorString, char_Type});
-}
 void Bullet::update(float dt)
 {
 	timer += dt;

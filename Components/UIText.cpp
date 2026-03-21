@@ -13,7 +13,11 @@ bool UIText::Init()
 {
     if (!entity->HasComponent<UIRect>())
         entity->AddComponent<UIRect>();
-    Serialize();
+    Field("text", text);
+    Field("fontId", fontId);
+    Field("fontSize", fontSize);
+    Field("color", colorString);
+    Field("alignment", alignmentString);
     if (!fontId.empty())
         UpdateTextProperties();
     return true;
@@ -89,38 +93,3 @@ void UIText::SetText(const std::string &t) { text = t; }
 void UIText::SetFontSize(unsigned int s) { fontSize = s; }
 void UIText::SetColor(sf::Color c) { sfText.setFillColor(c); }
 void UIText::SetAlignment(TextAlignment a) { alignment = a; }
-
-void UIText::Serialize()
-{
-    serializables.push_back({"text", &text, char_Type});
-    serializables.push_back({"fontId", &fontId, char_Type});
-    serializables.push_back({"fontSize", (int *)&fontSize, int_Type});
-    serializables.push_back({"color", &colorString, char_Type});
-    serializables.push_back({"alignment", &alignmentString, char_Type});
-}
-
-void UIText::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    for (auto const &[key, value] : map.stringFields)
-    {
-        if (key == "text")
-            text = value;
-        if (key == "fontId")
-            fontId = value;
-        if (key == "color")
-            colorString = value;
-        if (key == "alignment")
-        {
-            alignmentString = value;
-            if (value == "Left")
-                alignment = TextAlignment::Left;
-            else if (value == "Right")
-                alignment = TextAlignment::Right;
-            else
-                alignment = TextAlignment::Center;
-        }
-    }
-    for (auto const &[key, value] : map.intFields)
-        if (key == "fontSize")
-            fontSize = value;
-}

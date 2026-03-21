@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../Component.h"
 #include "../Color.h"
 #include "Sprite.h"
 #include "Collision/Collider.h"
+#include "../SerializableScript.h"
 
-class FloorSquare : public Component
+class FloorSquare : public SerializableScript
 {
 public:
 	FloorSquare() = default;
@@ -15,15 +15,10 @@ public:
 
 	void Config(Vector2F position, Color color);
 
-	void Serialize();
-
-	void InitSerializedFields(ReadableSerializableVariableMap map) override final;
-
 	void update(float dt) override final;
 
 	void updateEngine(float dt) override final;
 
-	std::vector<SerializableVariable> *GetSerializedFields() override final;
 
 	Color GetColorEnum();
 
@@ -31,7 +26,6 @@ public:
 	void OnTriggerEnter(Collider &other) override final;
 
 private:
-	std::vector<SerializableVariable> variables;
 	Color color;
 	std::string colorString;
 

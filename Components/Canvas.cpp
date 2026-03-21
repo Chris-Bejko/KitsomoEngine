@@ -4,7 +4,9 @@
 
 bool Canvas::Init()
 {
-    Serialize();
+    Field("renderMode", renderModeString);
+    Field("referenceResolution.x", referenceResolution.x);
+    Field("referenceResolution.y", referenceResolution.y);
     return true;
 }
 
@@ -26,31 +28,5 @@ void Canvas::DrawEditorButton()
     {
         renderMode = CanvasRenderMode::WorldSpace;
         renderModeString = "WorldSpace";
-    }
-}
-
-void Canvas::Serialize()
-{
-    serializables.clear();
-    serializables.push_back({"renderMode", &renderModeString, char_Type});
-    serializables.push_back({"referenceResolution.x", &referenceResolution.x, float_Type});
-    serializables.push_back({"referenceResolution.y", &referenceResolution.y, float_Type});
-}
-
-void Canvas::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    for (auto const& [key, value] : map.stringFields)
-    {
-        if (key == "renderMode")
-        {
-            renderModeString = value;
-            renderMode = (value == "WorldSpace") ? 
-                CanvasRenderMode::WorldSpace : CanvasRenderMode::ScreenSpace;
-        }
-    }
-    for (auto const& [key, value] : map.floatFields)
-    {
-        if (key == "referenceResolution.x") referenceResolution.x = value;
-        if (key == "referenceResolution.y") referenceResolution.y = value;
     }
 }

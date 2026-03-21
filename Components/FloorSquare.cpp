@@ -9,7 +9,7 @@ bool FloorSquare::Init()
 	Color color;
 	color.SetColor(colorString);
 	entity->transform->scale = Vector2F(0.2, 0.2);
-	Serialize();
+	Field("colorString", colorString);
 	return true;
 }
 
@@ -23,22 +23,6 @@ void FloorSquare::Config(Vector2F position, Color color)
 	}
 }
 
-void FloorSquare::Serialize()
-{
-	variables.push_back({ "colorString",&colorString, char_Type });
-}
-
-void FloorSquare::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-	for (auto const& [key, value] : map.stringFields)
-	{
-		if (key == "colorString")
-		{
-			colorString = value;
-			color.SetColor(value);
-		}
-	}
-}
 
 void FloorSquare::update(float dt)
 {
@@ -52,11 +36,6 @@ void FloorSquare::update(float dt)
 void FloorSquare::updateEngine(float dt)
 {
 	color.SetColor(colorString);
-}
-
-std::vector<SerializableVariable>* FloorSquare::GetSerializedFields()
-{
-	return &variables;
 }
 
 Color FloorSquare::GetColorEnum()

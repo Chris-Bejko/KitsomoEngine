@@ -1,10 +1,8 @@
 #pragma once
-#include "../Component.h"
 #include "../Vector2.h"
+#include "../SerializableScript.h"
 
-#define DECLARE(TYPE, NAME, VALUE) \
-variables.push_back({NAME, #NAME, TYPE})
-class Transform : public Component
+class Transform : public SerializableScript
 {
 public:
 	Transform() = default;
@@ -13,12 +11,6 @@ public:
 
 	Transform(float x, float y, float scX, float scY, float roation);
 	virtual ~Transform() = default;
-
-	void Serialize() override final;
-
-	void InitSerializedFields(ReadableSerializableVariableMap variables) override final;
-
-	std::vector<SerializableVariable>* GetSerializedFields() override final;
 
 	bool Init() override final;
 
@@ -46,7 +38,6 @@ public:
 	std::vector<Transform*>& GetChildren() { return children; }
 	bool isUITransform = false;
 private:
-	std::vector<SerializableVariable> variables;
 	Transform* parent = nullptr;
 	std::vector<Transform*> children;
 	

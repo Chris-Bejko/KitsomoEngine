@@ -2,9 +2,8 @@
 
 #include "../Camera.h"
 #include "../Color.h"
-#include "../Component.h"
-
-class Player : public Component
+#include "../SerializableScript.h"
+class Player : public SerializableScript
 {
 public:
 	Player();
@@ -14,13 +13,6 @@ public:
 	Player(bool useControls, Vector2F position, std::string tag);
 
 	bool Init() override final;
-
-	void Serialize() override final;
-
-	std::vector<SerializableVariable>* GetSerializedFields() override final;
-
-
-	void InitSerializedFields(ReadableSerializableVariableMap map) override final;
 
 	void Awake() override final;
 
@@ -39,8 +31,6 @@ public:
 
 private:
 	Camera* camera;
-	std::vector<SerializableVariable> variables;
-
 	bool useControls;
 	Vector2F initPos;
 	std::string initTag;

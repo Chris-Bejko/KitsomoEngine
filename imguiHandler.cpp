@@ -68,6 +68,8 @@ void ImguiHandler::ApplyEditorStyle()
 
 void ImguiHandler::Update(sf::Time rest)
 {
+	if(Engine::get().IsLoading())
+		return;
 	ImGui::SFML::Update(Engine::get().GetWindow(), rest);
 
 	DrawToolbar();
@@ -234,88 +236,46 @@ void ImguiHandler::DrawInspector()
 {
 	ImGui::Begin("Inspector");
 
-	auto selected = Engine::get().GetManager()->GetSelectedEntity();
-	if (selected == nullptr)
+	bool isDragging = ImGui::GetDragDropPayload() != nullptr &&
+					  ImGui::GetDragDropPayload()->IsDataType("ENTITY"); // changed to ENTITY
+
+	Entity *dragHovered = Engine::get().GetManager()->GetDragHoveredEntity();
+
+	// Show hovered entity during drag, otherwise show selected
+	Entity *displayEntity = (isDragging && dragHovered != nullptr)
+								? dragHovered
+								: Engine::get().GetManager()->GetSelectedEntity();
+
+	if (displayEntity == nullptr)
 	{
 		ImGui::TextColored(COLOR_TEXT_DIM, "No entity selected.");
 		ImGui::End();
 		return;
 	}
 
-	Engine::get().GetManager()->DisplayComponents();
-
-	ImGui::Spacing();
-	ImGui::Separator();
-	ImGui::Spacing();
-
-	// Entity operations
-	ImGui::TextColored(COLOR_TEXT_DIM, "ENTITY OPERATIONS");
-	ImGui::Spacing();
-
-	// Copy button (Ctrl+C)
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.35f, 0.55f, 1.0f));
-	if (ImGui::Button("  Copy (Ctrl+C)", ImVec2(-1, 24)))
-		OnCopyEntity();
-	ImGui::PopStyleColor(2);
-
-	// Paste button (Ctrl+V) - only if clipboard has content
-	ImGui::PushStyleColor(ImGuiCol_Button, EntityClipboard::get().HasContent() ? ImVec4(0.18f, 0.22f, 0.35f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, EntityClipboard::get().HasContent() ? ImVec4(0.25f, 0.35f, 0.55f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
-	if (ImGui::Button("  Paste (Ctrl+V)", ImVec2(-1, 24)) && EntityClipboard::get().HasContent())
-		OnPasteEntity();
-	ImGui::PopStyleColor(2);
-
-	// Duplicate button (Ctrl+D)
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.35f, 0.55f, 1.0f));
-	if (ImGui::Button("  Duplicate (Ctrl+D)", ImVec2(-1, 24)))
-		OnDuplicateEntity();
-	ImGui::PopStyleColor(2);
-
-	// Delete button (Delete key)
-	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.85f, 0.28f, 0.28f, 1.0f));
-	if (ImGui::Button("  Delete (Delete)", ImVec2(-1, 24)))
-		OnDeleteEntity();
-	ImGui::PopStyleColor(2);
-
-	ImGui::Spacing();
-	ImGui::Separator();
-	ImGui::Spacing();
-
-	// Undo/Redo info
-	ImGui::TextColored(COLOR_TEXT_DIM, "UNDO/REDO");
-	ImGui::Spacing();
-
-	ImGui::PushStyleColor(ImGuiCol_Button, CommandHistory::get().CanUndo() ? ImVec4(0.18f, 0.22f, 0.35f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, CommandHistory::get().CanUndo() ? ImVec4(0.25f, 0.35f, 0.55f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
-	if (ImGui::Button("  Undo (Ctrl+Z)", ImVec2(-1, 24)) && CommandHistory::get().CanUndo())
-		OnUndo();
-	ImGui::PopStyleColor(2);
-
-	ImGui::PushStyleColor(ImGuiCol_Button, CommandHistory::get().CanRedo() ? ImVec4(0.18f, 0.22f, 0.35f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, CommandHistory::get().CanRedo() ? ImVec4(0.25f, 0.35f, 0.55f, 1.0f) : ImVec4(0.10f, 0.10f, 0.12f, 1.0f));
-	if (ImGui::Button("  Redo (Ctrl+Y)", ImVec2(-1, 24)) && CommandHistory::get().CanRedo())
-		OnRedo();
-	ImGui::PopStyleColor(2);
-
-	ImGui::Spacing();
-	ImGui::Separator();
-	ImGui::Spacing();
-
-	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.35f, 0.55f, 1.0f));
-	if (ImGui::Button("  Save as Prefab", ImVec2(-1, 28)))
+	if (isDragging && dragHovered != nullptr &&
+		dragHovered != Engine::get().GetManager()->GetSelectedEntity())
 	{
-		Engine::get().SavePrefab(selected);
-		LOG_INFO("Prefab saved!");
+		ImGui::TextColored(ImVec4(0.95f, 0.78f, 0.2f, 1.0f),
+						   "Drop target: %s", displayEntity->GetName().c_str());
+		ImGui::Separator();
 	}
-	ImGui::PopStyleColor(2);
+
+	Engine::get().GetManager()->DisplayComponentsOf(displayEntity);
+
+	if (!isDragging)
+	{
+		ImGui::Spacing();
+		ImGui::Separator();
+		ImGui::Spacing();
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
+		if (ImGui::Button("  Save as Prefab", ImVec2(-1, 28)))
+			Engine::get().SavePrefab(displayEntity);
+		ImGui::PopStyleColor();
+	}
 
 	ImGui::End();
 }
-
 void ImguiHandler::DrawSaveDialog()
 {
 	if (Engine::get().GetCurrentState() != EngineState::Running)

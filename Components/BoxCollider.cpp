@@ -25,6 +25,7 @@ BoxCollider::BoxCollider(const std::string tag, sf::FloatRect hitbox, bool isTri
 
 bool BoxCollider::Init()
 {
+    Collider::Init();
     if (entity->HasComponent<Sprite>())
     {
         if (!configuredHitbox)
@@ -34,64 +35,11 @@ bool BoxCollider::Init()
     }
 
     SetUpColliderVisuals();
-    // transform = &entity->GetComponent<Transform>();
-    Serialize();
-
+    Field("hitbox.top", hitbox.top);
+    Field("hitbox.left", hitbox.left);
+    Field("hitbox.width", hitbox.width);
+    Field("hitbox.height", hitbox.height);
     return true;
-}
-
-void BoxCollider::Serialize()
-{
-    serializables.clear();
-    serializables.push_back({"hitbox.top", &hitbox.top, float_Type});
-    serializables.push_back({"hitbox.left", &hitbox.left, float_Type});
-    serializables.push_back({"hitbox.width", &hitbox.width, float_Type});
-    serializables.push_back({"hitbox.height", &hitbox.height, float_Type});
-    serializables.push_back({"collisionTag", &collisionTag, char_Type});
-    serializables.push_back({"isTrigger", &isTrigger, bool_Type});
-}
-
-std::vector<SerializableVariable> *BoxCollider::GetSerializedFields()
-{
-    return &serializables;
-}
-
-void BoxCollider::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    for (auto const &[key, value] : map.floatFields)
-    {
-        if (key == "hitbox.top")
-        {
-            hitbox.top = value;
-        }
-        if (key == "hitbox.left")
-        {
-            hitbox.left = value;
-        }
-        if (key == "hitbox.width")
-        {
-            hitbox.width = value;
-        }
-        if (key == "hitbox.height")
-        {
-            hitbox.height = value;
-        }
-    }
-    for (auto const &[key, value] : map.stringFields)
-    {
-        if (key == "collisionTag")
-        {
-            collisionTag = value;
-        }
-    }
-
-    for (auto const &[key, value] : map.boolFields)
-    {
-        if (key == "isTrigger")
-        {
-            isTrigger = value;
-        }
-    }
 }
 
 void BoxCollider::SetUpColliderVisuals()
@@ -171,12 +119,12 @@ BoxCollider::DragHandle BoxCollider::GetHoveredHandle(sf::Vector2f mousePos)
     float hw = 8.f; // slightly larger hit area than visual
     // LOG_DEBUG("GetHoveredHandle - mouse: ", mousePos.x, ",", mousePos.y,
     //   " rect: ", rect.left, ",", rect.top, " ", rect.width, "x", rect.height);
-    auto near = [](float a, float b)
+    auto nearBy = [](float a, float b)
     { return std::abs(a - b) < 8.f; };
-    bool onLeft = near(mousePos.x, rect.left);
-    bool onRight = near(mousePos.x, rect.left + rect.width);
-    bool onTop = near(mousePos.y, rect.top);
-    bool onBottom = near(mousePos.y, rect.top + rect.height);
+    bool onLeft = nearBy(mousePos.x, rect.left);
+    bool onRight = nearBy(mousePos.x, rect.left + rect.width);
+    bool onTop = nearBy(mousePos.y, rect.top);
+    bool onBottom = nearBy(mousePos.y, rect.top + rect.height);
 
     if (onTop && onLeft)
         return DragHandle::TopLeft;

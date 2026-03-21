@@ -6,9 +6,15 @@
 #include "Logger.h"
 bool UIRect::Init()
 {
-    Serialize();
     if (entity->HasComponent<Transform>())
         entity->GetComponent<Transform>().isUITransform = true;
+
+    Field("anchorOffset.x", anchorOffset.x);
+    Field("anchorOffset.y", anchorOffset.y);
+    Field("sizeDelta.x", sizeDelta.x);
+    Field("sizeDelta.y", sizeDelta.y);
+    Field("pivot.x", pivot.x);
+    Field("pivot.y", pivot.y);
     return true;
 }
 
@@ -68,7 +74,7 @@ sf::Vector2f UIRect::ResolveAnchor(AnchorPreset anchor, sf::Vector2f screenSize)
 
 sf::Vector2f UIRect::GetScreenPosition()
 {
-    Canvas* canvas = GetCanvas();
+    Canvas *canvas = GetCanvas();
     sf::Vector2f screenSize;
 
     if (canvas && canvas->GetRenderMode() == CanvasRenderMode::ScreenSpace)
@@ -83,22 +89,21 @@ sf::Vector2f UIRect::GetScreenPosition()
     }
 
     // Check if parent entity has a UIRect - position relative to it
-    if (entity->GetParent() != nullptr && 
+    if (entity->GetParent() != nullptr &&
         entity->GetParent()->HasComponent<UIRect>())
     {
-        auto& parentRect = entity->GetParent()->GetComponent<UIRect>();
+        auto &parentRect = entity->GetParent()->GetComponent<UIRect>();
         sf::FloatRect parentScreenRect = parentRect.GetScreenRect();
-        
+
         // Anchor relative to parent rect instead of screen
-        sf::Vector2f parentAnchorPos = ResolveAnchor(anchor, 
-            sf::Vector2f(parentScreenRect.width, parentScreenRect.height));
-        
+        sf::Vector2f parentAnchorPos = ResolveAnchor(anchor,
+                                                     sf::Vector2f(parentScreenRect.width, parentScreenRect.height));
+
         sf::Vector2f pivotOffset = {sizeDelta.x * pivot.x, sizeDelta.y * pivot.y};
-        
+
         return sf::Vector2f(
             parentScreenRect.left + parentAnchorPos.x + anchorOffset.x - pivotOffset.x,
-            parentScreenRect.top  + parentAnchorPos.y + anchorOffset.y - pivotOffset.y
-        );
+            parentScreenRect.top + parentAnchorPos.y + anchorOffset.y - pivotOffset.y);
     }
 
     // Normal screen space positioning
@@ -113,39 +118,9 @@ sf::FloatRect UIRect::GetScreenRect()
     return sf::FloatRect(pos.x, pos.y, sizeDelta.x, sizeDelta.y);
 }
 
-void UIRect::Serialize()
-{
-    serializables.clear();
-    serializables.push_back({"anchorOffset.x", &anchorOffset.x, float_Type});
-    serializables.push_back({"anchorOffset.y", &anchorOffset.y, float_Type});
-    serializables.push_back({"sizeDelta.x", &sizeDelta.x, float_Type});
-    serializables.push_back({"sizeDelta.y", &sizeDelta.y, float_Type});
-    serializables.push_back({"pivot.x", &pivot.x, float_Type});
-    serializables.push_back({"pivot.y", &pivot.y, float_Type});
-}
-
-void UIRect::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    for (auto const &[key, value] : map.floatFields)
-    {
-        if (key == "anchorOffset.x")
-            anchorOffset.x = value;
-        if (key == "anchorOffset.y")
-            anchorOffset.y = value;
-        if (key == "sizeDelta.x")
-            sizeDelta.x = value;
-        if (key == "sizeDelta.y")
-            sizeDelta.y = value;
-        if (key == "pivot.x")
-            pivot.x = value;
-        if (key == "pivot.y")
-            pivot.y = value;
-    }
-}
-
 void UIRect::updateEngine(float dt)
 {
-        SyncToTransform();
+    SyncToTransform();
 }
 
 void UIRect::update(float dt)

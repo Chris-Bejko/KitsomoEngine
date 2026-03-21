@@ -18,6 +18,7 @@ CircleCollider::CircleCollider(std::string tag, float radius, bool isTrigger)
 
 bool CircleCollider::Init()
 {
+    Collider::Init();
     if (!configuredRadius && entity->HasComponent<Sprite>())
     {
         auto bounds = entity->GetComponent<Sprite>().GetGlobalBounds();
@@ -29,8 +30,7 @@ bool CircleCollider::Init()
     colliderVisual.setFillColor(sf::Color::Transparent);
     colliderVisual.setOutlineColor(sf::Color(0, 255, 128, 255));
     colliderVisual.setOutlineThickness(1.f);
-
-    Serialize();
+    Field("radius", radius);
     return true;
 }
 
@@ -38,8 +38,7 @@ sf::Vector2f CircleCollider::GetCenter()
 {
     return sf::Vector2f(
         entity->transform->position.x,
-        entity->transform->position.y
-    );
+        entity->transform->position.y);
 }
 
 sf::FloatRect CircleCollider::GetBounds()
@@ -48,15 +47,14 @@ sf::FloatRect CircleCollider::GetBounds()
         GetCenter().x - radius,
         GetCenter().y - radius,
         radius * 2.f,
-        radius * 2.f
-    );
+        radius * 2.f);
 }
 
-bool CircleCollider::Intersects(Collider& other)
+bool CircleCollider::Intersects(Collider &other)
 {
     if (other.GetType() == ColliderType::Circle)
     {
-        auto& circle = static_cast<CircleCollider&>(other);
+        auto &circle = static_cast<CircleCollider &>(other);
         sf::Vector2f diff = GetCenter() - circle.GetCenter();
         float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
         return dist < (radius + circle.GetRadius());
@@ -76,8 +74,10 @@ void CircleCollider::DrawDebug()
 
 void CircleCollider::draw()
 {
-    if (!Engine::get().isEngine) return;
-    if (!editMode) return;
+    if (!Engine::get().isEngine)
+        return;
+    if (!editMode)
+        return;
     DrawDebug();
     UpdateEditMode();
 }
@@ -100,8 +100,10 @@ void CircleCollider::updateEngine(float dt)
 }
 void CircleCollider::UpdateEditMode()
 {
-    if (!editMode) return;
-    if (ImGui::GetIO().WantCaptureMouse) return;
+    if (!editMode)
+        return;
+    if (ImGui::GetIO().WantCaptureMouse)
+        return;
 
     auto mousePixel = sf::Mouse::getPosition(Engine::get().GetWindow());
     auto mouseWorld = Engine::get().GetWindow().mapPixelToCoords(mousePixel);
@@ -134,22 +136,4 @@ void CircleCollider::UpdateEditMode()
         colliderVisual.setOrigin(radius, radius);
         Serialize();
     }
-}
-
-void CircleCollider::Serialize()
-{
-    serializables.clear();
-    serializables.push_back({ "radius", &radius, float_Type });
-    serializables.push_back({ "collisionTag", &collisionTag, char_Type });
-    serializables.push_back({ "isTrigger", &isTrigger, bool_Type });
-}
-
-void CircleCollider::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    for (auto const& [key, value] : map.floatFields)
-        if (key == "radius") radius = value;
-    for (auto const& [key, value] : map.stringFields)
-        if (key == "collisionTag") collisionTag = value;
-    for (auto const& [key, value] : map.boolFields)
-        if (key == "isTrigger") isTrigger = value;
 }

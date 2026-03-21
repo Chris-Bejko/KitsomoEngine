@@ -24,12 +24,6 @@ public:
     void DrawDebug() override;
     ColliderType GetType() override { return ColliderType::Box; }
 
-	void Serialize() override final;
-
-	std::vector<SerializableVariable> *GetSerializedFields() override final;
-
-	void InitSerializedFields(ReadableSerializableVariableMap map) override final;
-
 	void SetUpColliderVisuals();
 
 	void draw() override final;
@@ -43,7 +37,6 @@ public:
 	void DrawEditorButton() override;
 
 private:
-	std::vector<SerializableVariable> serializables;
 	friend class Collision;
 	float offset_x, offset_y;
 	sf::FloatRect hitbox;

@@ -3,6 +3,7 @@
 #include "../Serialization.h"
 #include "SFML/Graphics.hpp"
 #include <string>
+#include "../SerializableScript.h"
 
 enum class ColliderType
 {
@@ -11,37 +12,39 @@ enum class ColliderType
     Polygon
 };
 
-class Collider : public Component
+class Collider : public SerializableScript
 {
 public:
     Collider() = default;
     virtual ~Collider() = default;
 
+    bool Init() override
+    {
+        Field("isTrigger", isTrigger);
+        Field("collisionTag", collisionTag);
+        return true;
+    }
     // Must implement
-    virtual bool Intersects(Collider& other) = 0;
+    virtual bool Intersects(Collider &other) = 0;
     virtual sf::FloatRect GetBounds() = 0;
     virtual void DrawDebug() = 0;
     virtual ColliderType GetType() = 0;
 
     // Shared behaviour
     std::string GetCollisionTag() { return collisionTag; }
-    void SetCollisionTag(const std::string& tag) { collisionTag = tag; }
+    void SetCollisionTag(const std::string &tag) { collisionTag = tag; }
     bool IsTrigger() { return isTrigger; }
     bool editMode = false;
-
-    virtual void Serialize() override {}
-    virtual std::vector<SerializableVariable>* GetSerializedFields() override { return &serializables; }
-    virtual void InitSerializedFields(ReadableSerializableVariableMap map) override {}
 
     virtual void DrawEditorButton() override;
 
     // Collision callbacks forwarded from Entity
-    void OnCollisionEnter(Collider& other) override {}
-    void OnCollisionExit(Collider& other) override {}
-    void OnTriggerEnter(Collider& other) override {}
-    void OnTriggerExit(Collider& other) override {}
-    void OnTriggerStay(Collider& other) override {}
-	bool IsInEditMode() { return editMode; }
+    void OnCollisionEnter(Collider &other) override {}
+    void OnCollisionExit(Collider &other) override {}
+    void OnTriggerEnter(Collider &other) override {}
+    void OnTriggerExit(Collider &other) override {}
+    void OnTriggerStay(Collider &other) override {}
+    bool IsInEditMode() { return editMode; }
 
 protected:
     std::string collisionTag = "";

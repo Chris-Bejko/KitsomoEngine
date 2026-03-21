@@ -17,12 +17,12 @@ UIButton::~UIButton()
 
 bool UIButton::Init()
 {
-    Serialize();
+    Field("interactable", interactable);
 
     if (!entity->HasComponent<UIRect>())
         entity->AddComponent<UIRect>();
 
-    if(!entity->HasComponent<UIImage>())
+    if (!entity->HasComponent<UIImage>())
         entity->AddComponent<UIImage>();
 
     Entity *textEntity = new Entity("Text");
@@ -100,16 +100,4 @@ void UIButton::DrawEditorButton()
     ImGui::Separator();
     ImGui::TextColored(ImVec4(0.4f, 0.7f, 1.0f, 1.0f), "Button Settings");
     ImGui::Checkbox("Interactable", &interactable);
-}
-
-void UIButton::Serialize()
-{
-    serializables.push_back({"interactable", &interactable, bool_Type});
-}
-
-void UIButton::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    for (auto const &[key, value] : map.boolFields)
-        if (key == "interactable")
-            interactable = value;
 }

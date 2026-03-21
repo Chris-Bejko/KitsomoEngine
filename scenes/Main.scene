@@ -3,6 +3,134 @@
     "components": [
       {
         "fields": {
+          "anchorOffset.x": 0.0,
+          "anchorOffset.y": 0.0,
+          "pivot.x": 0.5,
+          "pivot.y": 0.5,
+          "sizeDelta.x": 100.0,
+          "sizeDelta.y": 50.0
+        },
+        "guid": "",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alignment": "Center",
+          "color": "Red",
+          "fontId": "dmPrison",
+          "fontSize": -858993460,
+          "text": "Add 1 to score"
+        },
+        "guid": "",
+        "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 830.0,
+          "position.y": 434.5,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "guid": "4e7f3381-bdd7-430f-96f3-fefa63b09950",
+    "name": "Text (1)",
+    "parent": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "interactable": true
+        },
+        "guid": "",
+        "type": "UIButton"
+      },
+      {
+        "fields": {
+          "anchorOffset.x": 0.0,
+          "anchorOffset.y": 0.0,
+          "pivot.x": 0.5,
+          "pivot.y": 0.5,
+          "sizeDelta.x": 100.0,
+          "sizeDelta.y": 50.0
+        },
+        "guid": "",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alpha": 1.0,
+          "color": "White",
+          "textureId": ""
+        },
+        "guid": "",
+        "type": "UIImage"
+      },
+      {
+        "fields": {
+          "position.x": 830.0,
+          "position.y": 434.5,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "guid": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5",
+    "name": "UIButton",
+    "parent": "c9ec4c50-f310-4e5f-8070-6d19b0525a3a"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "anchorOffset.x": 0.0,
+          "anchorOffset.y": 0.0,
+          "pivot.x": 0.5,
+          "pivot.y": 0.5,
+          "sizeDelta.x": 100.0,
+          "sizeDelta.y": 50.0
+        },
+        "guid": "",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alignment": "Center",
+          "color": "White",
+          "fontId": "",
+          "fontSize": 0,
+          "text": "Text"
+        },
+        "guid": "",
+        "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 830.0,
+          "position.y": 434.5,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "guid": "191d51c1-4efe-42bd-bde4-e5440646e34c",
+    "name": "Text",
+    "parent": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5"
+  },
+  {
+    "components": [
+      {
+        "fields": {
           "colorString": "Cyan"
         },
         "guid": "",
@@ -258,6 +386,15 @@
     "components": [
       {
         "fields": {
+          "referenceResolution.x": 1280.0,
+          "referenceResolution.y": 720.0,
+          "renderMode": "ScreenSpace"
+        },
+        "guid": "",
+        "type": "Canvas"
+      },
+      {
+        "fields": {
           "position.x": 0.0,
           "position.y": 0.0,
           "rotation": 0.0,
@@ -266,15 +403,6 @@
         },
         "guid": "",
         "type": "Transform"
-      },
-      {
-        "fields": {
-          "referenceResolution.x": 1280.0,
-          "referenceResolution.y": 720.0,
-          "renderMode": "ScreenSpace"
-        },
-        "guid": "",
-        "type": "Canvas"
       }
     ],
     "guid": "c9ec4c50-f310-4e5f-8070-6d19b0525a3a",
@@ -283,17 +411,6 @@
   },
   {
     "components": [
-      {
-        "fields": {
-          "position.x": 830.0,
-          "position.y": 434.5,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "",
-        "type": "Transform"
-      },
       {
         "fields": {
           "anchorOffset.x": 0.0,
@@ -311,11 +428,22 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": -1430408320,
+          "fontSize": -858993460,
           "text": "Score"
         },
         "guid": "",
         "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 830.0,
+          "position.y": 434.5,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "",
+        "type": "Transform"
       }
     ],
     "guid": "115f7172-f19c-4837-9229-825d18a0073a",
@@ -326,6 +454,16 @@
     "components": [
       {
         "fields": {
+          "button": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5|ddfb46f9-21c9-4805-880c-48e4e591eb9b",
+          "player": "",
+          "score": 3,
+          "scoreText": "115f7172-f19c-4837-9229-825d18a0073a|"
+        },
+        "guid": "",
+        "type": "GameManager"
+      },
+      {
+        "fields": {
           "position.x": 0.0,
           "position.y": 0.0,
           "rotation": 0.0,
@@ -334,16 +472,6 @@
         },
         "guid": "",
         "type": "Transform"
-      },
-      {
-        "fields": {
-          "button": "",
-          "player": "",
-          "score": 3,
-          "scoreText": "115f7172-f19c-4837-9229-825d18a0073a|"
-        },
-        "guid": "",
-        "type": "GameManager"
       }
     ],
     "guid": "c654de34-f964-48af-8341-8dcea5cd045c",
