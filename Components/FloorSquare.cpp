@@ -16,6 +16,7 @@ bool FloorSquare::Init()
 void FloorSquare::Config(Vector2F position, Color color)
 {
 	this->color = color;
+	colorString = color.SerializeColor();
 	entity->transform->position = position;
 	if(entity->HasComponent<Sprite>())
 	{
