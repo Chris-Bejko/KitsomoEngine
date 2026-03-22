@@ -8,6 +8,12 @@ enum class CanvasRenderMode
     WorldSpace
 };
 
+enum class CanvasScaleMode
+{
+    ConstantPixelSize,
+    ScaleWithScreenSize,
+};
+
 class Canvas : public SerializableScript
 {
 public:
@@ -22,8 +28,6 @@ public:
     CanvasRenderMode GetRenderMode() { return renderMode; }
     void SetRenderMode(CanvasRenderMode mode) { renderMode = mode; }
 
-    sf::Vector2f referenceResolution = {1280.f, 720.f};
-
     void DrawEditorButton() override;
     void OnFieldChanged(const std::string &fieldName) override
     {
@@ -31,7 +35,14 @@ public:
             renderMode = (renderModeString == "WorldSpace") ? CanvasRenderMode::WorldSpace : CanvasRenderMode::ScreenSpace;
     }
 
+    void UpdateScaleFactor();
+
+    float GetScaleFactor() {return scaleFactor;}
 private:
     CanvasRenderMode renderMode = CanvasRenderMode::ScreenSpace;
     std::string renderModeString = "ScreenSpace";
+    CanvasScaleMode scaleMode = CanvasScaleMode::ScaleWithScreenSize;
+    std::string scaleModeString = "ScaleWithScreenSize";
+    Vector2F referenceResolution = Vector2F(1280.f, 720.f);
+    float scaleFactor = 1.0f;
 };

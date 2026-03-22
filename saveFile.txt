@@ -9,22 +9,22 @@
           "fontSize": 24,
           "text": "Score: {0}"
         },
-        "guid": "",
+        "guid": "abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
         "type": "UIText"
       },
       {
         "fields": {
-          "anchorOffset": "-790.000000|-350.000000",
+          "anchorOffset": "-496.666779|-198.721512",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "",
+        "guid": "653c8e7b-580d-4816-9add-a45d58effa1d",
         "type": "UIRect"
       },
       {
         "fields": {
-          "position.x": 40.0,
-          "position.y": 84.5,
+          "position.x": 93.33322143554688,
+          "position.y": 136.2784881591797,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -44,12 +44,12 @@
           "All Floor Squares": "",
           "Bools": "",
           "ExampleSerializedVector": "",
-          "button": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5|ddfb46f9-21c9-4805-880c-48e4e591eb9b",
+          "button": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5|eee00b40-9955-4e1a-974d-f77a7c23a3ae",
           "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
           "score": 3,
-          "scoreText": "115f7172-f19c-4837-9229-825d18a0073a|"
+          "scoreText": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f|abdd52fb-e4b3-4c42-8f30-968f168ecaa7"
         },
-        "guid": "",
+        "guid": "968f3aff-082c-40eb-b7ba-697b2e1084db",
         "type": "GameManager"
       },
       {
@@ -72,11 +72,11 @@
     "components": [
       {
         "fields": {
-          "referenceResolution.x": 1280.0,
-          "referenceResolution.y": 720.0,
-          "renderMode": "ScreenSpace"
+          "referenceResolution": "1280.000000|720.000000",
+          "renderMode": "ScreenSpace",
+          "scaleMode": "ScaleWithScreenSize"
         },
-        "guid": "",
+        "guid": "aa8ba336-3c60-4cef-9a1c-0438d94be3d3",
         "type": "Canvas"
       },
       {
@@ -103,7 +103,7 @@
           "isTrigger": true,
           "vertices": "2.791113|-499.497528;-535.390930|471.992981;570.063293|471.992981"
         },
-        "guid": "",
+        "guid": "1eea6922-d86d-4928-9274-b78f51618efc",
         "type": "PolygonCollider"
       },
       {
@@ -112,7 +112,7 @@
           "renderOrder": 2,
           "textureID": "triangle"
         },
-        "guid": "",
+        "guid": "b6bd7b22-d8f3-4f6e-957c-c449fd4dfd17",
         "type": "Sprite"
       },
       {
@@ -124,7 +124,7 @@
           "moveSpeed": 350.0,
           "shootSound": "Audio/explosion.wav"
         },
-        "guid": "",
+        "guid": "032ea708-4efb-45b6-a06b-02f7b0b890d4",
         "type": "Player"
       },
       {
@@ -137,7 +137,7 @@
           "mass": 1.0,
           "useGravity": false
         },
-        "guid": "",
+        "guid": "2202bae2-d4aa-4a30-9c48-533f626f3da4",
         "type": "Rigidbody"
       },
       {
@@ -147,13 +147,13 @@
           "pitch": 1.0,
           "volume": 80.0
         },
-        "guid": "",
+        "guid": "685878f4-3375-4477-ac0a-71f28eeb5510",
         "type": "AudioSource"
       },
       {
         "fields": {
-          "position.x": -302.54547119140625,
-          "position.y": 80.69645690917969,
+          "position.x": 64.78515625,
+          "position.y": -104.48687744140625,
           "rotation": 0.0,
           "scale.x": 0.05000000074505806,
           "scale.y": 0.05000000074505806
@@ -172,7 +172,7 @@
         "fields": {
           "colorString": "Magenta"
         },
-        "guid": "",
+        "guid": "a4391a24-b049-4501-a936-13450559fef9",
         "type": "FloorSquare"
       },
       {
@@ -184,7 +184,7 @@
           "hitbox.width": 123.67306518554688,
           "isTrigger": true
         },
-        "guid": "",
+        "guid": "7094b86e-ca5b-429f-bc2b-c426e80fa1ef",
         "type": "BoxCollider"
       },
       {
@@ -193,7 +193,7 @@
           "renderOrder": 0,
           "textureID": "square"
         },
-        "guid": "",
+        "guid": "b15818af-1928-45fc-98ec-dd0259dc5ad4",
         "type": "Sprite"
       },
       {
@@ -220,7 +220,7 @@
           "renderOrder": 0,
           "textureID": "square"
         },
-        "guid": "",
+        "guid": "3926b45a-f729-4274-adbe-1bea51c3ad2f",
         "type": "Sprite"
       },
       {
@@ -232,14 +232,14 @@
           "hitbox.width": 123.67306518554688,
           "isTrigger": true
         },
-        "guid": "",
+        "guid": "a9ac476c-d499-4b06-9a27-0039ff7de1e2",
         "type": "BoxCollider"
       },
       {
         "fields": {
           "colorString": "Blue"
         },
-        "guid": "",
+        "guid": "2cf69c65-0f22-4b23-ad08-5207dbeb6b0c",
         "type": "FloorSquare"
       },
       {
@@ -264,7 +264,7 @@
         "fields": {
           "colorString": "Cyan"
         },
-        "guid": "",
+        "guid": "c9376e08-6c50-4f04-a913-50419d3c086c",
         "type": "FloorSquare"
       },
       {
@@ -276,7 +276,7 @@
           "hitbox.width": 123.67306518554688,
           "isTrigger": true
         },
-        "guid": "",
+        "guid": "55ca71ff-5f86-463f-b427-4f49ee16ebd9",
         "type": "BoxCollider"
       },
       {
@@ -285,13 +285,13 @@
           "renderOrder": 0,
           "textureID": "square"
         },
-        "guid": "",
+        "guid": "8c62c7fe-bdcb-41f9-b111-a0d1653e7ce8",
         "type": "Sprite"
       },
       {
         "fields": {
-          "position.x": -224.89053344726563,
-          "position.y": -178.8114471435547,
+          "position.x": 403.7344055175781,
+          "position.y": -199.8209228515625,
           "rotation": 0.0,
           "scale.x": 0.25,
           "scale.y": 0.25
@@ -312,7 +312,7 @@
           "renderOrder": 0,
           "textureID": "square"
         },
-        "guid": "",
+        "guid": "5507e72d-f3c7-4b6c-ac8e-9c5cdf7d7e1d",
         "type": "Sprite"
       },
       {
@@ -324,14 +324,14 @@
           "hitbox.width": 123.67306518554688,
           "isTrigger": true
         },
-        "guid": "",
+        "guid": "d85b038d-cfa0-4816-aa39-68e34d0b3a61",
         "type": "BoxCollider"
       },
       {
         "fields": {
           "colorString": "Cyan"
         },
-        "guid": "",
+        "guid": "4437c923-e031-4c38-967d-8407c908c210",
         "type": "FloorSquare"
       },
       {
@@ -360,22 +360,22 @@
           "fontSize": 24,
           "text": "AddToScore"
         },
-        "guid": "",
+        "guid": "63163fb9-3b8c-4306-91be-2fa39cc4fc07",
         "type": "UIText"
       },
       {
         "fields": {
-          "anchorOffset": "0.000000|0.000000",
+          "anchorOffset": "-7.333374|-8.562958",
           "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
+          "sizeDelta": "75.000000|34.000000"
         },
-        "guid": "",
+        "guid": "9ded52b2-731a-4ad3-b32b-5c663c8d1ea1",
         "type": "UIRect"
       },
       {
         "fields": {
-          "position.x": 380.0,
-          "position.y": 184.5,
+          "position.x": 580.4999389648438,
+          "position.y": 234.53610229492188,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -396,16 +396,16 @@
           "color": "Red",
           "textureId": "square"
         },
-        "guid": "",
+        "guid": "eeff400d-ab3d-4c83-b79d-cee3e1bb5849",
         "type": "UIImage"
       },
       {
         "fields": {
-          "anchorOffset": "-450.000000|-250.000000",
+          "anchorOffset": "-14.666687|-99.900955",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "",
+        "guid": "2c829050-840d-4882-b527-e636ec5c18de",
         "type": "UIRect"
       },
       {
@@ -413,13 +413,13 @@
           "interactable": true,
           "targetText": "f7e5db49-fc0f-4b62-9769-f5dc4b43359d"
         },
-        "guid": "",
+        "guid": "eee00b40-9955-4e1a-974d-f77a7c23a3ae",
         "type": "UIButton"
       },
       {
         "fields": {
-          "position.x": 380.0,
-          "position.y": 184.5,
+          "position.x": 575.3333129882813,
+          "position.y": 235.09906005859375,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
