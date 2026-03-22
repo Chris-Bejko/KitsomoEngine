@@ -52,7 +52,6 @@
         "type": "Rigidbody"
       }
     ],
-    "guid": "f8f8f156-54e2-467a-8c4d-c80b7a2188c6",
     "name": "Bullet",
     "parent": ""
   }

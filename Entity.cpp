@@ -67,7 +67,7 @@ void Entity::Awake()
 {
 	ValidateAddedComponents();
 	for (auto &comp : components)
-	{	
+	{
 		comp->ResolvePointers();
 		comp->Awake();
 	}
@@ -342,12 +342,20 @@ void Entity::DisplayComponents()
 			case char_Type:
 			{
 				auto p = reinterpret_cast<std::string *>(it->data);
-				std::string str(*p);
+
+				// Check if this is a vector field
+				SerializableScript *script = dynamic_cast<SerializableScript *>(e.get());
+				if (script && (script->IsVectorField(std::string(it->name))))
+				{
+					DrawVectorField(script, it->name, fieldId);
+					break;
+				}
+
+				// Normal string field
+				auto str = *p;
 				str.resize(200, '\0');
 				ImGui::InputText(fieldId.c_str(), &str[0], 200);
 				*p = std::string(str.c_str());
-				if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
-					script->NotifyFieldChanged(std::string(it->name));
 				break;
 			}
 			case bool_Type:
@@ -362,114 +370,27 @@ void Entity::DisplayComponents()
 			}
 			case entityRef_Type:
 			{
+				SerializableScript *script = dynamic_cast<SerializableScript *>(e.get());
+				if (script && script->IsVectorPtrField(std::string(it->name)))
+				{
+					DrawVectorField(script, it->name, fieldId);
+					break;
+				}
 				auto p = reinterpret_cast<std::string *>(it->data);
-
-				// Find resolved entity by GUID
-				Entity *resolved = nullptr;
-				for (auto &ent : Engine::get().GetManager()->GetEntities())
-				{
-					if (ent->GetGUID() == *p)
-					{
-						resolved = ent.get();
-						break;
-					}
-				}
-
-				std::string displayText = resolved ? "-> " + resolved->GetName() : !p->empty() ? "NOT FOUND"
-																							   : "Drop entity here...";
-
-				ImVec4 boxColor = resolved ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) : !p->empty() ? ImVec4(0.35f, 0.1f, 0.1f, 1.0f)
-																						   : ImVec4(0.15f, 0.18f, 0.25f, 1.0f);
-
-				ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
-				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(boxColor.x + 0.05f,
-																	 boxColor.y + 0.05f,
-																	 boxColor.z + 0.1f, 1.0f));
-				ImGui::Button((displayText + "##" + fieldId).c_str(), ImVec2(-1, 0));
-				ImGui::PopStyleColor(2);
-
-				if (ImGui::BeginDragDropTarget())
-				{
-					if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
-					{
-						Entity *dropped = *(Entity **)payload->Data;
-						if (dropped)
-							*p = dropped->GetGUID(); // just store GUID directly
-					}
-					ImGui::EndDragDropTarget();
-				}
+				DrawEntityRefField(*p, fieldId);
 				break;
 			}
 			case compRef_Type:
 			{
+				SerializableScript *script = dynamic_cast<SerializableScript *>(e.get());
+				if (script && script->IsVectorPtrField(std::string(it->name)))
+				{
+					DrawVectorField(script, it->name, fieldId);
+					break;
+				}
+
 				auto p = reinterpret_cast<std::string *>(it->data);
-				std::string typeHint = it->componentTypeHint;
-
-				// Parse packed string "entityGUID|compGUID"
-				std::string entityGUID, compGUID;
-				auto pipePos = p->find('|');
-				if (pipePos != std::string::npos)
-				{
-					entityGUID = p->substr(0, pipePos);
-					compGUID = p->substr(pipePos + 1);
-				}
-
-				// Find resolved entity by GUID
-				Entity *resolved = nullptr;
-				for (auto &ent : Engine::get().GetManager()->GetEntities())
-				{
-					if (ent->GetGUID() == entityGUID)
-					{
-						resolved = ent.get();
-						break;
-					}
-				}
-
-				// Build display text: "UIText (EntityName)"
-				std::string displayText = "Drop component here...";
-				if (resolved)
-					displayText = typeHint + " (" + resolved->GetName() + ")";
-				else if (!entityGUID.empty())
-					displayText = "NOT FOUND";
-
-				ImVec4 boxColor = resolved ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) : !entityGUID.empty() ? ImVec4(0.35f, 0.1f, 0.1f, 1.0f)
-																								   : ImVec4(0.15f, 0.18f, 0.25f, 1.0f);
-
-				ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
-				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(boxColor.x + 0.05f,
-																	 boxColor.y + 0.05f,
-																	 boxColor.z + 0.1f, 1.0f));
-				ImGui::Button((displayText + "##" + fieldId).c_str(), ImVec2(-1, 0));
-				ImGui::PopStyleColor(2);
-
-				if (ImGui::BeginDragDropTarget())
-				{
-					if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
-					{
-						Entity *dropped = *(Entity **)payload->Data;
-						if (dropped)
-						{
-							// Find component matching type hint
-							Component *matchedComp = nullptr;
-							for (auto &comp : dropped->GetComponents())
-							{
-								std::string compTypeName(typeid(*comp).name());
-								compTypeName = std::regex_replace(compTypeName,
-																  std::regex("class "), "");
-								if (compTypeName == typeHint)
-								{
-									matchedComp = comp.get();
-									break;
-								}
-							}
-
-							if (matchedComp)
-								*p = dropped->GetGUID() + "|" + matchedComp->GetGUID();
-							// if no match, don't accept
-						}
-					}
-					ImGui::EndDragDropTarget();
-				}
+				DrawCompRefField(*p, it->componentTypeHint, fieldId);
 				break;
 			}
 			default:
@@ -702,4 +623,316 @@ void Entity::RemoveChild(Entity *child)
 	children.erase(
 		std::remove(children.begin(), children.end(), child),
 		children.end());
+}
+
+void Entity::DrawVectorField(SerializableScript *script,
+							 const char *fieldName,
+							 const std::string &fieldId)
+{
+	std::string name(fieldName);
+	bool isPtrField = script->IsVectorPtrField(name);
+	std::string &packedStr = script->vectorStrings[name];
+
+	// Find field type and type hint
+	int fieldType = char_Type;
+	std::string typeHint = "";
+	for (auto &var : *script->GetSerializedFields())
+	{
+		if (std::string(var.name) == name)
+		{
+			typeHint = var.componentTypeHint;
+			break;
+		}
+	}
+
+	if (script->vectorFields.count(name))
+		fieldType = script->vectorFields[name].elementType;
+	else if (script->vectorPtrFields.count(name))
+		fieldType = script->vectorPtrFields[name].elementType;
+	// Parse current elements
+	std::vector<std::string> elements;
+	if (!packedStr.empty())
+	{
+		std::stringstream ss(packedStr);
+		std::string token;
+		while (std::getline(ss, token, ';'))
+			elements.push_back(token);
+	}
+
+	int removeIdx = -1;
+
+	for (int i = 0; i < (int)elements.size(); i++)
+	{
+		std::string elemId = fieldId + "_" + std::to_string(i);
+
+		if (isPtrField)
+		{
+			float childHeight = ImGui::GetFrameHeightWithSpacing() + 8.f;
+			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0.12f, 0.12f, 0.12f, 1.0f));
+			ImGui::BeginChild((elemId + "_child").c_str(), ImVec2(0, childHeight), true);
+
+			ImGui::Text("%d.", i + 1);
+			ImGui::SameLine();
+
+			if (fieldType == entityRef_Type)
+				DrawEntityRefField(elements[i], elemId);
+			else if (fieldType == compRef_Type)
+				DrawCompRefField(elements[i], typeHint, elemId);
+
+			ImGui::SameLine();
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+			if (ImGui::Button(("X##remove" + elemId).c_str(), ImVec2(30, 0)))
+				removeIdx = i;
+			ImGui::PopStyleColor();
+
+			ImGui::EndChild();
+			ImGui::PopStyleColor();
+		}
+		else
+		{
+
+			ImGui::Text("%d.", i + 1);
+			ImGui::SameLine();
+			// Primitive - draw inline using DrawVectorElement
+			elements[i] = DrawVectorElement(elements[i], fieldType, elemId);
+			ImGui::SameLine();
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
+			if (ImGui::Button(("X##remove" + elemId).c_str(), ImVec2(30, 0)))
+				removeIdx = i;
+			ImGui::PopStyleColor();
+		}
+	}
+
+	// Remove element
+	if (removeIdx >= 0)
+		elements.erase(elements.begin() + removeIdx);
+
+	// Add button
+	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.4f, 0.1f, 1.0f));
+	if (ImGui::Button(("+ Add##add" + fieldId).c_str(), ImVec2(-1, 0)))
+		elements.push_back(DefaultValue(fieldType));
+	ImGui::PopStyleColor();
+
+	// Rebuild packed string
+	std::string newPacked;
+	for (size_t i = 0; i < elements.size(); i++)
+	{
+		if (i > 0)
+			newPacked += ";";
+		newPacked += elements[i]; // null stays as "null"
+	}
+	packedStr = newPacked;
+
+	// Sync back to primitive vector
+	if (script->vectorFields.count(name))
+		script->vectorFields[name].deserialize(packedStr);
+}
+
+std::string Entity::DrawVectorElement(const std::string &current,
+									  int fieldType,
+									  const std::string &elemId)
+{
+	switch (fieldType)
+	{
+	case int_Type:
+	{
+		int val = 0;
+		try
+		{
+			if (!current.empty())
+				val = std::stoi(current);
+		}
+		catch (...)
+		{
+		}
+		ImGui::SetNextItemWidth(-40);
+		if (ImGui::InputInt(("##" + elemId).c_str(), &val))
+			return std::to_string(val);
+		return current;
+	}
+	case float_Type:
+	{
+		float val = 0.f;
+		try
+		{
+			if (!current.empty())
+				val = std::stof(current);
+		}
+		catch (...)
+		{
+		}
+		ImGui::SetNextItemWidth(-40);
+		if (ImGui::InputFloat(("##" + elemId).c_str(), &val))
+			return std::to_string(val);
+		return current;
+	}
+	case bool_Type:
+	{
+		bool val = current == "1";
+		if (ImGui::Checkbox(("##" + elemId).c_str(), &val))
+			return val ? "1" : "0";
+		return current;
+	}
+	case entityRef_Type:
+	case compRef_Type:
+		return current;
+	case char_Type:
+	default:
+	{
+		std::string str = current;
+		str.resize(200, '\0');
+		ImGui::SetNextItemWidth(-40);
+		if (ImGui::InputText(("##" + elemId).c_str(), &str[0], 200))
+			return std::string(str.c_str());
+		return current;
+	}
+	}
+}
+
+std::string Entity::DefaultValue(int fieldType)
+{
+	switch (fieldType)
+	{
+	case int_Type:
+		return "0";
+	case float_Type:
+		return "0.0";
+	case bool_Type:
+		return "0";
+	case char_Type:
+		return "";
+	case entityRef_Type:
+		return "null"; // null entity
+	case compRef_Type:
+		return "null"; // null component
+	default:
+		return "";
+	}
+}
+
+void Entity::DrawEntityRefField(std::string &guidStorage, const std::string &fieldId)
+{
+	bool isEmpty = guidStorage.empty() || guidStorage == "null";
+
+	Entity *resolved = nullptr;
+	if (!isEmpty)
+	{
+		for (auto &ent : Engine::get().GetManager()->GetEntities())
+		{
+			if (ent->GetGUID() == guidStorage)
+			{
+				resolved = ent.get();
+				break;
+			}
+		}
+	}
+
+	std::string displayText = resolved ? "-> " + resolved->GetName() : !isEmpty ? "NOT FOUND"
+																				: "Drop entity here...";
+
+	ImVec4 boxColor = resolved ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) : !guidStorage.empty() ? ImVec4(0.35f, 0.1f, 0.1f, 1.0f)
+																						: ImVec4(0.15f, 0.18f, 0.25f, 1.0f);
+
+	ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+						  ImVec4(boxColor.x + 0.05f, boxColor.y + 0.05f,
+								 boxColor.z + 0.1f, 1.0f));
+	ImGui::Button((displayText + "##" + fieldId).c_str(), ImVec2(-40, 0));
+	ImGui::PopStyleColor(2);
+
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
+		{
+			Entity *dropped = *(Entity **)payload->Data;
+			if (dropped)
+				guidStorage = dropped->GetGUID();
+		}
+		ImGui::EndDragDropTarget();
+	}
+}
+
+void Entity::DrawCompRefField(std::string& packedStorage,
+                              const std::string& typeHint,
+                              const std::string& fieldId)
+{
+    bool isEmpty = packedStorage.empty() || packedStorage == "null";
+
+    std::string entityGUID, compGUID;
+    if (!isEmpty)
+    {
+        auto pipe = packedStorage.find('|');
+        if (pipe != std::string::npos)
+        {
+            entityGUID = packedStorage.substr(0, pipe);
+            compGUID   = packedStorage.substr(pipe + 1);
+        }
+    }
+
+    Entity* resolved = nullptr;
+    if (!entityGUID.empty())
+    {
+        for (auto& ent : Engine::get().GetManager()->GetEntities())
+        {
+            if (ent->GetGUID() == entityGUID)
+            {
+                resolved = ent.get();
+                break;
+            }
+        }
+    }
+
+    std::string displayText = "Drop component here...";
+    if (resolved)
+    {
+        std::string compName = typeHint;
+        for (auto& comp : resolved->GetComponents())
+        {
+            if (comp->GetGUID() == compGUID)
+            {
+                compName = typeid(*comp).name();
+                compName = std::regex_replace(compName, std::regex("class "), "");
+                break;
+            }
+        }
+        displayText = compName + " (" + resolved->GetName() + ")";
+    }
+    else if (!isEmpty && !entityGUID.empty())
+        displayText = "NOT FOUND";
+
+    ImVec4 boxColor = resolved             ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) :
+                      (!isEmpty && !entityGUID.empty()) ? ImVec4(0.35f, 0.1f, 0.1f, 1.0f) :
+                                             ImVec4(0.15f, 0.18f, 0.25f, 1.0f);
+
+    ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+                          ImVec4(boxColor.x + 0.05f, boxColor.y + 0.05f,
+                                 boxColor.z + 0.1f, 1.0f));
+    ImGui::Button((displayText + "##" + fieldId).c_str(), ImVec2(-40, 0));
+    ImGui::PopStyleColor(2);
+
+    if (ImGui::BeginDragDropTarget())
+    {
+        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY"))
+        {
+            Entity* dropped = *(Entity**)payload->Data;
+            if (dropped)
+            {
+                for (auto& comp : dropped->GetComponents())
+                {
+                    std::string compTypeName(typeid(*comp).name());
+                    compTypeName = std::regex_replace(compTypeName,
+                                   std::regex("class "), "");
+                    if (compTypeName == "Transform" ||
+                        compTypeName == "EditorSprite") continue;
+                    if (typeHint.empty() || compTypeName == typeHint)
+                    {
+                        packedStorage = dropped->GetGUID() + "|" + comp->GetGUID();
+                        break;
+                    }
+                }
+            }
+        }
+        ImGui::EndDragDropTarget();
+    }
 }

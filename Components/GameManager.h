@@ -13,7 +13,9 @@ public:
         Field("button",    button);      // UIButton*
         Field("player",    player);      // Entity*
         Field("score",     score);       // int
-        Field("FloorSquare", floorSquare);
+        Field("All Floor Squares", floorSquares);
+        Field("ExampleSerializedVector", ExampleSerializedVector);
+        Field("Bools", BoolsList);
         return true;
     }
 
@@ -31,9 +33,6 @@ public:
             LOG_INFO("Player retrieved with guid: ", player->GetGUID());
         }
 
-        if(floorSquare){
-           floorSquare->Config(Vector2F(0,0), Color(ColorEnum::Magenta));
-        }
     }
 
 
@@ -41,6 +40,8 @@ private:
     UIText*   scoreText = nullptr;
     UIButton* button    = nullptr;
     Entity*   player    = nullptr;
-    FloorSquare* floorSquare = nullptr;
+    std::vector<FloorSquare*> floorSquares;
+    std::vector<int> ExampleSerializedVector;
+    std::vector<bool> BoolsList;
     int       score     = 0;
 };

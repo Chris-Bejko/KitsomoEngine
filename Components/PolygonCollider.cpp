@@ -12,91 +12,53 @@ PolygonCollider::PolygonCollider()
     isTrigger = false;
 }
 
-PolygonCollider::PolygonCollider(std::string tag, std::vector<sf::Vector2f> vertices, bool isTrigger)
+PolygonCollider::PolygonCollider(std::string tag, std::vector<Vector2F> verts, bool isTrigger)
 {
     collisionTag = tag;
-    this->vertices = vertices;
+    this->vertices = verts;
     this->isTrigger = isTrigger;
 }
 
 bool PolygonCollider::Init()
 {
     Collider::Init();
-    LOG_DEBUG("PolygonCollider::OnInit called, vertices: ", vertices.size());
     if (vertices.empty())
     {
         vertices = {
-            sf::Vector2f(0, -50),
-            sf::Vector2f(50, 50),
-            sf::Vector2f(-50, 50)};
+            Vector2F(0, -50),
+            Vector2F(50, 50),
+            Vector2F(-50, 50)};
     }
     RebuildVisual();
-    SerializeVerticesToString();
-    Field("vertices", verticesString);
+    Field("vertices", vertices);
     return true;
-}
-
-void PolygonCollider::SerializeVerticesToString()
-{
-    verticesString = "";
-    for (size_t i = 0; i < vertices.size(); i++)
-    {
-        verticesString += std::to_string(vertices[i].x) + "|" +
-                          std::to_string(vertices[i].y);
-        if (i < vertices.size() - 1)
-            verticesString += ";";
-    }
-    LOG_DEBUG("Serialized ", vertices.size(), " vertices: ", verticesString.c_str());
-}
-
-void PolygonCollider::DeserializeVerticesFromString(const std::string &str)
-{
-    vertices.clear();
-    if (str.empty())
-        return;
-
-    std::stringstream ss(str);
-    std::string pair;
-    while (std::getline(ss, pair, ';'))
-    {
-        auto pipePos = pair.find('|');
-        if (pipePos != std::string::npos)
-        {
-            try
-            {
-                float x = std::stof(pair.substr(0, pipePos));
-                float y = std::stof(pair.substr(pipePos + 1));
-                vertices.push_back(sf::Vector2f(x, y));
-            }
-            catch (...)
-            {
-                LOG_WARNING("Failed to parse vertex: ", pair.c_str());
-            }
-        }
-    }
-    LOG_DEBUG("Deserialized ", vertices.size(), " vertices");
-    RebuildVisual();
 }
 
 void PolygonCollider::InitSerializedFields(ReadableSerializableVariableMap map)
 {
     SerializableScript::InitSerializedFields(map);
-
-    if (map.stringFields.count("vertices"))
-        DeserializeVerticesFromString(map.stringFields["vertices"]);
+    RebuildVisual();
 }
 
-std::vector<sf::Vector2f> PolygonCollider::GetWorldVertices()
+std::vector<Vector2F> PolygonCollider::GetWorldVertices()
 {
-    std::vector<sf::Vector2f> worldVerts;
-    sf::Transform t;
-    t.translate(entity->transform->position.x, entity->transform->position.y);
-    t.rotate(entity->transform->rotation);
-    t.scale(entity->transform->scale.x, entity->transform->scale.y);
+    std::vector<Vector2F> worldVerts;
+    Vector2F worldPos = entity->transform->GetWorldPosition();
+    float worldRot = entity->transform->GetWorldRotation();
+    Vector2F worldScale = entity->transform->GetWorldScale();
+
+    float rad = worldRot * 3.14159f / 180.f;
+    float cosR = cos(rad);
+    float sinR = sin(rad);
 
     for (auto &v : vertices)
-        worldVerts.push_back(t.transformPoint(v));
-
+    {
+        float scaledX = v.x * worldScale.x;
+        float scaledY = v.y * worldScale.y;
+        float rotatedX = scaledX * cosR - scaledY * sinR;
+        float rotatedY = scaledX * sinR + scaledY * cosR;
+        worldVerts.push_back(Vector2F(worldPos.x + rotatedX, worldPos.y + rotatedY));
+    }
     return worldVerts;
 }
 
@@ -108,7 +70,6 @@ sf::FloatRect PolygonCollider::GetBounds()
 
     float minX = worldVerts[0].x, maxX = worldVerts[0].x;
     float minY = worldVerts[0].y, maxY = worldVerts[0].y;
-
     for (auto &v : worldVerts)
     {
         minX = std::min(minX, v.x);
@@ -119,25 +80,25 @@ sf::FloatRect PolygonCollider::GetBounds()
     return sf::FloatRect(minX, minY, maxX - minX, maxY - minY);
 }
 
-// SAT helpers
-std::vector<sf::Vector2f> PolygonCollider::GetAxes(const std::vector<sf::Vector2f> &worldVerts)
+std::vector<Vector2F> PolygonCollider::GetAxes(const std::vector<Vector2F> &worldVerts)
 {
-    std::vector<sf::Vector2f> axes;
+    std::vector<Vector2F> axes;
     for (size_t i = 0; i < worldVerts.size(); i++)
     {
-        sf::Vector2f edge = worldVerts[(i + 1) % worldVerts.size()] - worldVerts[i];
-        // Perpendicular (normal)
-        sf::Vector2f normal(-edge.y, edge.x);
-        // Normalize
+        Vector2F edge = worldVerts[(i + 1) % worldVerts.size()] - worldVerts[i];
+        Vector2F normal(-edge.y, edge.x);
         float len = std::sqrt(normal.x * normal.x + normal.y * normal.y);
         if (len > 0)
-            normal /= len;
+        {
+            normal.x /= len;
+            normal.y /= len;
+        }
         axes.push_back(normal);
     }
     return axes;
 }
 
-void PolygonCollider::Project(const std::vector<sf::Vector2f> &verts, sf::Vector2f axis, float &min, float &max)
+void PolygonCollider::Project(const std::vector<Vector2F> &verts, Vector2F axis, float &min, float &max)
 {
     min = max = (verts[0].x * axis.x + verts[0].y * axis.y);
     for (auto &v : verts)
@@ -152,8 +113,6 @@ bool PolygonCollider::SATvsPolygon(PolygonCollider &other)
 {
     auto vertsA = GetWorldVertices();
     auto vertsB = other.GetWorldVertices();
-
-    // Test axes from both polygons
     for (auto &axes : {GetAxes(vertsA), GetAxes(vertsB)})
     {
         for (auto &axis : axes)
@@ -162,7 +121,7 @@ bool PolygonCollider::SATvsPolygon(PolygonCollider &other)
             Project(vertsA, axis, minA, maxA);
             Project(vertsB, axis, minB, maxB);
             if (maxA < minB || maxB < minA)
-                return false; // Separating axis found
+                return false;
         }
     }
     return true;
@@ -170,18 +129,13 @@ bool PolygonCollider::SATvsPolygon(PolygonCollider &other)
 
 bool PolygonCollider::SATvsBox(sf::FloatRect box)
 {
-    // Convert box to polygon vertices
-    std::vector<sf::Vector2f> boxVerts = {
+    std::vector<Vector2F> boxVerts = {
         {box.left, box.top},
         {box.left + box.width, box.top},
         {box.left + box.width, box.top + box.height},
         {box.left, box.top + box.height}};
-
     auto vertsA = GetWorldVertices();
-    auto axesA = GetAxes(vertsA);
-    auto axesB = GetAxes(boxVerts);
-
-    for (auto &axes : {axesA, axesB})
+    for (auto &axes : {GetAxes(vertsA), GetAxes(boxVerts)})
     {
         for (auto &axis : axes)
         {
@@ -195,18 +149,19 @@ bool PolygonCollider::SATvsBox(sf::FloatRect box)
     return true;
 }
 
-bool PolygonCollider::SATvsCircle(sf::Vector2f center, float radius)
+bool PolygonCollider::SATvsCircle(Vector2F center, float radius)
 {
     auto worldVerts = GetWorldVertices();
-
-    // Test polygon face normals
     for (size_t i = 0; i < worldVerts.size(); i++)
     {
-        sf::Vector2f edge = worldVerts[(i + 1) % worldVerts.size()] - worldVerts[i];
-        sf::Vector2f axis(-edge.y, edge.x);
+        Vector2F edge = worldVerts[(i + 1) % worldVerts.size()] - worldVerts[i];
+        Vector2F axis(-edge.y, edge.x);
         float len = std::sqrt(axis.x * axis.x + axis.y * axis.y);
         if (len > 0)
-            axis /= len;
+        {
+            axis.x /= len;
+            axis.y /= len;
+        }
 
         float minA, maxA;
         Project(worldVerts, axis, minA, maxA);
@@ -215,12 +170,11 @@ bool PolygonCollider::SATvsCircle(sf::Vector2f center, float radius)
             return false;
     }
 
-    // Test axis from closest vertex to circle center
     float minDist = std::numeric_limits<float>::max();
-    sf::Vector2f closestVert;
+    Vector2F closestVert;
     for (auto &v : worldVerts)
     {
-        sf::Vector2f diff = center - v;
+        Vector2F diff = center - v;
         float dist = diff.x * diff.x + diff.y * diff.y;
         if (dist < minDist)
         {
@@ -229,17 +183,19 @@ bool PolygonCollider::SATvsCircle(sf::Vector2f center, float radius)
         }
     }
 
-    sf::Vector2f axis = center - closestVert;
+    Vector2F axis = center - closestVert;
     float len = std::sqrt(axis.x * axis.x + axis.y * axis.y);
     if (len > 0)
-        axis /= len;
+    {
+        axis.x /= len;
+        axis.y /= len;
+    }
 
     float minA, maxA;
     Project(worldVerts, axis, minA, maxA);
     float circleProj = center.x * axis.x + center.y * axis.y;
     if (maxA < circleProj - radius || circleProj + radius < minA)
         return false;
-
     return true;
 }
 
@@ -247,15 +203,12 @@ bool PolygonCollider::Intersects(Collider &other)
 {
     if (other.GetType() == ColliderType::Polygon)
         return SATvsPolygon(static_cast<PolygonCollider &>(other));
-
     if (other.GetType() == ColliderType::Box)
         return SATvsBox(other.GetBounds());
-
     if (other.GetType() == ColliderType::Circle)
     {
         sf::FloatRect b = other.GetBounds();
-        sf::Vector2f center(b.left + b.width / 2.f, b.top + b.height / 2.f);
-        return SATvsCircle(center, b.width / 2.f);
+        return SATvsCircle(Vector2F(b.left + b.width / 2.f, b.top + b.height / 2.f), b.width / 2.f);
     }
     return false;
 }
@@ -264,21 +217,22 @@ void PolygonCollider::RebuildVisual()
 {
     colliderVisual.setPointCount(vertices.size());
     for (size_t i = 0; i < vertices.size(); i++)
-        colliderVisual.setPoint(i, vertices[i]);
-
+        colliderVisual.setPoint(i, sf::Vector2f(vertices[i].x, vertices[i].y));
     colliderVisual.setFillColor(sf::Color::Transparent);
-    colliderVisual.setOutlineColor(sf::Color(255, 165, 0, 255)); // Orange
+    colliderVisual.setOutlineColor(sf::Color(255, 165, 0, 255));
     colliderVisual.setOutlineThickness(1.f);
+    Serialize();
 }
 
 void PolygonCollider::DrawDebug()
 {
-    colliderVisual.setPosition(entity->transform->position.x, entity->transform->position.y);
-    colliderVisual.setRotation(entity->transform->rotation);
-    colliderVisual.setScale(entity->transform->scale.x, entity->transform->scale.y);
+    Vector2F worldPos = entity->transform->GetWorldPosition();
+    colliderVisual.setPosition(worldPos.x, worldPos.y);
+    colliderVisual.setRotation(entity->transform->GetWorldRotation());
+    Vector2F worldScale = entity->transform->GetWorldScale();
+    colliderVisual.setScale(worldScale.x, worldScale.y);
     Engine::get().GetWindow().draw(colliderVisual);
 
-    // Draw vertex handles in edit mode
     if (editMode)
     {
         auto worldVerts = GetWorldVertices();
@@ -286,7 +240,7 @@ void PolygonCollider::DrawDebug()
         {
             sf::CircleShape handle(6.f);
             handle.setOrigin(6.f, 6.f);
-            handle.setPosition(worldVerts[i]);
+            handle.setPosition(worldVerts[i].x, worldVerts[i].y);
             handle.setFillColor(i == (size_t)selectedVertex ? sf::Color::Yellow : sf::Color::White);
             handle.setOutlineColor(sf::Color(255, 165, 0));
             handle.setOutlineThickness(1.f);
@@ -295,8 +249,8 @@ void PolygonCollider::DrawDebug()
 
         if (addingVertex)
         {
-            auto mousePixel = sf::Mouse::getPosition(Engine::get().GetWindow());
-            auto mouseWorld = Engine::get().GetWindow().mapPixelToCoords(mousePixel);
+            auto mouseWorld = Engine::get().GetWindow().mapPixelToCoords(
+                sf::Mouse::getPosition(Engine::get().GetWindow()));
             sf::CircleShape preview(5.f);
             preview.setOrigin(5.f, 5.f);
             preview.setPosition(mouseWorld);
@@ -323,6 +277,7 @@ void PolygonCollider::update(float dt)
         UpdateEditMode();
     }
 }
+
 void PolygonCollider::updateEngine(float dt)
 {
     if (editMode)
@@ -339,68 +294,90 @@ void PolygonCollider::UpdateEditMode()
 
     auto mousePixel = sf::Mouse::getPosition(Engine::get().GetWindow());
     auto mouseWorld = Engine::get().GetWindow().mapPixelToCoords(mousePixel);
-    auto worldVerts = GetWorldVertices();
+    Vector2F mouse(mouseWorld.x, mouseWorld.y);
 
-    float scaleX = entity->transform->scale.x;
-    float scaleY = entity->transform->scale.y;
+    auto worldVerts = GetWorldVertices();
+    Vector2F worldPos = entity->transform->GetWorldPosition();
+    float worldRot = entity->transform->GetWorldRotation();
+    Vector2F worldScale = entity->transform->GetWorldScale();
+
+    // Convert world pos to local space
+    auto toLocal = [&](Vector2F worldPoint) -> Vector2F
+    {
+        float rad = worldRot * 3.14159f / 180.f;
+        float cosR = cos(-rad);
+        float sinR = sin(-rad);
+        float dx = worldPoint.x - worldPos.x;
+        float dy = worldPoint.y - worldPos.y;
+        return Vector2F(
+            (dx * cosR - dy * sinR) / worldScale.x,
+            (dx * sinR + dy * cosR) / worldScale.y);
+    };
 
     // Find hovered vertex
     hoveredVertex = -1;
     for (size_t i = 0; i < worldVerts.size(); i++)
     {
-        sf::Vector2f diff = mouseWorld - worldVerts[i];
-        if (std::sqrt(diff.x * diff.x + diff.y * diff.y) < 10.f)
+        Vector2F diff = mouse - worldVerts[i];
+        if (diff.magnitude() < 10.f)
         {
             hoveredVertex = (int)i;
             break;
         }
     }
 
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+    bool rightDown = sf::Mouse::isButtonPressed(sf::Mouse::Right);
+
+    // Add vertex mode - left click to place
+    if (addingVertex)
     {
-        if (addingVertex)
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !wasLeftDown)
         {
-            // Convert mouse world pos to local space
-            sf::Transform inv;
-            inv.translate(entity->transform->position.x, entity->transform->position.y);
-            inv.rotate(entity->transform->rotation);
-            inv.scale(scaleX, scaleY);
-            sf::Vector2f localPos = inv.getInverse().transformPoint(mouseWorld);
-            vertices.push_back(localPos);
+            vertices.push_back(toLocal(mouse));
             RebuildVisual();
-            SerializeVerticesToString();
             addingVertex = false;
         }
-        else if (hoveredVertex >= 0)
+        wasLeftDown = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        return; // don't do drag while adding
+    }
+
+    // Start drag on right click press (not hold)
+    if (rightDown && !wasRightDown)
+    {
+        // Delete with ctrl
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
+            hoveredVertex >= 0 && vertices.size() > 3)
         {
-            selectedVertex = hoveredVertex;
+            vertices.erase(vertices.begin() + hoveredVertex);
+            hoveredVertex = -1;
+            selectedVertex = -1;
+            RebuildVisual();
+            wasRightDown = true;
+            return;
         }
+
+        if (hoveredVertex >= 0)
+            selectedVertex = hoveredVertex;
     }
 
     // Drag selected vertex
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && selectedVertex >= 0 && selectedVertex < (int)vertices.size())
+    if (rightDown && selectedVertex >= 0 && selectedVertex < (int)vertices.size())
     {
-        sf::Transform inv;
-        inv.translate(entity->transform->position.x, entity->transform->position.y);
-        inv.rotate(entity->transform->rotation);
-        inv.scale(scaleX, scaleY);
-        vertices[selectedVertex] = inv.getInverse().transformPoint(mouseWorld);
+        Vector2F before = vertices[selectedVertex];
+        vertices[selectedVertex] = toLocal(mouse);
+        LOG_DEBUG("Vertex ", selectedVertex, " moved from ",
+                  before.x, ",", before.y, " to ",
+                  vertices[selectedVertex].x, ",", vertices[selectedVertex].y);
         RebuildVisual();
-        SerializeVerticesToString();
     }
 
-    if (!sf::Mouse::isButtonPressed(sf::Mouse::Right))
-        selectedVertex = -1;
-
-    // Delete vertex with ctrl + Right click
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && sf::Mouse::isButtonPressed(sf::Mouse::Right) && hoveredVertex >= 0 && vertices.size() > 3)
+    // Release
+    if (!rightDown && wasRightDown)
     {
-        vertices.erase(vertices.begin() + hoveredVertex);
-        hoveredVertex = -1;
-        selectedVertex = -1;
-        RebuildVisual();
-        SerializeVerticesToString();
+        selectedVertex = -1; // clear AFTER final position is set
     }
+
+    wasRightDown = rightDown;
 }
 
 void PolygonCollider::DrawEditorButton()
@@ -418,15 +395,15 @@ void PolygonCollider::DrawEditorButton()
         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.3f, 0.1f, 1.0f));
         if (ImGui::Button("+ Add Vertex", ImVec2(-1, 24)))
             addingVertex = !addingVertex;
+
+        if (addingVertex)
+            ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f),
+                               "Left-click in viewport to place vertex");
         ImGui::PopStyleColor();
 
         if (vertices.size() > 3)
-        {
-            ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
             ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f),
                                "Ctrl + Right-click vertex to delete");
-            ImGui::PopStyleColor();
-        }
         ImGui::Text("Vertices: %zu", vertices.size());
     }
     else

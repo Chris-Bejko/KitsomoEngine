@@ -127,7 +127,6 @@ public:
 		return nullptr;
 	}
 
-
 	void RemoveComponent(Component *comp);
 
 	void Awake();
@@ -193,6 +192,18 @@ public:
 		m_guid = guid;
 	}
 
+	void DrawVectorField(SerializableScript *script,
+						 const char *fieldName,
+						 const std::string &fieldId);
+
+	std::string DefaultValue(int fieldType);
+
+	std::string DrawVectorElement(const std::string &current, int fieldType, const std::string &elemId);
+
+	void Entity::DrawCompRefField(std::string &packedStorage, const std::string &typeHint, const std::string &fieldId);
+
+	void Entity::DrawEntityRefField(std::string &guidStorage, const std::string &fieldId);
+
 private:
 	bool isActive;
 
@@ -210,6 +221,5 @@ private:
 
 	Entity *parent = nullptr;
 	std::vector<Entity *> children;
-
 	std::string m_guid;
 };

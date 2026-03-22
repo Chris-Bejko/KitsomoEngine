@@ -266,6 +266,8 @@ void Engine::TriggerDragging(std::string newDragged)
 void Engine::ClearInpsector()
 {
 	manager->ClearInspector();
+	manager->SetSelectedEntity(nullptr);
+	draggedEntity = "";
 }
 
 void Engine::SetView(sf::View &view)
@@ -529,60 +531,62 @@ void Engine::RegisterComponents()
 	};
 }
 
-void Engine::SavePrefab(Entity* entity)
+void Engine::SavePrefab(Entity *entity)
 {
-    std::filesystem::create_directories("prefabs");
+	std::filesystem::create_directories("prefabs");
 
-    json root = json::array(); 
-    
-    json entityJson;
-    entityJson["name"]   = entity->GetName();
-    entityJson["guid"]   = entity->GetGUID();
-    entityJson["parent"] = "";
+	json root = json::array();
 
-    json componentsJson = json::array();
-    for (auto& comp : entity->GetAllComponentVariables())
-    {
-        json compJson;
-        compJson["type"] = comp.componentName;
-        compJson["guid"] = comp.guiD;
+	json entityJson;
+	entityJson["name"] = entity->GetName();
+	entityJson["parent"] = "";
 
-        json fieldsJson;
-        for (auto& f : comp.variables)
-        {
-            switch (f.type)
-            {
-            case int_Type:
-                fieldsJson[f.name] = *reinterpret_cast<int*>(f.data);
-                break;
-            case float_Type:
-                fieldsJson[f.name] = *reinterpret_cast<float*>(f.data);
-                break;
-            case char_Type:
-            case entityRef_Type:
-            case compRef_Type:
-                fieldsJson[f.name] = *reinterpret_cast<std::string*>(f.data);
-                break;
-            case bool_Type:
-                fieldsJson[f.name] = *reinterpret_cast<bool*>(f.data);
-                break;
-            }
-        }
-        compJson["fields"] = fieldsJson;
-        componentsJson.push_back(compJson);
-    }
-    entityJson["components"] = componentsJson;
-    root.push_back(entityJson); // push into array
+	json componentsJson = json::array();
+	for (auto &comp : entity->GetAllComponentVariables())
+	{
+		json compJson;
+		compJson["type"] = comp.componentName;
 
-    std::string filename = "prefabs/" + entity->GetName() + ".prefab";
-    std::ofstream file(filename);
-    file << root.dump(2);
-    file.close();
-    LOG_INFO("Saved prefab: ", filename.c_str());
+		json fieldsJson;
+		for (auto &f : comp.variables)
+		{
+			switch (f.type)
+			{
+			case int_Type:
+				fieldsJson[f.name] = *reinterpret_cast<int *>(f.data);
+				break;
+			case float_Type:
+				fieldsJson[f.name] = *reinterpret_cast<float *>(f.data);
+				break;
+			case char_Type:
+			case entityRef_Type:
+			case compRef_Type:
+				fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
+				break;
+			case bool_Type:
+				fieldsJson[f.name] = *reinterpret_cast<bool *>(f.data);
+				break;
+			}
+		}
+		compJson["fields"] = fieldsJson;
+		componentsJson.push_back(compJson);
+	}
+	entityJson["components"] = componentsJson;
+	root.push_back(entityJson); // push into array
+
+	std::string filename = "prefabs/" + entity->GetName() + ".prefab";
+	std::ofstream file(filename);
+	file << root.dump(2);
+	file.close();
+	LOG_INFO("Saved prefab: ", filename.c_str());
 }
 
 void Engine::Reset()
 {
+	ImguiHandler::get().ClearInspector();
+	GizmoSystem::get().SetSelectedEntity(nullptr);
+	UIEventSystem::get().Clear();
+
 	manager->DestroyAllEntities();
 	UIEventSystem::get().Clear();
 	GizmoSystem::get().SetSelectedEntity(nullptr);
@@ -755,7 +759,7 @@ std::vector<SerializableEntity> Engine::ParseFile(const std::string &fileName)
 						comp.fields.boolFields[key] = val.get<bool>();
 					else if (val.is_number_integer())
 						comp.fields.intFields[key] = val.get<int>();
-					else if (val.is_number()) 
+					else if (val.is_number())
 						comp.fields.floatFields[key] = val.get<float>();
 					else if (val.is_string())
 						comp.fields.stringFields[key] = val.get<std::string>();

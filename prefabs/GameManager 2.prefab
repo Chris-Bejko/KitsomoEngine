@@ -1,0 +1,30 @@
+[
+  {
+    "components": [
+      {
+        "fields": {
+          "position.x": 0.0,
+          "position.y": 0.0,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "type": "Transform"
+      },
+      {
+        "fields": {
+          "All Floor Squares": "",
+          "Bools": "",
+          "ExampleSerializedVector": "",
+          "button": "",
+          "player": "",
+          "score": 0,
+          "scoreText": ""
+        },
+        "type": "GameManager"
+      }
+    ],
+    "name": "GameManager 2",
+    "parent": ""
+  }
+]
