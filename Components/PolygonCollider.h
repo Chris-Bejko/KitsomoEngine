@@ -21,12 +21,18 @@ public:
     std::vector<sf::Vector2f> GetWorldVertices();
     std::vector<sf::Vector2f> &GetLocalVertices() { return vertices; }
 
-    void Serialize() override;
-    void InitSerializedFields(ReadableSerializableVariableMap map) override final;
     void DrawEditorButton() override;
 
+    void InitSerializedFields(ReadableSerializableVariableMap map) override;
+
+    void OnFieldChanged(const std::string &fieldName) override
+    {
+        if (fieldName == "vertices")
+            DeserializeVerticesFromString(verticesString);
+    }
+
 private:
-    std::string verticesString; // For serialization
+    std::string verticesString;         // For serialization
     std::vector<sf::Vector2f> vertices; // local space
     sf::ConvexShape colliderVisual;
 
@@ -42,6 +48,7 @@ private:
     bool SATvsPolygon(PolygonCollider &other);
     bool SATvsBox(sf::FloatRect box);
     bool SATvsCircle(sf::Vector2f center, float radius);
-
+    void SerializeVerticesToString();
+    void DeserializeVerticesFromString(const std::string &str);
     void RebuildVisual();
 };

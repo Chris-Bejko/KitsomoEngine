@@ -20,9 +20,6 @@ public:
     float GetRadius() { return radius; }
     sf::Vector2f GetCenter();
 
-    void Serialize() override;
-    void InitSerializedFields(ReadableSerializableVariableMap map) override;
-
 private:
     float radius = 50.f;
     sf::CircleShape colliderVisual;

@@ -1,11 +1,11 @@
 #pragma once
 #include "../Entity.h"
 #include "../Vector2.h"
-#include "../Component.h"
+#include "../SerializableScript.h"
 
 constexpr float GRAVITY = 10.0f;
 
-class Rigidbody : public Component
+class Rigidbody : public SerializableScript
 {
 public:
     Rigidbody();
@@ -49,11 +49,6 @@ public:
     bool UsesGravity() { return useGravity; }
     void SetUseGravity(bool g) { useGravity = g; }
 
-    
-    void InitSerializedFields(ReadableSerializableVariableMap map) override final;
-	std::vector<SerializableVariable>* GetSerializedFields() override final;
-	void Serialize() override final;
-
 
 private:
     float mass = 1.0f;
@@ -70,5 +65,4 @@ private:
     bool firstUpdate = true;
     Vector2F initialForce;
     Vector2F velocity = Vector2F();
-    std::vector<SerializableVariable> serializables;
 };

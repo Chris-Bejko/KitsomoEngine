@@ -16,7 +16,9 @@ Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 
 bool Sprite::Init()
 {
-	Serialize();
+	Field("textureID", textureID);
+	Field("ColorID", ColorID);
+	Field("renderOrder", renderOrder);
 	if (!textureID.empty())
 	{
 		// Try to load texture if not already in AssetManager
@@ -27,50 +29,6 @@ bool Sprite::Init()
 		LOG_DEBUG("Texture '", textureID, "' size: ", texture.getSize().x, "x", texture.getSize().y);
 	}
 	return true;
-}
-
-std::vector<SerializableVariable> *Sprite::GetSerializedFields()
-{
-	return &variables;
-}
-
-void Sprite::Serialize()
-{
-	variables.push_back({"textureID", &textureID, char_Type});
-	variables.push_back({"ColorID", &ColorID, char_Type});
-	variables.push_back({"renderOrder", &renderOrder, int_Type});
-}
-
-void Sprite::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-	for (auto const &[key, value] : map.stringFields)
-	{
-		LOG_DEBUG(key, value);
-		if (key == "textureID")
-		{
-			textureID = value;
-			AssetManager::get().loadTexture(textureID, textureID + ".png");
-			texture = AssetManager::get().getTexture(textureID);
-			sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
-			sprite.setTexture(texture);
-		}
-
-		if (key == "ColorID")
-		{
-			ColorID = value;
-			Color color;
-			color.SetColor(value);
-			SetColor(color);
-		}
-	}
-
-	for (auto const &[key, value] : map.intFields)
-	{
-		if (key == "renderOrder")
-		{
-			renderOrder = value;
-		}
-	}
 }
 
 void Sprite::draw()

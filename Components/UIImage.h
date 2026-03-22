@@ -1,9 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../Component.h"
-
+#include "../SerializableScript.h"
 class Component;
-class UIImage : public Component
+class UIImage : public SerializableScript
 {
 public:
     UIImage() = default;
@@ -18,16 +17,12 @@ public:
     void SetColor(sf::Color color);
     void SetAlpha(float alpha);
 
-    void Serialize() override;
-    void InitSerializedFields(ReadableSerializableVariableMap map) override;
-    std::vector<SerializableVariable>* GetSerializedFields() override { return &serializables; }
 private:
     sf::Sprite uiSprite;
     sf::Texture uiTexture;
     std::string textureId = "";
     std::string colorString = "White";
     float alpha = 1.0f;
-	std::vector<SerializableVariable> serializables;
 
     void UpdateSprite();
 };

@@ -2,11 +2,11 @@
 
 #include <string>
 #include "../AssetManager.h"
-#include "../Component.h"
 #include "../Vector2.h"
 #include "Transform.h"
 #include "../Color.h"
-class Sprite : public Component
+#include "../SerializableScript.h"
+class Sprite : public SerializableScript
 {
 public:
     Sprite() = default;
@@ -14,12 +14,6 @@ public:
     Sprite(std::string textureId, int renderOrder = 0, Color color = Color());
 
     bool Init() override final;
-
-    std::vector<SerializableVariable> *GetSerializedFields() override final;
-
-    void Serialize();
-
-    void InitSerializedFields(ReadableSerializableVariableMap map) override final;
 
     void draw() override final;
     void update(float dt) override final;
@@ -41,9 +35,8 @@ public:
     sf::Vector2f GetOrigin();
 
     sf::Sprite GetSprite();
-    
-    bool GetForceRender() { return forceDrag; }
 
+    bool GetForceRender() { return forceDrag; }
 
     void SetColor(const sf::Color &color);
 
@@ -56,11 +49,29 @@ public:
 
     void SetRenderOrder(int i);
     void SetForceDrag(bool force) { forceDrag = force; }
+    
+    void OnFieldChanged(const std::string &fieldName) override
+    {
+        if (fieldName == "textureID")
+        {
+            AssetManager::get().loadTexture(textureID, textureID + ".png");
+            texture = AssetManager::get().getTexture(textureID);
+            sprite.setTexture(texture);
+            sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
+            lastTextureID = textureID;
+        }
+        if (fieldName == "ColorID")
+        {
+            Color color;
+            color.SetColor(ColorID);
+            sprite.setColor(color.GetColorEnum());
+            lastColorID = ColorID;
+        }
+    }
 
 private:
     std::string ColorID = "";
     int renderOrder;
-    std::vector<SerializableVariable> variables;
     bool dragging = false;
     bool wasDragging = false; // Track previous frame's drag state
     sf::Vector2f mouseRectOffset;

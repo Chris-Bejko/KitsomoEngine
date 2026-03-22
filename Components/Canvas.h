@@ -1,10 +1,14 @@
 #pragma once
-#include "../Component.h"
 #include <SFML/Graphics.hpp>
+#include "../SerializableScript.h"
 
-enum class CanvasRenderMode { ScreenSpace, WorldSpace };
+enum class CanvasRenderMode
+{
+    ScreenSpace,
+    WorldSpace
+};
 
-class Canvas : public Component
+class Canvas : public SerializableScript
 {
 public:
     Canvas() = default;
@@ -20,14 +24,14 @@ public:
 
     sf::Vector2f referenceResolution = {1280.f, 720.f};
 
-    void Serialize() override;
-    std::vector<SerializableVariable>* GetSerializedFields() override { return &serializables; }
-    void InitSerializedFields(ReadableSerializableVariableMap map) override;
-
     void DrawEditorButton() override;
+    void OnFieldChanged(const std::string &fieldName) override
+    {
+        if (fieldName == "renderMode")
+            renderMode = (renderModeString == "WorldSpace") ? CanvasRenderMode::WorldSpace : CanvasRenderMode::ScreenSpace;
+    }
 
 private:
     CanvasRenderMode renderMode = CanvasRenderMode::ScreenSpace;
     std::string renderModeString = "ScreenSpace";
-    std::vector<SerializableVariable> serializables;
 };

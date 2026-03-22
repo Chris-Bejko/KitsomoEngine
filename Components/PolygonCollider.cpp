@@ -21,8 +21,8 @@ PolygonCollider::PolygonCollider(std::string tag, std::vector<sf::Vector2f> vert
 
 bool PolygonCollider::Init()
 {
-    LOG_DEBUG("PolygonCollider Init - vertices count before: ", vertices.size());
-    // Default to a triangle if no vertices
+    Collider::Init();
+    LOG_DEBUG("PolygonCollider::OnInit called, vertices: ", vertices.size());
     if (vertices.empty())
     {
         vertices = {
@@ -30,10 +30,60 @@ bool PolygonCollider::Init()
             sf::Vector2f(50, 50),
             sf::Vector2f(-50, 50)};
     }
-    LOG_DEBUG("PolygonCollider Init - vertices count after: ", vertices.size());
     RebuildVisual();
-    Serialize();
+    SerializeVerticesToString();
+    Field("vertices", verticesString);
     return true;
+}
+
+void PolygonCollider::SerializeVerticesToString()
+{
+    verticesString = "";
+    for (size_t i = 0; i < vertices.size(); i++)
+    {
+        verticesString += std::to_string(vertices[i].x) + "|" +
+                          std::to_string(vertices[i].y);
+        if (i < vertices.size() - 1)
+            verticesString += ";";
+    }
+    LOG_DEBUG("Serialized ", vertices.size(), " vertices: ", verticesString.c_str());
+}
+
+void PolygonCollider::DeserializeVerticesFromString(const std::string &str)
+{
+    vertices.clear();
+    if (str.empty())
+        return;
+
+    std::stringstream ss(str);
+    std::string pair;
+    while (std::getline(ss, pair, ';'))
+    {
+        auto pipePos = pair.find('|');
+        if (pipePos != std::string::npos)
+        {
+            try
+            {
+                float x = std::stof(pair.substr(0, pipePos));
+                float y = std::stof(pair.substr(pipePos + 1));
+                vertices.push_back(sf::Vector2f(x, y));
+            }
+            catch (...)
+            {
+                LOG_WARNING("Failed to parse vertex: ", pair.c_str());
+            }
+        }
+    }
+    LOG_DEBUG("Deserialized ", vertices.size(), " vertices");
+    RebuildVisual();
+}
+
+void PolygonCollider::InitSerializedFields(ReadableSerializableVariableMap map)
+{
+    SerializableScript::InitSerializedFields(map);
+
+    if (map.stringFields.count("vertices"))
+        DeserializeVerticesFromString(map.stringFields["vertices"]);
 }
 
 std::vector<sf::Vector2f> PolygonCollider::GetWorldVertices()
@@ -318,7 +368,7 @@ void PolygonCollider::UpdateEditMode()
             sf::Vector2f localPos = inv.getInverse().transformPoint(mouseWorld);
             vertices.push_back(localPos);
             RebuildVisual();
-            Serialize();
+            SerializeVerticesToString();
             addingVertex = false;
         }
         else if (hoveredVertex >= 0)
@@ -336,7 +386,7 @@ void PolygonCollider::UpdateEditMode()
         inv.scale(scaleX, scaleY);
         vertices[selectedVertex] = inv.getInverse().transformPoint(mouseWorld);
         RebuildVisual();
-        Serialize();
+        SerializeVerticesToString();
     }
 
     if (!sf::Mouse::isButtonPressed(sf::Mouse::Right))
@@ -349,7 +399,7 @@ void PolygonCollider::UpdateEditMode()
         hoveredVertex = -1;
         selectedVertex = -1;
         RebuildVisual();
-        Serialize();
+        SerializeVerticesToString();
     }
 }
 
@@ -386,63 +436,4 @@ void PolygonCollider::DrawEditorButton()
             editMode = true;
         ImGui::PopStyleColor();
     }
-}
-
-void PolygonCollider::Serialize()
-{
-    LOG_DEBUG("Serializing polygon collider ");
-
-    verticesString = "";
-    for (size_t i = 0; i < vertices.size(); i++)
-    {
-        verticesString += std::to_string(vertices[i].x) + "|" + std::to_string(vertices[i].y);
-        if (i < vertices.size() - 1)
-            verticesString += ";";
-    }
-    serializables.clear();
-    serializables.push_back({"collisionTag", &collisionTag, char_Type});
-    serializables.push_back({"isTrigger", &isTrigger, bool_Type});
-    serializables.push_back({"vertices", &verticesString, char_Type});
-}
-
-void PolygonCollider::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    for (auto const &[key, value] : map.stringFields)
-    {
-        LOG_DEBUG("  key: '", key.c_str(), "' value: '", value.c_str(), "'");
-        if (key == "collisionTag")
-            collisionTag = value;
-        if (key == "vertices")
-        {
-            LOG_DEBUG("Loading vertices string: ", value.c_str());
-            vertices.clear();
-            verticesString = value;
-
-            std::stringstream ss(value);
-            std::string pair;
-            while (std::getline(ss, pair, ';'))
-            {
-                std::stringstream ps(pair);
-                std::string xStr, yStr;
-                if (std::getline(ps, xStr, '|') && std::getline(ps, yStr, '|'))
-                {
-                    try
-                    {
-                        float x = std::stof(xStr);
-                        float y = std::stof(yStr);
-                        vertices.push_back(sf::Vector2f(x, y));
-                    }
-                    catch (...)
-                    {
-                        LOG_WARNING("Failed to parse vertex: ", pair.c_str());
-                    }
-                }
-            }
-            LOG_DEBUG("Loaded ", vertices.size(), " vertices");
-            RebuildVisual();
-        }
-    }
-    for (auto const &[key, value] : map.boolFields)
-        if (key == "isTrigger")
-            isTrigger = value;
 }

@@ -22,7 +22,7 @@ Player::Player(bool useControls, Vector2F position, std::string tag)
 
 bool Player::Init()
 {
-	Serialize();
+
 	LOG_INFO("Player Inititalized");
 	AssetManager::get().loadTexture("triangle", "triangle.png");
 	if (!entity->HasComponent<Sprite>())
@@ -31,58 +31,13 @@ bool Player::Init()
 	}
 	entity->transform->scale = Vector2F(0.05f, 0.05f);
 	LOG_DEBUG("Player initialized with position: ", entity->transform->position.x, ", ", entity->transform->position.y, "and scale: ", entity->transform->scale.x, ", ", entity->transform->scale.y);
+	Field("lastColorString", lastColorString);
+	Field("bulletPrefab", bulletPrefab);
+	Field("moveSpeed", moveSpeed);
+	Field("cooldown", cooldown);
+	Field("shootSound", shootSound);
+	Field("floorTouchSound", floorTouchSound);
 	return true;
-}
-
-void Player::Serialize()
-{
-	variables.push_back({"lastColorString", &lastColorString, char_Type});
-	variables.push_back({"bulletPrefab", &bulletPrefab, char_Type});
-	variables.push_back({"moveSpeed", &moveSpeed, float_Type});
-	variables.push_back({"cooldown", &cooldown, float_Type});
-	variables.push_back({"shootSound", &shootSound, char_Type});
-	variables.push_back({"floorTouchSound", &floorTouchSound, char_Type});
-}
-
-std::vector<SerializableVariable> *Player::GetSerializedFields()
-{
-	return &variables;
-}
-
-void Player::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-	for (auto const &[key, value] : map.stringFields)
-	{
-		if (key == "lastColorString")
-		{
-			lastColor.SetColor(value);
-			lastColorString = value;
-		}
-		if (key == "bulletPrefab")
-		{
-			bulletPrefab = value;
-		}
-		if(key == "shootSound")
-		{
-			shootSound = value;
-		}
-		if(key == "floorTouchSound")
-		{
-			floorTouchSound = value;
-		}
-	}
-
-	for(auto const& [key, value] : map.floatFields)
-	{
-		if (key == "moveSpeed")
-		{
-			moveSpeed = value;
-		}
-		if (key == "cooldown")
-		{
-			cooldown = value;
-		}
-	}
 }
 
 void Player::Awake()
@@ -139,9 +94,9 @@ void Player::update(float dt)
 			spawned.SetColor(lastColor);
 		}
 
-		if(entity->HasComponent<AudioSource>())
+		if (entity->HasComponent<AudioSource>())
 		{
-			auto& audio = entity->GetComponent<AudioSource>();	
+			auto &audio = entity->GetComponent<AudioSource>();
 			audio.LoadAudio(shootSound);
 			audio.Play();
 		}
@@ -199,15 +154,15 @@ void Player::OnTriggerEnter(Collider &other)
 			LOG_DEBUG("Player triggered with floor square of the same color, no color change");
 			return;
 		}
-		if(entity->HasComponent<AudioSource>())
+		if (entity->HasComponent<AudioSource>())
 		{
-			auto& audio = entity->GetComponent<AudioSource>();	
+			auto &audio = entity->GetComponent<AudioSource>();
 			audio.LoadAudio(floorTouchSound);
 			audio.Play();
 		}
 		lastColor = otherColor;
 		lastColorString = lastColor.SerializeColor();
-		
+
 		LOG_DEBUG("Player triggered with FloorSquare, changing color to match the floor square's color: ", lastColor.SerializeColor());
 		// entity->GetComponent<Sprite>().SetColor(lastColor);
 	}

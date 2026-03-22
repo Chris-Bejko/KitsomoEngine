@@ -4,14 +4,17 @@
 #include <algorithm>
 
 AudioSource::AudioSource()
-    : sound(nullptr), soundBuffer(nullptr), currentFilePath(""), 
+    : sound(nullptr), soundBuffer(nullptr), currentFilePath(""),
       volume(80.0f), isLooping(false), pitch(1.0f)
 {
 }
 
 bool AudioSource::Init()
 {
-    Serialize();
+    Field("filePath", currentFilePath);
+    Field("volume", volume);
+    Field("isLooping", isLooping);
+    Field("pitch", pitch);
     return true;
 }
 
@@ -20,13 +23,13 @@ void AudioSource::update(float dt)
     // Update can be extended for future functionality like fade-in/fade-out
 }
 
-bool AudioSource::LoadAudio(const std::string& filePath)
+bool AudioSource::LoadAudio(const std::string &filePath)
 {
     try
     {
         // Create new sound buffer
         auto newBuffer = std::make_unique<sf::SoundBuffer>();
-        
+
         // Try to load the audio file
         if (!newBuffer->loadFromFile(filePath))
         {
@@ -38,10 +41,10 @@ bool AudioSource::LoadAudio(const std::string& filePath)
         soundBuffer = std::move(newBuffer);
         sound = std::make_unique<sf::Sound>(*soundBuffer);
         currentFilePath = filePath;
-        
+
         return true;
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         std::cerr << "Exception loading audio: " << e.what() << std::endl;
         return false;
@@ -161,61 +164,7 @@ void AudioSource::SetPlayingOffset(float offset)
         sound->setPlayingOffset(sf::seconds(offset));
     }
 }
-
-void AudioSource::Serialize()
-{
-    serializables.clear();
-    serializables.push_back({"filePath", &currentFilePath, char_Type});
-    serializables.push_back({"volume", &volume, float_Type});
-    serializables.push_back({"isLooping", &isLooping, bool_Type});
-    serializables.push_back({"pitch", &pitch, float_Type});
-}
-
-std::vector<SerializableVariable>* AudioSource::GetSerializedFields()
-{
-    return &serializables;
-}
-
-void AudioSource::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    // Load string fields
-    for (auto const& [key, value] : map.stringFields)
-    {
-        if (key == "filePath")
-        {
-            if (!value.empty())
-            {
-                LoadAudio(value);
-            }
-        }
-    }
-
-    // Load float fields
-    for (auto const& [key, value] : map.floatFields)
-    {
-        if (key == "volume")
-        {
-            volume = value;
-            SetVolume(volume);
-        }
-        if (key == "pitch")
-        {
-            pitch = value;
-            SetPitch(pitch);
-        }
-    }
-
-    // Load bool fields
-    for (auto const& [key, value] : map.boolFields)
-    {
-        if (key == "isLooping")
-        {
-            isLooping = value;
-            SetLoop(isLooping);
-        }
-    }
-}
-
+    
 void AudioSource::DrawEditorButton()
 {
     ImGui::Spacing();
@@ -223,7 +172,7 @@ void AudioSource::DrawEditorButton()
 
     // Playback controls
     ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Playback Controls");
-    
+
     float buttonWidth = (ImGui::GetContentRegionAvail().x - ImGui::GetStyle().ItemSpacing.x * 2) / 3.0f;
 
     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.5f, 0.2f, 1.0f));

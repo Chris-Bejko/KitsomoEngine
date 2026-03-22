@@ -24,9 +24,13 @@
 #include "Components/UIImage.h"
 #include "Components/UIText.h"
 #include "Components/Canvas.h"
+#include "Components/GameManager.h"
 #include "GizmoSystem.h"
 #include "UI/UIEventSystem.h"
 #include "AssetManager.h"
+#include "GUIDGenerator.h"
+#include "nlohmann/json.hpp"
+using json = nlohmann::json;
 
 Engine *Engine::s_instance = nullptr;
 
@@ -119,6 +123,8 @@ void Engine::Render()
 
 void Engine::Update()
 {
+	if (this->loading)
+		return;
 	bool checkBox;
 	switch (currentState)
 	{
@@ -289,69 +295,80 @@ size_t Engine::GetTotalEntities()
 	return manager->GetTotalEntities();
 }
 
-void Engine::Save(std::string filename)
+void Engine::Save(const std::string &filename)
 {
-	std::ofstream myFile;
-	myFile.open(filename);
+	json root = json::array();
 
-	for (auto &e : manager->GetEntities()) // iterate Entity* directly
+	for (auto &e : manager->GetEntities())
 	{
-		myFile << "ENTITY_NAME_" << e->GetName() << "_ENTITY_NAME_E_";
+		json entityJson;
+		entityJson["name"] = e->GetName();
+		entityJson["guid"] = e->GetGUID();
+		entityJson["parent"] = e->HasParent() ? e->GetParent()->GetGUID() : "";
 
-		if (e->HasParent())
-			myFile << "_PARENT_" << e->GetParent()->GetName() << "_PARENT_E_";
-
-		auto components = e->GetAllComponentVariables();
-		for (auto &c : components)
+		json componentsJson = json::array();
+		for (auto &comp : e->GetAllComponentVariables())
 		{
-			myFile << "_COMPONENT_NAME_" << c.componentName;
-			myFile << "_COMPONENT_NAME_E_";
-			for (auto &f : c.variables)
+			json compJson;
+			compJson["type"] = comp.componentName;
+			compJson["guid"] = comp.guiD;
+
+			json fieldsJson;
+			for (auto &f : comp.variables)
 			{
-				myFile << "_FIELD_";
-				myFile << ":" << f.name << "::";
 				switch (f.type)
 				{
-				case 1:
-					myFile << "," << f.read() << ",,";
+				case int_Type:
+					fieldsJson[f.name] = *reinterpret_cast<int *>(f.data);
 					break;
-				case 2:
-					myFile << "," << f.read() << ",,";
+				case float_Type:
+					fieldsJson[f.name] = *reinterpret_cast<float *>(f.data);
 					break;
-				case 3:
-				{
-					std::string p = *reinterpret_cast<std::string *>(f.data);
-					myFile << "," << p << ",,";
+				case char_Type:
+					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
+					break;
+				case bool_Type:
+					fieldsJson[f.name] = *reinterpret_cast<bool *>(f.data);
+					break;
+				case entityRef_Type:
+					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
+					break;
+				case compRef_Type:
+					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
 					break;
 				}
-				case 4:
-				{
-					bool p = *reinterpret_cast<bool *>(f.data);
-					myFile << "," << p << ",,";
-					break;
-				}
-				}
-				myFile << ";" << f.type << ";;";
 			}
-			myFile << "_FIELD_";
+			compJson["fields"] = fieldsJson;
+			componentsJson.push_back(compJson);
 		}
-		myFile << "\n";
+		entityJson["components"] = componentsJson;
+		root.push_back(entityJson);
 	}
-	myFile.close();
+
+	std::ofstream file(filename);
+	file << root.dump(2); // 2 = indent spaces, makes it human readable
+	file.close();
+	LOG_INFO("Saved: ", filename.c_str());
 }
+
 bool Engine::Load(std::string fileName)
 {
 	LOG_INFO("Loading file: ", fileName.c_str());
 	if (fileName.empty())
 		return true;
-
+	this->loading = true;
 	auto entities = ParseFile(fileName);
 	if (entities.empty())
+	{
+		this->loading = false;
+
 		return false;
+	}
 	GizmoSystem::get().SetSelectedEntity(nullptr);
 	SpawnEntities(entities);
 	currentState = EngineState::Running;
 	openProject = fileName;
+	this->loading = false;
 	return true;
 }
 
@@ -389,13 +406,13 @@ Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 	auto &e = entities[0];
 	e.entityName = manager->GetUniqueName(e.entityName);
 
-	Entity *ent = new Entity(e.entityName);
+	Entity *ent = new Entity(e.entityName, e.guiD);
 	for (auto &c : e.components)
 	{
 		LOG_DEBUG("Spawning component: ", c.componentName.c_str());
 		auto it = componentRegistry.find(c.componentName);
 		if (it != componentRegistry.end())
-			it->second(ent, c.fields);
+			it->second(ent, c.fields, c.guiD);
 	}
 
 	// Override position
@@ -407,164 +424,161 @@ Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 
 void Engine::RegisterComponents()
 {
-	componentRegistry["Transform"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["Transform"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
+		e->GetComponent<Transform>().SetGUID(GUID);
 		e->GetComponent<Transform>().InitSerializedFields(fields);
 	};
-	componentRegistry["BoxCollider"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["BoxCollider"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<BoxCollider>())
-			e->AddComponent<BoxCollider>().InitSerializedFields(fields);
+			e->AddComponent<BoxCollider>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<BoxCollider>().InitSerializedFields(fields);
 	};
-	componentRegistry["Sprite"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["Sprite"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<Sprite>())
-			e->AddComponent<Sprite>().InitSerializedFields(fields);
+			e->AddComponent<Sprite>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<Sprite>().InitSerializedFields(fields);
 	};
-	componentRegistry["Player"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["Player"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<Player>())
-			e->AddComponent<Player>().InitSerializedFields(fields);
+			e->AddComponent<Player>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<Player>().InitSerializedFields(fields);
 	};
-	componentRegistry["FloorSquare"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["FloorSquare"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<FloorSquare>())
-			e->AddComponent<FloorSquare>().InitSerializedFields(fields);
+			e->AddComponent<FloorSquare>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<FloorSquare>().InitSerializedFields(fields);
 	};
-	componentRegistry["Bullet"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["Bullet"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<Bullet>())
-			e->AddComponent<Bullet>().InitSerializedFields(fields);
+			e->AddComponent<Bullet>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<Bullet>().InitSerializedFields(fields);
 	};
-	componentRegistry["Rigidbody"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["Rigidbody"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<Rigidbody>())
-			e->AddComponent<Rigidbody>().InitSerializedFields(fields);
+			e->AddComponent<Rigidbody>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<Rigidbody>().InitSerializedFields(fields);
 	};
-	componentRegistry["CircleCollider"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["CircleCollider"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<CircleCollider>())
-			e->AddComponent<CircleCollider>().InitSerializedFields(fields);
+			e->AddComponent<CircleCollider>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<CircleCollider>().InitSerializedFields(fields);
 	};
-	componentRegistry["PolygonCollider"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["PolygonCollider"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<PolygonCollider>())
-			e->AddComponent<PolygonCollider>().InitSerializedFields(fields);
+			e->AddComponent<PolygonCollider>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<PolygonCollider>().InitSerializedFields(fields);
 	};
-	componentRegistry["AudioSource"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["AudioSource"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<AudioSource>())
-			e->AddComponent<AudioSource>().InitSerializedFields(fields);
+			e->AddComponent<AudioSource>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<AudioSource>().InitSerializedFields(fields);
 	};
-	componentRegistry["UIButton"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["UIButton"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<UIButton>())
-			e->AddComponent<UIButton>().InitSerializedFields(fields);
+			e->AddComponent<UIButton>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<UIButton>().InitSerializedFields(fields);
 	};
-	componentRegistry["UIImage"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["UIImage"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<UIImage>())
-			e->AddComponent<UIImage>().InitSerializedFields(fields);
+			e->AddComponent<UIImage>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<UIImage>().InitSerializedFields(fields);
 	};
-	componentRegistry["UIText"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["UIText"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<UIText>())
-			e->AddComponent<UIText>().InitSerializedFields(fields);
+			e->AddComponent<UIText>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<UIText>().InitSerializedFields(fields);
 	};
-		componentRegistry["Canvas"] = [](Entity *e, ReadableSerializableVariableMap fields)
+	componentRegistry["Canvas"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
 		if (!e->HasComponent<Canvas>())
-			e->AddComponent<Canvas>().InitSerializedFields(fields);
+			e->AddComponent<Canvas>(FromGUID(GUID)).InitSerializedFields(fields);
 		else
 			e->GetComponent<Canvas>().InitSerializedFields(fields);
 	};
-}
-
-std::string Engine::GetSubstring(std::string &line, std::string &delStart, std::string &delEnd, bool erase = false)
-{
-	auto first = line.find(delStart);
-	auto last = line.find(delEnd);
-	SerializableComponent comp;
-	auto final = line.substr(first + delStart.length(), last - (first + delStart.length()));
-	if (erase)
-		line.erase(first, last - first + delEnd.length());
-
-	return final;
-}
-
-void Engine::SavePrefab(Entity *entity)
-{
-	// Create prefabs directory if it doesn't exist
-	std::filesystem::create_directories("prefabs");
-
-	std::ofstream myFile;
-	std::string name = entity->GetName();
-	name = name.c_str();
-	std::string filename = "prefabs/" + name + ".prefab";
-	myFile.open(filename);
-	LOG_INFO("Saving prefab to: ", std::filesystem::absolute(filename).string().c_str());
-	auto components = entity->GetAllComponentVariables();
-	myFile << "ENTITY_NAME_" << entity->GetName() << "_ENTITY_NAME_E_";
-	for (auto &c : components)
+	componentRegistry["GameManager"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
 	{
-		myFile << "_COMPONENT_NAME_" << c.componentName;
-		myFile << "_COMPONENT_NAME_E_";
-		for (auto &f : c.variables)
-		{
-			myFile << "_FIELD_";
-			myFile << ":" << f.name << "::";
-			switch (f.type)
-			{
-			case 1:
-				myFile << "," << f.read() << ",,";
-				break;
-			case 2:
-				myFile << "," << f.read() << ",,";
-				break;
-			case 3:
-			{
-				std::string p = *reinterpret_cast<std::string *>(f.data);
-				myFile << "," << p << ",,";
-				break;
-			}
-			case 4:
-			{
-				bool p = *reinterpret_cast<bool *>(f.data);
-				myFile << "," << p << ",,";
-				break;
-			}
-			}
-			myFile << ";" << f.type << ";;";
-		}
-		myFile << "_FIELD_";
-	}
-	myFile << "\n";
-	myFile.close();
-	LOG_INFO("Saved prefab: ", filename);
+		if (!e->HasComponent<GameManager>())
+			e->AddComponent<GameManager>(FromGUID(GUID)).InitSerializedFields(fields);
+		else
+			e->GetComponent<GameManager>().InitSerializedFields(fields);
+	};
+}
+
+void Engine::SavePrefab(Entity* entity)
+{
+    std::filesystem::create_directories("prefabs");
+
+    json root = json::array(); 
+    
+    json entityJson;
+    entityJson["name"]   = entity->GetName();
+    entityJson["guid"]   = entity->GetGUID();
+    entityJson["parent"] = "";
+
+    json componentsJson = json::array();
+    for (auto& comp : entity->GetAllComponentVariables())
+    {
+        json compJson;
+        compJson["type"] = comp.componentName;
+        compJson["guid"] = comp.guiD;
+
+        json fieldsJson;
+        for (auto& f : comp.variables)
+        {
+            switch (f.type)
+            {
+            case int_Type:
+                fieldsJson[f.name] = *reinterpret_cast<int*>(f.data);
+                break;
+            case float_Type:
+                fieldsJson[f.name] = *reinterpret_cast<float*>(f.data);
+                break;
+            case char_Type:
+            case entityRef_Type:
+            case compRef_Type:
+                fieldsJson[f.name] = *reinterpret_cast<std::string*>(f.data);
+                break;
+            case bool_Type:
+                fieldsJson[f.name] = *reinterpret_cast<bool*>(f.data);
+                break;
+            }
+        }
+        compJson["fields"] = fieldsJson;
+        componentsJson.push_back(compJson);
+    }
+    entityJson["components"] = componentsJson;
+    root.push_back(entityJson); // push into array
+
+    std::string filename = "prefabs/" + entity->GetName() + ".prefab";
+    std::ofstream file(filename);
+    file << root.dump(2);
+    file.close();
+    LOG_INFO("Saved prefab: ", filename.c_str());
 }
 
 void Engine::Reset()
@@ -614,7 +628,7 @@ void Engine::UpdateEditorCamera(float dt)
 			Entity *target = nullptr;
 			for (auto &e : manager->GetEntities())
 			{
-				if (e->GetName() == focusTargetName)
+				if (e->GetGUID() == focusTargetName)
 				{
 					target = e.get();
 					break;
@@ -699,79 +713,59 @@ void Engine::UpdateEditorCamera(float dt)
 std::vector<SerializableEntity> Engine::ParseFile(const std::string &fileName)
 {
 	std::vector<SerializableEntity> entities;
-	std::fstream myFile;
-	myFile.open(fileName, std::ios::in);
-	if (!myFile)
+	std::ifstream file(fileName);
+	if (!file.is_open())
+	{
+		LOG_ERROR("Failed to open: ", fileName.c_str());
 		return entities;
+	}
 
-	std::string line;
-	while (std::getline(myFile, line))
+	json root;
+	try
+	{
+		file >> root;
+	}
+	catch (const json::exception &e)
+	{
+		LOG_ERROR("JSON parse error: ", e.what());
+		return entities;
+	}
+
+	// Handle both single object (prefab) and array (scene)
+	json entityArray = root.is_array() ? root : json::array({root});
+
+	for (auto &entityJson : root)
 	{
 		SerializableEntity ent;
-		std::string delStart = "ENTITY_NAME_";
-		std::string delEnd = "_ENTITY_NAME_E_";
-		ent.entityName = GetSubstring(line, delStart, delEnd, true);
-		if (line.find("_PARENT_") != std::string::npos)
+		ent.entityName = entityJson.value("name", "");
+		ent.guiD = entityJson.value("guid", "");
+		ent.parentGUID = entityJson.value("parent", "");
+
+		for (auto &compJson : entityJson["components"])
 		{
-			delStart = "_PARENT_";
-			delEnd = "_PARENT_E_";
-			ent.parentName = GetSubstring(line, delStart, delEnd, true);
-		}
-		std::string delimiter = "_COMPONENT_NAME_";
-		std::size_t pos = 0;
-		while ((pos = line.find(delimiter)) != std::string::npos)
-		{
-			ReadableSerializableVariableMap fields;
-			delStart = "_COMPONENT_NAME_";
-			delEnd = "_COMPONENT_NAME_E_";
 			SerializableComponent comp;
-			comp.componentName = GetSubstring(line, delStart, delEnd, true);
+			comp.componentName = compJson.value("type", "");
+			comp.guiD = compJson.value("guid", "");
 
-			std::string delField = "_FIELD_";
-			std::size_t fieldPos = 0;
-			while ((fieldPos = line.find(delField)) != std::string::npos &&
-				   (fieldPos < line.find(delimiter)))
+			if (compJson.contains("fields"))
 			{
-				delStart = ":";
-				delEnd = "::";
-				auto fieldName = GetSubstring(line, delStart, delEnd, false);
-				delStart = ",";
-				delEnd = ",,";
-				auto fieldValue = GetSubstring(line, delStart, delEnd, false);
-
-				// Find the position of the value end delimiter (,,)
-				size_t valueEndPos = line.find(",,");
-				// Search for field type AFTER the value ends
-				std::string remainingLine = line.substr(valueEndPos);
-				delStart = ";";
-				delEnd = ";;";
-				auto fieldType = GetSubstring(remainingLine, delStart, delEnd, false);
-
-				if (fieldType == "_FIELD_")
-					break;
-				switch (std::stoi(fieldType))
+				for (auto &[key, val] : compJson["fields"].items())
 				{
-				case 1:
-					fields.intFields.emplace(fieldName, std::stoi(fieldValue));
-					break;
-				case 2:
-					fields.floatFields.emplace(fieldName, std::stof(fieldValue));
-					break;
-				case 3:
-					fields.stringFields.emplace(fieldName, fieldValue);
-					break;
-				case 4:
-					fields.boolFields.emplace(fieldName, std::stoi(fieldValue));
-					break;
+					if (val.is_boolean())
+						comp.fields.boolFields[key] = val.get<bool>();
+					else if (val.is_number_integer())
+						comp.fields.intFields[key] = val.get<int>();
+					else if (val.is_number()) 
+						comp.fields.floatFields[key] = val.get<float>();
+					else if (val.is_string())
+						comp.fields.stringFields[key] = val.get<std::string>();
 				}
-				comp.fields = fields;
-				line.erase(0, fieldPos + delField.length());
 			}
 			ent.components.push_back(comp);
 		}
 		entities.push_back(ent);
 	}
-	myFile.close();
+
 	return entities;
 }
 
@@ -780,12 +774,12 @@ void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 	// First pass - spawn all entities
 	for (auto &e : entities)
 	{
-		Entity *ent = new Entity(e.entityName);
+		Entity *ent = new Entity(e.entityName, e.guiD);
 		for (auto &c : e.components)
 		{
 			auto it = componentRegistry.find(c.componentName);
 			if (it != componentRegistry.end())
-				it->second(ent, c.fields);
+				it->second(ent, c.fields, c.guiD);
 			else
 				LOG_WARNING("Unknown component: ", c.componentName.c_str());
 		}
@@ -796,7 +790,7 @@ void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 	manager->ValidateAdded();
 	for (auto &e : entities)
 	{
-		if (e.parentName.empty())
+		if (e.parentGUID.empty())
 			continue;
 
 		Entity *child = nullptr;
@@ -804,22 +798,22 @@ void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 
 		for (auto &ent : manager->GetEntities())
 		{
-			if (ent->GetName() == e.entityName)
+			if (ent->GetGUID() == e.guiD)
 				child = ent.get();
-			if (ent->GetName() == e.parentName)
+			if (ent->GetGUID() == e.parentGUID)
 				parent = ent.get();
 		}
 
 		if (child && parent)
 		{
 			child->SetParent(parent);
-			LOG_DEBUG("Parented '", e.entityName.c_str(), "' to '", e.parentName.c_str(), "'");
+			LOG_DEBUG("Parented '", e.guiD.c_str(), "' to '", e.parentGUID.c_str(), "'");
 		}
 	}
 }
 void Engine::FocusOnEntity(Entity *entity)
 {
-	focusTargetName = entity->GetName();
+	focusTargetName = entity->GetGUID();
 
 	LOG_INFO("Focusing on: ", focusTargetName.c_str());
 }

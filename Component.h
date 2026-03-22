@@ -30,4 +30,10 @@ public:
 	virtual void OnTriggerExit(Collider& other) { }
 	virtual void OnTriggerStay(Collider& other) { }
 	virtual void DrawEditorButton() {}
+	virtual void ResolvePointers() {}
+	void SetGUID(std::string guid) { m_GUID = guid; }
+	std::string GetGUID() { return m_GUID; }
+
+private:
+	std::string m_GUID;
 };

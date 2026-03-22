@@ -1,5 +1,5 @@
 #pragma once
-#include "../Component.h"
+#include "../SerializableScript.h"
 #include <SFML/Graphics.hpp>
 
 enum class AnchorPreset
@@ -20,7 +20,7 @@ enum class AnchorPreset
 
 class Canvas;
 
-class UIRect : public Component
+class UIRect : public SerializableScript
 {
 public:
     UIRect() = default;
@@ -38,14 +38,10 @@ public:
     sf::FloatRect GetScreenRect();
     sf::Vector2f GetScreenPosition();
 
-    void Serialize() override;
-    std::vector<SerializableVariable> *GetSerializedFields() override { return &serializables; }
-    void InitSerializedFields(ReadableSerializableVariableMap map) override;
     sf::Vector2f ResolveAnchor(AnchorPreset anchor, sf::Vector2f screenSize);
     Canvas *GetCanvas();
     void SyncToTransform();
 private:
-    std::vector<SerializableVariable> serializables;
     std::string anchorString = "MiddleCenter";
     Canvas* cachedCanvas = nullptr;
 };

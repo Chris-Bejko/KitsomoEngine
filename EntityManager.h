@@ -61,6 +61,8 @@ public:
 	std::string GetUniqueName(const std::string &baseName);
 	std::vector<std::unique_ptr<Entity>> &GetEntities() { return entities; }
 	void DisplayEntityNode(Entity *e);
+	Entity *GetDragHoveredEntity() { return dragHoveredEntity; }
+	void DisplayComponentsOf(Entity* e);
 
 private:
 	// Track active collision pairs to ensure OnTriggerEnter/Stay/Exit called correctly
@@ -74,4 +76,5 @@ private:
 	Entity *selectedEntity = nullptr;
 	Entity *lastClickedEntity = nullptr;
 	float lastClickTime = 0.f;
+	Entity *dragHoveredEntity = nullptr;
 };

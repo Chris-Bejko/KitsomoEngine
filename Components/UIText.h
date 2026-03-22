@@ -1,9 +1,10 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <string>
-#include "../Component.h"
+#include "../SerializableScript.h"
+
 enum class TextAlignment { Left, Center, Right };
-class UIText : public Component
+class UIText : public SerializableScript
 {
 public:
     UIText() = default;
@@ -23,9 +24,6 @@ public:
 
     std::string GetText() { return text; }
 
-    void Serialize() override;
-    void InitSerializedFields(ReadableSerializableVariableMap map) override;
-    std::vector<SerializableVariable>* GetSerializedFields() override { return &serializables; }
 
 private:
     sf::Text sfText;
@@ -36,7 +34,6 @@ private:
     TextAlignment alignment = TextAlignment::Center;
     std::string alignmentString = "Center";
     bool wordWrap = false;
-	std::vector<SerializableVariable> serializables;
 
     void UpdateTextProperties();
     void ApplyAlignment(sf::Vector2f screenPos);

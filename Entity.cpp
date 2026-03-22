@@ -16,14 +16,24 @@
 #include "Components/UIImage.h"
 #include "Components/UIText.h"
 #include "Components/Canvas.h"
+#include "Components/GameManager.h"
 #include "Logger.h"
 #include "EditorSprite.h"
+#include "GUIDGenerator.h"
 // #include "Components/BoxCollider.h"
 
-Entity::Entity(std::string name)
+Entity::Entity(std::string name, std::string guid)
 {
 	this->transform = &this->AddComponent<Transform>(0, 0);
 	this->AddComponent<EditorSprite>();
+	if (guid.empty())
+	{
+		this->m_guid = EngineGUID::Generate();
+	}
+	else
+	{
+		m_guid = guid;
+	}
 	isActive = true;
 	displayComponents = false;
 	SaveAvailableComponents();
@@ -57,7 +67,8 @@ void Entity::Awake()
 {
 	ValidateAddedComponents();
 	for (auto &comp : components)
-	{
+	{	
+		comp->ResolvePointers();
 		comp->Awake();
 	}
 }
@@ -198,11 +209,11 @@ void Entity::DisplayComponents()
 
 	// Delete entity button
 	ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
-	if (ImGui::Button("-Delete Entity", ImVec2(-1, 0)))
+	if (ImGui::Button("Delete Entity", ImVec2(-1, 0)))
 		deletePressed = true;
 	ImGui::PopStyleColor();
 
-	if (deletePressed)
+	if (deletePressed == 1)
 	{
 		std::string warning = "Delete Entity: " + this->GetName() + " ?";
 		char *warningChar = &warning[0];
@@ -314,6 +325,8 @@ void Entity::DisplayComponents()
 				int temp(*p);
 				ImGui::InputInt(fieldId.c_str(), &temp);
 				*p = temp;
+				if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
+					script->NotifyFieldChanged(std::string(it->name));
 				break;
 			}
 			case float_Type:
@@ -322,6 +335,8 @@ void Entity::DisplayComponents()
 				float temp(*p);
 				ImGui::InputFloat(fieldId.c_str(), &temp);
 				*p = temp;
+				if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
+					script->NotifyFieldChanged(std::string(it->name));
 				break;
 			}
 			case char_Type:
@@ -331,6 +346,8 @@ void Entity::DisplayComponents()
 				str.resize(200, '\0');
 				ImGui::InputText(fieldId.c_str(), &str[0], 200);
 				*p = std::string(str.c_str());
+				if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
+					script->NotifyFieldChanged(std::string(it->name));
 				break;
 			}
 			case bool_Type:
@@ -339,6 +356,120 @@ void Entity::DisplayComponents()
 				bool b(*p);
 				ImGui::Checkbox(fieldId.c_str(), &b);
 				*p = b;
+				if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
+					script->NotifyFieldChanged(std::string(it->name));
+				break;
+			}
+			case entityRef_Type:
+			{
+				auto p = reinterpret_cast<std::string *>(it->data);
+
+				// Find resolved entity by GUID
+				Entity *resolved = nullptr;
+				for (auto &ent : Engine::get().GetManager()->GetEntities())
+				{
+					if (ent->GetGUID() == *p)
+					{
+						resolved = ent.get();
+						break;
+					}
+				}
+
+				std::string displayText = resolved ? "-> " + resolved->GetName() : !p->empty() ? "NOT FOUND"
+																							   : "Drop entity here...";
+
+				ImVec4 boxColor = resolved ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) : !p->empty() ? ImVec4(0.35f, 0.1f, 0.1f, 1.0f)
+																						   : ImVec4(0.15f, 0.18f, 0.25f, 1.0f);
+
+				ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(boxColor.x + 0.05f,
+																	 boxColor.y + 0.05f,
+																	 boxColor.z + 0.1f, 1.0f));
+				ImGui::Button((displayText + "##" + fieldId).c_str(), ImVec2(-1, 0));
+				ImGui::PopStyleColor(2);
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
+					{
+						Entity *dropped = *(Entity **)payload->Data;
+						if (dropped)
+							*p = dropped->GetGUID(); // just store GUID directly
+					}
+					ImGui::EndDragDropTarget();
+				}
+				break;
+			}
+			case compRef_Type:
+			{
+				auto p = reinterpret_cast<std::string *>(it->data);
+				std::string typeHint = it->componentTypeHint;
+
+				// Parse packed string "entityGUID|compGUID"
+				std::string entityGUID, compGUID;
+				auto pipePos = p->find('|');
+				if (pipePos != std::string::npos)
+				{
+					entityGUID = p->substr(0, pipePos);
+					compGUID = p->substr(pipePos + 1);
+				}
+
+				// Find resolved entity by GUID
+				Entity *resolved = nullptr;
+				for (auto &ent : Engine::get().GetManager()->GetEntities())
+				{
+					if (ent->GetGUID() == entityGUID)
+					{
+						resolved = ent.get();
+						break;
+					}
+				}
+
+				// Build display text: "UIText (EntityName)"
+				std::string displayText = "Drop component here...";
+				if (resolved)
+					displayText = typeHint + " (" + resolved->GetName() + ")";
+				else if (!entityGUID.empty())
+					displayText = "NOT FOUND";
+
+				ImVec4 boxColor = resolved ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) : !entityGUID.empty() ? ImVec4(0.35f, 0.1f, 0.1f, 1.0f)
+																								   : ImVec4(0.15f, 0.18f, 0.25f, 1.0f);
+
+				ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(boxColor.x + 0.05f,
+																	 boxColor.y + 0.05f,
+																	 boxColor.z + 0.1f, 1.0f));
+				ImGui::Button((displayText + "##" + fieldId).c_str(), ImVec2(-1, 0));
+				ImGui::PopStyleColor(2);
+
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
+					{
+						Entity *dropped = *(Entity **)payload->Data;
+						if (dropped)
+						{
+							// Find component matching type hint
+							Component *matchedComp = nullptr;
+							for (auto &comp : dropped->GetComponents())
+							{
+								std::string compTypeName(typeid(*comp).name());
+								compTypeName = std::regex_replace(compTypeName,
+																  std::regex("class "), "");
+								if (compTypeName == typeHint)
+								{
+									matchedComp = comp.get();
+									break;
+								}
+							}
+
+							if (matchedComp)
+								*p = dropped->GetGUID() + "|" + matchedComp->GetGUID();
+							// if no match, don't accept
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
 				break;
 			}
 			default:
@@ -444,6 +575,8 @@ void Entity::AddComponentByName(const std::string &componentName)
 		this->AddComponent<UIText>();
 	else if (componentName == "Canvas")
 		this->AddComponent<Canvas>();
+	else if (componentName == "GameManager")
+		this->AddComponent<GameManager>();
 	else
 		LOG_ERROR("Unknown component: ", componentName.c_str());
 }

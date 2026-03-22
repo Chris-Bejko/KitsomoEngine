@@ -1,11 +1,11 @@
 #pragma once
-#include "../Engine.h"
 #include "../Color.h"
 #include "../Vector2.h"
 #include "Sprite.h"
 #include "Rigidbody.h"
+#include "../SerializableScript.h"
 
-class Bullet : public Component
+class Bullet : public SerializableScript
 {
 
 public:
@@ -29,11 +29,6 @@ public:
 	void OnCollisionEnter(Collider& other) override final;
 
 	float GetForce() { return force; }	
-
-	void InitSerializedFields(ReadableSerializableVariableMap map) override final;
-	std::vector<SerializableVariable>* GetSerializedFields() override final;
-
-	void Serialize() override final;
 private:
 	float force = 850.f;
 	Color lastColor;
@@ -41,6 +36,5 @@ private:
 	float timer = 0;
 	Sprite* sprite;
 	Rigidbody* rb;
-	std::vector<SerializableVariable> variables;
 
 };
