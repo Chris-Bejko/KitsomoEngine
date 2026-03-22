@@ -68,7 +68,7 @@ void ImguiHandler::ApplyEditorStyle()
 
 void ImguiHandler::Update(sf::Time rest)
 {
-	if(Engine::get().IsLoading())
+	if (Engine::get().IsLoading())
 		return;
 	ImGui::SFML::Update(Engine::get().GetWindow(), rest);
 
@@ -246,6 +246,32 @@ void ImguiHandler::DrawInspector()
 								? dragHovered
 								: Engine::get().GetManager()->GetSelectedEntity();
 
+	// Guard against stale pointer
+	if (displayEntity != nullptr)
+	{
+		bool entityStillExists = false;
+		for (auto &e : Engine::get().GetManager()->GetEntities())
+		{
+			if (e.get() == displayEntity)
+			{
+				entityStillExists = true;
+				break;
+			}
+		}
+		if (!entityStillExists)
+		{
+			Engine::get().GetManager()->SetSelectedEntity(nullptr);
+			dragHovered = nullptr;
+			displayEntity = nullptr;
+		}
+	}
+
+	if (displayEntity == nullptr)
+	{
+		ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "No entity selected.");
+		ImGui::End();
+		return;
+	}
 	if (displayEntity == nullptr)
 	{
 		ImGui::TextColored(COLOR_TEXT_DIM, "No entity selected.");

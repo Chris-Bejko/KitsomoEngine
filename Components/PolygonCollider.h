@@ -1,12 +1,13 @@
 #pragma once
 #include "../Collision/Collider.h"
+#include "../Vector2.h"
 #include <vector>
 
 class PolygonCollider : public Collider
 {
 public:
     PolygonCollider();
-    PolygonCollider(std::string tag, std::vector<sf::Vector2f> vertices, bool isTrigger = false);
+    PolygonCollider(std::string tag, std::vector<Vector2F> vertices, bool isTrigger = false);
 
     bool Init() override;
     void updateEngine(float dt) override;
@@ -18,37 +19,32 @@ public:
     void DrawDebug() override;
     ColliderType GetType() override { return ColliderType::Polygon; }
 
-    std::vector<sf::Vector2f> GetWorldVertices();
-    std::vector<sf::Vector2f> &GetLocalVertices() { return vertices; }
+    std::vector<Vector2F> GetWorldVertices();
+    std::vector<Vector2F> &GetLocalVertices() { return vertices; }
 
     void DrawEditorButton() override;
-
     void InitSerializedFields(ReadableSerializableVariableMap map) override;
-
     void OnFieldChanged(const std::string &fieldName) override
     {
         if (fieldName == "vertices")
-            DeserializeVerticesFromString(verticesString);
+            RebuildVisual();
     }
 
 private:
-    std::string verticesString;         // For serialization
-    std::vector<sf::Vector2f> vertices; // local space
+    std::vector<Vector2F> vertices;
     sf::ConvexShape colliderVisual;
 
-    // Edit mode
     void UpdateEditMode();
     int selectedVertex = -1;
     int hoveredVertex = -1;
     bool addingVertex = false;
 
-    // SAT helpers
-    std::vector<sf::Vector2f> GetAxes(const std::vector<sf::Vector2f> &worldVerts);
-    void Project(const std::vector<sf::Vector2f> &verts, sf::Vector2f axis, float &min, float &max);
+    std::vector<Vector2F> GetAxes(const std::vector<Vector2F> &worldVerts);
+    void Project(const std::vector<Vector2F> &verts, Vector2F axis, float &min, float &max);
     bool SATvsPolygon(PolygonCollider &other);
     bool SATvsBox(sf::FloatRect box);
-    bool SATvsCircle(sf::Vector2f center, float radius);
-    void SerializeVerticesToString();
-    void DeserializeVerticesFromString(const std::string &str);
+    bool SATvsCircle(Vector2F center, float radius);
     void RebuildVisual();
+    bool wasRightDown = false;
+    bool wasLeftDown = false;
 };

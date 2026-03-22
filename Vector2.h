@@ -1,22 +1,15 @@
 #pragma once
 #include <iostream>
+#include <cmath>
+#include <limits>
 
 template <typename T>
 struct Vector2
 {
     T x, y;
 
-    Vector2()
-    {
-        this->x = 0;
-        this->y = 0;
-    }
-
-    Vector2(T x, T y)
-    {
-        this->x = x;
-        this->y = y;
-    }
+    Vector2() : x(0), y(0) {}
+    Vector2(T x, T y) : x(x), y(y) {}
 
     inline Vector2<T> operator+(const Vector2<T>& v2) const
     {
@@ -30,12 +23,12 @@ struct Vector2
         return v1;
     }
 
-    inline Vector2<T> operator-(const Vector2<T>& v2)
+    inline Vector2<T> operator-(const Vector2<T>& v2) const
     {
         return Vector2<T>(x - v2.x, y - v2.y);
     }
 
-    inline friend Vector2<T> operator-=(Vector2<T>& v1, const Vector2<T>& v2)
+    inline friend Vector2<T>& operator-=(Vector2<T>& v1, const Vector2<T>& v2)
     {
         v1.x -= v2.x;
         v1.y -= v2.y;
@@ -52,21 +45,32 @@ struct Vector2
         return (d != 0 ? Vector2<T>(x / d, y / d) : Vector2<T>());
     }
 
-    inline Vector2<T>& zero()
+    inline bool operator==(const Vector2<T>& v2) const
     {
-        this->x = 0;
-        this->y = 0;
-        return *this;
+        return x == v2.x && y == v2.y;
     }
 
-    inline Vector2<T>& ones()
+    inline bool operator!=(const Vector2<T>& v2) const
     {
-        this->x = 1;
-        this->y = 1;
-        return *this;
+        return !(*this == v2);
     }
 
-    inline friend std::ostream& operator <<(std::ostream& stream, const Vector2<T>& v)
+    inline Vector2<T>& zero()  { x = 0; y = 0; return *this; }
+    inline Vector2<T>& ones()  { x = 1; y = 1; return *this; }
+
+    inline T magnitude() const
+    {
+        return std::sqrt(x * x + y * y);
+    }
+
+    inline Vector2<T> normalized() const
+    {
+        T mag = magnitude();
+        if (mag <= 0) return Vector2<T>();
+        return Vector2<T>(x / mag, y / mag);
+    }
+
+    inline friend std::ostream& operator<<(std::ostream& stream, const Vector2<T>& v)
     {
         stream << "(" << v.x << "," << v.y << ")";
         return stream;
@@ -76,17 +80,14 @@ struct Vector2
     {
         constexpr auto units_in_last_place = 2;
         auto norm = std::sqrt((vector.x * vector.x) + (vector.y * vector.y));
-        // Prevent division by zero
         if (norm <= std::numeric_limits<float>::epsilon() * norm * units_in_last_place
             || norm < std::numeric_limits<float>::min())
-        {
             return Vector2<T>();
-        }
         return vector / norm;
     }
 };
 
-using Vector2I = Vector2<int>;
-using Vector2U = Vector2<unsigned int>;
-using Vector2F = Vector2<float>;
+using Vector2I  = Vector2<int>;
+using Vector2U  = Vector2<unsigned int>;
+using Vector2F  = Vector2<float>;
 using Vector2LF = Vector2<double>;
