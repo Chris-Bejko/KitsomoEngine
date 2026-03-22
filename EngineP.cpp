@@ -23,6 +23,7 @@
 #include "Components/UIButton.h"
 #include "Components/UIImage.h"
 #include "Components/UIText.h"
+#include "../UI/UIRect.h"
 #include "Components/Canvas.h"
 #include "Components/GameManager.h"
 #include "GizmoSystem.h"
@@ -332,6 +333,33 @@ void Engine::Save(const std::string &filename)
 				case bool_Type:
 					fieldsJson[f.name] = *reinterpret_cast<bool *>(f.data);
 					break;
+				case mathVector_Type:
+				{
+					std::string packed;
+					if (f.isIntVector)
+					{
+						auto *data = reinterpret_cast<int *>(f.data);
+						for (int i = 0; i < f.vectorSize; i++)
+						{
+							if (i > 0)
+								packed += "|";
+							packed += std::to_string(data[i]);
+						}
+					}
+					else
+					{
+						auto *data = reinterpret_cast<float *>(f.data);
+						for (int i = 0; i < f.vectorSize; i++)
+						{
+							if (i > 0)
+								packed += "|";
+							packed += std::to_string(data[i]);
+						}
+					}
+					fieldsJson[f.name] = packed;
+					break;
+				}
+
 				case entityRef_Type:
 					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
 					break;
@@ -529,6 +557,13 @@ void Engine::RegisterComponents()
 		else
 			e->GetComponent<GameManager>().InitSerializedFields(fields);
 	};
+	componentRegistry["UIRect"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
+	{
+		if (!e->HasComponent<UIRect>())
+			e->AddComponent<UIRect>(FromGUID(GUID)).InitSerializedFields(fields);
+		else
+			e->GetComponent<UIRect>().InitSerializedFields(fields);
+	};
 }
 
 void Engine::SavePrefab(Entity *entity)
@@ -566,6 +601,33 @@ void Engine::SavePrefab(Entity *entity)
 			case bool_Type:
 				fieldsJson[f.name] = *reinterpret_cast<bool *>(f.data);
 				break;
+				// Save
+			case mathVector_Type:
+			{
+				std::string packed;
+				if (f.isIntVector)
+				{
+					auto *data = reinterpret_cast<int *>(f.data);
+					for (int i = 0; i < f.vectorSize; i++)
+					{
+						if (i > 0)
+							packed += "|";
+						packed += std::to_string(data[i]);
+					}
+				}
+				else
+				{
+					auto *data = reinterpret_cast<float *>(f.data);
+					for (int i = 0; i < f.vectorSize; i++)
+					{
+						if (i > 0)
+							packed += "|";
+						packed += std::to_string(data[i]);
+					}
+				}
+				fieldsJson[f.name] = packed;
+				break;
+			}
 			}
 		}
 		compJson["fields"] = fieldsJson;

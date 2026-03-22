@@ -1,7 +1,7 @@
 #pragma once
 #include "../SerializableScript.h"
 #include <SFML/Graphics.hpp>
-
+#include "../Vector2.h"
 enum class AnchorPreset
 {
     TopLeft,
@@ -29,16 +29,16 @@ public:
     void update(float dt) override;
     void updateEngine(float dt) override;
     // Position relative to anchor (replaces transform position for UI)
-    sf::Vector2f anchorOffset = {0.f, 0.f};
-    sf::Vector2f sizeDelta = {100.f, 50.f}; // width/height
-    sf::Vector2f pivot = {0.5f, 0.5f};      // 0,0=topleft 1,1=bottomright
+    Vector2F anchorOffset = {0.f, 0.f};
+    Vector2F sizeDelta = {100.f, 50.f}; // width/height
+    Vector2F pivot = {0.5f, 0.5f};      // 0,0=topleft 1,1=bottomright
     AnchorPreset anchor = AnchorPreset::MiddleCenter;
 
     // Resolved screen rect
     sf::FloatRect GetScreenRect();
-    sf::Vector2f GetScreenPosition();
+    Vector2F GetScreenPosition();
 
-    sf::Vector2f ResolveAnchor(AnchorPreset anchor, sf::Vector2f screenSize);
+    Vector2F ResolveAnchor(AnchorPreset anchor, Vector2F screenSize);
     Canvas *GetCanvas();
     void SyncToTransform();
 private:

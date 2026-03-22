@@ -33,6 +33,7 @@ public:
 		to_Add.emplace_back(std::move(uptr));
 
 		comp->entity = this;
+		comp->SetGUID(EngineGUID::Generate());
 		if (comp->Init())
 		{
 			componentsList[getComponentTypeID<T>()] = comp;

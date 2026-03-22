@@ -44,6 +44,19 @@ public:
     void Field(const char *name, std::string &val) { serializables.push_back({name, &val, char_Type}); }
     void Field(const char *name, bool &val) { serializables.push_back({name, &val, bool_Type}); }
     void Field(const char *name, unsigned int &val) { serializables.push_back({name, &val, int_Type}); }
+    template <typename T, typename Derived>
+    void Field(const char *name, VectorBase<T, Derived> &val)
+    {
+        serializables.push_back({
+            name,
+            &val,
+            mathVector_Type,
+            "",
+            (int)Derived::Size,
+            std::is_integral<T>::value // isInt flag
+        });
+    }
+
     // Entity* field
     void Field(const char *name, Entity *&ptr);
 
@@ -236,6 +249,7 @@ protected:
     std::map<std::string, VectorFieldEntry> vectorFields;
     std::map<std::string, VectorPtrFieldEntry> vectorPtrFields;
     bool fieldsRegistered = false;
+    std::vector<std::string> fieldNameStorage; // keeps names alive
 
     void *GetFieldData(const std::string &name)
     {

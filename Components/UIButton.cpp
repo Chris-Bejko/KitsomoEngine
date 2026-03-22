@@ -18,6 +18,7 @@ UIButton::~UIButton()
 bool UIButton::Init()
 {
     Field("interactable", interactable);
+    Field("targetText", targetText);
 
     if (!entity->HasComponent<UIRect>())
         entity->AddComponent<UIRect>();
@@ -25,17 +26,21 @@ bool UIButton::Init()
     if (!entity->HasComponent<UIImage>())
         entity->AddComponent<UIImage>();
 
-    Entity *textEntity = new Entity("Text");
-    textEntity->AddComponent<UIText>();
-    textEntity->SetParent(entity);
-    Engine::get().Spawn(textEntity);
-    sf::Vector2f size = entity->GetComponent<UIRect>().sizeDelta;
+
+    if(!targetText){
+
+        Entity *textEntity = new Entity("Text");
+        textEntity->AddComponent<UIText>();
+        textEntity->SetParent(entity);
+        Engine::get().Spawn(textEntity);
+        targetText = textEntity;
+    }
+    Vector2F size = entity->GetComponent<UIRect>().sizeDelta;
 
     background.setSize(sf::Vector2f(size.x, size.y));
     background.setFillColor(normalColor);
     background.setOutlineColor(sf::Color(100, 100, 100, 200));
     background.setOutlineThickness(1.f);
-
     return true;
 }
 
@@ -74,10 +79,10 @@ void UIButton::draw()
         Engine::get().GetWindow().setView(Engine::get().GetWindow().getDefaultView());
     }
 
-    sf::Vector2f screenPos = entity->GetComponent<UIRect>().GetScreenPosition();
-    sf::Vector2f size = entity->GetComponent<UIRect>().sizeDelta;
+    Vector2F screenPos = entity->GetComponent<UIRect>().GetScreenPosition();
+    Vector2F size = entity->GetComponent<UIRect>().sizeDelta;
     background.setSize(sf::Vector2f(size.x, size.y));
-    background.setPosition(screenPos);
+    background.setPosition(sf::Vector2f(screenPos.x, screenPos.y));
     UpdateVisualState();
     Engine::get().GetWindow().draw(background);
 

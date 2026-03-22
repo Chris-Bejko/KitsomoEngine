@@ -21,6 +21,9 @@ public:
 
     void Awake() override
     {
+        if (scoreText){
+            scoreText->SetText("Score: 0");
+        }
         // Pointers already resolved by ResolvePointers()!
         if (button)
             button->AddOnClick([this]() { 

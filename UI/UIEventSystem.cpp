@@ -4,12 +4,12 @@
 #include "../Engine.h"
 #include "../UI/UIRect.h"
 
-void UIEventSystem::Register(UIButton* button)
+void UIEventSystem::Register(UIButton *button)
 {
     buttons.push_back(button);
 }
 
-void UIEventSystem::Unregister(UIButton* button)
+void UIEventSystem::Unregister(UIButton *button)
 {
     buttons.erase(std::remove(buttons.begin(), buttons.end(), button), buttons.end());
     hoveredButtons.erase(button);
@@ -23,18 +23,23 @@ void UIEventSystem::Clear()
 
 void UIEventSystem::Update()
 {
-    if (Engine::get().isEngine) return; // only in play mode
+    if (Engine::get().isEngine)
+        return; // only in play mode
 
+    sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::get().GetWindow());
+    sf::View defaultView = Engine::get().GetWindow().getDefaultView();
+    sf::Vector2f mouseScreen = Engine::get().GetWindow().mapPixelToCoords(pixelPos, defaultView);
     // Get mouse in screen space
-    sf::Vector2f mouseScreen = (sf::Vector2f)sf::Mouse::getPosition(Engine::get().GetWindow());
     bool mousePressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 
-    for (auto* button : buttons)
+    for (auto *button : buttons)
     {
-        if (!button || !button->IsInteractable()) continue;
+        if (!button || !button->IsInteractable())
+            continue;
 
-        Canvas* canvas = button->entity->GetComponent<UIRect>().GetCanvas();
-        if (!canvas) continue;
+        Canvas *canvas = button->entity->GetComponent<UIRect>().GetCanvas();
+        if (!canvas)
+            continue;
 
         sf::Vector2f mousePos = mouseScreen;
 

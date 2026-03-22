@@ -4,17 +4,15 @@
 #include "../Components/Transform.h"
 #include "../GizmoSystem.h"
 #include "Logger.h"
+
 bool UIRect::Init()
 {
     if (entity->HasComponent<Transform>())
         entity->GetComponent<Transform>().isUITransform = true;
 
-    Field("anchorOffset.x", anchorOffset.x);
-    Field("anchorOffset.y", anchorOffset.y);
-    Field("sizeDelta.x", sizeDelta.x);
-    Field("sizeDelta.y", sizeDelta.y);
-    Field("pivot.x", pivot.x);
-    Field("pivot.y", pivot.y);
+    Field("anchorOffset", anchorOffset);
+    Field("sizeDelta", sizeDelta);
+    Field("pivot", pivot);
     return true;
 }
 
@@ -23,7 +21,6 @@ Canvas *UIRect::GetCanvas()
     if (cachedCanvas != nullptr)
         return cachedCanvas;
 
-    // Walk up entity hierarchy to find Canvas
     Entity *current = entity->GetParent();
     while (current != nullptr)
     {
@@ -42,79 +39,77 @@ void UIRect::SyncToTransform()
     if (!entity->HasComponent<Transform>())
         return;
 
-    auto screenPos = GetScreenPosition();
-    entity->transform->position = Vector2F(screenPos.x, screenPos.y);
+    Vector2F screenPos = GetScreenPosition();
+    entity->transform->position = screenPos;
 }
-sf::Vector2f UIRect::ResolveAnchor(AnchorPreset anchor, sf::Vector2f screenSize)
+
+Vector2F UIRect::ResolveAnchor(AnchorPreset anchor, Vector2F screenSize)
 {
     switch (anchor)
     {
     case AnchorPreset::TopLeft:
-        return {0, 0};
+        return Vector2F(0, 0);
     case AnchorPreset::TopCenter:
-        return {screenSize.x * 0.5f, 0};
+        return Vector2F(screenSize.x * 0.5f, 0);
     case AnchorPreset::TopRight:
-        return {screenSize.x, 0};
+        return Vector2F(screenSize.x, 0);
     case AnchorPreset::MiddleLeft:
-        return {0, screenSize.y * 0.5f};
+        return Vector2F(0, screenSize.y * 0.5f);
     case AnchorPreset::MiddleCenter:
-        return {screenSize.x * 0.5f, screenSize.y * 0.5f};
+        return Vector2F(screenSize.x * 0.5f, screenSize.y * 0.5f);
     case AnchorPreset::MiddleRight:
-        return {screenSize.x, screenSize.y * 0.5f};
+        return Vector2F(screenSize.x, screenSize.y * 0.5f);
     case AnchorPreset::BottomLeft:
-        return {0, screenSize.y};
+        return Vector2F(0, screenSize.y);
     case AnchorPreset::BottomCenter:
-        return {screenSize.x * 0.5f, screenSize.y};
+        return Vector2F(screenSize.x * 0.5f, screenSize.y);
     case AnchorPreset::BottomRight:
-        return {screenSize.x, screenSize.y};
+        return Vector2F(screenSize.x, screenSize.y);
     default:
-        return {screenSize.x * 0.5f, screenSize.y * 0.5f};
+        return Vector2F(screenSize.x * 0.5f, screenSize.y * 0.5f);
     }
 }
 
-sf::Vector2f UIRect::GetScreenPosition()
+Vector2F UIRect::GetScreenPosition()
 {
     Canvas *canvas = GetCanvas();
-    sf::Vector2f screenSize;
+    Vector2F screenSize;
 
     if (canvas && canvas->GetRenderMode() == CanvasRenderMode::ScreenSpace)
     {
         auto windowSize = Engine::get().GetWindow().getSize();
-        screenSize = {(float)windowSize.x, (float)windowSize.y};
+        screenSize = Vector2F((float)windowSize.x, (float)windowSize.y);
     }
     else
     {
-        return {entity->transform->GetWorldPosition().x,
-                entity->transform->GetWorldPosition().y};
+        return entity->transform->GetWorldPosition();
     }
 
-    // Check if parent entity has a UIRect - position relative to it
+    // Check if parent has UIRect - position relative to it
     if (entity->GetParent() != nullptr &&
         entity->GetParent()->HasComponent<UIRect>())
     {
         auto &parentRect = entity->GetParent()->GetComponent<UIRect>();
         sf::FloatRect parentScreenRect = parentRect.GetScreenRect();
 
-        // Anchor relative to parent rect instead of screen
-        sf::Vector2f parentAnchorPos = ResolveAnchor(anchor,
-                                                     sf::Vector2f(parentScreenRect.width, parentScreenRect.height));
+        Vector2F parentSize(parentScreenRect.width, parentScreenRect.height);
+        Vector2F parentAnchorPos = ResolveAnchor(anchor, parentSize);
+        Vector2F pivotOffset(sizeDelta.x * pivot.x, sizeDelta.y * pivot.y);
 
-        sf::Vector2f pivotOffset = {sizeDelta.x * pivot.x, sizeDelta.y * pivot.y};
-
-        return sf::Vector2f(
+        return Vector2F(
             parentScreenRect.left + parentAnchorPos.x + anchorOffset.x - pivotOffset.x,
             parentScreenRect.top + parentAnchorPos.y + anchorOffset.y - pivotOffset.y);
     }
 
-    // Normal screen space positioning
-    sf::Vector2f anchorPos = ResolveAnchor(anchor, screenSize);
-    sf::Vector2f pivotOffset = {sizeDelta.x * pivot.x, sizeDelta.y * pivot.y};
+    // Normal screen space
+    Vector2F anchorPos = ResolveAnchor(anchor, screenSize);
+    Vector2F pivotOffset(sizeDelta.x * pivot.x, sizeDelta.y * pivot.y);
     return anchorPos + anchorOffset - pivotOffset;
 }
 
 sf::FloatRect UIRect::GetScreenRect()
 {
-    sf::Vector2f pos = GetScreenPosition();
+    Vector2F pos = GetScreenPosition();
     return sf::FloatRect(pos.x, pos.y, sizeDelta.x, sizeDelta.y);
 }
 

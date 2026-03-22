@@ -368,6 +368,42 @@ void Entity::DisplayComponents()
 					script->NotifyFieldChanged(std::string(it->name));
 				break;
 			}
+			case mathVector_Type:
+			{
+				if (it->isIntVector)
+				{
+					auto *data = reinterpret_cast<int *>(it->data);
+					switch (it->vectorSize)
+					{
+					case 2:
+						ImGui::InputInt2(fieldId.c_str(), data);
+						break;
+					case 3:
+						ImGui::InputInt3(fieldId.c_str(), data);
+						break;
+					case 4:
+						ImGui::InputInt4(fieldId.c_str(), data);
+						break;
+					}
+				}
+				else
+				{
+					auto *data = reinterpret_cast<float *>(it->data);
+					switch (it->vectorSize)
+					{
+					case 2:
+						ImGui::InputFloat2(fieldId.c_str(), data);
+						break;
+					case 3:
+						ImGui::InputFloat3(fieldId.c_str(), data);
+						break;
+					case 4:
+						ImGui::InputFloat4(fieldId.c_str(), data);
+						break;
+					}
+				}
+				break;
+			}
 			case entityRef_Type:
 			{
 				SerializableScript *script = dynamic_cast<SerializableScript *>(e.get());
@@ -526,6 +562,7 @@ std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 			std::string str(typeid(*c).name());
 			str = std::regex_replace(str, std::regex("class "), "");
 			ser.componentName = str;
+			ser.guiD = c->GetGUID();
 			ser.variables = *c->GetSerializedFields();
 
 			// Also build the fields map from variables
@@ -547,6 +584,20 @@ std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 					case bool_Type:
 						ser.fields.boolFields[var.name] = *(bool *)var.data;
 						break;
+					case mathVector_Type:
+					{
+						auto *data = reinterpret_cast<float *>(var.data);
+						std::string packed;
+						for (int i = 0; i < var.vectorSize; i++)
+						{
+							if (i > 0)
+								packed += "|";
+							packed += std::to_string(data[i]);
+						}
+						LOG_DEBUG("  Vector packed: ", packed.c_str());
+						ser.fields.stringFields[var.name] = packed;
+						break;
+					}
 					}
 				}
 			}
@@ -852,87 +903,87 @@ void Entity::DrawEntityRefField(std::string &guidStorage, const std::string &fie
 	}
 }
 
-void Entity::DrawCompRefField(std::string& packedStorage,
-                              const std::string& typeHint,
-                              const std::string& fieldId)
+void Entity::DrawCompRefField(std::string &packedStorage,
+							  const std::string &typeHint,
+							  const std::string &fieldId)
 {
-    bool isEmpty = packedStorage.empty() || packedStorage == "null";
+	bool isEmpty = packedStorage.empty() || packedStorage == "null";
 
-    std::string entityGUID, compGUID;
-    if (!isEmpty)
-    {
-        auto pipe = packedStorage.find('|');
-        if (pipe != std::string::npos)
-        {
-            entityGUID = packedStorage.substr(0, pipe);
-            compGUID   = packedStorage.substr(pipe + 1);
-        }
-    }
+	std::string entityGUID, compGUID;
+	if (!isEmpty)
+	{
+		auto pipe = packedStorage.find('|');
+		if (pipe != std::string::npos)
+		{
+			entityGUID = packedStorage.substr(0, pipe);
+			compGUID = packedStorage.substr(pipe + 1);
+		}
+	}
 
-    Entity* resolved = nullptr;
-    if (!entityGUID.empty())
-    {
-        for (auto& ent : Engine::get().GetManager()->GetEntities())
-        {
-            if (ent->GetGUID() == entityGUID)
-            {
-                resolved = ent.get();
-                break;
-            }
-        }
-    }
+	Entity *resolved = nullptr;
+	if (!entityGUID.empty())
+	{
+		for (auto &ent : Engine::get().GetManager()->GetEntities())
+		{
+			if (ent->GetGUID() == entityGUID)
+			{
+				resolved = ent.get();
+				break;
+			}
+		}
+	}
 
-    std::string displayText = "Drop component here...";
-    if (resolved)
-    {
-        std::string compName = typeHint;
-        for (auto& comp : resolved->GetComponents())
-        {
-            if (comp->GetGUID() == compGUID)
-            {
-                compName = typeid(*comp).name();
-                compName = std::regex_replace(compName, std::regex("class "), "");
-                break;
-            }
-        }
-        displayText = compName + " (" + resolved->GetName() + ")";
-    }
-    else if (!isEmpty && !entityGUID.empty())
-        displayText = "NOT FOUND";
+	std::string displayText = "Drop component here...";
+	if (resolved)
+	{
+		std::string compName = typeHint;
+		for (auto &comp : resolved->GetComponents())
+		{
+			if (comp->GetGUID() == compGUID)
+			{
+				compName = typeid(*comp).name();
+				compName = std::regex_replace(compName, std::regex("class "), "");
+				break;
+			}
+		}
+		displayText = compName + " (" + resolved->GetName() + ")";
+	}
+	else if (!isEmpty && !entityGUID.empty())
+		displayText = "NOT FOUND";
 
-    ImVec4 boxColor = resolved             ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) :
-                      (!isEmpty && !entityGUID.empty()) ? ImVec4(0.35f, 0.1f, 0.1f, 1.0f) :
-                                             ImVec4(0.15f, 0.18f, 0.25f, 1.0f);
+	ImVec4 boxColor = resolved ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) : (!isEmpty && !entityGUID.empty()) ? ImVec4(0.35f, 0.1f, 0.1f, 1.0f)
+																									 : ImVec4(0.15f, 0.18f, 0.25f, 1.0f);
 
-    ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
-                          ImVec4(boxColor.x + 0.05f, boxColor.y + 0.05f,
-                                 boxColor.z + 0.1f, 1.0f));
-    ImGui::Button((displayText + "##" + fieldId).c_str(), ImVec2(-40, 0));
-    ImGui::PopStyleColor(2);
+	ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered,
+						  ImVec4(boxColor.x + 0.05f, boxColor.y + 0.05f,
+								 boxColor.z + 0.1f, 1.0f));
+	ImGui::Button((displayText + "##" + fieldId).c_str(), ImVec2(-40, 0));
+	ImGui::PopStyleColor(2);
 
-    if (ImGui::BeginDragDropTarget())
-    {
-        if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ENTITY"))
-        {
-            Entity* dropped = *(Entity**)payload->Data;
-            if (dropped)
-            {
-                for (auto& comp : dropped->GetComponents())
-                {
-                    std::string compTypeName(typeid(*comp).name());
-                    compTypeName = std::regex_replace(compTypeName,
-                                   std::regex("class "), "");
-                    if (compTypeName == "Transform" ||
-                        compTypeName == "EditorSprite") continue;
-                    if (typeHint.empty() || compTypeName == typeHint)
-                    {
-                        packedStorage = dropped->GetGUID() + "|" + comp->GetGUID();
-                        break;
-                    }
-                }
-            }
-        }
-        ImGui::EndDragDropTarget();
-    }
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
+		{
+			Entity *dropped = *(Entity **)payload->Data;
+			if (dropped)
+			{
+				for (auto &comp : dropped->GetComponents())
+				{
+					std::string compTypeName(typeid(*comp).name());
+					compTypeName = std::regex_replace(compTypeName,
+													  std::regex("class "), "");
+					if (compTypeName == "Transform" ||
+						compTypeName == "EditorSprite")
+						continue;
+					if (typeHint.empty() || compTypeName == typeHint)
+					{
+						packedStorage = dropped->GetGUID() + "|" + comp->GetGUID();
+						break;
+					}
+				}
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
 }

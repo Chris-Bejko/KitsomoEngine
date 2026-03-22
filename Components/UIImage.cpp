@@ -45,17 +45,18 @@ void UIImage::draw()
         Engine::get().GetWindow().setView(Engine::get().GetWindow().getDefaultView());
     }
 
-    sf::Vector2f screenPos = entity->GetComponent<UIRect>().GetScreenPosition();
+    Vector2F screenPos = entity->GetComponent<UIRect>().GetScreenPosition();
 
     // Scale sprite to fit size
     if (uiTexture.getSize().x > 0 && uiTexture.getSize().y > 0)
     {
-        sf::Vector2f size = entity->GetComponent<UIRect>().sizeDelta;
+        Vector2F size = entity->GetComponent<UIRect>().sizeDelta;
         uiSprite.setScale(
             size.x / uiTexture.getSize().x,
             size.y / uiTexture.getSize().y);
     }
-    uiSprite.setPosition(screenPos);
+    sf::Vector2f screenPosSf = sf::Vector2f(screenPos.x, screenPos.y);
+    uiSprite.setPosition(screenPosSf);
     Engine::get().GetWindow().draw(uiSprite);
 
     if (screenSpace)

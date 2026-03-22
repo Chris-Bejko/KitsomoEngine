@@ -3,13 +3,30 @@
     "components": [
       {
         "fields": {
-          "filePath": "",
-          "isLooping": false,
-          "pitch": 1.0,
-          "volume": 80.0
+          "collisionTag": "player",
+          "isTrigger": true,
+          "vertices": "2.791113|-499.497528;-535.390930|471.992981;570.063293|471.992981"
         },
-        "guid": "",
-        "type": "AudioSource"
+        "type": "PolygonCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "Red",
+          "renderOrder": 2,
+          "textureID": "triangle"
+        },
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "bulletPrefab": "Bullet",
+          "cooldown": 0.5,
+          "floorTouchSound": "Audio/powerUp.wav",
+          "lastColorString": "",
+          "moveSpeed": 350.0,
+          "shootSound": "Audio/explosion.wav"
+        },
+        "type": "Player"
       },
       {
         "fields": {
@@ -21,38 +38,16 @@
           "mass": 1.0,
           "useGravity": false
         },
-        "guid": "",
         "type": "Rigidbody"
       },
       {
         "fields": {
-          "bulletPrefab": "Bullet",
-          "cooldown": 0.5,
-          "floorTouchSound": "Audio/powerUp.wav",
-          "lastColorString": "",
-          "moveSpeed": 350.0,
-          "shootSound": "Audio/explosion.wav"
+          "filePath": "",
+          "isLooping": false,
+          "pitch": 1.0,
+          "volume": 80.0
         },
-        "guid": "",
-        "type": "Player"
-      },
-      {
-        "fields": {
-          "ColorID": "Red",
-          "renderOrder": 2,
-          "textureID": "triangle"
-        },
-        "guid": "",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "collisionTag": "player",
-          "isTrigger": true,
-          "vertices": "0.000000|-500.000000;-554.676697|480.960938;543.408997|480.960938"
-        },
-        "guid": "",
-        "type": "PolygonCollider"
+        "type": "AudioSource"
       },
       {
         "fields": {
@@ -62,7 +57,6 @@
           "scale.x": 0.05000000074505806,
           "scale.y": 0.05000000074505806
         },
-        "guid": "",
         "type": "Transform"
       }
     ],

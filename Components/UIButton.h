@@ -39,6 +39,7 @@ public:
 
     void DrawEditorButton() override;
 private:
+    Entity* targetText;
     std::vector<std::function<void()>> onClickListeners;
     std::vector<std::function<void()>> onHoverListeners;
     std::vector<std::function<void()>> onHoverExitListeners;

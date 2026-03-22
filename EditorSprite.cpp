@@ -24,22 +24,29 @@ void EditorSprite::draw()
         return; // invisible in play mode
     Engine::get().GetWindow().draw(sprite);
 }
-
 void EditorSprite::updateEngine(float dt)
 {
     bool isUI = entity->HasComponent<UIRect>();
 
+    // Get correct mouse positions
+    sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::get().GetWindow());
+    sf::View defaultView = Engine::get().GetWindow().getDefaultView();
+    
+    // Screen space mouse (for UI) - use default view mapping
+    sf::Vector2f mouseScreen = Engine::get().GetWindow().mapPixelToCoords(pixelPos, defaultView);
+    // World space mouse (for world entities)
+    sf::Vector2f mouseWorld = Engine::get().GetWindow().mapPixelToCoords(pixelPos);
+
     // Update sprite position
     if (isUI)
     {
-        // For UI, position sprite in screen space
         auto& ui = entity->GetComponent<UIRect>();
         auto rect = ui.GetScreenRect();
         sf::Vector2f center(rect.left + rect.width * 0.5f,
                             rect.top  + rect.height * 0.5f);
         // Convert screen pos to world pos for sprite rendering
         auto worldPos = Engine::get().GetWindow().mapPixelToCoords(
-            sf::Vector2i((int)center.x, (int)center.y));
+            sf::Vector2i((int)center.x, (int)center.y), defaultView);
         sprite.setPosition(worldPos);
     }
     else
@@ -56,17 +63,10 @@ void EditorSprite::updateEngine(float dt)
         entity->GetComponentOfType<Collider>()->editMode)
         return;
 
-    // Mouse position
-    sf::Vector2f mouseScreen = (sf::Vector2f)sf::Mouse::getPosition(
-        Engine::get().GetWindow());
-    sf::Vector2f mouseWorld = Engine::get().GetWindow().mapPixelToCoords(
-        sf::Mouse::getPosition(Engine::get().GetWindow()));
-
     // Hit detection
     bool mouseOver = false;
     if (isUI)
     {
-        // Use UIRect screen bounds for hit detection
         auto& ui = entity->GetComponent<UIRect>();
         mouseOver = ui.GetScreenRect().contains(mouseScreen);
     }
@@ -96,12 +96,11 @@ void EditorSprite::updateEngine(float dt)
                 pendingDrag = true;
                 dragTimer = 0.f;
 
-                // Store drag start
                 if (isUI)
                 {
                     auto& ui = entity->GetComponent<UIRect>();
                     dragStartAnchorOffset = {ui.anchorOffset.x, ui.anchorOffset.y};
-                    dragStartMousePos = mouseScreen;
+                    dragStartMousePos = mouseScreen; // now correctly mapped
                 }
                 else
                 {
