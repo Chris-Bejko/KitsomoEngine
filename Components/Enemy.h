@@ -28,7 +28,7 @@ public:
         }
 
         gameManager = FindObjectOfType<GameManager>();
-        if(!gameManager) 
+        if (!gameManager)
         {
             LOG_WARNING("No game manager found for enemy with guid: ", entity->GetGUID(), ". Destroying");
             entity->Destroy();
@@ -40,8 +40,11 @@ public:
         if (!playerEntity)
             return;
 
-        if(gameManager->GetGameState() != 1)
+        if (gameManager->GetGameState() != 1)
+        {
+            entity->Destroy();
             return;
+        }
 
         Vector2F myPos = entity->transform->GetWorldPosition();
         Vector2F playerPos = playerEntity->transform->GetWorldPosition();
@@ -84,7 +87,9 @@ public:
             {
                 // Wrong color - player loses
                 LOG_INFO("Wrong color! Game over!");
+                other.entity->Destroy();
                 gameManager->SetGameState(2);
+                entity->Destroy();
             }
         }
         if (other.entity->HasComponent<FloorSquare>())
@@ -107,6 +112,7 @@ public:
 
     std::string GetColorString() { return colorString; }
     void SetPlayerEntity(Entity *p) { playerEntity = p; }
+
 private:
     float moveSpeed = 100.f;
     float rotationSpeed = 5.f;
