@@ -15,6 +15,9 @@ void EntityManager::draw()
 	// Group entities by RenderOrder
 	for (auto &entity : entities)
 	{
+		if (!entity->IsActiveInHierarchy())
+			continue;
+
 		if (entity->HasComponent<Sprite>())
 		{
 			auto comp = &entity->GetComponent<Sprite>();
@@ -47,16 +50,19 @@ void EntityManager::updateEngine(float dt)
 	ValidateAdded();
 	for (auto &entity : entities)
 	{
+		if (!entity)
+			continue;
 		entity->UpdateEngine(dt);
 	}
 	ValidateRemoved();
 }
 void EntityManager::update(float dt)
 {
-
 	ValidateAdded();
 	for (auto &entity : entities)
 	{
+		if (!entity->IsActiveInHierarchy())
+			continue;
 		entity->Update(dt);
 	}
 	ValidateRemoved();
@@ -76,7 +82,7 @@ void EntityManager::ValidateRemoved()
 	entities.erase(std::remove_if(entities.begin(), entities.end(),
 								  [](const std::unique_ptr<Entity> &entity)
 								  {
-									  return !entity->IsActive();
+									  return entity->IsPendingDestroy();
 								  }),
 				   entities.end());
 }
@@ -114,6 +120,8 @@ void EntityManager::DisplayEntities()
 
 	for (auto &e : entities)
 	{
+		if (!e || e->IsPendingDestroy())
+			continue;
 		if (e->HasParent())
 			continue;
 		DisplayEntityNode(e.get());
@@ -124,6 +132,9 @@ void EntityManager::DisplayEntities()
 
 void EntityManager::DisplayEntityNode(Entity *e)
 {
+
+	if (!e || e->IsPendingDestroy())
+		return;
 	std::string name = e->GetName().c_str();
 	bool isSelected = (selectedEntity == e);
 	bool hasChildren = !e->GetChildren().empty();
@@ -240,12 +251,17 @@ void EntityManager::Collisions()
 	for (auto &entity : entities)
 	{
 		Collider *coll1 = entity->GetComponentOfType<Collider>();
+		if (!entity->IsActiveInHierarchy())
+			continue;
+
 		if (!coll1)
 			continue;
 
 		for (auto &other : entities)
 		{
-			if (entity == other)
+			if (entity->GetGUID() == other->GetGUID())
+				continue;
+			if (!other->IsActiveInHierarchy())
 				continue;
 
 			Collider *coll2 = other->GetComponentOfType<Collider>();
@@ -275,7 +291,7 @@ void EntityManager::Collisions()
 				}
 				else
 				{
-					// New collision - call OnTriggerEnter (first time)
+					// New collision - call OnTriggerEnter/OnCollision (first time)
 					LOG_DEBUG("OnTriggerEnter - collision started");
 					activeCollisionPairs.insert({coll1, coll2});
 
@@ -308,7 +324,8 @@ void EntityManager::Collisions()
 			Collider *coll2 = pair.second;
 
 			LOG_DEBUG("OnTriggerExit - collision ended");
-
+			if (!coll1->entity->IsActiveInHierarchy() || !coll2->entity->IsActiveInHierarchy())
+				continue;
 			if (coll1->IsTrigger())
 				coll1->entity->OnTriggerExit(*coll2);
 			else
@@ -329,10 +346,32 @@ void EntityManager::Collisions()
 		activeCollisionPairs.erase(pair);
 	}
 }
+
+void EntityManager::RemoveCollisionPairsForEntity(Entity *e)
+{
+	std::set<std::pair<Collider *, Collider *>> toRemove;
+	for (auto &pair : activeCollisionPairs)
+	{
+		if (pair.first->entity == e || pair.second->entity == e)
+			toRemove.insert(pair);
+	}
+	for (auto &pair : toRemove)
+		activeCollisionPairs.erase(pair);
+}
 void EntityManager::refresh()
 {
 }
 
+void EntityManager::RemoveEntityByGUID(const std::string &guid)
+{
+	entities.erase(
+		std::remove_if(entities.begin(), entities.end(),
+					   [&guid](const std::unique_ptr<Entity> &e)
+					   {
+						   return e && e->GetGUID() == guid;
+					   }),
+		entities.end());
+}
 bool EntityManager::IsInColliderEditMode()
 {
 	for (auto &entity : entities)

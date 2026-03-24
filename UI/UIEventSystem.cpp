@@ -6,42 +6,62 @@
 
 void UIEventSystem::Register(UIButton *button)
 {
-    buttons.push_back(button);
+    registeredGUIDs.push_back(button->GetGUID());
 }
 
 void UIEventSystem::Unregister(UIButton *button)
 {
-    buttons.erase(std::remove(buttons.begin(), buttons.end(), button), buttons.end());
-    hoveredButtons.erase(button);
+    auto &guid = button->GetGUID();
+    registeredGUIDs.erase(
+        std::remove(registeredGUIDs.begin(), registeredGUIDs.end(), guid),
+        registeredGUIDs.end());
 }
 
 void UIEventSystem::Clear()
 {
-    buttons.clear();
+    registeredGUIDs.clear();
     hoveredButtons.clear();
 }
 
 void UIEventSystem::Update()
 {
     if (Engine::get().isEngine)
-        return; // only in play mode
-
-    sf::Vector2i pixelPos = sf::Mouse::getPosition(Engine::get().GetWindow());
+    return; // only in play mode
+    auto mousePixel = sf::Mouse::getPosition(Engine::get().GetWindow());
     sf::View defaultView = Engine::get().GetWindow().getDefaultView();
-    sf::Vector2f mouseScreen = Engine::get().GetWindow().mapPixelToCoords(pixelPos, defaultView);
-    // Get mouse in screen space
+    sf::Vector2f mouse = Engine::get().GetWindow().mapPixelToCoords(mousePixel, defaultView);
+    
     bool mousePressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-
-    for (auto *button : buttons)
+    for (auto &guid : registeredGUIDs)
     {
-        if (!button || !button->IsInteractable())
+        // Find button by component GUID
+        UIButton *button = nullptr;
+        for (auto &e : Engine::get().GetManager()->GetEntities())
+        {
+            if (e->IsPendingDestroy())
+                continue;
+            if (!e->HasComponent<UIButton>())
+                continue;
+            auto &btn = e->GetComponent<UIButton>();
+            if (btn.GetGUID() == guid)
+            {
+                button = &btn;
+                break;
+            }
+        }
+
+        if (!button)
+            continue;
+        if (!button->entity)
             continue;
 
+        if(!button->entity->IsActiveInHierarchy())
+            continue;
         Canvas *canvas = button->entity->GetComponent<UIRect>().GetCanvas();
         if (!canvas)
             continue;
 
-        sf::Vector2f mousePos = mouseScreen;
+        sf::Vector2f mousePos = mouse;
 
         // For world space canvas, convert mouse to world coords
         if (canvas->GetRenderMode() == CanvasRenderMode::WorldSpace)

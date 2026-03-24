@@ -26,7 +26,6 @@ Transform::Transform(float x, float y, float scX, float scY, float roation)
 	this->rotation = rotation;
 }
 
-
 bool Transform::Init()
 {
 	Field("position.x", position.x);
@@ -89,18 +88,26 @@ void Transform::ClearHierarchy()
 
 Vector2F Transform::GetWorldPosition()
 {
-	if (parent == nullptr)
+	try
+	{
+
+		if (parent == nullptr || parent->entity == nullptr)
+			return position;
+
+		Vector2F parentWorld = parent->GetWorldPosition();
+		float parentRot = parent->GetWorldRotation() * 3.14159f / 180.f;
+		Vector2F parentScale = parent->GetWorldScale();
+
+		// Rotate and scale local position by parent's world transform
+		float rotatedX = position.x * parentScale.x * cos(parentRot) - position.y * parentScale.y * sin(parentRot);
+		float rotatedY = position.x * parentScale.x * sin(parentRot) + position.y * parentScale.y * cos(parentRot);
+
+		return Vector2F(parentWorld.x + rotatedX, parentWorld.y + rotatedY);
+	}
+	catch(char *e)
+	{
 		return position;
-
-	Vector2F parentWorld = parent->GetWorldPosition();
-	float parentRot = parent->GetWorldRotation() * 3.14159f / 180.f;
-	Vector2F parentScale = parent->GetWorldScale();
-
-	// Rotate and scale local position by parent's world transform
-	float rotatedX = position.x * parentScale.x * cos(parentRot) - position.y * parentScale.y * sin(parentRot);
-	float rotatedY = position.x * parentScale.x * sin(parentRot) + position.y * parentScale.y * cos(parentRot);
-
-	return Vector2F(parentWorld.x + rotatedX, parentWorld.y + rotatedY);
+	}
 }
 
 float Transform::GetWorldRotation()

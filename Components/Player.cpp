@@ -100,7 +100,6 @@ void Player::update(float dt)
 			audio.LoadAudio(shootSound);
 			audio.Play();
 		}
-		Engine::get().GetManager()->addEntity(bullet);
 	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))

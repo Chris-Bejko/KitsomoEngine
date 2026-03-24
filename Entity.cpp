@@ -10,6 +10,8 @@
 #include "Components/CircleCollider.h"
 #include "Components/BoxCollider.h"
 #include "Components/PolygonCollider.h"
+#include "Components/Enemy.h"
+#include "Components/EnemySpawner.h"
 #include "Components/AudioSource.h"
 #include "UI/UIRect.h"
 #include "Components/UIButton.h"
@@ -45,26 +47,30 @@ bool Entity::IsActive() const
 	return isActive;
 }
 
+bool Entity::IsActiveInHierarchy() const
+{
+	const Entity *current = this;
+	int depth = 0;
+	while (current != nullptr)
+	{
+		if(current->isPendingDestroy) return false;
+		if (!current->isActive)
+			return false;
+		current = current->GetParent();
+	}
+	return true;
+}
+
 void Entity::Destroy()
 {
 	isActive = false;
-
-	if (parent)
-	{
-		parent->RemoveChild(this);
-		parent = nullptr;
-	}
-
-	for (auto *child : children)
-	{
-		child->parent = nullptr;
-		child->transform->SetParent(nullptr);
-	}
-	children.clear();
+	isPendingDestroy = true;
+	Engine::get().QueueDestroy(GetGUID());
 }
 
 void Entity::Awake()
 {
+
 	ValidateAddedComponents();
 	for (auto &comp : components)
 	{
@@ -75,6 +81,7 @@ void Entity::Awake()
 
 void Entity::ValidateAddedComponents()
 {
+
 	while (!to_Add.empty())
 	{
 		components.push_back(std::move(to_Add.back()));
@@ -83,6 +90,7 @@ void Entity::ValidateAddedComponents()
 }
 void Entity::Draw()
 {
+
 	for (auto &comp : components)
 	{
 		comp->draw();
@@ -91,6 +99,7 @@ void Entity::Draw()
 
 void Entity::Update(float dt)
 {
+
 	ValidateAddedComponents();
 	for (auto &comp : components)
 	{
@@ -109,6 +118,7 @@ void Entity::UpdateEngine(float dt)
 
 void Entity::OnCollisionEnter(Collider &other)
 {
+
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
@@ -122,6 +132,7 @@ void Entity::OnCollisionEnter(Collider &other)
 
 void Entity::OnTriggerEnter(Collider &other)
 {
+
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
@@ -136,6 +147,7 @@ void Entity::OnTriggerEnter(Collider &other)
 
 void Entity::OnTriggerStay(Collider &other)
 {
+
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
@@ -150,6 +162,7 @@ void Entity::OnTriggerStay(Collider &other)
 
 void Entity::OnTriggerExit(Collider &other)
 {
+
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
@@ -164,6 +177,7 @@ void Entity::OnTriggerExit(Collider &other)
 
 void Entity::OnCollisionExit(Collider &other)
 {
+
 	ValidateAddedComponents();
 	if (&other == nullptr)
 		return;
@@ -228,7 +242,7 @@ void Entity::DisplayComponents()
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.1f, 0.1f, 1.0f));
 			if (ImGui::Button("Confirm", ImVec2(120, 0)))
 			{
-				Engine::get().RemoveEntity(this);
+				Engine::get().QueueDestroy(GetGUID());
 				deletePressed = false;
 			}
 			ImGui::PopStyleColor();
@@ -463,6 +477,7 @@ void Entity::RemoveComponent(Component *comp)
 					   }),
 		components.end());
 }
+
 void Entity::DisplayAvailableComponents()
 {
 	if (addingNewComp)
@@ -534,6 +549,10 @@ void Entity::AddComponentByName(const std::string &componentName)
 		this->AddComponent<Canvas>();
 	else if (componentName == "GameManager")
 		this->AddComponent<GameManager>();
+	else if (componentName == "Enemy")
+		this->AddComponent<Enemy>();
+	else if (componentName == "EnemySpawner")
+		this->AddComponent<EnemySpawner>();
 	else
 		LOG_ERROR("Unknown component: ", componentName.c_str());
 }

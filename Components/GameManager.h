@@ -1,50 +1,71 @@
 #pragma once
 #include "../SerializableScript.h"
-#include "../Components/UIText.h"
-#include "../Components/UIButton.h"
 #include "../Logger.h"
-#include "FloorSquare.h"
+#include "UIText.h"
+#include "UIButton.h"
 class GameManager : public SerializableScript
 {
 public:
     bool Init() override
     {
-        Field("scoreText", scoreText);   // UIText*
-        Field("button",    button);      // UIButton*
-        Field("player",    player);      // Entity*
-        Field("score",     score);       // int
-        Field("All Floor Squares", floorSquares);
-        Field("ExampleSerializedVector", ExampleSerializedVector);
-        Field("Bools", BoolsList);
+        Field("scoreText", scoreText);
+        Field("player", player);
+        Field("score", score);
+        Field("finalScore", finalScoreText);
+        Field("environment", environment);
+        Field("GameState", gameState);
+        Field("startUI", startUI);
+        Field("endUI", endUI);
+        Field("playButton", playButton);
+        Field("playAgainButton", playAgainButton);
+        Field("mainMenuButton", mainMenuButton);
         return true;
     }
 
     void Awake() override
     {
-        if (scoreText){
+        if (scoreText)
             scoreText->SetText("Score: 0");
-        }
-        // Pointers already resolved by ResolvePointers()!
-        if (button)
-            button->AddOnClick([this]() { 
-                score++; 
-                if (scoreText)
-                    scoreText->SetText("Score: " + std::to_string(score));
-            });
 
-        if (player){
-            LOG_INFO("Player retrieved with guid: ", player->GetGUID());
-        }
+        if (playButton)
+            playButton->AddOnClick([this]()
+                                   { SetGameState(1); });
 
+        if (mainMenuButton)
+            mainMenuButton->AddOnClick([this]()
+                                       { SetGameState(0); });
+
+        if (playAgainButton)
+            playAgainButton->AddOnClick([this]()
+                                        { 
+            score = 0;
+            if (scoreText)
+                scoreText->SetText("Score: 0");
+            SetGameState(1); });
+
+        SetGameState(0);
     }
 
+    void SetGameState(int _gameState);
+
+    void AddToScore(int score);
+    int GetGameState() {return gameState; }
 
 private:
-    UIText*   scoreText = nullptr;
-    UIButton* button    = nullptr;
-    Entity*   player    = nullptr;
-    std::vector<FloorSquare*> floorSquares;
+    UIText *scoreText = nullptr;
+    UIText *finalScoreText = nullptr;
+
+    UIButton *playButton = nullptr;
+    UIButton *mainMenuButton = nullptr;
+    UIButton *playAgainButton = nullptr;
+
+    Entity *player = nullptr;
+    Entity *environment = nullptr;
+    Entity *startUI = nullptr;
+    Entity *endUI = nullptr;
+
+    int gameState;
     std::vector<int> ExampleSerializedVector;
     std::vector<bool> BoolsList;
-    int       score     = 0;
+    int score = 0;
 };

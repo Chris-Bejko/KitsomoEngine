@@ -224,6 +224,34 @@ public:
             compRef_Type};
     }
 
+    template <typename T>
+    T *FindObjectOfType()
+    {
+        for (auto &e : Engine::get().GetManager()->GetEntities())
+        {
+            if (e->HasComponent<T>())
+            {
+                T *found = &e->GetComponent<T>();
+                SyncPtrToGUID(found, e.get());
+                return found;
+            }
+        }
+        return nullptr;
+    }
+
+    template <typename T>
+    void SyncPtrToGUID(T *comp, Entity *owner)
+    {
+        for (auto &[name, field] : componentPtrFields)
+        {
+            if (*field.ptr == static_cast<Component *>(comp))
+            {
+                field.guidStorage = owner->GetGUID() + "|" + comp->GetGUID();
+                return;
+            }
+        }
+    }
+
     bool IsVectorField(const std::string &name)
     {
         return vectorFields.count(name) || vectorPtrFields.count(name);
