@@ -3,6 +3,8 @@
 #include "../Logger.h"
 #include "UIText.h"
 #include "UIButton.h"
+#include "../PlayerPrefs.h"
+
 class GameManager : public SerializableScript
 {
 public:
@@ -19,11 +21,17 @@ public:
         Field("playButton", playButton);
         Field("playAgainButton", playAgainButton);
         Field("mainMenuButton", mainMenuButton);
+        Field("highScore", highScore);  
+        Field("highScoreText", highScoreText);
         return true;
     }
 
     void Awake() override
     {
+        if(PlayerPrefs::get().HasKey("highScore"))
+            highScore = PlayerPrefs::get().GetInt("highScore");
+
+
         if (scoreText)
             scoreText->SetText("Score: 0");
 
@@ -54,6 +62,8 @@ public:
 private:
     UIText *scoreText = nullptr;
     UIText *finalScoreText = nullptr;
+    UIText *highScoreText = nullptr;
+
 
     UIButton *playButton = nullptr;
     UIButton *mainMenuButton = nullptr;
@@ -68,4 +78,5 @@ private:
     std::vector<int> ExampleSerializedVector;
     std::vector<bool> BoolsList;
     int score = 0;
+    int highScore = 0;
 };

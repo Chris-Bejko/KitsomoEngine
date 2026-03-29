@@ -25,6 +25,20 @@ void GameManager::SetGameState(int _gameState)
     else if (gameState == 2)
     {
         finalScoreText->SetText("Final score: " + std::to_string(this->score));
+        if (score > highScore)
+        {
+            highScore = score;
+            PlayerPrefs::get().SetInt("highScore", highScore);
+            PlayerPrefs::get().Save();
+            if (highScoreText)
+                highScoreText->SetText("New High score!: " + std::to_string(highScore));
+        }
+        else
+        {
+            if (PlayerPrefs::get().HasKey("highScore"))
+                if (highScoreText)
+                    highScoreText->SetText("High score: " + std::to_string(highScore));
+        }
         startUI->SetActive(false);
         environment->SetActive(false);
         endUI->SetActive(true);

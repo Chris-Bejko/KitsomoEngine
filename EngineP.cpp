@@ -33,6 +33,7 @@
 #include "AssetManager.h"
 #include "GUIDGenerator.h"
 #include "nlohmann/json.hpp"
+#include "PlayerPrefs.h"	
 using json = nlohmann::json;
 
 Engine *Engine::s_instance = nullptr;
@@ -88,6 +89,7 @@ void Engine::Init()
 	manager = new EntityManager();
 	AssetManager::get().loadFont("dmPrison", "fonts/Domestic Prison.ttf");
 	std::ofstream txtFile;
+	PlayerPrefs::get().Load();
 	RegisterComponents();
 	// Load();
 	// Entity* newEntity = new Entity("Player");
