@@ -22,7 +22,6 @@ public:
 
 	void SetSpawnPointPosition();
 
-	
 	void OnTriggerEnter(Collider& other) override final;
 
 	void OnTriggerExit(Collider& other) override final;

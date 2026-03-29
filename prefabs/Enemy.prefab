@@ -3,7 +3,14 @@
     "components": [
       {
         "fields": {
-          "collisionTag": "player",
+          "colorString": "Magenta",
+          "moveSpeed": 100.0
+        },
+        "type": "Enemy"
+      },
+      {
+        "fields": {
+          "collisionTag": "enemy",
           "isTrigger": true,
           "vertices": "2.791113|-499.497528;-535.390930|471.992981;570.063293|471.992981"
         },
@@ -11,22 +18,11 @@
       },
       {
         "fields": {
-          "ColorID": "Red",
+          "ColorID": "Magenta",
           "renderOrder": 2,
           "textureID": "triangle"
         },
         "type": "Sprite"
-      },
-      {
-        "fields": {
-          "bulletPrefab": "Bullet",
-          "cooldown": 0.5,
-          "floorTouchSound": "Audio/powerUp.wav",
-          "lastColorString": "",
-          "moveSpeed": 350.0,
-          "shootSound": "Audio/explosion.wav"
-        },
-        "type": "Player"
       },
       {
         "fields": {
@@ -42,15 +38,6 @@
       },
       {
         "fields": {
-          "filePath": "",
-          "isLooping": false,
-          "pitch": 1.0,
-          "volume": 80.0
-        },
-        "type": "AudioSource"
-      },
-      {
-        "fields": {
           "position.x": 0.0,
           "position.y": 0.0,
           "rotation": 0.0,
@@ -60,7 +47,7 @@
         "type": "Transform"
       }
     ],
-    "name": "Player",
+    "name": "Enemy",
     "parent": ""
   }
 ]

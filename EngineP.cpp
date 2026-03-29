@@ -23,8 +23,11 @@
 #include "Components/UIButton.h"
 #include "Components/UIImage.h"
 #include "Components/UIText.h"
+#include "../UI/UIRect.h"
 #include "Components/Canvas.h"
 #include "Components/GameManager.h"
+#include "Components/EnemySpawner.h"
+#include "Components/Enemy.h"
 #include "GizmoSystem.h"
 #include "UI/UIEventSystem.h"
 #include "AssetManager.h"
@@ -125,6 +128,7 @@ void Engine::Update()
 {
 	if (this->loading)
 		return;
+	ProcessDestroyQueue();
 	bool checkBox;
 	switch (currentState)
 	{
@@ -149,23 +153,58 @@ void Engine::Update()
 
 		manager->update(dt);
 		manager->Collisions();
-		UIEventSystem::get().Update();
-
 		break;
 	}
 	}
-	SystemsManager::get().Update();
 	auto rest = deltaClock.restart();
-
+	
 	if (rest.asSeconds() <= 0.f)
 	{
 		rest = sf::seconds(1.f / 60.f);
 	}
 	dt = rest.asSeconds();
-
+	
 	// LOG_DEBUG("dt = ", dt, " | fps = ", 1.f / dt);
 	Timedelta::deltaTime = dt;
 	ImguiHandler::get().Update(rest);
+	ProcessDestroyQueue();
+	SystemsManager::get().Update();
+	UIEventSystem::get().Update();
+}
+
+void Engine::QueueDestroy(const std::string &guid)
+{
+	// Find entity
+	Entity *e = nullptr;
+	for (auto &ent : manager->GetEntities())
+	{
+		if (ent->GetGUID() == guid)
+		{
+			e = ent.get();
+			break;
+		}
+	}
+	if (!e)
+		return;
+
+	// Mark this entity
+	e->SetPendingDestroy(true);
+	destroyQueue.push_back(guid);
+
+	// Also queue all children recursively
+	QueueDestroyChildren(e);
+}
+
+void Engine::QueueDestroyChildren(Entity *e)
+{
+	for (auto *child : e->GetChildren())
+	{
+		if (!child || child->IsPendingDestroy())
+			continue;
+		child->SetPendingDestroy(true);
+		destroyQueue.push_back(child->GetGUID());
+		QueueDestroyChildren(child); // recurse
+	}
 }
 
 void Engine::Events()
@@ -332,6 +371,33 @@ void Engine::Save(const std::string &filename)
 				case bool_Type:
 					fieldsJson[f.name] = *reinterpret_cast<bool *>(f.data);
 					break;
+				case mathVector_Type:
+				{
+					std::string packed;
+					if (f.isIntVector)
+					{
+						auto *data = reinterpret_cast<int *>(f.data);
+						for (int i = 0; i < f.vectorSize; i++)
+						{
+							if (i > 0)
+								packed += "|";
+							packed += std::to_string(data[i]);
+						}
+					}
+					else
+					{
+						auto *data = reinterpret_cast<float *>(f.data);
+						for (int i = 0; i < f.vectorSize; i++)
+						{
+							if (i > 0)
+								packed += "|";
+							packed += std::to_string(data[i]);
+						}
+					}
+					fieldsJson[f.name] = packed;
+					break;
+				}
+
 				case entityRef_Type:
 					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
 					break;
@@ -419,8 +485,9 @@ Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 
 	// Override position
 	ent->GetComponent<Transform>().position = position;
-
-	LOG_INFO("Spawned prefab '", prefabName.c_str(), "' at ", position.x, ", ", position.y);
+	Spawn(ent);
+	ent->Awake();
+	LOG_INFO("Spawned prefab with name'", ent->GetName().c_str(), "' at ", position.x, ", ", position.y);
 	return ent;
 }
 
@@ -529,6 +596,27 @@ void Engine::RegisterComponents()
 		else
 			e->GetComponent<GameManager>().InitSerializedFields(fields);
 	};
+	componentRegistry["UIRect"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
+	{
+		if (!e->HasComponent<UIRect>())
+			e->AddComponent<UIRect>(FromGUID(GUID)).InitSerializedFields(fields);
+		else
+			e->GetComponent<UIRect>().InitSerializedFields(fields);
+	};
+	componentRegistry["Enemy"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
+	{
+		if (!e->HasComponent<Enemy>())
+			e->AddComponent<Enemy>(FromGUID(GUID)).InitSerializedFields(fields);
+		else
+			e->GetComponent<Enemy>().InitSerializedFields(fields);
+	};
+	componentRegistry["EnemySpawner"] = [](Entity *e, ReadableSerializableVariableMap fields, std::string GUID = "")
+	{
+		if (!e->HasComponent<EnemySpawner>())
+			e->AddComponent<EnemySpawner>(FromGUID(GUID)).InitSerializedFields(fields);
+		else
+			e->GetComponent<EnemySpawner>().InitSerializedFields(fields);
+	};
 }
 
 void Engine::SavePrefab(Entity *entity)
@@ -566,6 +654,33 @@ void Engine::SavePrefab(Entity *entity)
 			case bool_Type:
 				fieldsJson[f.name] = *reinterpret_cast<bool *>(f.data);
 				break;
+				// Save
+			case mathVector_Type:
+			{
+				std::string packed;
+				if (f.isIntVector)
+				{
+					auto *data = reinterpret_cast<int *>(f.data);
+					for (int i = 0; i < f.vectorSize; i++)
+					{
+						if (i > 0)
+							packed += "|";
+						packed += std::to_string(data[i]);
+					}
+				}
+				else
+				{
+					auto *data = reinterpret_cast<float *>(f.data);
+					for (int i = 0; i < f.vectorSize; i++)
+					{
+						if (i > 0)
+							packed += "|";
+						packed += std::to_string(data[i]);
+					}
+				}
+				fieldsJson[f.name] = packed;
+				break;
+			}
 			}
 		}
 		compJson["fields"] = fieldsJson;
@@ -579,6 +694,51 @@ void Engine::SavePrefab(Entity *entity)
 	file << root.dump(2);
 	file.close();
 	LOG_INFO("Saved prefab: ", filename.c_str());
+}
+
+void Engine::ProcessDestroyQueue()
+{
+	for (auto &guid : destroyQueue)
+	{
+		Entity *e = nullptr;
+		for (auto &ent : manager->GetEntities())
+		{
+			if (ent->GetGUID() == guid)
+			{
+				e = ent.get();
+				break;
+			}
+		}
+		if (!e)
+			continue;
+
+		manager->RemoveCollisionPairsForEntity(e);
+
+		Entity *parent = e->GetParent();
+		if (parent)
+		{
+			auto &siblings = parent->GetChildren();
+			siblings.erase(
+				std::remove(siblings.begin(), siblings.end(), e),
+				siblings.end());
+			e->ForceNullParent();
+		}
+
+		auto childrenCopy = e->GetChildren();
+		for (auto *child : childrenCopy)
+			if (child)
+				child->ForceNullParent();
+		e->GetChildren().clear();
+
+		if (e->transform)
+			e->transform->SetParent(nullptr);
+	}
+
+	// Remove all queued entities AFTER all cleanup
+	for (auto &guid : destroyQueue)
+		manager->RemoveEntityByGUID(guid);
+
+	destroyQueue.clear();
 }
 
 void Engine::Reset()
@@ -820,4 +980,12 @@ void Engine::FocusOnEntity(Entity *entity)
 	focusTargetName = entity->GetGUID();
 
 	LOG_INFO("Focusing on: ", focusTargetName.c_str());
+}
+
+void Engine::TriggerGameOver()
+{
+	isGameOver = true;
+	LOG_INFO("GAME OVER!");
+	// For now just stop play mode
+	SetEngineState(EngineState::Running);
 }

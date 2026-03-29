@@ -89,6 +89,11 @@ public:
     Entity *SpawnPrefab(const std::string prefabName, Vector2F position);
     void FocusOnEntity(Entity *entity);
     bool IsLoading() { return loading; }
+    void TriggerGameOver();
+    void ProcessDestroyQueue();
+    void QueueDestroyChildren(Entity *e);
+
+    void QueueDestroy(const std::string& guid);
 
 private:
     bool editorDragging = false;
@@ -103,6 +108,7 @@ private:
     InputSystem *inputSystem;
     sf::Clock deltaClock;
     float dt = 1.f;
+    std::vector<std::string> destroyQueue;
     std::string focusTargetName = "";
     float focusSpeed = 5.f;
 
@@ -111,4 +117,5 @@ private:
     std::string draggedEntity = "";
     std::unordered_map<std::string, ComponentFactory> componentRegistry;
     bool loading = false;
+    bool isGameOver = false;
 };

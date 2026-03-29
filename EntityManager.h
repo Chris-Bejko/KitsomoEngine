@@ -48,6 +48,7 @@ public:
 	void DisplayComponents();
 
 	void DestroyAllEntities();
+	void RemoveCollisionPairsForEntity(Entity *e);
 
 	bool IsInColliderEditMode();
 	bool cmp(std::pair<Entity *, int> &a,
@@ -62,7 +63,8 @@ public:
 	std::vector<std::unique_ptr<Entity>> &GetEntities() { return entities; }
 	void DisplayEntityNode(Entity *e);
 	Entity *GetDragHoveredEntity() { return dragHoveredEntity; }
-	void DisplayComponentsOf(Entity* e);
+	void DisplayComponentsOf(Entity *e);
+	void RemoveEntityByGUID(const std::string &guid);
 
 private:
 	// Track active collision pairs to ensure OnTriggerEnter/Stay/Exit called correctly

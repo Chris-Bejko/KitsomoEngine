@@ -21,6 +21,8 @@
     "components": [
       {
         "fields": {
+          "Environment": "c2360255-75bf-4a82-ba46-fea492927809",
+          "GameManager": "c654de34-f964-48af-8341-8dcea5cd045c|968f3aff-082c-40eb-b7ba-697b2e1084db",
           "enemyPrefab": "Enemy",
           "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
           "spawnInterval": 3.0
@@ -42,7 +44,7 @@
     ],
     "guid": "1ea485fb-8ec8-4841-b3ce-5000c1e6c886",
     "name": "EnemySpawner",
-    "parent": ""
+    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
   },
   {
     "components": [
@@ -51,7 +53,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 24,
+          "fontSize": 30,
           "text": "Score: {0}"
         },
         "guid": "abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
@@ -59,17 +61,17 @@
       },
       {
         "fields": {
-          "anchorOffset": "-552.666809|-311.466797",
+          "anchorOffset": "-861.333496|-459.890961",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "c79d79f3-1367-4063-bad7-061c6d1dbcfa",
+        "guid": "613dc9f1-d629-40f3-ac94-2ada7858c219",
         "type": "UIRect"
       },
       {
         "fields": {
-          "position.x": 115.42945861816406,
-          "position.y": 32.979164123535156,
+          "position.x": 104.52273559570313,
+          "position.y": 46.89372253417969,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -89,6 +91,10 @@
           "GameState": 0,
           "endUI": "83270db5-fa83-407e-9506-bd1d99b422b5",
           "environment": "c2360255-75bf-4a82-ba46-fea492927809",
+          "finalScore": "e434ef22-8d31-4caa-b9fc-11b1067ffb6c|c530e9b1-a3fb-446f-b3bb-d5cd005630ec",
+          "mainMenuButton": "4399b10c-367d-491a-91b2-2fee063e5bfb|62853400-36ed-4dde-8322-80aaecaeeca8",
+          "playAgainButton": "197d8213-1d1a-483d-a0ac-f9b4e05080ce|d9bb0149-04ac-40d7-8f6a-572e60623efe",
+          "playButton": "4a1cf809-e074-4d9f-873a-53dd9428ed04|bcde682b-d9b5-46dd-a439-c350617c00e6",
           "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
           "score": 3,
           "scoreText": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f|abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
@@ -99,8 +105,8 @@
       },
       {
         "fields": {
-          "position.x": -122.18181610107422,
-          "position.y": 3.9173126220703125,
+          "position.x": 0.0,
+          "position.y": 0.0,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -117,7 +123,7 @@
     "components": [
       {
         "fields": {
-          "referenceResolution": "1280.000000|720.000000",
+          "referenceResolution": "1920.000000|1080.000000",
           "renderMode": "ScreenSpace",
           "scaleMode": "ScaleWithScreenSize"
         },
@@ -157,7 +163,7 @@
           "renderOrder": 2,
           "textureID": "triangle"
         },
-        "guid": "21cfa7c4-ed21-4ab2-9d6b-606eaddcf575",
+        "guid": "a33562b2-6696-4088-a38a-ff4a7082638e",
         "type": "Sprite"
       },
       {
@@ -399,6 +405,15 @@
     "components": [
       {
         "fields": {
+          "referenceResolution": "1920.000000|1080.000000",
+          "renderMode": "ScreenSpace",
+          "scaleMode": "ScaleWithScreenSize"
+        },
+        "guid": "6f7d2cf6-eb05-4716-b639-8cf156d7288d",
+        "type": "Canvas"
+      },
+      {
+        "fields": {
           "position.x": 0.0,
           "position.y": 0.0,
           "rotation": 0.0,
@@ -407,15 +422,6 @@
         },
         "guid": "583738e8-241e-4698-bcc3-f51c24654e36",
         "type": "Transform"
-      },
-      {
-        "fields": {
-          "referenceResolution": "1920.000000|1080.000000",
-          "renderMode": "ScreenSpace",
-          "scaleMode": "ScaleWithScreenSize"
-        },
-        "guid": "6f7d2cf6-eb05-4716-b639-8cf156d7288d",
-        "type": "Canvas"
       }
     ],
     "guid": "ea9d9612-2219-44ad-b406-748ab473d088",
@@ -426,22 +432,11 @@
     "components": [
       {
         "fields": {
-          "position.x": 575.085205078125,
-          "position.y": 53.81017303466797,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "a8d4ad8f-c611-45a3-8ee3-fdeb35e374b6",
-        "type": "Transform"
-      },
-      {
-        "fields": {
           "anchorOffset": "-362.000000|-457.403381",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "324affd3-46b9-43c5-8b51-da181eece89c",
+        "guid": "97c1b7ce-0b70-499a-80cd-c63c863770bc",
         "type": "UIRect"
       },
       {
@@ -454,6 +449,17 @@
         },
         "guid": "1fcd9e17-7475-40d2-a996-923520dc1897",
         "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 529.4185791015625,
+          "position.y": 49.01045227050781,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "a8d4ad8f-c611-45a3-8ee3-fdeb35e374b6",
+        "type": "Transform"
       }
     ],
     "guid": "12383c99-0ef9-4c6f-b78d-e87bdb2bfa40",
@@ -464,22 +470,11 @@
     "components": [
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 177.1435546875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "38217d89-f792-4215-b48f-10f32eea4e05",
-        "type": "Transform"
-      },
-      {
-        "fields": {
           "alpha": 1.0,
           "color": "Red",
           "textureId": "square"
         },
-        "guid": "915eae8d-c056-4361-8ade-a0f116f9f725",
+        "guid": "e3cf349f-6087-4a58-9023-3a2a49b229e6",
         "type": "UIImage"
       },
       {
@@ -488,7 +483,7 @@
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "a9084ab8-ec13-44b0-a43b-a9716561b03a",
+        "guid": "c19149b4-51ec-48d7-86f9-0f499c79ac88",
         "type": "UIRect"
       },
       {
@@ -498,6 +493,17 @@
         },
         "guid": "bcde682b-d9b5-46dd-a439-c350617c00e6",
         "type": "UIButton"
+      },
+      {
+        "fields": {
+          "position.x": 531.120361328125,
+          "position.y": 161.3428192138672,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "38217d89-f792-4215-b48f-10f32eea4e05",
+        "type": "Transform"
       }
     ],
     "guid": "4a1cf809-e074-4d9f-873a-53dd9428ed04",
@@ -508,22 +514,11 @@
     "components": [
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 177.1435546875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "dc78abe9-5c39-4332-8b13-d6492c7c41c8",
-        "type": "Transform"
-      },
-      {
-        "fields": {
           "anchorOffset": "0.000000|0.000000",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "03a3d704-36c9-4666-b231-18d0fe4ecc34",
+        "guid": "a284820a-dda0-4e17-932e-773538c037d7",
         "type": "UIRect"
       },
       {
@@ -536,6 +531,17 @@
         },
         "guid": "6ab118f6-c2d5-48e7-b137-49a0954a6449",
         "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 531.120361328125,
+          "position.y": 161.3428192138672,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "dc78abe9-5c39-4332-8b13-d6492c7c41c8",
+        "type": "Transform"
       }
     ],
     "guid": "d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4",
@@ -555,8 +561,8 @@
       },
       {
         "fields": {
-          "position.x": -313.661865234375,
-          "position.y": 87.34483337402344,
+          "position.x": 0.0,
+          "position.y": 0.0,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -577,7 +583,7 @@
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "ec852183-3ee2-4656-a572-a3b0465dd6d5",
+        "guid": "89860285-ac67-4a55-99c6-cadc846c5f19",
         "type": "UIRect"
       },
       {
@@ -593,8 +599,8 @@
       },
       {
         "fields": {
-          "position.x": 570.7252807617188,
-          "position.y": 53.81053924560547,
+          "position.x": 525.447509765625,
+          "position.y": 49.01075744628906,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -615,7 +621,7 @@
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "a939ce81-9765-4174-810a-dd282b138b28",
+        "guid": "3ea8c090-57e0-424b-863e-3d72f079754e",
         "type": "UIRect"
       },
       {
@@ -631,8 +637,8 @@
       },
       {
         "fields": {
-          "position.x": 576.9537353515625,
-          "position.y": 177.14398193359375,
+          "position.x": 531.120361328125,
+          "position.y": 161.3432159423828,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -661,7 +667,7 @@
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "8e2f8c8d-d028-4320-b57a-09520224de78",
+        "guid": "7b5bf860-e25c-4ff8-b7ae-d9e47d5c02eb",
         "type": "UIRect"
       },
       {
@@ -670,13 +676,13 @@
           "color": "Red",
           "textureId": "square"
         },
-        "guid": "eaf7aa24-0cc3-4351-a143-e4800453ba47",
+        "guid": "c452358e-712e-4409-b3c2-482a82feb0b2",
         "type": "UIImage"
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 247.57870483398438,
+          "position.x": 531.120361328125,
+          "position.y": 225.49537658691406,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -686,7 +692,7 @@
       }
     ],
     "guid": "197d8213-1d1a-483d-a0ac-f9b4e05080ce",
-    "name": "Play again",
+    "name": "Play again ",
     "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
   },
   {
@@ -697,7 +703,7 @@
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "cbe07c25-db63-4b9d-9003-ec49c1fc4125",
+        "guid": "71d7667c-15c0-4eef-9045-4b5c3bad0829",
         "type": "UIRect"
       },
       {
@@ -713,8 +719,8 @@
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 247.57870483398438,
+          "position.x": 531.120361328125,
+          "position.y": 225.49537658691406,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -724,7 +730,7 @@
       }
     ],
     "guid": "e60e55d7-35a7-4542-89b3-b20174fc113d",
-    "name": "Play again",
+    "name": "Play again Text",
     "parent": "197d8213-1d1a-483d-a0ac-f9b4e05080ce"
   },
   {
@@ -735,7 +741,7 @@
           "color": "Red",
           "textureId": "square"
         },
-        "guid": "8dde9476-d717-472c-9856-d6c6179da596",
+        "guid": "730a06da-1fe8-44fc-a8dc-28ceecf40dbb",
         "type": "UIImage"
       },
       {
@@ -744,7 +750,7 @@
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "00650603-081d-4b91-9b2b-34e96a06c549",
+        "guid": "620c2955-d9c7-48c7-a852-9e56927ae71c",
         "type": "UIRect"
       },
       {
@@ -757,8 +763,8 @@
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 341.004638671875,
+          "position.x": 531.120361328125,
+          "position.y": 310.58795166015625,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -779,7 +785,7 @@
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "cff4e6ef-0c89-4e24-80fb-60f6b5414c83",
+        "guid": "ee62553a-5e26-4b8b-9c6c-267597fe147a",
         "type": "UIRect"
       },
       {
@@ -795,8 +801,8 @@
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 341.004638671875,
+          "position.x": 531.120361328125,
+          "position.y": 310.58795166015625,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -806,7 +812,7 @@
       }
     ],
     "guid": "f7062ed0-6df5-47f2-a9fe-74e2e28e4f3f",
-    "name": "Main Menu",
+    "name": "Main Menu Text",
     "parent": "4399b10c-367d-491a-91b2-2fee063e5bfb"
   }
 ]

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <set>
+#include <string> 
 
 class UIButton;
 
@@ -20,6 +21,6 @@ public:
 
 private:
     UIEventSystem() = default;
-    std::vector<UIButton*> buttons;
+    std::vector<std::string> registeredGUIDs;
     std::set<UIButton*> hoveredButtons;
 };

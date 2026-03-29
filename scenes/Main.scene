@@ -3,36 +3,28 @@
     "components": [
       {
         "fields": {
-          "interactable": true
+          "alignment": "Center",
+          "color": "White",
+          "fontId": "dmPrison",
+          "fontSize": 24,
+          "text": "Score: {0}"
         },
-        "guid": "",
-        "type": "UIButton"
+        "guid": "abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
+        "type": "UIText"
       },
       {
         "fields": {
-          "anchorOffset.x": -650.0,
-          "anchorOffset.y": -200.0,
-          "pivot.x": 0.5,
-          "pivot.y": 0.5,
-          "sizeDelta.x": 100.0,
-          "sizeDelta.y": 50.0
+          "anchorOffset": "-496.666779|-198.721512",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "",
+        "guid": "653c8e7b-580d-4816-9add-a45d58effa1d",
         "type": "UIRect"
       },
       {
         "fields": {
-          "alpha": 0.5,
-          "color": "Red",
-          "textureId": "square"
-        },
-        "guid": "",
-        "type": "UIImage"
-      },
-      {
-        "fields": {
-          "position.x": 260.0,
-          "position.y": 279.5,
+          "position.x": 93.33322143554688,
+          "position.y": 136.2784881591797,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -41,39 +33,29 @@
         "type": "Transform"
       }
     ],
-    "guid": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5",
-    "name": "UIButton",
+    "guid": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f",
+    "name": "Score Text",
     "parent": "c9ec4c50-f310-4e5f-8070-6d19b0525a3a"
   },
   {
     "components": [
       {
         "fields": {
-          "anchorOffset.x": 0.0,
-          "anchorOffset.y": 0.0,
-          "pivot.x": 0.5,
-          "pivot.y": 0.5,
-          "sizeDelta.x": 100.0,
-          "sizeDelta.y": 50.0
+          "All Floor Squares": "",
+          "Bools": "",
+          "ExampleSerializedVector": "",
+          "button": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5|eee00b40-9955-4e1a-974d-f77a7c23a3ae",
+          "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
+          "score": 3,
+          "scoreText": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f|abdd52fb-e4b3-4c42-8f30-968f168ecaa7"
         },
-        "guid": "",
-        "type": "UIRect"
+        "guid": "968f3aff-082c-40eb-b7ba-697b2e1084db",
+        "type": "GameManager"
       },
       {
         "fields": {
-          "alignment": "Center",
-          "color": "White",
-          "fontId": "dmPrison",
-          "fontSize": 24,
-          "text": "AddToScore"
-        },
-        "guid": "",
-        "type": "UIText"
-      },
-      {
-        "fields": {
-          "position.x": 260.0,
-          "position.y": 279.5,
+          "position.x": -122.18181610107422,
+          "position.y": 3.9173126220703125,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -82,274 +64,19 @@
         "type": "Transform"
       }
     ],
-    "guid": "f7e5db49-fc0f-4b62-9769-f5dc4b43359d",
-    "name": "Text",
-    "parent": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "colorString": "Cyan"
-        },
-        "guid": "",
-        "type": "FloorSquare"
-      },
-      {
-        "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
-        },
-        "guid": "",
-        "type": "BoxCollider"
-      },
-      {
-        "fields": {
-          "ColorID": "Magenta",
-          "renderOrder": 0,
-          "textureID": "square"
-        },
-        "guid": "",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "position.x": -42.176422119140625,
-          "position.y": -254.40293884277344,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
-        },
-        "guid": "",
-        "type": "Transform"
-      }
-    ],
-    "guid": "ff9d1783-31a4-4d29-96e5-c15699ad0b7f",
-    "name": "Floor Square (3)",
+    "guid": "c654de34-f964-48af-8341-8dcea5cd045c",
+    "name": "GameManager",
     "parent": ""
   },
   {
     "components": [
       {
         "fields": {
-          "ColorID": "Magenta",
-          "renderOrder": 0,
-          "textureID": "square"
+          "referenceResolution": "1280.000000|720.000000",
+          "renderMode": "ScreenSpace",
+          "scaleMode": "ScaleWithScreenSize"
         },
-        "guid": "",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
-        },
-        "guid": "",
-        "type": "BoxCollider"
-      },
-      {
-        "fields": {
-          "colorString": "Cyan"
-        },
-        "guid": "",
-        "type": "FloorSquare"
-      },
-      {
-        "fields": {
-          "position.x": -224.89053344726563,
-          "position.y": -178.8114471435547,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
-        },
-        "guid": "",
-        "type": "Transform"
-      }
-    ],
-    "guid": "738cf525-f469-4782-a530-87250ab4cc37",
-    "name": "Floor Square (2)",
-    "parent": ""
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "colorString": "Blue"
-        },
-        "guid": "",
-        "type": "FloorSquare"
-      },
-      {
-        "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
-        },
-        "guid": "",
-        "type": "BoxCollider"
-      },
-      {
-        "fields": {
-          "ColorID": "Magenta",
-          "renderOrder": 0,
-          "textureID": "square"
-        },
-        "guid": "",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "position.x": 283.2917175292969,
-          "position.y": -317.5133361816406,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
-        },
-        "guid": "",
-        "type": "Transform"
-      }
-    ],
-    "guid": "af8a14ad-a601-4de0-b555-68729497ff5f",
-    "name": "Floor Square (1)",
-    "parent": ""
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "ColorID": "Magenta",
-          "renderOrder": 0,
-          "textureID": "square"
-        },
-        "guid": "",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
-        },
-        "guid": "",
-        "type": "BoxCollider"
-      },
-      {
-        "fields": {
-          "colorString": "Magenta"
-        },
-        "guid": "",
-        "type": "FloorSquare"
-      },
-      {
-        "fields": {
-          "position.x": 197.8181915283203,
-          "position.y": -150.42437744140625,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
-        },
-        "guid": "",
-        "type": "Transform"
-      }
-    ],
-    "guid": "b5e4915e-526c-4276-a1dc-f4be673bd9b9",
-    "name": "Floor Square",
-    "parent": ""
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "filePath": "",
-          "isLooping": false,
-          "pitch": 1.0,
-          "volume": 80.0
-        },
-        "guid": "",
-        "type": "AudioSource"
-      },
-      {
-        "fields": {
-          "bounciness": 0.0,
-          "friction": 0.5,
-          "gravityScale": 1.0,
-          "isKinematic": true,
-          "isStatic": false,
-          "mass": 1.0,
-          "useGravity": false
-        },
-        "guid": "",
-        "type": "Rigidbody"
-      },
-      {
-        "fields": {
-          "bulletPrefab": "Bullet",
-          "cooldown": 0.5,
-          "floorTouchSound": "Audio/powerUp.wav",
-          "lastColorString": "",
-          "moveSpeed": 350.0,
-          "shootSound": "Audio/explosion.wav"
-        },
-        "guid": "",
-        "type": "Player"
-      },
-      {
-        "fields": {
-          "ColorID": "Red",
-          "renderOrder": 2,
-          "textureID": "triangle"
-        },
-        "guid": "",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "collisionTag": "player",
-          "isTrigger": true,
-          "vertices": "2.791113|-499.497528;-535.390930|471.992981;570.063293|471.992981"
-        },
-        "guid": "",
-        "type": "PolygonCollider"
-      },
-      {
-        "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 0.05000000074505806,
-          "scale.y": 0.05000000074505806
-        },
-        "guid": "",
-        "type": "Transform"
-      }
-    ],
-    "guid": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
-    "name": "Player",
-    "parent": ""
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "referenceResolution.x": 1280.0,
-          "referenceResolution.y": 720.0,
-          "renderMode": "ScreenSpace"
-        },
-        "guid": "",
+        "guid": "aa8ba336-3c60-4cef-9a1c-0438d94be3d3",
         "type": "Canvas"
       },
       {
@@ -372,72 +99,337 @@
     "components": [
       {
         "fields": {
-          "All Floor Squares": "",
-          "Bools": "",
-          "ExampleSerializedVector": "",
-          "button": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5|ddfb46f9-21c9-4805-880c-48e4e591eb9b",
-          "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
-          "score": 3,
-          "scoreText": "115f7172-f19c-4837-9229-825d18a0073a|"
+          "collisionTag": "player",
+          "isTrigger": true,
+          "vertices": "2.791113|-499.497528;-535.390930|471.992981;570.063293|471.992981"
         },
-        "guid": "",
-        "type": "GameManager"
+        "guid": "1eea6922-d86d-4928-9274-b78f51618efc",
+        "type": "PolygonCollider"
       },
       {
         "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
+          "ColorID": "Red",
+          "renderOrder": 2,
+          "textureID": "triangle"
+        },
+        "guid": "b6bd7b22-d8f3-4f6e-957c-c449fd4dfd17",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "bulletPrefab": "Bullet",
+          "cooldown": 0.5,
+          "floorTouchSound": "Audio/powerUp.wav",
+          "lastColorString": "",
+          "moveSpeed": 350.0,
+          "shootSound": "Audio/explosion.wav"
+        },
+        "guid": "032ea708-4efb-45b6-a06b-02f7b0b890d4",
+        "type": "Player"
+      },
+      {
+        "fields": {
+          "bounciness": 0.0,
+          "friction": 0.5,
+          "gravityScale": 1.0,
+          "isKinematic": true,
+          "isStatic": false,
+          "mass": 1.0,
+          "useGravity": false
+        },
+        "guid": "2202bae2-d4aa-4a30-9c48-533f626f3da4",
+        "type": "Rigidbody"
+      },
+      {
+        "fields": {
+          "filePath": "",
+          "isLooping": false,
+          "pitch": 1.0,
+          "volume": 80.0
+        },
+        "guid": "685878f4-3375-4477-ac0a-71f28eeb5510",
+        "type": "AudioSource"
+      },
+      {
+        "fields": {
+          "position.x": 64.78515625,
+          "position.y": -104.48687744140625,
           "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "scale.x": 0.05000000074505806,
+          "scale.y": 0.05000000074505806
         },
         "guid": "",
         "type": "Transform"
       }
     ],
-    "guid": "c654de34-f964-48af-8341-8dcea5cd045c",
-    "name": "GameManager",
+    "guid": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
+    "name": "Player",
     "parent": ""
   },
   {
     "components": [
       {
         "fields": {
-          "position.x": 560.0,
-          "position.y": 279.5,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "colorString": "Magenta"
         },
-        "guid": "",
-        "type": "Transform"
+        "guid": "a4391a24-b049-4501-a936-13450559fef9",
+        "type": "FloorSquare"
       },
       {
         "fields": {
-          "anchorOffset.x": -350.0,
-          "anchorOffset.y": -200.0,
-          "pivot.x": 0.5,
-          "pivot.y": 0.5,
-          "sizeDelta.x": 100.0,
-          "sizeDelta.y": 50.0
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "7094b86e-ca5b-429f-bc2b-c426e80fa1ef",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "renderOrder": 0,
+          "textureID": "square"
+        },
+        "guid": "b15818af-1928-45fc-98ec-dd0259dc5ad4",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "position.x": 197.8181915283203,
+          "position.y": -150.42437744140625,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
         },
         "guid": "",
-        "type": "UIRect"
+        "type": "Transform"
+      }
+    ],
+    "guid": "b5e4915e-526c-4276-a1dc-f4be673bd9b9",
+    "name": "Floor Square (3)",
+    "parent": ""
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "renderOrder": 0,
+          "textureID": "square"
+        },
+        "guid": "3926b45a-f729-4274-adbe-1bea51c3ad2f",
+        "type": "Sprite"
       },
+      {
+        "fields": {
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "a9ac476c-d499-4b06-9a27-0039ff7de1e2",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "colorString": "Blue"
+        },
+        "guid": "2cf69c65-0f22-4b23-ad08-5207dbeb6b0c",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "position.x": 283.2917175292969,
+          "position.y": -317.5133361816406,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "guid": "af8a14ad-a601-4de0-b555-68729497ff5f",
+    "name": "Floor Square (2)",
+    "parent": ""
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "colorString": "Cyan"
+        },
+        "guid": "c9376e08-6c50-4f04-a913-50419d3c086c",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "55ca71ff-5f86-463f-b427-4f49ee16ebd9",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "renderOrder": 0,
+          "textureID": "square"
+        },
+        "guid": "8c62c7fe-bdcb-41f9-b111-a0d1653e7ce8",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "position.x": 403.7344055175781,
+          "position.y": -199.8209228515625,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "guid": "738cf525-f469-4782-a530-87250ab4cc37",
+    "name": "Floor Square (1)",
+    "parent": ""
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "renderOrder": 0,
+          "textureID": "square"
+        },
+        "guid": "5507e72d-f3c7-4b6c-ac8e-9c5cdf7d7e1d",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "d85b038d-cfa0-4816-aa39-68e34d0b3a61",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "colorString": "Cyan"
+        },
+        "guid": "4437c923-e031-4c38-967d-8407c908c210",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "position.x": -42.176422119140625,
+          "position.y": -254.40293884277344,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "guid": "ff9d1783-31a4-4d29-96e5-c15699ad0b7f",
+    "name": "Floor Square",
+    "parent": ""
+  },
+  {
+    "components": [
       {
         "fields": {
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
           "fontSize": 24,
-          "text": "Score"
+          "text": "AddToScore"
+        },
+        "guid": "63163fb9-3b8c-4306-91be-2fa39cc4fc07",
+        "type": "UIText"
+      },
+      {
+        "fields": {
+          "anchorOffset": "-7.333374|-8.562958",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "75.000000|34.000000"
+        },
+        "guid": "9ded52b2-731a-4ad3-b32b-5c663c8d1ea1",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "position.x": 580.4999389648438,
+          "position.y": 234.53610229492188,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
         },
         "guid": "",
-        "type": "UIText"
+        "type": "Transform"
       }
     ],
-    "guid": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f",
-    "name": "Score Text",
+    "guid": "f7e5db49-fc0f-4b62-9769-f5dc4b43359d",
+    "name": "Text",
+    "parent": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "alpha": 0.5,
+          "color": "Red",
+          "textureId": "square"
+        },
+        "guid": "eeff400d-ab3d-4c83-b79d-cee3e1bb5849",
+        "type": "UIImage"
+      },
+      {
+        "fields": {
+          "anchorOffset": "-14.666687|-99.900955",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "2c829050-840d-4882-b527-e636ec5c18de",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "interactable": true,
+          "targetText": "f7e5db49-fc0f-4b62-9769-f5dc4b43359d"
+        },
+        "guid": "eee00b40-9955-4e1a-974d-f77a7c23a3ae",
+        "type": "UIButton"
+      },
+      {
+        "fields": {
+          "position.x": 575.3333129882813,
+          "position.y": 235.09906005859375,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "guid": "e56ee8e7-a7c8-4bb2-99ea-86247552bad5",
+    "name": "UIButton",
     "parent": "c9ec4c50-f310-4e5f-8070-6d19b0525a3a"
   }
 ]

@@ -12,6 +12,7 @@ enum VariableType
     float_Type,
     char_Type,
     bool_Type,
+    mathVector_Type,
     entityRef_Type,
     compRef_Type,
 };
@@ -21,7 +22,9 @@ struct SerializableVariable
     const char* name = 0;
     void* data = 0;
     int type = 0;
-    std::string componentTypeHint = ""; // kept for inspector display only
+    std::string componentTypeHint = "";
+    int vectorSize = 0;
+    bool isIntVector = false;
 
     void assign(double number);
     double read();

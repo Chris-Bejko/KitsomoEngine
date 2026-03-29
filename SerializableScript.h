@@ -44,6 +44,19 @@ public:
     void Field(const char *name, std::string &val) { serializables.push_back({name, &val, char_Type}); }
     void Field(const char *name, bool &val) { serializables.push_back({name, &val, bool_Type}); }
     void Field(const char *name, unsigned int &val) { serializables.push_back({name, &val, int_Type}); }
+    template <typename T, typename Derived>
+    void Field(const char *name, VectorBase<T, Derived> &val)
+    {
+        serializables.push_back({
+            name,
+            &val,
+            mathVector_Type,
+            "",
+            (int)Derived::Size,
+            std::is_integral<T>::value // isInt flag
+        });
+    }
+
     // Entity* field
     void Field(const char *name, Entity *&ptr);
 
@@ -211,6 +224,34 @@ public:
             compRef_Type};
     }
 
+    template <typename T>
+    T *FindObjectOfType()
+    {
+        for (auto &e : Engine::get().GetManager()->GetEntities())
+        {
+            if (e->HasComponent<T>())
+            {
+                T *found = &e->GetComponent<T>();
+                SyncPtrToGUID(found, e.get());
+                return found;
+            }
+        }
+        return nullptr;
+    }
+
+    template <typename T>
+    void SyncPtrToGUID(T *comp, Entity *owner)
+    {
+        for (auto &[name, field] : componentPtrFields)
+        {
+            if (*field.ptr == static_cast<Component *>(comp))
+            {
+                field.guidStorage = owner->GetGUID() + "|" + comp->GetGUID();
+                return;
+            }
+        }
+    }
+
     bool IsVectorField(const std::string &name)
     {
         return vectorFields.count(name) || vectorPtrFields.count(name);
@@ -236,6 +277,7 @@ protected:
     std::map<std::string, VectorFieldEntry> vectorFields;
     std::map<std::string, VectorPtrFieldEntry> vectorPtrFields;
     bool fieldsRegistered = false;
+    std::vector<std::string> fieldNameStorage; // keeps names alive
 
     void *GetFieldData(const std::string &name)
     {

@@ -33,6 +33,7 @@ public:
 		to_Add.emplace_back(std::move(uptr));
 
 		comp->entity = this;
+		comp->SetGUID(EngineGUID::Generate());
 		if (comp->Init())
 		{
 			componentsList[getComponentTypeID<T>()] = comp;
@@ -133,6 +134,13 @@ public:
 
 	bool IsActive() const;
 
+	bool IsActiveInHierarchy() const;
+	void SetActive(bool active) { isActive = active; }
+
+	bool IsPendingDestroy() const { return isPendingDestroy; }
+
+	void SetPendingDestroy(bool flag) { isPendingDestroy = flag; }
+
 	void Destroy();
 
 	void ValidateAddedComponents();
@@ -183,6 +191,7 @@ public:
 	bool HasParent() { return parent != nullptr; }
 	std::vector<Entity *> &GetChildren() { return children; }
 	Entity *GetParent() { return parent; }
+	const Entity *GetParent() const { return parent; }
 
 	std::string GetGUID() { return m_guid; }
 	void SetGUID(std::string guid)
@@ -203,10 +212,12 @@ public:
 	void Entity::DrawCompRefField(std::string &packedStorage, const std::string &typeHint, const std::string &fieldId);
 
 	void Entity::DrawEntityRefField(std::string &guidStorage, const std::string &fieldId);
+	void ForceNullParent() { parent = nullptr; }
 
 private:
-	bool isActive;
+	bool isActive = true;
 
+	bool isPendingDestroy = false;
 	bool deletePressed = false;
 
 	std::vector<std::string> availableComponents;

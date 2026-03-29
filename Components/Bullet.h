@@ -29,6 +29,8 @@ public:
 	void OnCollisionEnter(Collider& other) override final;
 
 	float GetForce() { return force; }	
+
+	std::string GetColorString() {return lastColorString; }
 private:
 	float force = 850.f;
 	Color lastColor;
