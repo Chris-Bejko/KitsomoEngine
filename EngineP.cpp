@@ -33,7 +33,8 @@
 #include "AssetManager.h"
 #include "GUIDGenerator.h"
 #include "nlohmann/json.hpp"
-#include "PlayerPrefs.h"	
+#include "PlayerPrefs.h"
+#include "SceneManager.h"
 using json = nlohmann::json;
 
 Engine *Engine::s_instance = nullptr;
@@ -87,6 +88,7 @@ void Engine::Init()
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
+	SceneManager::get().Init();
 	AssetManager::get().loadFont("dmPrison", "fonts/Domestic Prison.ttf");
 	std::ofstream txtFile;
 	PlayerPrefs::get().Load();
@@ -340,6 +342,9 @@ size_t Engine::GetTotalEntities()
 
 void Engine::Save(const std::string &filename)
 {
+	std::filesystem::path path = SceneManager::get().ResolveProjectPath(filename);
+	std::filesystem::create_directories(path.parent_path());
+
 	json root = json::array();
 
 	for (auto &e : manager->GetEntities())
@@ -415,19 +420,20 @@ void Engine::Save(const std::string &filename)
 		root.push_back(entityJson);
 	}
 
-	std::ofstream file(filename);
+	std::ofstream file(path);
 	file << root.dump(2); // 2 = indent spaces, makes it human readable
 	file.close();
-	LOG_INFO("Saved: ", filename.c_str());
+	LOG_INFO("Saved: ", path.string().c_str());
 }
 
 bool Engine::Load(std::string fileName)
 {
-	LOG_INFO("Loading file: ", fileName.c_str());
+	std::filesystem::path path = SceneManager::get().ResolveProjectPath(fileName);
+	LOG_INFO("Loading file: ", path.string().c_str());
 	if (fileName.empty())
 		return true;
 	this->loading = true;
-	auto entities = ParseFile(fileName);
+	auto entities = ParseFile(path.string());
 	if (entities.empty())
 	{
 		this->loading = false;
@@ -444,10 +450,10 @@ bool Engine::Load(std::string fileName)
 
 bool Engine::LoadPrefab(std::string prefabName)
 {
-	std::string path = "prefabs/" + prefabName + ".prefab";
-	LOG_INFO("Loading prefab: ", path.c_str());
+	std::filesystem::path path = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + prefabName + ".prefab");
+	LOG_INFO("Loading prefab: ", path.string().c_str());
 
-	auto entities = ParseFile(path);
+	auto entities = ParseFile(path.string());
 	if (entities.empty())
 	{
 		LOG_WARNING("Prefab not found: ", path.c_str());
@@ -464,8 +470,8 @@ bool Engine::LoadPrefab(std::string prefabName)
 
 Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 {
-	std::string path = "prefabs/" + prefabName + ".prefab";
-	auto entities = ParseFile(path);
+	std::filesystem::path path = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + prefabName + ".prefab");
+	auto entities = ParseFile(path.string());
 	if (entities.empty())
 	{
 		LOG_WARNING("Prefab not found: ", path.c_str());
@@ -623,7 +629,7 @@ void Engine::RegisterComponents()
 
 void Engine::SavePrefab(Entity *entity)
 {
-	std::filesystem::create_directories("prefabs");
+	std::filesystem::create_directories(SceneManager::get().GetPrefabDirectory());
 
 	json root = json::array();
 
@@ -691,11 +697,12 @@ void Engine::SavePrefab(Entity *entity)
 	entityJson["components"] = componentsJson;
 	root.push_back(entityJson); // push into array
 
-	std::string filename = "prefabs/" + entity->GetName() + ".prefab";
-	std::ofstream file(filename);
+	std::filesystem::path path = SceneManager::get().GetPrefabDirectory() / (entity->GetName() + ".prefab");
+	std::filesystem::create_directories(path.parent_path());
+	std::ofstream file(path);
 	file << root.dump(2);
 	file.close();
-	LOG_INFO("Saved prefab: ", filename.c_str());
+	LOG_INFO("Saved prefab: ", path.string().c_str());
 }
 
 void Engine::ProcessDestroyQueue()

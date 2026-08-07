@@ -2,20 +2,28 @@
 #include "Engine.h"
 #include "Logger.h"
 #include <filesystem>
+#include <algorithm>
 
 void SceneManager::Init()
 {
-    std::filesystem::create_directories("scenes/");
+    if (!HasProjectRoot())
+    {
+        std::filesystem::path defaultRoot = std::filesystem::current_path() / "Projects" / "DefaultProject";
+        SetProjectRoot(defaultRoot.string());
+    }
+
+    std::filesystem::create_directories(GetSceneDirectory());
+    std::filesystem::create_directories(GetPrefabDirectory());
     LOG_INFO("SceneManager initialized");
 }
 
 void SceneManager::LoadScene(const std::string& sceneName, SceneLoadMode mode)
 {
-    std::string path = "scenes/" + sceneName + ".scene";
+    std::filesystem::path path = GetSceneDirectory() / (sceneName + ".scene");
     
     if (!std::filesystem::exists(path))
     {
-        LOG_WARNING("Scene not found: ", path.c_str());
+        LOG_WARNING("Scene not found: ", path.string().c_str());
         return;
     }
 
@@ -25,7 +33,7 @@ void SceneManager::LoadScene(const std::string& sceneName, SceneLoadMode mode)
         loadedScenes.clear();
     }
 
-    Engine::get().Load(path);
+    Engine::get().Load(path.string());
     currentScene = sceneName;
     loadedScenes.push_back(sceneName);
     LOG_INFO("Loaded scene: ", sceneName.c_str());
@@ -53,11 +61,11 @@ void SceneManager::SaveCurrentScene()
 
 void SceneManager::SaveSceneAs(const std::string& sceneName)
 {
-    std::filesystem::create_directories("scenes/");
-    std::string path = "scenes/" + sceneName + ".scene";
-    Engine::get().Save(path);
+    std::filesystem::create_directories(GetSceneDirectory());
+    std::filesystem::path path = GetSceneDirectory() / (sceneName + ".scene");
+    Engine::get().Save(path.string());
     currentScene = sceneName;
-    LOG_INFO("Saved scene: ", path.c_str());
+    LOG_INFO("Saved scene: ", path.string().c_str());
 }
 
 void SceneManager::DontDestroyOnLoad(Entity* entity)
@@ -89,12 +97,73 @@ void SceneManager::DestroyNonPersistentEntities()
     }
 }
 
+bool SceneManager::CreateNewProject(const std::string& projectName, const std::string& baseDirectory)
+{
+    if (projectName.empty())
+        return false;
+
+    std::filesystem::path base(baseDirectory.empty() ? "Projects" : baseDirectory);
+    std::filesystem::path root = std::filesystem::absolute(base / projectName);
+    std::filesystem::create_directories(root / "Assets" / "Scenes");
+    std::filesystem::create_directories(root / "Assets" / "Prefabs");
+    std::filesystem::create_directories(root / "Assets" / "Scripts");
+
+    SetProjectRoot(root.string());
+    currentScene.clear();
+    loadedScenes.clear();
+    return true;
+}
+
+void SceneManager::SetProjectRoot(const std::string& path)
+{
+    projectRoot = std::filesystem::absolute(path);
+    std::filesystem::create_directories(projectRoot);
+}
+
+std::string SceneManager::GetProjectRoot() const
+{
+    return projectRoot.empty() ? std::string() : projectRoot.string();
+}
+
+std::filesystem::path SceneManager::GetProjectRootPath() const
+{
+    return projectRoot.empty() ? std::filesystem::current_path() : projectRoot;
+}
+
+std::filesystem::path SceneManager::GetSceneDirectory() const
+{
+    return ResolveProjectPath("Assets/Scenes");
+}
+
+std::filesystem::path SceneManager::GetPrefabDirectory() const
+{
+    return ResolveProjectPath("Assets/Prefabs");
+}
+
+std::filesystem::path SceneManager::ResolveProjectPath(const std::string& relativePath) const
+{
+    if (relativePath.empty())
+        return GetProjectRootPath();
+
+    std::filesystem::path path(relativePath);
+    if (path.is_absolute())
+        return path;
+
+    return GetProjectRootPath() / path;
+}
+
+bool SceneManager::HasProjectRoot() const
+{
+    return !projectRoot.empty();
+}
+
 std::vector<std::string> SceneManager::GetAvailableScenes()
 {
     std::vector<std::string> scenes;
-    if (!std::filesystem::exists("scenes/")) return scenes;
+    std::filesystem::path sceneDir = GetSceneDirectory();
+    if (!std::filesystem::exists(sceneDir)) return scenes;
     
-    for (const auto& entry : std::filesystem::directory_iterator("scenes/"))
+    for (const auto& entry : std::filesystem::directory_iterator(sceneDir))
     {
         if (entry.path().extension() == ".scene")
             scenes.push_back(entry.path().stem().string());
