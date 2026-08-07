@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <filesystem>
 #include "Entity.h"
 
 enum class SceneLoadMode
@@ -23,6 +24,14 @@ public:
     void UnloadScene(const std::string& sceneName);
     void SaveCurrentScene();
     void SaveSceneAs(const std::string& sceneName);
+    bool CreateNewProject(const std::string& projectName, const std::string& baseDirectory = "Projects");
+    void SetProjectRoot(const std::string& path);
+    std::string GetProjectRoot() const;
+    std::filesystem::path GetProjectRootPath() const;
+    std::filesystem::path GetSceneDirectory() const;
+    std::filesystem::path GetPrefabDirectory() const;
+    std::filesystem::path ResolveProjectPath(const std::string& relativePath) const;
+    bool HasProjectRoot() const;
 
     // DontDestroyOnLoad
     void DontDestroyOnLoad(Entity* entity);
@@ -40,6 +49,7 @@ private:
     std::string currentScene = "";
     std::vector<std::string> loadedScenes;
     std::set<Entity*> persistentEntities;
+    std::filesystem::path projectRoot;
 
     void DestroyNonPersistentEntities();
 };

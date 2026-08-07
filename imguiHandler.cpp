@@ -6,6 +6,8 @@
 #include "Commands/PasteEntityCommand.h"
 #include "Commands/DuplicateEntityCommand.h"
 #include "GizmoSystem.h"
+#include <filesystem>
+#include <algorithm>
 
 ImguiHandler *ImguiHandler::s_instance = nullptr;
 
@@ -77,6 +79,7 @@ void ImguiHandler::Update(sf::Time rest)
 	DrawConsole();
 	DrawInspector();
 	DrawEntities();
+	DrawProjectExplorer();
 
 	if (Engine::get().GetCurrentState() == EngineState::Running)
 		DrawScenePanel();
@@ -203,14 +206,15 @@ void ImguiHandler::DrawEntities()
 	ImGui::PopStyleColor(2);
 
 	// Prefabs section
-	if (std::filesystem::exists("prefabs/"))
+	std::filesystem::path prefabDir = SceneManager::get().GetPrefabDirectory();
+	if (std::filesystem::exists(prefabDir))
 	{
 		ImGui::Spacing();
 		ImGui::TextColored(COLOR_TEXT_DIM, "PREFABS");
 		ImGui::Separator();
 		ImGui::Spacing();
 
-		for (const auto &entry : std::filesystem::directory_iterator("prefabs/"))
+		for (const auto &entry : std::filesystem::directory_iterator(prefabDir))
 		{
 			std::string prefabFile = entry.path().stem().string();
 			std::string buttonLabel = "  " + prefabFile + "##prefab";
@@ -424,7 +428,7 @@ void ImguiHandler::DrawStatusWindow()
 					 ImGuiWindowFlags_NoScrollbar |
 					 ImGuiWindowFlags_AlwaysAutoResize);
 
-	float dt = Engine::get().GetDt(); // we'll add this
+	float dt = Engine::get().GetDt(); 
 	for (auto it = notifications.begin(); it != notifications.end();)
 	{
 		it->lifetime -= dt;
@@ -495,6 +499,123 @@ void ImguiHandler::DrawConsole()
 		ImGui::SetScrollHereY(1.0f);
 
 	ImGui::EndChild();
+	ImGui::End();
+}
+
+void ImguiHandler::DrawProjectExplorer()
+{
+	ImGui::Begin("Project Explorer");
+
+	if (ImGui::Button("New Project", ImVec2(100, 26)))
+		showNewProjectDialog = true;
+	ImGui::SameLine();
+	if (ImGui::Button("Refresh", ImVec2(90, 26)))
+		projectExplorerDirectory = std::filesystem::path();
+
+	ImGui::Separator();
+	ImGui::TextColored(COLOR_TEXT_DIM, "PROJECT ROOT");
+	ImGui::TextWrapped("%s", SceneManager::get().GetProjectRoot().c_str());
+	ImGui::Spacing();
+
+	if (showNewProjectDialog)
+	{
+		ImGui::OpenPopup("Create New Project");
+		showNewProjectDialog = false;
+	}
+
+	if (ImGui::BeginPopupModal("Create New Project", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+	{
+		ImGui::Text("Choose a project name:");
+		char buffer[128] = {0};
+		std::strncpy(buffer, newProjectNameBuffer.c_str(), sizeof(buffer) - 1);
+		if (ImGui::InputText("##newProjectName", buffer, sizeof(buffer)))
+			newProjectNameBuffer = buffer;
+		if (ImGui::Button("Create", ImVec2(120, 0)))
+		{
+			if (SceneManager::get().CreateNewProject(newProjectNameBuffer))
+			{
+				projectExplorerDirectory = std::filesystem::path();
+				newProjectNameBuffer = "MyProject";
+				ImGui::CloseCurrentPopup();
+			}
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("Cancel", ImVec2(120, 0)))
+			ImGui::CloseCurrentPopup();
+		ImGui::EndPopup();
+	}
+
+	ImGui::Spacing();
+	ImGui::TextColored(COLOR_TEXT_DIM, "ASSETS");
+	ImGui::Separator();
+
+	std::filesystem::path baseDir = projectExplorerDirectory.empty()
+		? SceneManager::get().GetProjectRootPath()
+		: projectExplorerDirectory;
+
+	if (!std::filesystem::exists(baseDir))
+		baseDir = SceneManager::get().GetProjectRootPath();
+
+	if (!projectExplorerDirectory.empty())
+	{
+		if (ImGui::Button("..", ImVec2(-1, 24)))
+			projectExplorerDirectory = baseDir.parent_path();
+	}
+
+	std::vector<std::filesystem::directory_entry> entries;
+	for (const auto &entry : std::filesystem::directory_iterator(baseDir))
+		entries.push_back(entry);
+	std::sort(entries.begin(), entries.end(), [](const auto &a, const auto &b)
+	{
+		return a.path().filename().string() < b.path().filename().string();
+	});
+
+	for (const auto &entry : entries)
+	{
+		const auto path = entry.path();
+		const std::string name = path.filename().string();
+		const bool isDirectory = std::filesystem::is_directory(path);
+
+		if (isDirectory)
+		{
+			if (ImGui::Button(("[DIR] " + name).c_str(), ImVec2(-1, 24)))
+				projectExplorerDirectory = path;
+		}
+		else
+		{
+			const std::string ext = path.extension().string();
+			if (ext == ".scene")
+			{
+				if (ImGui::Button(("[SCENE] " + name).c_str(), ImVec2(-1, 24)))
+					SceneManager::get().LoadScene(path.stem().string(), SceneLoadMode::Replace);
+			}
+			else if (ext == ".prefab")
+			{
+				ImGui::Button(("[PREFAB] " + name).c_str(), ImVec2(-1, 24));
+			}
+			else
+			{
+				ImGui::Button(name.c_str(), ImVec2(-1, 24));
+			}
+		}
+	}
+
+	ImGui::Spacing();
+	ImGui::TextColored(COLOR_TEXT_DIM, "ACTIONS");
+	ImGui::Separator();
+	if (ImGui::Button("New Scene", ImVec2(-1, 28)))
+	{
+		std::string sceneName = "NewScene";
+		std::filesystem::path scenePath = baseDir / (sceneName + ".scene");
+		int suffix = 1;
+		while (std::filesystem::exists(scenePath))
+		{
+			scenePath = baseDir / (sceneName + std::to_string(suffix++) + ".scene");
+		}
+		SceneManager::get().SaveSceneAs(scenePath.stem().string());
+		projectExplorerDirectory = baseDir;
+	}
+
 	ImGui::End();
 }
 
