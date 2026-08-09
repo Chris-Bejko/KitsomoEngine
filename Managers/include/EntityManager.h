@@ -65,7 +65,7 @@ public:
 	Entity *GetDragHoveredEntity() { return dragHoveredEntity; }
 	void DisplayComponentsOf(Entity *e);
 	void RemoveEntityByGUID(const std::string &guid);
-
+	void ClearAllEntities() { entities.clear(); to_add.clear(); }
 private:
 	// Track active collision pairs to ensure OnTriggerEnter/Stay/Exit called correctly
 	std::set<std::pair<Collider *, Collider *>> activeCollisionPairs;
