@@ -3,7 +3,7 @@
 #include "Component.h"
 #include <SFML/Graphics.hpp>
 
-class Camera : public Component
+class Camera : public SerializableScript
 {
 public:
     Transform* transform;

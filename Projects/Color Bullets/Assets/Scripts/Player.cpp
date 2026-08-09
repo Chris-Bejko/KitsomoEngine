@@ -45,9 +45,9 @@ bool Player::Init()
 void Player::Awake()
 {
 	entity->transform->position = initPos;
-	Entity *camera = new Entity("Camera");
-	this->camera = &camera->AddComponent<Camera>();
-	Engine::get().Spawn(camera);
+	// Entity *camera = new Entity("Camera");
+	// this->camera = &camera->AddComponent<Camera>();
+	// Engine::get().Spawn(camera);
 	Entity *bulletSpawnPoint = new Entity("spawnpoint");
 	AssetManager::get().loadTexture("circle", "circle.png");
 	bulletSpawnPoint->AddComponent<Sprite>("circle");
