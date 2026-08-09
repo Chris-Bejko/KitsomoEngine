@@ -19,6 +19,8 @@
 #include "nlohmann/json.hpp"
 #include "PlayerPrefs.h"
 #include "SceneManager.h"
+#include "DialogSystem.h"
+#include "Dialogs/include/InspectorDialog.h"
 using json = nlohmann::json;
 
 Engine::Engine()
@@ -73,6 +75,10 @@ void Engine::Init()
 	auto inputSystem = new InputSystem();
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
+	auto* inspectorDialog = new InspectorDialog();
+	auto* dialogSystem = new DialogSystem();
+	dialogSystem->AddDialog(std::make_unique<InspectorDialog>(), "Inspector");
+	SystemsManager::get().AddSystem(dialogSystem);
 	manager = new EntityManager();
 	projectModuleLoader = std::make_unique<ProjectModuleLoader>();
 	SceneManager::get().Init();

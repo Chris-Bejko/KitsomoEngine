@@ -87,7 +87,7 @@ void ImguiHandler::Update(sf::Time rest)
 	DrawToolbar();
 	DrawStatusWindow();
 	DrawConsole();
-	DrawInspector();
+	// DrawInspector();
 	DrawEntities();
 	DrawProjectExplorer();
 	DrawProjectLoadWindow();

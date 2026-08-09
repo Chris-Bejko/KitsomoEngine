@@ -59,12 +59,12 @@ void Player::Awake()
 
 void Player::updateEngine(float dt)
 {
-	LOG_INFO("HOT RELOAD WORKING");
 	lastColor.SetColor(lastColorString);
 }
 
 void Player::update(float dt)
 {
+	LOG_INFO("HOT RELOAD WORKS");
 	camera->Follow(sf::Vector2f(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y));
 	SetSpawnPointPosition();
 	spawnPoint->rotation = entity->transform->rotation;

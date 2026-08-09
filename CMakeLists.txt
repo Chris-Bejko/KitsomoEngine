@@ -15,6 +15,7 @@ file(GLOB BASE_SOURCES CONFIGURE_DEPENDS "Base/src/*.cpp")
 file(GLOB MANAGER_SOURCES CONFIGURE_DEPENDS "Managers/src/*.cpp")
 file(GLOB SYSTEM_SOURCES CONFIGURE_DEPENDS "Systems/src/*.cpp")
 file(GLOB DATA_SOURCES CONFIGURE_DEPENDS "DataClasses/src/*.cpp")
+file(GLOB DIALOG_SOURCES CONFIGURE_DEPENDS "Dialogs/src/*.cpp")
 file(GLOB TOOL_SOURCES CONFIGURE_DEPENDS "Tools/src/*.cpp")
 file(GLOB HOT_RELOAD_SOURCES CONFIGURE_DEPENDS "HotReloading/*.cpp")
 file(GLOB COLLISION_SOURCES CONFIGURE_DEPENDS "Collision/*.cpp")
@@ -43,6 +44,7 @@ add_library(ECSEngineCore SHARED
     ${COMPONENTS_SOURCES}
     ${UI_SOURCES}
     ${IMGUI_SOURCES}
+    ${DIALOG_SOURCES}
 )
 
 set_target_properties(ECSEngineCore PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
@@ -59,6 +61,9 @@ target_include_directories(ECSEngineCore PUBLIC
     Systems/include/
     DataClasses/include/
     Tools/include/
+    Dialogs/include/
+    Dialogs/include/base/
+    HotReloading/include/
     Components/
     imgui/
     include/
