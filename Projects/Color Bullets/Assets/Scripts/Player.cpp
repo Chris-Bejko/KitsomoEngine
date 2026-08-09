@@ -8,7 +8,8 @@
 #include "Logger.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(Player, false)
+DECLARE_COMPONENT_RULES(Player, false)
+REGISTER_SERIALIZABLE_COMPONENT(Player)
 
 Player::Player()
 {

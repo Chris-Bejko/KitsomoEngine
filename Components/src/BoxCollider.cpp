@@ -4,7 +4,8 @@
 #include "CollisionSystem.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(BoxCollider, true)
+DECLARE_COMPONENT_RULES(BoxCollider, true)
+REGISTER_SERIALIZABLE_COMPONENT(BoxCollider)
 
 BoxCollider::BoxCollider()
 {

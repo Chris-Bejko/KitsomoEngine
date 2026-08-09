@@ -4,7 +4,8 @@
 #include "CollisionSystem.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(CircleCollider, true)
+DECLARE_COMPONENT_RULES(CircleCollider, true)
+REGISTER_SERIALIZABLE_COMPONENT(CircleCollider)
 
 CircleCollider::CircleCollider()
 {

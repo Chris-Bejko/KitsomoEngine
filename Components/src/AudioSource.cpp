@@ -4,7 +4,8 @@
 #include <algorithm>
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(AudioSource, false)
+DECLARE_COMPONENT_RULES(AudioSource, false)
+REGISTER_SERIALIZABLE_COMPONENT(AudioSource)
 
 AudioSource::AudioSource()
     : sound(nullptr), soundBuffer(nullptr), currentFilePath(""),

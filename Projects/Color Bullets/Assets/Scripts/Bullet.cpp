@@ -6,7 +6,8 @@
 #include "Engine.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(Bullet, false)
+DECLARE_COMPONENT_RULES(Bullet, false, Rigidbody)
+REGISTER_SERIALIZABLE_COMPONENT(Bullet)
 
 bool Bullet::Init()
 {

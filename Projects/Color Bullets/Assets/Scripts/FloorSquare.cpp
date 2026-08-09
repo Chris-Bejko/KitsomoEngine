@@ -5,7 +5,8 @@
 #include "BoxCollider.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(FloorSquare, false)
+DECLARE_COMPONENT_RULES(FloorSquare, false)
+REGISTER_SERIALIZABLE_COMPONENT(FloorSquare)
 
 bool FloorSquare::Init()
 {

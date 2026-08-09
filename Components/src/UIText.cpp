@@ -6,7 +6,8 @@
 #include "UIRect.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(UIText, false)
+DECLARE_COMPONENT_RULES(UIText, false)
+REGISTER_SERIALIZABLE_COMPONENT(UIText)
 
 UIText::UIText(const std::string& text, const std::string& fontId, unsigned int fontSize)
     : text(text), fontId(fontId), fontSize(fontSize)

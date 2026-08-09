@@ -5,7 +5,8 @@
 #include "UIRect.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(UIImage, false)
+DECLARE_COMPONENT_RULES(UIImage, false)
+REGISTER_SERIALIZABLE_COMPONENT(UIImage)
 
 UIImage::UIImage(const std::string &texId)
 {

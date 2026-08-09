@@ -3,6 +3,7 @@
 #include <functional>
 #include <string>
 #include <type_traits>
+#include <tuple>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -15,8 +16,15 @@ struct ComponentDescriptor
 {
     std::string name;
     bool allowsMultiple = false;
-    std::function<void(Entity *)> addDefault;
+    std::function<bool(Entity *)> addDefault;
     std::function<void(Entity *, ReadableSerializableVariableMap, std::string)> applySerialized;
+};
+
+template <typename T>
+struct ComponentRegistrationMeta
+{
+    static constexpr bool allowMultiple = false;
+    using requiredTypes = std::tuple<>;
 };
 
 class ComponentRegistry
@@ -29,7 +37,7 @@ public:
     }
 
     template <typename T>
-    bool Register(const std::string &name, bool allowsMultiple = false)
+    bool Register(const std::string &name)
     {
         static_assert(std::is_base_of<SerializableScript, T>::value, "Registered type must inherit from SerializableScript");
 
@@ -40,21 +48,28 @@ public:
 
         ComponentDescriptor descriptor;
         descriptor.name = name;
+        constexpr bool allowsMultiple = ComponentRegistrationMeta<T>::allowMultiple;
         descriptor.allowsMultiple = allowsMultiple;
 
         descriptor.addDefault = [allowsMultiple](Entity *entity)
         {
             if (entity == nullptr)
             {
-                return;
+                return false;
+            }
+
+            if (!HasRequiredTypes<T>(entity))
+            {
+                return false;
             }
 
             if (!allowsMultiple && entity->HasComponent<T>())
             {
-                return;
+                return false;
             }
 
             entity->AddComponent<T>();
+            return true;
         };
 
         descriptor.applySerialized = [allowsMultiple](Entity *entity, ReadableSerializableVariableMap fields, std::string guid)
@@ -105,8 +120,7 @@ public:
             return false;
         }
 
-        it->second.addDefault(entity);
-        return true;
+        return it->second.addDefault(entity);
     }
 
     bool IsMultiInstance(const std::string &name) const
@@ -130,13 +144,42 @@ public:
     }
 
 private:
+    template <typename T>
+    static bool HasRequiredTypes(Entity *entity)
+    {
+        using Required = typename ComponentRegistrationMeta<T>::requiredTypes;
+        if constexpr (std::tuple_size_v<Required> == 0)
+        {
+            return true;
+        }
+        else
+        {
+            return HasRequiredTypesImpl<Required>(entity, std::make_index_sequence<std::tuple_size_v<Required>>{});
+        }
+    }
+
+    template <typename RequiredTuple, std::size_t... I>
+    static bool HasRequiredTypesImpl(Entity *entity, std::index_sequence<I...>)
+    {
+        return (entity->HasComponentOfType<std::tuple_element_t<I, RequiredTuple>>() && ...);
+    }
+
     std::unordered_map<std::string, ComponentDescriptor> descriptors;
     std::vector<std::string> insertionOrder;
 };
 
-#define REGISTER_SERIALIZABLE_COMPONENT(TYPE, ALLOWS_MULTIPLE)                              \
+#define REGISTER_SERIALIZABLE_COMPONENT(TYPE, ...)                                           \
     namespace                                                                                \
     {                                                                                        \
         inline const bool TYPE##_component_registered =                                     \
-            ComponentRegistry::get().Register<TYPE>(#TYPE, ALLOWS_MULTIPLE);                \
+            ComponentRegistry::get().Register<TYPE>(#TYPE);                                 \
     }
+
+#define DECLARE_COMPONENT_RULES(TYPE, ALLOW_MULTIPLE, ...)                                   \
+    template <>                                                                               \
+    struct ComponentRegistrationMeta<TYPE>                                                    \
+    {                                                                                         \
+        static constexpr bool allowMultiple = ALLOW_MULTIPLE;                                 \
+        using requiredTypes = std::tuple<__VA_ARGS__>;                                        \
+    };
+

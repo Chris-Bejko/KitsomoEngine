@@ -7,7 +7,8 @@
 #include "Transform.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(PolygonCollider, true)
+DECLARE_COMPONENT_RULES(PolygonCollider, true)
+REGISTER_SERIALIZABLE_COMPONENT(PolygonCollider)
 
 PolygonCollider::PolygonCollider()
 {

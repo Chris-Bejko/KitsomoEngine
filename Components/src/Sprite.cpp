@@ -8,7 +8,8 @@
 #include "GizmoSystem.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(Sprite, false)
+DECLARE_COMPONENT_RULES(Sprite, false)
+REGISTER_SERIALIZABLE_COMPONENT(Sprite)
 
 Sprite::Sprite(std::string textureId, int renderOrder, Color color)
 {

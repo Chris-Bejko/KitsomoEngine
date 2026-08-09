@@ -495,7 +495,7 @@ void Entity::AddComponentByName(const std::string &componentName)
 {
 	if (!ComponentRegistry::get().AddByName(this, componentName))
 	{
-		LOG_ERROR("Unknown component: ", componentName.c_str());
+		LOG_ERROR("Failed to add component (unknown type, duplicate single-instance, or unmet requirements): ", componentName.c_str());
 	}
 }
 

@@ -8,7 +8,8 @@
 #include "UIRect.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(UIButton, false)
+DECLARE_COMPONENT_RULES(UIButton, false)
+REGISTER_SERIALIZABLE_COMPONENT(UIButton)
 
 UIButton::UIButton()
 {

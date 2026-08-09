@@ -3,7 +3,8 @@
 #include "imgui.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(Canvas, false)
+DECLARE_COMPONENT_RULES(Canvas, false)
+REGISTER_SERIALIZABLE_COMPONENT(Canvas)
 
 bool Canvas::Init()
 {

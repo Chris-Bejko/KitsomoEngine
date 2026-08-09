@@ -6,7 +6,8 @@
 #include "Logger.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(UIRect, false)
+DECLARE_COMPONENT_RULES(UIRect, false)
+REGISTER_SERIALIZABLE_COMPONENT(UIRect)
 
 bool UIRect::Init()
 {

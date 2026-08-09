@@ -3,7 +3,8 @@
 #include "Logger.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(Rigidbody, false)
+DECLARE_COMPONENT_RULES(Rigidbody, false)
+REGISTER_SERIALIZABLE_COMPONENT(Rigidbody)
 
 Rigidbody::Rigidbody()
 {

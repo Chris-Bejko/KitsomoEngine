@@ -3,7 +3,8 @@
 #include "Entity.h"
 #include "ComponentRegistry.h"
 
-REGISTER_SERIALIZABLE_COMPONENT(Transform, false)
+DECLARE_COMPONENT_RULES(Transform, false)
+REGISTER_SERIALIZABLE_COMPONENT(Transform)
 
 Transform::Transform(float x, float y)
 {
