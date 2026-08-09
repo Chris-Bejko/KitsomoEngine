@@ -3,10 +3,6 @@
 #include "Logger.h"
 #include "Bullet.h"
 #include "BoxCollider.h"
-#include "ComponentRegistry.h"
-
-DECLARE_COMPONENT_RULES(FloorSquare, false)
-REGISTER_SERIALIZABLE_COMPONENT(FloorSquare)
 
 bool FloorSquare::Init()
 {

@@ -14,7 +14,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "47.333374|27.779968",
+          "anchorOffset": "-360.000000|-50.000000",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -23,8 +23,8 @@
       },
       {
         "fields": {
-          "position.x": 957.5086669921875,
-          "position.y": 507.0971984863281,
+          "position.x": 576.9537353515625,
+          "position.y": 434.4305725097656,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -114,7 +114,7 @@
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "a5f4ecdc-a993-4f7a-aac1-84c0db5f82f7",
+        "guid": "805bbd08-0cab-4f34-ae2a-0a32c0676bcc",
         "type": "Transform"
       }
     ],
@@ -151,7 +151,7 @@
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "7328081e-f048-4cb8-a7c0-14ea69c2fb00",
+        "guid": "d6a33bce-a6cf-4158-8869-7c6aca05e838",
         "type": "Transform"
       }
     ],
@@ -178,7 +178,7 @@
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "96f2654d-9e81-450d-873e-7a1d43e3938a",
+        "guid": "27ccecfd-0582-4752-8303-805fee05e241",
         "type": "Transform"
       }
     ],
@@ -208,8 +208,8 @@
       },
       {
         "fields": {
-          "Camera": "c318f141-2b23-4586-97e2-9f43420fc842|f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
-          "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|9b4469c3-bccf-484f-9d05-56a92005b598",
+          "Camera": "",
+          "Sprite": "",
           "bulletPrefab": "Bullet",
           "cooldown": 0.5,
           "floorTouchSound": "Audio/powerUp.wav",
@@ -251,7 +251,7 @@
           "scale.x": 0.05000000074505806,
           "scale.y": 0.05000000074505806
         },
-        "guid": "83e3d555-0e00-468f-bf73-7dada7ec8190",
+        "guid": "c35cc972-86a9-4749-ba2b-92a9e1c2ed5f",
         "type": "Transform"
       }
     ],
@@ -297,7 +297,7 @@
           "scale.x": 0.25,
           "scale.y": 0.25
         },
-        "guid": "9f62bd39-8a69-452d-aeaf-8bddef6c2b7b",
+        "guid": "517e628d-b0a4-4858-9cac-16ef7228021d",
         "type": "Transform"
       }
     ],
@@ -343,7 +343,7 @@
           "scale.x": 0.25,
           "scale.y": 0.25
         },
-        "guid": "c9a1cf46-0679-43c5-a680-fd8c96302624",
+        "guid": "720b48b7-64da-4d8a-ade7-cae208252e54",
         "type": "Transform"
       }
     ],
@@ -389,7 +389,7 @@
           "scale.x": 0.25,
           "scale.y": 0.25
         },
-        "guid": "18513d7a-d5c7-4ad6-b640-d3bda9009851",
+        "guid": "648c85a7-adc5-4476-994b-c60d993ce690",
         "type": "Transform"
       }
     ],
@@ -435,7 +435,7 @@
           "scale.x": 0.25,
           "scale.y": 0.25
         },
-        "guid": "28e5337d-7573-4e67-8580-0cdce495c76d",
+        "guid": "079e25eb-a44f-434c-857e-a3536d4568f9",
         "type": "Transform"
       }
     ],
@@ -867,17 +867,17 @@
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "1b373b78-9145-4ba3-9771-8c62f0606542",
+        "guid": "b0820aaa-af95-47f7-a580-053d01772745",
         "type": "Transform"
       },
       {
         "fields": null,
-        "guid": "f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
+        "guid": "00f5012f-9d0c-4e52-8363-a06118493f4f",
         "type": "Camera"
       }
     ],
-    "guid": "c318f141-2b23-4586-97e2-9f43420fc842",
-    "name": "Camera",
+    "guid": "79b27112-a01c-49b3-bab4-bb71a624abc4",
+    "name": "New Entity",
     "parent": ""
   }
 ]

@@ -1,7 +1,9 @@
 #include "Camera.h"
 #include "Engine.h"
-Camera* Camera::s_instance = nullptr;
+#include "ComponentRegistry.h"
 
+DECLARE_COMPONENT_RULES(Camera, false)
+REGISTER_SERIALIZABLE_COMPONENT(Camera)
 
 bool Camera::Init()
 {

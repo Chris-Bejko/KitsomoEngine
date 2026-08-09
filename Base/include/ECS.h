@@ -3,27 +3,32 @@
 #include <array>
 #include <bitset>
 #include <cstddef>
+#include <cstdint>
 
 class Component;
 
-using ComponentID = std::size_t;
+// ============================================================
+// Component IDs
+// ============================================================
 
-inline ComponentID getNewComponentTypeID()
-{
-    static ComponentID lastID = 0u;
-    return lastID++;
-}
+using ComponentID = std::uint32_t;
 
-template <typename T>
-inline ComponentID getComponentTypeID() noexcept
-{
-    static ComponentID typeID = getNewComponentTypeID();
-    return typeID;
-}
+constexpr ComponentID INVALID_COMPONENT_ID =
+    static_cast<ComponentID>(-1);
+
+
+// ============================================================
+// ECS limits
+// ============================================================
 
 constexpr std::size_t maxComponents = 128;
 
-struct ComponentList : std::array<Component *, maxComponents>
+
+// ============================================================
+// Component storage
+// ============================================================
+
+struct ComponentList : std::array<Component*, maxComponents>
 {
     ComponentList()
     {

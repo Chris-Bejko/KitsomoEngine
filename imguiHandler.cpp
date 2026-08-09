@@ -6,6 +6,7 @@
 #include "Commands/PasteEntityCommand.h"
 #include "Commands/DuplicateEntityCommand.h"
 #include "GizmoSystem.h"
+#include "HotReloading/ScriptCompiler.h"
 #include <filesystem>
 #include <algorithm>
 
@@ -72,16 +73,26 @@ void ImguiHandler::Update(sf::Time rest)
 {
 	if (Engine::get().IsLoading())
 		return;
-	ImGui::SFML::Update(Engine::get().GetWindow(), rest);
+	auto& engine = Engine::get();
+	auto& window = engine.GetWindow();
 
+	std::cout << "Engine: " << &engine << '\n';
+	std::cout << "Window: " << &window << '\n';
+
+	auto handle = window.getSystemHandle();
+
+	std::cout << "Handle: " << handle << '\n';
+
+	ImGui::SFML::Update(window, rest);
 	DrawToolbar();
 	DrawStatusWindow();
 	DrawConsole();
 	DrawInspector();
 	DrawEntities();
 	DrawProjectExplorer();
+	DrawProjectLoadWindow();
 
-	if (Engine::get().GetCurrentState() == EngineState::Running)
+	if (Engine::get().GetCurrentState() == EngineState::Running && SceneManager::get().HasProjectRoot())
 		DrawScenePanel();
 	if (savePressed)
 		DrawSaveDialog();
@@ -105,6 +116,28 @@ void ImguiHandler::Update(sf::Time rest)
 	}
 }
 
+
+void ImguiHandler::DrawScriptStatus()
+{
+    if (Engine::get().pendingRecompile)
+    {
+        ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f),
+                           "● Recompiling...");
+    }
+    else if (ScriptCompiler::lastCompileFailed)
+    {
+        ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f),
+                           "● Compile Error");
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("%s", ScriptCompiler::lastError.c_str());
+    }
+    else
+    {
+        ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f),
+                           "● Scripts OK");
+    }
+}
+
 void ImguiHandler::DrawToolbar()
 {
 	ImGui::SetNextWindowSize(ImVec2(0, 0), ImGuiCond_Always);
@@ -123,6 +156,19 @@ void ImguiHandler::DrawToolbar()
 	};
 
 	bool pressed = false;
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		if (stateButton(" Open", COLOR_ACCENT, pressed))
+			showOpenProjectDialog = true;
+		ImGui::SameLine();
+		if (stateButton("  New", COLOR_SUCCESS, pressed))
+			showNewProjectDialog = true;
+		ImGui::SameLine();
+		ImGui::TextColored(COLOR_WARNING, "No project loaded");
+		ImGui::End();
+		return;
+	}
+
 	switch (Engine::get().GetCurrentState())
 	{
 	case EngineState::Running:
@@ -190,6 +236,14 @@ void ImguiHandler::DrawToolbar()
 		GizmoSystem::get().snapEnabled = !GizmoSystem::get().snapEnabled;
 	if (snap)
 		ImGui::PopStyleColor();
+
+	ImGui::SameLine();
+	DrawScriptStatus();
+	ImGui::SameLine();
+	if (ImGui::Button("Reload Scripts", ImVec2(110, 28)))
+	{
+		Engine::get().RequestScriptRecompile();
+	}
 	ImGui::End();
 }
 
@@ -399,12 +453,25 @@ void ImguiHandler::OnReset()
 }
 void ImguiHandler::OnSave()
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		Notify("Load a project before saving", COLOR_WARNING);
+		return;
+	}
+
 	str = "saveFile.txt";
 	str.resize(255, '\0');
 	savePressed = true;
 }
 void ImguiHandler::OnLoad()
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		showOpenProjectDialog = true;
+		Notify("Select a project before loading scenes", COLOR_WARNING);
+		return;
+	}
+
 	str = "saveFile.txt";
 	str.resize(255, '\0');
 	loadPressed = true;
@@ -509,8 +576,54 @@ void ImguiHandler::DrawProjectExplorer()
 	if (ImGui::Button("New Project", ImVec2(100, 26)))
 		showNewProjectDialog = true;
 	ImGui::SameLine();
-	if (ImGui::Button("Refresh", ImVec2(90, 26)))
-		projectExplorerDirectory = std::filesystem::path();
+	if (ImGui::Button(SceneManager::get().HasProjectRoot() ? "Refresh" : "Open Project", ImVec2(90, 26)))
+	{
+		if (SceneManager::get().HasProjectRoot())
+			projectExplorerDirectory = std::filesystem::path();
+		else
+			showOpenProjectDialog = true;
+	}
+
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		ImGui::Separator();
+		ImGui::TextColored(COLOR_TEXT_DIM, "PROJECT ROOT");
+		ImGui::TextColored(COLOR_WARNING, "No project selected");
+		ImGui::Spacing();
+		ImGui::TextWrapped("Open or create a project to browse assets and scenes.");
+
+		if (showNewProjectDialog)
+		{
+			ImGui::OpenPopup("Create New Project");
+			showNewProjectDialog = false;
+		}
+
+		if (ImGui::BeginPopupModal("Create New Project", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			ImGui::Text("Choose a project name:");
+			char buffer[128] = {0};
+			std::strncpy(buffer, newProjectNameBuffer.c_str(), sizeof(buffer) - 1);
+			if (ImGui::InputText("##newProjectName", buffer, sizeof(buffer)))
+				newProjectNameBuffer = buffer;
+			if (ImGui::Button("Create", ImVec2(120, 0)))
+			{
+				if (SceneManager::get().CreateNewProject(newProjectNameBuffer))
+				{
+					projectExplorerDirectory = std::filesystem::path();
+					newProjectNameBuffer = "MyProject";
+					showOpenProjectDialog = false;
+					ImGui::CloseCurrentPopup();
+				}
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Cancel", ImVec2(120, 0)))
+				ImGui::CloseCurrentPopup();
+			ImGui::EndPopup();
+		}
+
+		ImGui::End();
+		return;
+	}
 
 	ImGui::Separator();
 	ImGui::TextColored(COLOR_TEXT_DIM, "PROJECT ROOT");
@@ -621,6 +734,9 @@ void ImguiHandler::DrawProjectExplorer()
 
 void ImguiHandler::DrawScenePanel()
 {
+	if (!SceneManager::get().HasProjectRoot())
+		return;
+
 	ImGui::Begin("Scenes");
 
 	// Current scene
@@ -722,6 +838,73 @@ void ImguiHandler::DrawScenePanel()
 		ImGui::PopStyleColor();
 
 		ImGui::End();
+	}
+
+	ImGui::End();
+}
+
+void ImguiHandler::DrawProjectLoadWindow()
+{
+	if (!showOpenProjectDialog && SceneManager::get().HasProjectRoot())
+		return;
+
+	ImGui::SetNextWindowSize(ImVec2(520, 0), ImGuiCond_FirstUseEver);
+	if (!ImGui::Begin("Open Project", &showOpenProjectDialog))
+	{
+		ImGui::End();
+		return;
+	}
+
+	ImGui::TextColored(COLOR_TEXT_DIM, "DISCOVERED PROJECTS");
+	ImGui::Separator();
+	auto projects = SceneManager::get().GetAvailableProjects();
+	if (projects.empty())
+	{
+		ImGui::TextColored(COLOR_TEXT_DIM, "No projects found under Projects/");
+	}
+	else
+	{
+		for (const auto& projectPath : projects)
+		{
+			std::string label = projectPath.filename().string();
+			if (ImGui::Button(label.c_str(), ImVec2(-1, 26)))
+			{
+				if (Engine::get().OpenProject(projectPath.string()))
+				{
+					projectExplorerDirectory.clear();
+					loadProjectPathError = false;
+					showOpenProjectDialog = false;
+				}
+			}
+		}
+	}
+
+	ImGui::Spacing();
+	ImGui::TextColored(COLOR_TEXT_DIM, "OPEN BY PATH");
+	ImGui::Separator();
+	ImGui::SetNextItemWidth(-1);
+	ImGui::InputText("##projectPath", &loadProjectPathBuffer[0], loadProjectPathBuffer.size() + 1);
+	if (loadProjectPathError)
+		ImGui::TextColored(COLOR_DANGER, "Project folder not found or invalid");
+
+	if (ImGui::Button("Open Path", ImVec2(-1, 28)))
+	{
+		std::string path = loadProjectPathBuffer.c_str();
+		if (Engine::get().OpenProject(path))
+		{
+			projectExplorerDirectory.clear();
+			loadProjectPathError = false;
+			showOpenProjectDialog = false;
+		}
+		else
+		{
+			loadProjectPathError = true;
+		}
+	}
+
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		ImGui::TextColored(COLOR_WARNING, "The editor is currently in no-project mode.");
 	}
 
 	ImGui::End();

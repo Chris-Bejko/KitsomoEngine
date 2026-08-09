@@ -20,7 +20,7 @@ public:
         return _sprite.getGlobalBounds().contains(mousePos);
     }
 
-    std::string textureId = "editor_entity"; // default editor icon
+    std::string textureId = "Assets/editor_entity"; // default editor icon
 
 private:
     sf::Sprite sprite;

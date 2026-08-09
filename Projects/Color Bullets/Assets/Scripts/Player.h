@@ -3,6 +3,8 @@
 #include "Camera.h"
 #include "Color.h"
 #include "SerializableScript.h"
+#include "Sprite.h"
+
 class Player : public SerializableScript
 {
 public:
@@ -45,7 +47,7 @@ private:
 	std::string bulletPrefab = "Bullet";
 	std::string shootSound = "Audio/explosion.wav";
 	std::string floorTouchSound = "Audio/powerUp.wav";
-
+	Sprite* sprite;
 	void Move(const Vector2F movement);
 	void LookAtMouse();
 	Vector2F currentVelocity = Vector2F(0, 0);

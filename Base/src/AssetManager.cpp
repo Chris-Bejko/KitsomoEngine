@@ -1,6 +1,5 @@
 #include "AssetManager.h"
 #include "Logger.h"
-AssetManager* AssetManager::s_instance = nullptr;
 
 AssetManager::AssetManager()
 {

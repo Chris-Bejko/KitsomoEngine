@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Color.h"
-#include "Sprite.h"
-#include "Collider.h"
 #include "SerializableScript.h"
+
+class Sprite;
+class Collider;
 
 class FloorSquare : public SerializableScript
 {

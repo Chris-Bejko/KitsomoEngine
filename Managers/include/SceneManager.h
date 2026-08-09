@@ -25,12 +25,16 @@ public:
     void SaveCurrentScene();
     void SaveSceneAs(const std::string& sceneName);
     bool CreateNewProject(const std::string& projectName, const std::string& baseDirectory = "Projects");
+    bool OpenProject(const std::string& path);
+    void ClearProjectRoot();
     void SetProjectRoot(const std::string& path);
     std::string GetProjectRoot() const;
     std::filesystem::path GetProjectRootPath() const;
     std::filesystem::path GetSceneDirectory() const;
     std::filesystem::path GetPrefabDirectory() const;
+    std::filesystem::path GetScriptsDirectory() const;
     std::filesystem::path ResolveProjectPath(const std::string& relativePath) const;
+    std::vector<std::filesystem::path> GetAvailableProjects(const std::string& baseDirectory = "Projects") const;
     bool HasProjectRoot() const;
 
     // DontDestroyOnLoad

@@ -12,6 +12,7 @@
 #include "Collision/Collider.h"
 #include "GUIDGenerator.h"
 #include "Logger.h"
+#include "ComponentTypeID.h"
 class Transform;
 class Collider;
 class SerializableComponent;
@@ -25,24 +26,49 @@ public:
 
 	virtual ~Entity() {}
 
-	template <typename T, typename... TArgs>
-	inline T &AddComponent(TArgs &&...args)
-	{
-		T *comp(new T(std::forward<TArgs>(args)...));
-		std::unique_ptr<Component> uptr{comp};
-		to_Add.emplace_back(std::move(uptr));
+template <typename T, typename... TArgs>
+inline T& AddComponent(TArgs&&... args)
+{
+    T* comp = new T(std::forward<TArgs>(args)...);
+    std::unique_ptr<Component> uptr{comp};
+    to_Add.emplace_back(std::move(uptr));
 
-		comp->entity = this;
-		comp->SetGUID(EngineGUID::Generate());
-		if (comp->Init())
-		{
-			componentsList[getComponentTypeID<T>()] = comp;
-			componentsBitset[getComponentTypeID<T>()] = true;
-			return *comp;
-		}
+    comp->entity = this;
+    comp->SetGUID(EngineGUID::Generate());
 
-		return *static_cast<T *>(nullptr);
-	}
+    if (comp->Init())
+    {
+        const ComponentID id = getComponentTypeID<T>();
+
+        LOG_INFO(
+            "Adding component type ID: ",
+            static_cast<int>(id)
+        );
+
+        if (id == INVALID_COMPONENT_ID)
+        {
+            LOG_ERROR("Component has no registered type ID!");
+            return *static_cast<T*>(nullptr);
+        }
+
+        if (id >= componentsList.size())
+        {
+            LOG_ERROR(
+                "Component ID exceeds component list size: ",
+                static_cast<int>(id)
+            );
+
+            return *static_cast<T*>(nullptr);
+        }
+
+        componentsList[id] = comp;
+        componentsBitset[id] = true;
+
+        return *comp;
+    }
+
+    return *static_cast<T*>(nullptr);
+}
 
 	template <typename T, typename... TArgs>
 	inline T &AddComponent(FromGUID guidTag, TArgs &&...args)
@@ -72,7 +98,14 @@ public:
 	template <typename T>
 	inline bool HasComponent() const
 	{
-		return componentsBitset[getComponentTypeID<T>()];
+		const ComponentID id = getComponentTypeID<T>();
+
+		if (id == INVALID_COMPONENT_ID)
+		{
+			return false;
+		}
+
+		return componentsBitset[id];
 	}
 	template <typename T>
 	inline bool HasComponent(const std::string &guid) const

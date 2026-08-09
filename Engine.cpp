@@ -12,6 +12,7 @@
 #include "Timedelta.h"
 #include "Logger.h"
 #include "GizmoSystem.h"
+#include "HotReloading/ProjectModuleLoader.h"
 #include "UI/UIEventSystem.h"
 #include "AssetManager.h"
 #include "GUIDGenerator.h"
@@ -19,8 +20,6 @@
 #include "PlayerPrefs.h"
 #include "SceneManager.h"
 using json = nlohmann::json;
-
-Engine *Engine::s_instance = nullptr;
 
 Engine::Engine()
 {
@@ -35,6 +34,11 @@ Engine::~Engine()
 {
 }
 
+Engine& Engine::get()   {
+	static Engine instance;
+	return instance;
+}
+
 void Engine::Quit()
 {
 	isRunning = false;
@@ -43,7 +47,6 @@ void Engine::Quit()
 void Engine::Init()
 {
 	this->window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML works!");
-	this->window = window;
 	window->setFramerateLimit(1000);
 	if (!ImGui::SFML::Init(GetWindow()))
 	{
@@ -71,8 +74,9 @@ void Engine::Init()
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
 	manager = new EntityManager();
+	projectModuleLoader = std::make_unique<ProjectModuleLoader>();
 	SceneManager::get().Init();
-	AssetManager::get().loadFont("dmPrison", "fonts/Domestic Prison.ttf");
+	AssetManager::get().loadFont("dmPrison", "Assets/fonts/Domestic Prison.ttf");
 	std::ofstream txtFile;
 	PlayerPrefs::get().Load();
 	RegisterComponents();
@@ -115,6 +119,7 @@ void Engine::Update()
 {
 	if (this->loading)
 		return;
+	ProcessHotReloading();
 	ProcessDestroyQueue();
 	bool checkBox;
 	switch (currentState)
@@ -325,6 +330,12 @@ size_t Engine::GetTotalEntities()
 
 void Engine::Save(const std::string &filename)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot save without a loaded project");
+		return;
+	}
+
 	std::filesystem::path path = SceneManager::get().ResolveProjectPath(filename);
 	std::filesystem::create_directories(path.parent_path());
 
@@ -411,6 +422,12 @@ void Engine::Save(const std::string &filename)
 
 bool Engine::Load(std::string fileName)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot load scene without a loaded project");
+		return false;
+	}
+
 	std::filesystem::path path = SceneManager::get().ResolveProjectPath(fileName);
 	LOG_INFO("Loading file: ", path.string().c_str());
 	if (fileName.empty())
@@ -433,6 +450,12 @@ bool Engine::Load(std::string fileName)
 
 bool Engine::LoadPrefab(std::string prefabName)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot load prefab without a loaded project");
+		return false;
+	}
+
 	std::filesystem::path path = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + prefabName + ".prefab");
 	LOG_INFO("Loading prefab: ", path.string().c_str());
 
@@ -453,6 +476,12 @@ bool Engine::LoadPrefab(std::string prefabName)
 
 Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot spawn prefab without a loaded project");
+		return nullptr;
+	}
+
 	std::filesystem::path path = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + prefabName + ".prefab");
 	auto entities = ParseFile(path.string());
 	if (entities.empty())
@@ -491,8 +520,108 @@ void Engine::RegisterComponents()
 	}
 }
 
+bool Engine::OpenProject(const std::string &projectPath)
+{
+	if (projectModuleLoader && projectModuleLoader->HasLoadedModule())
+	{
+		projectModuleLoader->StopWatching();
+		manager->DestroyAllEntities();
+		projectModuleLoader->UnloadProjectModule();
+		ComponentRegistry::get().UnregisterProjectComponents();
+		RegisterComponents();
+	}
+
+	if (!SceneManager::get().OpenProject(projectPath))
+	{
+		return false;
+	}
+
+	if (!projectModuleLoader->LoadProjectModule(SceneManager::get().GetProjectRootPath()))
+	{
+		return false;
+	}
+
+	RegisterComponents();
+	projectModuleLoader->StartWatching(SceneManager::get().GetScriptsDirectory());
+
+	auto availableScenes = SceneManager::get().GetAvailableScenes();
+	if (std::find(availableScenes.begin(), availableScenes.end(), "MainNew") != availableScenes.end())
+	{
+		SceneManager::get().LoadScene("MainNew", SceneLoadMode::Replace);
+	}
+	else if (!availableScenes.empty())
+	{
+		SceneManager::get().LoadScene(availableScenes.front(), SceneLoadMode::Replace);
+	}
+
+	return true;
+}
+
+bool Engine::ReloadProjectScripts()
+{
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		return false;
+	}
+
+	pendingRecompile = true;
+	const std::string activeScene = openProject;
+
+	if (!projectModuleLoader->RebuildProjectModule(SceneManager::get().GetProjectRootPath()))
+	{
+		pendingRecompile = false;
+		return false;
+	}
+
+	ImguiHandler::get().ClearInspector();
+	GizmoSystem::get().SetSelectedEntity(nullptr);
+	UIEventSystem::get().Clear();
+	manager->DestroyAllEntities();
+	RegisterComponents();
+
+	if (!activeScene.empty())
+	{
+		Load(activeScene);
+	}
+
+	pendingRecompile = false;
+	return true;
+}
+
+void Engine::RequestScriptRecompile()
+{
+	recompileRequested = true;
+}
+
+void Engine::ProcessHotReloading()
+{
+	if (!projectModuleLoader)
+	{
+		return;
+	}
+
+	if (projectModuleLoader->ConsumeReloadRequest())
+	{
+		recompileRequested = true;
+	}
+
+	if (!recompileRequested || currentState != EngineState::Running || loading)
+	{
+		return;
+	}
+
+	recompileRequested = false;
+	ReloadProjectScripts();
+}
+
 void Engine::SavePrefab(Entity *entity)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot save prefab without a loaded project");
+		return;
+	}
+
 	std::filesystem::create_directories(SceneManager::get().GetPrefabDirectory());
 
 	json root = json::array();

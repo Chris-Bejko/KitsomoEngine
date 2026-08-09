@@ -12,15 +12,7 @@ public:
     void AddSystem(System* system);
     void Update();
 
-    inline static SystemsManager& get()
-    {
-        if (s_instance == nullptr)
-        {
-            s_instance = new SystemsManager();
-        }
-
-        return *s_instance;
-    }
+    static SystemsManager& get();
 
 private:
     std::vector<std::unique_ptr<System>> systems;

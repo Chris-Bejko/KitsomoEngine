@@ -57,6 +57,8 @@ private:
     void DrawLoadDialog();
     void DrawScenePanel();
     void DrawProjectExplorer();
+    void DrawProjectLoadWindow();
+    void DrawScriptStatus();
 
     void OnPlay();
     void OnPause();
@@ -83,7 +85,10 @@ private:
     bool showDeleteDialog = false;
     Entity* entityToDelete = nullptr;
     bool showNewProjectDialog = false;
+    bool showOpenProjectDialog = true;
     std::string newProjectNameBuffer = "MyProject";
+    std::string loadProjectPathBuffer = "Projects";
+    bool loadProjectPathError = false;
     std::filesystem::path projectExplorerDirectory;
     
     // Keyboard state tracking for single-key-press detection

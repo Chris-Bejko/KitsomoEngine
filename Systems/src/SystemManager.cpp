@@ -16,3 +16,9 @@ void SystemsManager::Update()
         system->Update();
     }
 }
+
+SystemsManager& SystemsManager::get()
+{
+    static SystemsManager instance;
+    return instance;
+}
