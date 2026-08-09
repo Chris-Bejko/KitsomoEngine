@@ -1,8 +1,8 @@
 #pragma once
 #include "Command.h"
-#include "../Entity.h"
-#include "../Components/Transform.h"
-#include "../Vector2.h"
+#include "Entity.h"
+#include "Transform.h"
+#include "Vector2.h"
 
 class MoveEntityCommand : public Command
 {

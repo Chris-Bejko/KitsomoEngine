@@ -1,9 +1,9 @@
 #pragma once
 #include "Command.h"
-#include "../Entity.h"
-#include "../Engine.h"
-#include "../Vector2.h"
-#include "../Components/Transform.h"
+#include "Entity.h"
+#include "Engine.h"
+#include "Vector2.h"
+#include "Transform.h"
 class DuplicateEntityCommand : public Command
 {
 public:

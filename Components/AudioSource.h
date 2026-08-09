@@ -2,7 +2,7 @@
 #include <SFML/Audio.hpp>
 #include <memory>
 #include <string>
-#include "../SerializableScript.h"
+#include "SerializableScript.h"
 
 
 class AudioSource : public SerializableScript

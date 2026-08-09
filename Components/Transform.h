@@ -1,6 +1,6 @@
 #pragma once
-#include "../Vector2.h"
-#include "../SerializableScript.h"
+#include "Vector2.h"
+#include "SerializableScript.h"
 
 class Transform : public SerializableScript
 {

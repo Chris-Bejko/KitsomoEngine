@@ -1,6 +1,6 @@
 #pragma once
-#include "../Collision/Collider.h"
-#include "../Vector2.h"
+#include "Collider.h"
+#include "Vector2.h"
 #include <vector>
 
 class PolygonCollider : public Collider

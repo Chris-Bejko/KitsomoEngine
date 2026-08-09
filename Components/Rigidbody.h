@@ -1,7 +1,7 @@
 #pragma once
-#include "../Entity.h"
-#include "../Vector2.h"
-#include "../SerializableScript.h"
+#include "Entity.h"
+#include "Vector2.h"
+#include "SerializableScript.h"
 
 constexpr float GRAVITY = 10.0f;
 

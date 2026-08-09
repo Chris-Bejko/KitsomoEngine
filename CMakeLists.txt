@@ -9,13 +9,17 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_definitions(SFML_STATIC)
 add_compile_definitions(NOMINMAX WIN32_LEAN_AND_MEAN)
 
-# Source files in root
-file(GLOB SOURCES "*.cpp")
-file(GLOB COLLISION_SOURCES "Collision/*.cpp")
-file(GLOB UI_SOURCES "UI/*.cpp")
-
-# Components folder
-file(GLOB COMPONENTS_SOURCES "Components/*.cpp")
+# Source files
+file(GLOB ROOT_SOURCES CONFIGURE_DEPENDS "*.cpp")
+file(GLOB BASE_SOURCES CONFIGURE_DEPENDS "Base/src/*.cpp")
+file(GLOB MANAGER_SOURCES CONFIGURE_DEPENDS "Managers/src/*.cpp")
+file(GLOB SYSTEM_SOURCES CONFIGURE_DEPENDS "Systems/src/*.cpp")
+file(GLOB DATA_SOURCES CONFIGURE_DEPENDS "DataClasses/src/*.cpp")
+file(GLOB TOOL_SOURCES CONFIGURE_DEPENDS "Tools/src/*.cpp")
+file(GLOB COLLISION_SOURCES CONFIGURE_DEPENDS "Collision/*.cpp")
+file(GLOB UI_SOURCES CONFIGURE_DEPENDS "UI/*.cpp")
+file(GLOB COMPONENTS_SOURCES CONFIGURE_DEPENDS "Components/src/*.cpp")
+# file(GLOB PROJECT_SCRIPT_SOURCES CONFIGURE_DEPENDS "Projects/Color Bullets/Scripts/*.cpp")1
 
 # ImGui sources
 set(IMGUI_SOURCES
@@ -27,9 +31,15 @@ set(IMGUI_SOURCES
 )
 
 add_executable(ECSEngine
-    ${SOURCES}
+    ${ROOT_SOURCES}
+    ${BASE_SOURCES}
+    ${MANAGER_SOURCES}
+    ${SYSTEM_SOURCES}
+    ${DATA_SOURCES}
+    ${TOOL_SOURCES}
     ${COLLISION_SOURCES}
     ${COMPONENTS_SOURCES}
+    ${PROJECT_SCRIPT_SOURCES}
     ${UI_SOURCES}
     ${IMGUI_SOURCES}
 )
@@ -37,9 +47,17 @@ add_executable(ECSEngine
 # Includes
 target_include_directories(ECSEngine PRIVATE
     .
+    Base/include/
+    Managers/include/
+    Systems/include/
+    DataClasses/include/
+    Tools/include/
+    Components/
+    Projects/Color Bullets/Scripts/
     imgui/
     include/
-    Collision/  
+    Collision/
+    Commands/
     UI/
 )
 

@@ -1,8 +1,8 @@
 ﻿#include "CollisionSystem.h"
 #include <algorithm>
-#include "../Engine.h"
-#include "../Components/Rigidbody.h"
-#include "../Components/Transform.h"
+#include "Engine.h"
+#include "Rigidbody.h"
+#include "Transform.h"
 CollisionSystem *CollisionSystem::s_instance = nullptr;
 
 bool CollisionSystem::AABB(sf::FloatRect a, sf::FloatRect b)

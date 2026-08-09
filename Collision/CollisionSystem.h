@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "../System.h"
+#include "System.h"
 #include <string>
 #include "SFML/Graphics.hpp"
 #include <set>

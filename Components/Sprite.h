@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include "../AssetManager.h"
-#include "../Vector2.h"
+#include "AssetManager.h"
+#include "Vector2.h"
 #include "Transform.h"
-#include "../Color.h"
-#include "../SerializableScript.h"
+#include "Color.h"
+#include "SerializableScript.h"
 class Sprite : public SerializableScript
 {
 public:
