@@ -325,6 +325,12 @@ size_t Engine::GetTotalEntities()
 
 void Engine::Save(const std::string &filename)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot save without a loaded project");
+		return;
+	}
+
 	std::filesystem::path path = SceneManager::get().ResolveProjectPath(filename);
 	std::filesystem::create_directories(path.parent_path());
 
@@ -411,6 +417,12 @@ void Engine::Save(const std::string &filename)
 
 bool Engine::Load(std::string fileName)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot load scene without a loaded project");
+		return false;
+	}
+
 	std::filesystem::path path = SceneManager::get().ResolveProjectPath(fileName);
 	LOG_INFO("Loading file: ", path.string().c_str());
 	if (fileName.empty())
@@ -433,6 +445,12 @@ bool Engine::Load(std::string fileName)
 
 bool Engine::LoadPrefab(std::string prefabName)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot load prefab without a loaded project");
+		return false;
+	}
+
 	std::filesystem::path path = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + prefabName + ".prefab");
 	LOG_INFO("Loading prefab: ", path.string().c_str());
 
@@ -453,6 +471,12 @@ bool Engine::LoadPrefab(std::string prefabName)
 
 Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot spawn prefab without a loaded project");
+		return nullptr;
+	}
+
 	std::filesystem::path path = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + prefabName + ".prefab");
 	auto entities = ParseFile(path.string());
 	if (entities.empty())
@@ -493,6 +517,12 @@ void Engine::RegisterComponents()
 
 void Engine::SavePrefab(Entity *entity)
 {
+	if (!SceneManager::get().HasProjectRoot())
+	{
+		LOG_WARNING("Cannot save prefab without a loaded project");
+		return;
+	}
+
 	std::filesystem::create_directories(SceneManager::get().GetPrefabDirectory());
 
 	json root = json::array();
