@@ -15,6 +15,11 @@ sf::Texture AssetManager::getTexture(std::string id)
 	return textures[id];
 }
 
+AssetManager& AssetManager::get()
+{
+	static AssetManager instance;
+	return instance;
+}
 void AssetManager::loadTexture(std::string id, std::string path)
 {
 	if (textures.count(id) <= 0)
