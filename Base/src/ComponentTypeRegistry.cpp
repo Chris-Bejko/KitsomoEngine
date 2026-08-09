@@ -4,7 +4,6 @@ ComponentTypeRegistry&
 ComponentTypeRegistry::get()
 {
     static ComponentTypeRegistry instance;
-
     return instance;
 }
 
@@ -18,6 +17,11 @@ ComponentTypeRegistry::GetOrCreateID(
     if (it != nameToID.end())
     {
         return it->second;
+    }
+
+    if (nextID >= maxComponents)
+    {
+        return INVALID_COMPONENT_ID;
     }
 
     const ComponentID id = nextID++;

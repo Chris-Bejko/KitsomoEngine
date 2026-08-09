@@ -99,7 +99,6 @@ void Entity::Update(float dt)
 	ValidateAddedComponents();
 	for (auto &comp : components)
 	{
-		LOG_INFO(typeid(*comp).name());
 		comp->update(dt);
 	}
 }

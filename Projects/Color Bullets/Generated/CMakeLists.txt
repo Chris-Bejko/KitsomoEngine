@@ -23,6 +23,20 @@ add_library(GameScripts SHARED
     "${PROJECT_ROOT}/Assets/Scripts/GameManager.cpp"
     "${PROJECT_ROOT}/Assets/Scripts/Player.cpp"
 )
+
+if(NOT DEFINED BUILD_GENERATION)
+    set(BUILD_GENERATION 0)
+endif()
+
+set_target_properties(GameScripts PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"
+    LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"
+    ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"
+    PDB_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/PDB"
+    PDB_NAME_DEBUG "GameScripts_${BUILD_GENERATION}"
+    COMPILE_PDB_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/PDB"
+    COMPILE_PDB_NAME_DEBUG "GameScripts_${BUILD_GENERATION}"
+)
 set_target_properties(GameScripts PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"
     LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"
