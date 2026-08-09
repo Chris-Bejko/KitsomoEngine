@@ -18,6 +18,7 @@
 #include "GUIDGenerator.h"
 #include "ComponentRegistry.h"
 // #include "Components/BoxCollider.h"
+#include <typeinfo>
 
 Entity::Entity(std::string name, std::string guid)
 {
@@ -98,6 +99,7 @@ void Entity::Update(float dt)
 	ValidateAddedComponents();
 	for (auto &comp : components)
 	{
+		LOG_INFO(typeid(*comp).name());
 		comp->update(dt);
 	}
 }

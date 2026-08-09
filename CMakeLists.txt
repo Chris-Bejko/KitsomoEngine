@@ -16,10 +16,11 @@ file(GLOB MANAGER_SOURCES CONFIGURE_DEPENDS "Managers/src/*.cpp")
 file(GLOB SYSTEM_SOURCES CONFIGURE_DEPENDS "Systems/src/*.cpp")
 file(GLOB DATA_SOURCES CONFIGURE_DEPENDS "DataClasses/src/*.cpp")
 file(GLOB TOOL_SOURCES CONFIGURE_DEPENDS "Tools/src/*.cpp")
+file(GLOB HOT_RELOAD_SOURCES CONFIGURE_DEPENDS "HotReloading/*.cpp")
 file(GLOB COLLISION_SOURCES CONFIGURE_DEPENDS "Collision/*.cpp")
 file(GLOB UI_SOURCES CONFIGURE_DEPENDS "UI/*.cpp")
 file(GLOB COMPONENTS_SOURCES CONFIGURE_DEPENDS "Components/src/*.cpp")
-# file(GLOB PROJECT_SCRIPT_SOURCES CONFIGURE_DEPENDS "Projects/Color Bullets/Scripts/*.cpp")1
+list(REMOVE_ITEM ROOT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp")
 
 # ImGui sources
 set(IMGUI_SOURCES
@@ -30,22 +31,28 @@ set(IMGUI_SOURCES
     imgui/imgui-SFML.cpp
 )
 
-add_executable(ECSEngine
+add_library(ECSEngineCore SHARED
     ${ROOT_SOURCES}
     ${BASE_SOURCES}
     ${MANAGER_SOURCES}
     ${SYSTEM_SOURCES}
     ${DATA_SOURCES}
     ${TOOL_SOURCES}
+    ${HOT_RELOAD_SOURCES}
     ${COLLISION_SOURCES}
     ${COMPONENTS_SOURCES}
-    ${PROJECT_SCRIPT_SOURCES}
     ${UI_SOURCES}
     ${IMGUI_SOURCES}
 )
 
+set_target_properties(ECSEngineCore PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+add_executable(ECSEngine
+    main.cpp
+)
+
 # Includes
-target_include_directories(ECSEngine PRIVATE
+target_include_directories(ECSEngineCore PUBLIC
     .
     Base/include/
     Managers/include/
@@ -53,13 +60,14 @@ target_include_directories(ECSEngine PRIVATE
     DataClasses/include/
     Tools/include/
     Components/
-    Projects/Color Bullets/Scripts/
     imgui/
     include/
     Collision/
     Commands/
     UI/
 )
+
+target_include_directories(ECSEngine PRIVATE .)
 
 # SFML
 set(SFML_STATIC_LIBRARIES TRUE)
@@ -70,9 +78,9 @@ add_custom_command(TARGET ECSEngine POST_BUILD
     "${CMAKE_SOURCE_DIR}/bin/OpenAL32.dll"
     $<TARGET_FILE_DIR:ECSEngine>
 )
-target_link_directories(ECSEngine PRIVATE "${CMAKE_SOURCE_DIR}/lib")
+target_link_directories(ECSEngineCore PUBLIC "${CMAKE_SOURCE_DIR}/lib")
 
-target_link_libraries(ECSEngine PRIVATE
+target_link_libraries(ECSEngineCore PUBLIC
     sfml-graphics-s-d
     sfml-window-s-d
     sfml-system-s-d
@@ -88,3 +96,5 @@ target_link_libraries(ECSEngine PRIVATE
     ogg
     openal32
 )
+
+target_link_libraries(ECSEngine PRIVATE ECSEngineCore)

@@ -175,6 +175,11 @@ std::filesystem::path SceneManager::GetPrefabDirectory() const
     return ResolveProjectPath("Assets/Prefabs");
 }
 
+std::filesystem::path SceneManager::GetScriptsDirectory() const
+{
+    return ResolveProjectPath("Assets/Scripts");
+}
+
 std::filesystem::path SceneManager::ResolveProjectPath(const std::string& relativePath) const
 {
     if (!HasProjectRoot())

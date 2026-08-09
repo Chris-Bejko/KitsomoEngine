@@ -1,45 +1,81 @@
 #pragma once
 
+#include <algorithm>
 #include <functional>
 #include <string>
-#include <type_traits>
 #include <tuple>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 
+#include "ComponentTypeRegistry.h"
 #include "Entity.h"
 #include "GUIDGenerator.h"
 #include "SerializableScript.h"
 
+
 struct ComponentDescriptor
 {
+    ComponentID id = INVALID_COMPONENT_ID;
+
     std::string name;
+
     bool allowsMultiple = false;
-    std::function<bool(Entity *)> addDefault;
-    std::function<void(Entity *, ReadableSerializableVariableMap, std::string)> applySerialized;
+    bool isProjectComponent = false;
+
+    std::function<bool(Entity*)> addDefault;
+
+    std::function<void(
+        Entity*,
+        ReadableSerializableVariableMap,
+        std::string)> applySerialized;
 };
 
-template <typename T>
+
+using ComponentAddDefaultFn =
+    bool (*)(Entity*);
+
+using ComponentApplySerializedFn =
+    void (*)
+    (
+        Entity*,
+        const ReadableSerializableVariableMap&,
+        const char*
+    );
+
+
+template<typename T>
 struct ComponentRegistrationMeta
 {
     static constexpr bool allowMultiple = false;
+
     using requiredTypes = std::tuple<>;
 };
+
 
 class ComponentRegistry
 {
 public:
-    static ComponentRegistry &get()
+
+    static ComponentRegistry& get()
     {
         static ComponentRegistry instance;
         return instance;
     }
 
-    template <typename T>
-    bool Register(const std::string &name)
+
+    // ============================================================
+    // Engine component registration
+    // ============================================================
+
+    template<typename T>
+    bool Register(const std::string& name)
     {
-        static_assert(std::is_base_of<SerializableScript, T>::value, "Registered type must inherit from SerializableScript");
+        static_assert(
+            std::is_base_of<SerializableScript, T>::value,
+            "Registered type must inherit from SerializableScript"
+        );
 
         if (descriptors.count(name) > 0)
         {
@@ -47,74 +83,120 @@ public:
         }
 
         ComponentDescriptor descriptor;
+
+        // Get/create the GLOBAL engine-owned ID.
+        descriptor.id = ComponentTypeRegistry::get().RegisterType<T>(name);
+
         descriptor.name = name;
-        constexpr bool allowsMultiple = ComponentRegistrationMeta<T>::allowMultiple;
+
+        constexpr bool allowsMultiple =
+            ComponentRegistrationMeta<T>::allowMultiple;
+
         descriptor.allowsMultiple = allowsMultiple;
 
-        descriptor.addDefault = [allowsMultiple](Entity *entity)
-        {
-            if (entity == nullptr)
-            {
-                return false;
-            }
 
-            if (!HasRequiredTypes<T>(entity))
+        descriptor.addDefault =
+            [allowsMultiple](Entity* entity)
             {
-                return false;
-            }
-
-            if (!allowsMultiple && entity->HasComponent<T>())
-            {
-                return false;
-            }
-
-            entity->AddComponent<T>();
-            return true;
-        };
-
-        descriptor.applySerialized = [allowsMultiple](Entity *entity, ReadableSerializableVariableMap fields, std::string guid)
-        {
-            if (entity == nullptr)
-            {
-                return;
-            }
-
-            if (allowsMultiple)
-            {
-                if (!guid.empty() && entity->HasComponent<T>(guid))
+                if (entity == nullptr)
                 {
-                    entity->GetComponent<T>(guid).SetGUID(guid);
-                    entity->GetComponent<T>(guid).InitSerializedFields(fields);
+                    return false;
+                }
+
+                if (!HasRequiredTypes<T>(entity))
+                {
+                    return false;
+                }
+
+                if (!allowsMultiple &&
+                    entity->HasComponent<T>())
+                {
+                    return false;
+                }
+
+                entity->AddComponent<T>();
+
+                return entity->HasComponent<T>();
+            };
+
+
+        descriptor.applySerialized =
+            [allowsMultiple]
+            (
+                Entity* entity,
+                ReadableSerializableVariableMap fields,
+                std::string guid
+            )
+            {
+                if (entity == nullptr)
+                {
+                    return;
+                }
+
+                if (allowsMultiple)
+                {
+                    if (!guid.empty() &&
+                        entity->HasComponent<T>(guid))
+                    {
+                        entity
+                            ->GetComponent<T>(guid)
+                            .SetGUID(guid);
+
+                        entity
+                            ->GetComponent<T>(guid)
+                            .InitSerializedFields(fields);
+                    }
+                    else
+                    {
+                        entity
+                            ->AddComponent<T>(FromGUID(guid))
+                            .InitSerializedFields(fields);
+                    }
+
+                    return;
+                }
+
+
+                if (!entity->HasComponent<T>())
+                {
+                    entity
+                        ->AddComponent<T>(FromGUID(guid))
+                        .InitSerializedFields(fields);
                 }
                 else
                 {
-                    entity->AddComponent<T>(FromGUID(guid)).InitSerializedFields(fields);
-                }
-                return;
-            }
+                    if (!guid.empty())
+                    {
+                        entity
+                            ->GetComponent<T>()
+                            .SetGUID(guid);
+                    }
 
-            if (!entity->HasComponent<T>())
-            {
-                entity->AddComponent<T>(FromGUID(guid)).InitSerializedFields(fields);
-            }
-            else
-            {
-                if (!guid.empty())
-                {
-                    entity->GetComponent<T>().SetGUID(guid);
+                    entity
+                        ->GetComponent<T>()
+                        .InitSerializedFields(fields);
                 }
-                entity->GetComponent<T>().InitSerializedFields(fields);
-            }
-        };
+            };
+
 
         descriptors[name] = std::move(descriptor);
+
         insertionOrder.push_back(name);
+
         return true;
     }
 
-    bool AddByName(Entity *entity, const std::string &name) const
+
+    // ============================================================
+    // Add component by registered name
+    // ============================================================
+
+    bool AddByName(
+        Entity* entity,
+        const std::string& name) const
     {
         auto it = descriptors.find(name);
+
         if (it == descriptors.end())
         {
             return false;
@@ -123,63 +205,259 @@ public:
         return it->second.addDefault(entity);
     }
 
-    bool IsMultiInstance(const std::string &name) const
+
+    // ============================================================
+    // Multi-instance
+    // ============================================================
+
+    bool IsMultiInstance(
+        const std::string& name) const
     {
         auto it = descriptors.find(name);
+
         if (it == descriptors.end())
         {
             return false;
         }
+
         return it->second.allowsMultiple;
     }
 
-    const std::unordered_map<std::string, ComponentDescriptor> &GetAll() const
+
+    // ============================================================
+    // Get descriptors
+    // ============================================================
+
+    const std::unordered_map<
+        std::string,
+        ComponentDescriptor>&
+        GetAll() const
     {
         return descriptors;
     }
+
+
+    // ============================================================
+    // PROJECT DLL REGISTRATION
+    // ============================================================
+
+    bool RegisterExternal(
+        const std::string& name,
+        bool allowsMultiple,
+        ComponentAddDefaultFn addDefault,
+        ComponentApplySerializedFn applySerialized,
+        bool isProjectComponent)
+    {
+        if (name.empty() ||
+            addDefault == nullptr ||
+            applySerialized == nullptr)
+        {
+            return false;
+        }
+
+        if (descriptors.count(name) > 0)
+        {
+            return false;
+        }
+
+
+        ComponentDescriptor descriptor;
+
+        // IMPORTANT:
+        // This gets the SAME ID if this component was
+        // registered during an earlier hot reload.
+        descriptor.id =
+            ComponentTypeRegistry::get()
+                .GetOrCreateID(name);
+
+        descriptor.name = name;
+
+        descriptor.allowsMultiple =
+            allowsMultiple;
+
+        descriptor.isProjectComponent =
+            isProjectComponent;
+
+
+        descriptor.addDefault =
+            [addDefault](Entity* entity)
+            {
+                return addDefault(entity);
+            };
+
+
+        descriptor.applySerialized =
+            [applySerialized]
+            (
+                Entity* entity,
+                ReadableSerializableVariableMap fields,
+                std::string guid
+            )
+            {
+                applySerialized(
+                    entity,
+                    fields,
+                    guid.c_str()
+                );
+            };
+
+
+        descriptors[name] =
+            std::move(descriptor);
+
+        insertionOrder.push_back(name);
+
+        return true;
+    }
+
+
+    // ============================================================
+    // Associate project C++ type with its registered ID
+    // ============================================================
+
+    template<typename T>
+    void AssociateProjectType(
+        const std::string& name)
+    {
+        const ComponentID id =
+            ComponentTypeRegistry::get()
+                .GetID(name);
+
+        if (id == INVALID_COMPONENT_ID)
+        {
+            return;
+        }
+
+        ComponentTypeRegistry::get()
+            .AssociateType<T>(id);
+    }
+
+
+    // ============================================================
+    // Remove descriptor
+    // ============================================================
+
+    void Unregister(
+        const std::string& name)
+    {
+        descriptors.erase(name);
+
+        insertionOrder.erase(
+            std::remove(
+                insertionOrder.begin(),
+                insertionOrder.end(),
+                name
+            ),
+            insertionOrder.end()
+        );
+    }
+
+
+    // ============================================================
+    // Remove project descriptors
+    // ============================================================
+
+    void UnregisterProjectComponents()
+    {
+        std::vector<std::string> namesToRemove;
+
+        for (const auto& entry : descriptors)
+        {
+            if (entry.second.isProjectComponent)
+            {
+                namesToRemove.push_back(
+                    entry.first
+                );
+            }
+        }
+
+        for (const auto& name : namesToRemove)
+        {
+            Unregister(name);
+        }
+    }
+
+
+    // ============================================================
+    // Names
+    // ============================================================
 
     std::vector<std::string> GetNames() const
     {
         return insertionOrder;
     }
 
+
 private:
-    template <typename T>
-    static bool HasRequiredTypes(Entity *entity)
+
+    template<typename T>
+    static bool HasRequiredTypes(Entity* entity)
     {
-        using Required = typename ComponentRegistrationMeta<T>::requiredTypes;
+        using Required =
+            typename ComponentRegistrationMeta<T>::requiredTypes;
+
         if constexpr (std::tuple_size_v<Required> == 0)
         {
             return true;
         }
         else
         {
-            return HasRequiredTypesImpl<Required>(entity, std::make_index_sequence<std::tuple_size_v<Required>>{});
+            return HasRequiredTypesImpl<Required>(
+                entity,
+                std::make_index_sequence<
+                    std::tuple_size_v<Required>
+                >{}
+            );
         }
     }
 
-    template <typename RequiredTuple, std::size_t... I>
-    static bool HasRequiredTypesImpl(Entity *entity, std::index_sequence<I...>)
+
+    template<
+        typename RequiredTuple,
+        std::size_t... I>
+    static bool HasRequiredTypesImpl(
+        Entity* entity,
+        std::index_sequence<I...>)
     {
-        return (entity->HasComponentOfType<std::tuple_element_t<I, RequiredTuple>>() && ...);
+        return
+        (
+            entity->HasComponentOfType<
+                std::tuple_element_t<
+                    I,
+                    RequiredTuple
+                >
+            >()
+            && ...
+        );
     }
 
-    std::unordered_map<std::string, ComponentDescriptor> descriptors;
+
+    std::unordered_map<
+        std::string,
+        ComponentDescriptor> descriptors;
+
     std::vector<std::string> insertionOrder;
 };
 
-#define REGISTER_SERIALIZABLE_COMPONENT(TYPE, ...)                                           \
-    namespace                                                                                \
-    {                                                                                        \
-        inline const bool TYPE##_component_registered =                                     \
-            ComponentRegistry::get().Register<TYPE>(#TYPE);                                 \
-    }
+#ifdef ECS_PROJECT_MODULE_BUILD
 
-#define DECLARE_COMPONENT_RULES(TYPE, ALLOW_MULTIPLE, ...)                                   \
-    template <>                                                                               \
-    struct ComponentRegistrationMeta<TYPE>                                                    \
-    {                                                                                         \
-        static constexpr bool allowMultiple = ALLOW_MULTIPLE;                                 \
-        using requiredTypes = std::tuple<__VA_ARGS__>;                                        \
-    };
+#define REGISTER_SERIALIZABLE_COMPONENT(TYPE, ...)
 
+#else
+
+#define REGISTER_SERIALIZABLE_COMPONENT(TYPE, ...)          \
+namespace                                                   \
+{                                                           \
+    inline const bool TYPE##_component_registered =         \
+        ComponentRegistry::get().Register<TYPE>(#TYPE);     \
+}
+
+#endif
+
+#define DECLARE_COMPONENT_RULES(TYPE, ALLOW_MULTIPLE, ...)  \
+template <>                                                 \
+struct ComponentRegistrationMeta<TYPE>                     \
+{                                                           \
+    static constexpr bool allowMultiple = ALLOW_MULTIPLE;  \
+    using requiredTypes = std::tuple<__VA_ARGS__>;          \
+};

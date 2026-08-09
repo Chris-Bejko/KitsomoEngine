@@ -3,7 +3,10 @@
 #include "InputSystem.h"
 #include <SFML/Graphics.hpp>
 #include <functional>
+#include <memory>
 #include "Vector2.h"
+
+class ProjectModuleLoader;
 
 using ComponentFactory = std::function<void(Entity *, ReadableSerializableVariableMap, std::string)>;
 
@@ -20,6 +23,7 @@ class Engine
 {
 public:
     bool isEngine;
+    bool pendingRecompile = false;
 
     Engine();
     ~Engine();
@@ -46,16 +50,8 @@ public:
 
     void RemoveEntity(Entity *entity);
 
-    inline static Engine &get()
-    {
-        if (s_instance == nullptr)
-        {
-            s_instance = new Engine();
-        }
-
-        return *s_instance;
-    }
-
+    static Engine &get();
+    
     EngineState GetCurrentState();
 
     void SetEngineState(EngineState engineState);
@@ -94,8 +90,13 @@ public:
     void QueueDestroyChildren(Entity *e);
 
     void QueueDestroy(const std::string& guid);
+    bool OpenProject(const std::string &projectPath);
+    bool ReloadProjectScripts();
+    void RequestScriptRecompile();
 
 private:
+    void ProcessHotReloading();
+
     bool editorDragging = false;
     std::string openProject = "";
     sf::Vector2f editorDragStart;
@@ -104,7 +105,6 @@ private:
     EntityManager *manager;
     bool isRunning;
     sf::RenderWindow *window;
-    static Engine *s_instance;
     InputSystem *inputSystem;
     sf::Clock deltaClock;
     float dt = 1.f;
@@ -118,4 +118,6 @@ private:
     std::unordered_map<std::string, ComponentFactory> componentRegistry;
     bool loading = false;
     bool isGameOver = false;
+    bool recompileRequested = false;
+    std::unique_ptr<ProjectModuleLoader> projectModuleLoader;
 };

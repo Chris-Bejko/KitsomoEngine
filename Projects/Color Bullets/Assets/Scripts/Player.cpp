@@ -6,10 +6,6 @@
 #include "AudioSource.h"
 #include "Timedelta.h"
 #include "Logger.h"
-#include "ComponentRegistry.h"
-
-DECLARE_COMPONENT_RULES(Player, false)
-REGISTER_SERIALIZABLE_COMPONENT(Player)
 
 Player::Player()
 {
@@ -29,10 +25,10 @@ bool Player::Init()
 
 	LOG_INFO("Player Inititalized");
 	AssetManager::get().loadTexture("triangle", "triangle.png");
-	if (!entity->HasComponent<Sprite>())
-	{
-		entity->AddComponent<Sprite>("triangle", 2, Color(ColorEnum::Red));
-	}
+	// if (!entity->HasComponent<Sprite>())
+	// {
+	// 	entity->AddComponent<Sprite>("triangle", 2, Color(ColorEnum::Red));
+	// }
 	entity->transform->scale = Vector2F(0.05f, 0.05f);
 	LOG_DEBUG("Player initialized with position: ", entity->transform->position.x, ", ", entity->transform->position.y, "and scale: ", entity->transform->scale.x, ", ", entity->transform->scale.y);
 	Field("lastColorString", lastColorString);
@@ -41,12 +37,14 @@ bool Player::Init()
 	Field("cooldown", cooldown);
 	Field("shootSound", shootSound);
 	Field("floorTouchSound", floorTouchSound);
+	Field("Sprite", sprite);
+	Field("Camera", camera);
 	return true;
 }
 
 void Player::Awake()
 {
-	// entity->transform->position = initPos;
+	entity->transform->position = initPos;
 	Entity *camera = new Entity("Camera");
 	this->camera = &camera->AddComponent<Camera>();
 	Engine::get().Spawn(camera);
@@ -61,25 +59,16 @@ void Player::Awake()
 
 void Player::updateEngine(float dt)
 {
+	LOG_INFO("HOT RELOAD WORKING");
 	lastColor.SetColor(lastColorString);
 }
 
 void Player::update(float dt)
 {
-
 	camera->Follow(sf::Vector2f(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y));
-	// lastColor.SetColor(lastColorString);
 	SetSpawnPointPosition();
 	spawnPoint->rotation = entity->transform->rotation;
 	timer += dt;
-	// if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	//{
-	//	LOG_DEBUG("Mouse clicked! timer = ", timer, " cooldown = ", cooldown);
-	//	if (timer >= cooldown)
-	//		LOG_DEBUG("Spawning bullet!");
-	//	else
-	//		LOG_DEBUG("Timer not ready: ", timer, "/", cooldown);
-	// }
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && timer >= cooldown)
 	{
 		timer = 0;
@@ -173,16 +162,11 @@ void Player::OnTriggerEnter(Collider &other)
 
 void Player::OnTriggerExit(Collider &other)
 {
-	// Color color(ColorEnum::Red);
-	// entity->GetComponent<Sprite>().SetColor(color);
 }
 
 Vector2F Player::GetMouseVector()
 {
-	// sf::Vector2f currmouse(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
 	auto mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
-	// auto mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
-	// auto mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
 	auto origin = sf::Vector2f(entity->transform->position.x, entity->transform->position.y);
 	auto aimDirNorm = atan2(mousePos.y - origin.y, mousePos.x - origin.x);
 	auto finall = Vector2F(cos(aimDirNorm) * 1.f, sin(aimDirNorm) * 1.0f);
@@ -197,11 +181,7 @@ void Player::Move(const Vector2F movement)
 void Player::LookAtMouse()
 {
 	sf::Vector2f currmouse(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
-	// mousePos = sf::Mouse::getPosition(Engine::get().GetWindow());
 	mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
-	// sf::Vector2f testPos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition());
-	// std::cout << "test: " << testPos.x << "," << testPos.y << std::endl;
-	// std::cout << "mouse: " << mousePos.x << "," << mousePos.y << std::endl;
 	auto mouseAngle = -atan2(mousePos.x - entity->transform->position.x, mousePos.y - entity->transform->position.y) * 180 / 3.14159;
 
 	entity->transform->LookAt(mouseAngle + 180);

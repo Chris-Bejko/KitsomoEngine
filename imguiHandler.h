@@ -58,6 +58,7 @@ private:
     void DrawScenePanel();
     void DrawProjectExplorer();
     void DrawProjectLoadWindow();
+    void DrawScriptStatus();
 
     void OnPlay();
     void OnPause();

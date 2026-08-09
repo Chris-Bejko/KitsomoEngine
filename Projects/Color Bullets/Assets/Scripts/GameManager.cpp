@@ -2,9 +2,6 @@
 #include "Entity.h"
 #include "ComponentRegistry.h"
 
-DECLARE_COMPONENT_RULES(GameManager, false)
-REGISTER_SERIALIZABLE_COMPONENT(GameManager)
-
 void GameManager::SetGameState(int _gameState)
 {
     gameState = _gameState;

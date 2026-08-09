@@ -20,16 +20,11 @@ public:
     void clean();
     inline static AssetManager& get()
     {
-        if (s_instance == nullptr)
-        {
-            s_instance = new AssetManager();
-        }
-
-        return *s_instance;
+        static AssetManager instance;
+        return instance;
     }
 
 private:
-    static AssetManager* s_instance;
     std::map<std::string, sf::Font> fonts;
     std::map<std::string, sf::Texture> textures;
 

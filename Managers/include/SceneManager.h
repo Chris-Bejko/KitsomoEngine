@@ -32,6 +32,7 @@ public:
     std::filesystem::path GetProjectRootPath() const;
     std::filesystem::path GetSceneDirectory() const;
     std::filesystem::path GetPrefabDirectory() const;
+    std::filesystem::path GetScriptsDirectory() const;
     std::filesystem::path ResolveProjectPath(const std::string& relativePath) const;
     std::vector<std::filesystem::path> GetAvailableProjects(const std::string& baseDirectory = "Projects") const;
     bool HasProjectRoot() const;

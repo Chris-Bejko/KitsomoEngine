@@ -6,6 +6,7 @@
 #include "Commands/PasteEntityCommand.h"
 #include "Commands/DuplicateEntityCommand.h"
 #include "GizmoSystem.h"
+#include "HotReloading/ScriptCompiler.h"
 #include <filesystem>
 #include <algorithm>
 
@@ -72,8 +73,17 @@ void ImguiHandler::Update(sf::Time rest)
 {
 	if (Engine::get().IsLoading())
 		return;
-	ImGui::SFML::Update(Engine::get().GetWindow(), rest);
+	auto& engine = Engine::get();
+	auto& window = engine.GetWindow();
 
+	std::cout << "Engine: " << &engine << '\n';
+	std::cout << "Window: " << &window << '\n';
+
+	auto handle = window.getSystemHandle();
+
+	std::cout << "Handle: " << handle << '\n';
+
+	ImGui::SFML::Update(window, rest);
 	DrawToolbar();
 	DrawStatusWindow();
 	DrawConsole();
@@ -104,6 +114,28 @@ void ImguiHandler::Update(sf::Time rest)
 	{
 		HandleEntityKeyboardShortcuts();
 	}
+}
+
+
+void ImguiHandler::DrawScriptStatus()
+{
+    if (Engine::get().pendingRecompile)
+    {
+        ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f),
+                           "● Recompiling...");
+    }
+    else if (ScriptCompiler::lastCompileFailed)
+    {
+        ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f),
+                           "● Compile Error");
+        if (ImGui::IsItemHovered())
+            ImGui::SetTooltip("%s", ScriptCompiler::lastError.c_str());
+    }
+    else
+    {
+        ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f),
+                           "● Scripts OK");
+    }
 }
 
 void ImguiHandler::DrawToolbar()
@@ -204,6 +236,14 @@ void ImguiHandler::DrawToolbar()
 		GizmoSystem::get().snapEnabled = !GizmoSystem::get().snapEnabled;
 	if (snap)
 		ImGui::PopStyleColor();
+
+	ImGui::SameLine();
+	DrawScriptStatus();
+	ImGui::SameLine();
+	if (ImGui::Button("Reload Scripts", ImVec2(110, 28)))
+	{
+		Engine::get().RequestScriptRecompile();
+	}
 	ImGui::End();
 }
 
@@ -829,7 +869,7 @@ void ImguiHandler::DrawProjectLoadWindow()
 			std::string label = projectPath.filename().string();
 			if (ImGui::Button(label.c_str(), ImVec2(-1, 26)))
 			{
-				if (SceneManager::get().OpenProject(projectPath.string()))
+				if (Engine::get().OpenProject(projectPath.string()))
 				{
 					projectExplorerDirectory.clear();
 					loadProjectPathError = false;
@@ -850,7 +890,7 @@ void ImguiHandler::DrawProjectLoadWindow()
 	if (ImGui::Button("Open Path", ImVec2(-1, 28)))
 	{
 		std::string path = loadProjectPathBuffer.c_str();
-		if (SceneManager::get().OpenProject(path))
+		if (Engine::get().OpenProject(path))
 		{
 			projectExplorerDirectory.clear();
 			loadProjectPathError = false;

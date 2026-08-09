@@ -1,0 +1,52 @@
+
+============================================================
+Generating component registry...
+============================================================
+COMMAND:
+python "C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine/Tools/GenerateRegistry.py" "C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets" "C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine"
+
+OUTPUT:
+Generated project module files for 6 scripts in C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets
+
+EXIT CODE: 0
+
+============================================================
+Configuring script module...
+============================================================
+COMMAND:
+cmake -S "C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\Generated" -B "C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build" -DENGINE_ROOT="C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine" -DPROJECT_ROOT="C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets"
+
+OUTPUT:
+-- Selecting Windows SDK version 10.0.22000.0 to target Windows 10.0.26200.
+-- Found SFML 2.6.1 in C:/Users/kitso/Documents/CPP Game/CPP PRoject/ECSEngine/lib/cmake/SFML
+-- Configuring done
+-- Generating done
+-- Build files have been written to: C:/Users/kitso/Documents/CPP Game/CPP PRoject/ECSEngine/Projects/Color Bullets/build
+
+EXIT CODE: 0
+
+============================================================
+Compiling scripts...
+============================================================
+COMMAND:
+cmake --build "C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build" --target GameScripts --config Debug
+
+OUTPUT:
+MSBuild version 17.5.1+f6fdcf537 for .NET Framework
+
+  Player.cpp
+  RegisterProjectComponents.cpp
+  Generating Code...
+sfml-graphics-s-d.lib(Font.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Font.obj)' or at ''; linking object as if no debug info [C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build\GameScripts.vcxproj]
+sfml-graphics-s-d.lib(RenderTarget.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(RenderTarget.obj)' or at ''; linking object as if no debug info [C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build\GameScripts.vcxproj]
+sfml-graphics-s-d.lib(Texture.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Texture.obj)' or at ''; linking object as if no debug info [C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build\GameScripts.vcxproj]
+sfml-graphics-s-d.lib(Transform.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(Transform.obj)' or at ''; linking object as if no debug info [C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build\GameScripts.vcxproj]
+sfml-graphics-s-d.lib(View.obj) : warning LNK4099: PDB '' was not found with 'sfml-graphics-s-d.lib(View.obj)' or at ''; linking object as if no debug info [C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build\GameScripts.vcxproj]
+sfml-window-s-d.lib(WindowImplWin32.obj) : warning LNK4099: PDB '' was not found with 'sfml-window-s-d.lib(WindowImplWin32.obj)' or at ''; linking object as if no debug info [C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build\GameScripts.vcxproj]
+  GameScripts.vcxproj -> C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\build\Debug\GameScripts.dll
+
+EXIT CODE: 0
+
+============================================================
+BUILD SUCCESSFUL
+============================================================
