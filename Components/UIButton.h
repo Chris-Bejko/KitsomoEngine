@@ -2,7 +2,7 @@
 #include <functional>
 #include <vector>
 #include <SFML/Graphics.hpp>
-#include "../SerializableScript.h"
+#include "SerializableScript.h"
 
 class UIButton : public SerializableScript
 {

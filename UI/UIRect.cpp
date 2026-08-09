@@ -1,9 +1,12 @@
 #include "UIRect.h"
-#include "../Components/Canvas.h"
-#include "../Engine.h"
-#include "../Components/Transform.h"
-#include "../GizmoSystem.h"
+#include "Canvas.h"
+#include "Engine.h"
+#include "Transform.h"
+#include "GizmoSystem.h"
 #include "Logger.h"
+#include "ComponentRegistry.h"
+
+REGISTER_SERIALIZABLE_COMPONENT(UIRect, false)
 
 bool UIRect::Init()
 {

@@ -1,7 +1,7 @@
 #pragma once
-#include "../SerializableScript.h"
+#include "SerializableScript.h"
 #include <SFML/Graphics.hpp>
-#include "../Vector2.h"
+#include "Vector2.h"
 enum class AnchorPreset
 {
     TopLeft,

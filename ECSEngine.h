@@ -1,9 +1,0 @@
-#pragma once
-#include "Engine.h"
-#include "ECS.h"
-#include "EntityManager.h"
-#include "Component.h"
-#include "Components/Transform.h"
-#include "Components/Rigidbody.h"
-#include "Components/Sprite.h"
-#include "Components/BoxCollider2D.h"

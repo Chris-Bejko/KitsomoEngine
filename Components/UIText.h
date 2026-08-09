@@ -1,6 +1,6 @@
 #pragma once
-#include "../SerializableScript.h"
-#include "../Vector2.h"
+#include "SerializableScript.h"
+#include "Vector2.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 

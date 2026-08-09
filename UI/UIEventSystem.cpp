@@ -1,8 +1,8 @@
 #include "UIEventSystem.h"
-#include "../Components/UIButton.h"
-#include "../Components/Canvas.h"
-#include "../Engine.h"
-#include "../UI/UIRect.h"
+#include "UIButton.h"
+#include "Canvas.h"
+#include "Engine.h"
+#include "UIRect.h"
 
 void UIEventSystem::Register(UIButton *button)
 {

@@ -1,9 +1,9 @@
 #pragma once
-#include "../Component.h"
-#include "../Serialization.h"
+#include "Component.h"
+#include "Serialization.h"
 #include "SFML/Graphics.hpp"
 #include <string>
-#include "../SerializableScript.h"
+#include "SerializableScript.h"
 
 enum class ColliderType
 {

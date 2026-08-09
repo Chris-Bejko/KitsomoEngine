@@ -2,9 +2,9 @@
 
 #include <string>
 #include <vector>
-#include "../Component.h"
+#include "Component.h"
 #include <SFML/Graphics.hpp>
-#include "../Collision/Collider.h"
+#include "Collider.h"
 
 class BoxCollider : public Collider
 {

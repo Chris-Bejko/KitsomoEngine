@@ -1,7 +1,7 @@
 #pragma once
 #include "Command.h"
 #include "EntityClipboard.h"
-#include "../Entity.h"
+#include "Entity.h"
 
 class CopyEntityCommand : public Command
 {

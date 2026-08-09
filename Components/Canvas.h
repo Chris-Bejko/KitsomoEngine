@@ -1,6 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../SerializableScript.h"
+#include "SerializableScript.h"
 
 enum class CanvasRenderMode
 {
