@@ -294,6 +294,11 @@ void Engine::TriggerDragging(std::string newDragged)
 	draggedEntity = newDragged;
 }
 
+void Engine::PrepareForProjectModuleUnload()
+{
+	// Unload the project module to prepare for recompilation
+	manager->ClearAllEntities();
+}
 void Engine::ClearInpsector()
 {
 	manager->ClearInspector();

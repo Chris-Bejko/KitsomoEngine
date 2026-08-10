@@ -18,11 +18,7 @@ public:
     void loadFont(const std::string& id, const std::string& path);
 
     void clean();
-    inline static AssetManager& get()
-    {
-        static AssetManager instance;
-        return instance;
-    }
+    static AssetManager& get();
 
 private:
     std::map<std::string, sf::Font> fonts;
