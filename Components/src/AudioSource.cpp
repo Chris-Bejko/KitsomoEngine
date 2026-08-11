@@ -5,6 +5,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(AudioSource, false)
+REGISTER_COMPONENT(AudioSource)
 REGISTER_SERIALIZABLE_COMPONENT(AudioSource)
 
 AudioSource::AudioSource()

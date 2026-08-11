@@ -8,6 +8,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(PolygonCollider, true)
+REGISTER_COMPONENT(PolygonCollider)
 REGISTER_SERIALIZABLE_COMPONENT(PolygonCollider)
 
 PolygonCollider::PolygonCollider()

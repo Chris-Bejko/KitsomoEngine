@@ -4,6 +4,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(Rigidbody, false)
+REGISTER_COMPONENT(Rigidbody)
 REGISTER_SERIALIZABLE_COMPONENT(Rigidbody)
 
 Rigidbody::Rigidbody()

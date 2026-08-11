@@ -4,6 +4,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(Transform, false)
+REGISTER_COMPONENT(Transform)
 REGISTER_SERIALIZABLE_COMPONENT(Transform)
 
 Transform::Transform(float x, float y)

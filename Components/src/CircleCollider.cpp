@@ -5,6 +5,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(CircleCollider, true)
+REGISTER_COMPONENT(CircleCollider)
 REGISTER_SERIALIZABLE_COMPONENT(CircleCollider)
 
 CircleCollider::CircleCollider()
