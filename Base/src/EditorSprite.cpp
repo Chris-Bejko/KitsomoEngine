@@ -7,10 +7,9 @@
 #include "Canvas.h"
 #include "ComponentRegistry.h"
 EditorSprite::EditorSprite(const std::string &texId) : textureId(texId) {}
-
+REGISTER_COMPONENT(EditorSprite)
 bool EditorSprite::Init()
 {
-    ComponentTypeRegistry::get().RegisterType<EditorSprite>("EditorSprite");
     AssetManager::get().loadTexture(textureId, textureId + ".png");
     texture = AssetManager::get().getTexture(textureId);
     sprite.setTexture(texture);

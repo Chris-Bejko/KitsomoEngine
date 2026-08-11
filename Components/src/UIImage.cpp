@@ -6,6 +6,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(UIImage, false)
+REGISTER_COMPONENT(UIImage)
 REGISTER_SERIALIZABLE_COMPONENT(UIImage)
 
 UIImage::UIImage(const std::string &texId)

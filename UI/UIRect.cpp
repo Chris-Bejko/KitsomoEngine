@@ -5,8 +5,9 @@
 #include "GizmoSystem.h"
 #include "Logger.h"
 #include "ComponentRegistry.h"
+#include "ComponentTypeRegistry.h"
 
-DECLARE_COMPONENT_RULES(UIRect, false)
+REGISTER_COMPONENT(UIRect)
 REGISTER_SERIALIZABLE_COMPONENT(UIRect)
 
 bool UIRect::Init()

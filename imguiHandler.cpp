@@ -688,8 +688,8 @@ void ImguiHandler::DrawProjectExplorer()
 		const auto path = entry.path();
 		const std::string name = path.filename().string();
 		const bool isDirectory = std::filesystem::is_directory(path);
-
-		if (isDirectory)
+		const bool shouldIgnore = name == "Generated" || name == "build";
+		if (isDirectory && ! shouldIgnore)
 		{
 			if (ImGui::Button(("[DIR] " + name).c_str(), ImVec2(-1, 24)))
 				projectExplorerDirectory = path;
@@ -706,7 +706,7 @@ void ImguiHandler::DrawProjectExplorer()
 			{
 				ImGui::Button(("[PREFAB] " + name).c_str(), ImVec2(-1, 24));
 			}
-			else
+			else if (!isDirectory)
 			{
 				ImGui::Button(name.c_str(), ImVec2(-1, 24));
 			}

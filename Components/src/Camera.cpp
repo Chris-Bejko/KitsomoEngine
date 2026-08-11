@@ -3,6 +3,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(Camera, false)
+REGISTER_COMPONENT(Camera)
 REGISTER_SERIALIZABLE_COMPONENT(Camera)
 
 bool Camera::Init()

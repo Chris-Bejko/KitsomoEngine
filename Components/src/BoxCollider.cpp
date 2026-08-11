@@ -5,6 +5,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(BoxCollider, true)
+REGISTER_COMPONENT(BoxCollider)
 REGISTER_SERIALIZABLE_COMPONENT(BoxCollider)
 
 BoxCollider::BoxCollider()

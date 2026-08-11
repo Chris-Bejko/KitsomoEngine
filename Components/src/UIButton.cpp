@@ -9,6 +9,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(UIButton, false)
+REGISTER_COMPONENT(UIButton)
 REGISTER_SERIALIZABLE_COMPONENT(UIButton)
 
 UIButton::UIButton()
