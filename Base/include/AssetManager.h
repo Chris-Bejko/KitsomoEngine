@@ -9,7 +9,6 @@ class AssetManager
 {
 public:
     AssetManager();
-    ~AssetManager() = default;
 
     sf::Texture getTexture(std::string id);
     void loadTexture(std::string id, std::string path);

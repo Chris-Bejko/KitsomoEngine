@@ -6,10 +6,10 @@
 #include "Commands/PasteEntityCommand.h"
 #include "Commands/DuplicateEntityCommand.h"
 #include "GizmoSystem.h"
-#include "HotReloading/ScriptCompiler.h"
+#include "ScriptCompiler.h"
 #include <filesystem>
 #include <algorithm>
-
+#include "ProjectExporter.h"
 ImguiHandler *ImguiHandler::s_instance = nullptr;
 
 // Color palette
@@ -91,7 +91,10 @@ void ImguiHandler::Update(sf::Time rest)
 	DrawEntities();
 	DrawProjectExplorer();
 	DrawProjectLoadWindow();
-
+	if (exportWindowOpen)
+	{
+		DrawExportWindow();
+	}
 	if (Engine::get().GetCurrentState() == EngineState::Running && SceneManager::get().HasProjectRoot())
 		DrawScenePanel();
 	if (savePressed)
@@ -180,6 +183,8 @@ void ImguiHandler::DrawToolbar()
 		ImGui::SameLine();
 		if (stateButton("  Load", COLOR_ACCENT, pressed))
 			OnLoad();
+		if(ImGui::MenuItem("Export Game"))
+			OpenExportWindow();
 		break;
 
 	case EngineState::PlayMode:
@@ -1067,4 +1072,215 @@ void ImguiHandler::OnRedo()
 	{
 		CommandHistory::get().Redo();
 	}
+}
+
+void ImguiHandler::OpenExportWindow()
+{
+    exportWindowOpen = true;
+
+    auto& sceneManager =
+        SceneManager::get();
+
+    exportScenes =
+        sceneManager.GetAvailableScenes();
+
+    exportSceneIndex = 0;
+
+    if (!exportScenes.empty())
+    {
+        for (size_t i = 0;
+             i < exportScenes.size();
+             ++i)
+        {
+            if (exportScenes[i] == "MainNew")
+            {
+                exportSceneIndex =
+                    static_cast<int>(i);
+
+                break;
+            }
+        }
+    }
+
+    std::string projectName =
+        sceneManager.GetProjectRootPath()
+            .filename()
+            .string();
+
+    strcpy_s(
+        exportGameName,
+        projectName.c_str());
+
+    std::string executable =
+        projectName;
+
+    executable.erase(
+        std::remove(
+            executable.begin(),
+            executable.end(),
+            ' '),
+        executable.end());
+
+    strcpy_s(
+        exportExecutableName,
+        executable.c_str());
+
+    auto defaultOutput =
+        sceneManager.GetProjectRootPath() /
+        "Export" /
+        projectName;
+
+    strcpy_s(
+        exportOutputPath,
+        defaultOutput.string().c_str());
+}
+
+void ImguiHandler::DrawExportWindow()
+{
+    if (!exportWindowOpen)
+        return;
+
+    ImGui::SetNextWindowSize(
+        ImVec2(620, 430),
+        ImGuiCond_FirstUseEver);
+
+    if (!ImGui::Begin(
+            "Export Project",
+            &exportWindowOpen))
+    {
+        ImGui::End();
+        return;
+    }
+
+    ImGui::Text(
+        "Build a standalone playable version of this project.");
+
+    ImGui::Separator();
+
+    ImGui::InputText(
+        "Game Name",
+        exportGameName,
+        sizeof(exportGameName));
+
+    ImGui::InputText(
+        "Executable",
+        exportExecutableName,
+        sizeof(exportExecutableName));
+
+    // ------------------------------------------------------------
+    // Startup scene
+    // ------------------------------------------------------------
+
+    if (ImGui::BeginCombo(
+            "Startup Scene",
+            exportScenes.empty()
+                ? "<No scenes>"
+                : exportScenes[exportSceneIndex].c_str()))
+    {
+        for (int i = 0;
+             i < static_cast<int>(exportScenes.size());
+             ++i)
+        {
+            bool selected =
+                exportSceneIndex == i;
+
+            if (ImGui::Selectable(
+                    exportScenes[i].c_str(),
+                    selected))
+            {
+                exportSceneIndex = i;
+            }
+
+            if (selected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+
+        ImGui::EndCombo();
+    }
+
+    // ------------------------------------------------------------
+    // Output
+    // ------------------------------------------------------------
+
+    ImGui::InputText(
+        "Output Directory",
+        exportOutputPath,
+        sizeof(exportOutputPath));
+
+    ImGui::Checkbox(
+        "Copy Assets",
+        &exportCopyAssets);
+
+    ImGui::Checkbox(
+        "Include OpenAL32.dll",
+        &exportCopyOpenAL);
+
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+
+    if (ImGui::Button(
+            "Cancel",
+            ImVec2(120, 35)))
+    {
+        exportWindowOpen = false;
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button(
+            "Export Game",
+            ImVec2(160, 35)))
+    {
+        if (exportScenes.empty())
+        {
+            LOG_ERROR(
+                "Cannot export: project has no scenes.");
+        }
+        else
+        {
+            ProjectExporter::Settings settings;
+
+            settings.gameName =
+                exportGameName;
+
+            settings.executableName =
+                exportExecutableName;
+
+            settings.startupScene =
+                exportScenes[exportSceneIndex];
+
+            settings.outputDirectory =
+                exportOutputPath;
+
+            settings.copyAssets =
+                exportCopyAssets;
+
+            settings.copyOpenAL =
+                exportCopyOpenAL;
+
+            bool success =
+                ProjectExporter::Export(
+                    SceneManager::get()
+                        .GetProjectRootPath(),
+                    settings);
+
+            if (success)
+            {
+                LOG_INFO(
+                    "Game exported successfully!");
+
+                exportWindowOpen = false;
+            }
+            else
+            {
+                LOG_ERROR(
+                    "Game export failed.");
+            }
+        }
+    }
+
+    ImGui::End();
 }

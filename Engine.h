@@ -94,6 +94,20 @@ public:
     bool ReloadProjectScripts();
     void RequestScriptRecompile();
     void PrepareForProjectModuleUnload();
+
+    //Build Pipeline:
+    void InitRuntime(
+        const std::string& projectRoot,
+        const std::string& startupScene);
+
+
+    void UpdateRuntime();
+    void RenderRuntime();
+
+    bool IsRuntime() const
+    {
+        return !isEngine;
+    }
 private:
     void ProcessHotReloading();
 

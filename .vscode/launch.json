@@ -8,6 +8,19 @@
             "program": "${workspaceFolder}/build/Debug/ECSEngine.exe",
             "cwd": "${workspaceFolder}",
             "args": []
+        },
+        {
+            "name": "Debug Exported Game",
+            "type": "cppvsdbg",
+            "request": "launch",
+
+            "program": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Export\\Color Bullets\\ColorBullets.exe",
+
+            "cwd": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Export\\Color Bullets",
+
+            "stopAtEntry": false,
+
+            "console": "integratedTerminal"
         }
     ]
 }

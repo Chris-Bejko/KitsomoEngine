@@ -16,7 +16,7 @@ file(GLOB MANAGER_SOURCES CONFIGURE_DEPENDS "Managers/src/*.cpp")
 file(GLOB SYSTEM_SOURCES CONFIGURE_DEPENDS "Systems/src/*.cpp")
 file(GLOB DATA_SOURCES CONFIGURE_DEPENDS "DataClasses/src/*.cpp")
 file(GLOB TOOL_SOURCES CONFIGURE_DEPENDS "Tools/src/*.cpp")
-file(GLOB HOT_RELOAD_SOURCES CONFIGURE_DEPENDS "HotReloading/*.cpp")
+file(GLOB HOT_RELOAD_SOURCES CONFIGURE_DEPENDS "HotReloading/src/*.cpp")
 file(GLOB COLLISION_SOURCES CONFIGURE_DEPENDS "Collision/*.cpp")
 file(GLOB UI_SOURCES CONFIGURE_DEPENDS "UI/*.cpp")
 file(GLOB COMPONENTS_SOURCES CONFIGURE_DEPENDS "Components/src/*.cpp")
@@ -59,6 +59,7 @@ target_include_directories(ECSEngineCore PUBLIC
     Systems/include/
     DataClasses/include/
     Tools/include/
+    HotReloading/include/
     Components/
     imgui/
     include/
