@@ -79,7 +79,6 @@ private:
     
     std::deque<Notification> notifications;
 
-    std::deque<std::pair<std::string, ImVec4>> consoleLogs;
     bool loadError = false;
     
     bool showDeleteDialog = false;

@@ -21,6 +21,8 @@
 #include "SceneManager.h"
 #include "DialogSystem.h"
 #include "Dialogs/include/InspectorDialog.h"
+#include "Dialogs/include/ConsoleDialog.h"
+#include "ConsoleManager.h"
 using json = nlohmann::json;
 
 Engine::Engine()
@@ -71,13 +73,13 @@ void Engine::Init()
     case LogLevel::Debug:   color = ImVec4(0.4f, 0.85f, 1.0f, 1.0f); break;
     default:                color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); break;
     }
-    ImguiHandler::get().AddConsoleLog(message, color); });
+    ConsoleManager::get().AddToConsole(message, level); });
 	auto inputSystem = new InputSystem();
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
-	auto* inspectorDialog = new InspectorDialog();
 	auto* dialogSystem = new DialogSystem();
 	dialogSystem->AddDialog(std::make_unique<InspectorDialog>(), "Inspector");
+	dialogSystem->AddDialog(std::make_unique<ConsoleDialog>(), "Console");
 	SystemsManager::get().AddSystem(dialogSystem);
 	manager = new EntityManager();
 	projectModuleLoader = std::make_unique<ProjectModuleLoader>();
