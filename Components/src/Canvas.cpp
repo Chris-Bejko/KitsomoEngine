@@ -4,6 +4,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(Canvas, false)
+REGISTER_COMPONENT(Canvas)
 REGISTER_SERIALIZABLE_COMPONENT(Canvas)
 
 bool Canvas::Init()

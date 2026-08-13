@@ -4,7 +4,6 @@ ComponentTypeRegistry&
 ComponentTypeRegistry::get()
 {
     static ComponentTypeRegistry instance;
-
     return instance;
 }
 
@@ -20,7 +19,12 @@ ComponentTypeRegistry::GetOrCreateID(
         return it->second;
     }
 
-    const ComponentID id = nextID++;
+    if (nextID >= maxComponents)
+    {
+        return INVALID_COMPONENT_ID;
+    }
+
+    ComponentID id = nextID++;
 
     nameToID[name] = id;
 
@@ -40,4 +44,15 @@ ComponentTypeRegistry::GetID(
     }
 
     return it->second;
+}
+
+
+void
+ComponentTypeRegistry::UnregisterProjectTypes(
+    const std::vector<std::type_index>& types)
+{
+    for (const auto& type : types)
+    {
+        typeIDs.erase(type);
+    }
 }

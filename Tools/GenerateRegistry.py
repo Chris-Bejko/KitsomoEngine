@@ -102,7 +102,21 @@ def generate_cmake(scripts):
             )
 
     lines.append(")")
+    lines.append("")
+    lines.append("if(NOT DEFINED BUILD_GENERATION)")
+    lines.append("    set(BUILD_GENERATION 0)")
+    lines.append("endif()")
+    lines.append("")
 
+    lines.append("set_target_properties(GameScripts PROPERTIES")
+    lines.append('    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"')
+    lines.append('    LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"')
+    lines.append('    ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"')
+    lines.append('    PDB_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/PDB"')
+    lines.append('    PDB_NAME_DEBUG "GameScripts_${BUILD_GENERATION}"')
+    lines.append('    COMPILE_PDB_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/PDB"')
+    lines.append('    COMPILE_PDB_NAME_DEBUG "GameScripts_${BUILD_GENERATION}"')
+    lines.append(")")
     # ------------------------------------------------------------
     # Output
     # ------------------------------------------------------------

@@ -93,7 +93,7 @@ public:
     bool OpenProject(const std::string &projectPath);
     bool ReloadProjectScripts();
     void RequestScriptRecompile();
-
+    void PrepareForProjectModuleUnload();
 private:
     void ProcessHotReloading();
 

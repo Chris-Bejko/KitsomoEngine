@@ -7,6 +7,7 @@
 #include "ComponentRegistry.h"
 
 DECLARE_COMPONENT_RULES(UIText, false)
+REGISTER_COMPONENT(UIText)
 REGISTER_SERIALIZABLE_COMPONENT(UIText)
 
 UIText::UIText(const std::string& text, const std::string& fontId, unsigned int fontSize)

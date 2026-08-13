@@ -1,12 +1,13 @@
 #pragma once
 
+#include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <sstream>
 #include <string>
-#include <chrono>
-#include <iomanip>
+#include <ctime>
 
 #include "Logger.h"
 
@@ -16,15 +17,23 @@ public:
     inline static std::string lastError = "";
     inline static bool lastCompileFailed = false;
     inline static std::string enginePath = "";
+    inline static int buildGeneration = 0;
 
     static bool GenerateAndCompile(const std::string& projectPath)
     {
         const std::string resolvedEnginePath = GetEnginePath();
+
         const std::filesystem::path projectRoot =
             std::filesystem::absolute(projectPath);
 
         lastCompileFailed = false;
         lastError.clear();
+
+        // ------------------------------------------------------------
+        // New build generation
+        // ------------------------------------------------------------
+
+        ++buildGeneration;
 
         // ------------------------------------------------------------
         // Build log directory
@@ -34,7 +43,10 @@ public:
             projectRoot / "Generated" / "BuildLogs";
 
         std::error_code ec;
-        std::filesystem::create_directories(logDirectory, ec);
+
+        std::filesystem::create_directories(
+            logDirectory,
+            ec);
 
         if (ec)
         {
@@ -43,15 +55,22 @@ public:
                 logDirectory.string().c_str());
 
             lastCompileFailed = true;
-            lastError = "Failed to create build log directory";
+            lastError =
+                "Failed to create build log directory";
+
             return false;
         }
 
-        const std::string timestamp = GetTimestamp();
+        const std::string timestamp =
+            GetTimestamp();
 
         const std::filesystem::path logFile =
             logDirectory /
-            ("GameScripts_build_" + timestamp + ".log");
+            ("GameScripts_build_" +
+             timestamp +
+             "_gen_" +
+             std::to_string(buildGeneration) +
+             ".log");
 
         LOG_INFO(
             "GameScripts build log: ",
@@ -76,20 +95,15 @@ public:
                 command +
                 "\n\nOUTPUT:\n");
 
-            // Redirect stdout and stderr into the same log.
-            //
-            // 2>&1 means:
-            // stderr -> stdout
-            // stdout -> log
-            //
-            // `>>` appends instead of overwriting.
             const std::string loggedCommand =
                 command +
                 " >> \"" +
                 logFile.string() +
                 "\" 2>&1";
 
-            const int result = std::system(loggedCommand.c_str());
+            const int result =
+                std::system(
+                    loggedCommand.c_str());
 
             AppendLog(
                 logFile,
@@ -154,7 +168,9 @@ public:
             "\" "
             "-DPROJECT_ROOT=\"" +
             projectRoot.string() +
-            "\"";
+            "\" "
+            "-DBUILD_GENERATION=" +
+            std::to_string(buildGeneration);
 
         if (!RunCommand(
                 configureCmd,
@@ -185,7 +201,8 @@ public:
         // Success
         // ------------------------------------------------------------
 
-        LOG_INFO("Scripts compiled successfully!");
+        LOG_INFO(
+            "Scripts compiled successfully!");
 
         AppendLog(
             logFile,
@@ -222,9 +239,13 @@ private:
         std::tm localTime{};
 
 #ifdef _WIN32
-        localtime_s(&localTime, &time);
+        localtime_s(
+            &localTime,
+            &time);
 #else
-        localtime_r(&time, &localTime);
+        localtime_r(
+            &time,
+            &localTime);
 #endif
 
         std::ostringstream stream;

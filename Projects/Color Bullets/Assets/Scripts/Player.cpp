@@ -24,7 +24,7 @@ bool Player::Init()
 {
 
 	LOG_INFO("Player Inititalized");
-	AssetManager::get().loadTexture("triangle", "triangle.png");
+	AssetManager::get().loadTexture("circle", "circle.png");
 	// if (!entity->HasComponent<Sprite>())
 	// {
 	// 	entity->AddComponent<Sprite>("triangle", 2, Color(ColorEnum::Red));
@@ -65,7 +65,7 @@ void Player::updateEngine(float dt)
 void Player::update(float dt)
 {
 	LOG_INFO("HOT RELOAD WORKS");
-	camera->Follow(sf::Vector2f(entity->GetComponent<Transform>().position.x, entity->GetComponent<Transform>().position.y));
+	camera->Follow(sf::Vector2f(entity->transform->position.x, entity->transform->position.y));
 	SetSpawnPointPosition();
 	spawnPoint->rotation = entity->transform->rotation;
 	timer += dt;
@@ -124,7 +124,7 @@ void Player::update(float dt)
 
 void Player::SetSpawnPointPosition()
 {
-	auto bounds = entity->GetComponent<Sprite>().GetGlobalBounds();
+	auto bounds = sprite->GetGlobalBounds();
 	spawnPoint->entity->GetComponent<Sprite>().SetOrigin(Vector2F(bounds.left + bounds.width / 2, bounds.top));
 	sf::Transform rot;
 	rot.rotate(entity->transform->rotation, entity->transform->position.x, entity->transform->position.y);
@@ -139,7 +139,6 @@ void Player::OnTriggerEnter(Collider &other)
 	LOG_DEBUG("Player triggered with something", other.GetCollisionTag().c_str());
 	if (other.entity->HasComponent<FloorSquare>())
 	{
-
 		Color otherColor = other.entity->GetComponent<FloorSquare>().GetColorEnum();
 		if (otherColor.SerializeColor() == lastColorString)
 		{

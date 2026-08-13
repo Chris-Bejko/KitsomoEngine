@@ -6,6 +6,7 @@
 #include "HotReloading/ProjectModuleAPI.h"
 #include "HotReloading/ScriptCompiler.h"
 #include "Logger.h"
+#include "Engine.h"
 
 namespace
 {
@@ -59,29 +60,19 @@ bool ProjectModuleLoader::LoadProjectModule(
 bool ProjectModuleLoader::RebuildProjectModule(
     const std::filesystem::path& projectRoot)
 {
-    // 1. Remove all project component registrations first.
+    if (!BuildProjectModule(projectRoot))
+        return false;
+
+    // 1. DESTROY OBJECTS CREATED BY THE DLL
+    Engine::get().PrepareForProjectModuleUnload();
+
+    // 2. Remove descriptors/function pointers into DLL
     ComponentRegistry::get().UnregisterProjectComponents();
 
-    // 2. Destroy all existing project entities/components.
-    // IMPORTANT: this must happen BEFORE FreeLibrary().
-    //
-    // TODO:
-    // Engine::get().DestroyProjectEntities();
-
-    // 3. Unload the old DLL.
+    // 3. NOW unload DLL
     UnloadProjectModule();
 
-    // 4. Now compile the new DLL.
-    if (!BuildProjectModule(projectRoot))
-    {
-        LOG_ERROR(
-            "Project module rebuild failed. "
-            "Old project module remains unloaded.");
-
-        return false;
-    }
-
-    // 5. Load the new DLL.
+    // 4. Load new DLL
     return LoadCompiledModule(projectRoot);
 }
 
