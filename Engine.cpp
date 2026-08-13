@@ -22,7 +22,9 @@
 #include "DialogSystem.h"
 #include "Dialogs/include/InspectorDialog.h"
 #include "Dialogs/include/ConsoleDialog.h"
+#include "Dialogs/include/StatusDialog.h"
 #include "ConsoleManager.h"
+#include "StatusManager.h"
 using json = nlohmann::json;
 
 Engine::Engine()
@@ -79,6 +81,7 @@ void Engine::Init()
 	SystemsManager::get().AddSystem(inputSystem);
 	auto* dialogSystem = new DialogSystem();
 	dialogSystem->AddDialog(std::make_unique<InspectorDialog>(), "Inspector");
+	dialogSystem->AddDialog(std::make_unique<StatusDialog>(), "Status");
 	dialogSystem->AddDialog(std::make_unique<ConsoleDialog>(), "Console");
 	SystemsManager::get().AddSystem(dialogSystem);
 	manager = new EntityManager();
@@ -169,6 +172,7 @@ void Engine::Update()
 	ImguiHandler::get().Update(rest);
 	ProcessDestroyQueue();
 	SystemsManager::get().Update();
+	StatusManager::get().Update(dt);
 	UIEventSystem::get().Update();
 }
 
