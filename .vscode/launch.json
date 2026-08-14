@@ -14,9 +14,9 @@
             "type": "cppvsdbg",
             "request": "launch",
 
-            "program": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Export\\Color Bullets\\ColorBullets.exe",
+            "program": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Export\\MyGame.exe",
 
-            "cwd": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Export\\Color Bullets",
+            "cwd": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Export\\",
 
             "stopAtEntry": false,
 

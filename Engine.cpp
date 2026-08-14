@@ -176,9 +176,9 @@ void Engine::Update()
 	if (isEngine)
 	{
 		ImguiHandler::get().Update(rest);
+		DialogManager::get().Update();
 	}
 	ProcessDestroyQueue();
-	DialogManager::get().Update();
 	SystemsManager::get().Update();
 	StatusManager::get().Update(dt);
 	UIEventSystem::get().Update();
@@ -615,7 +615,7 @@ void Engine::OpenProject(const OpenProjectEvent& event)
 	this->OpenProject(event.projectPath);
 }
 
-bool Engine::OpenProject(const std::string &projectPath)
+bool Engine::OpenProject(const std::string& projectPath)
 {
     LOG_INFO(
         "OPEN PROJECT 1: BEGIN: ",
@@ -628,87 +628,87 @@ bool Engine::OpenProject(const std::string &projectPath)
 
         return false;
     }
-	if (!SceneManager::get().OpenProject(projectPath))
-	{
-		EventSystem::get().Fire(ProjectLoadFailedEvent());
-		return false;
-	}
 
-	if (!projectModuleLoader->LoadProjectModule(SceneManager::get().GetProjectRootPath()))
-	{
-		EventSystem::get().Fire(ProjectLoadFailedEvent());
-		return false;
-	}
-
-    LOG_INFO(
-        "OPEN PROJECT 2: projectModuleLoader exists");
-
+    // ------------------------------------------------------------
+    // Unload currently loaded project module
+    // ------------------------------------------------------------
     if (projectModuleLoader->HasLoadedModule())
     {
         LOG_INFO(
-            "OPEN PROJECT 3: Existing project module detected");
+            "OPEN PROJECT 2: Existing project module detected");
 
         projectModuleLoader->StopWatching();
 
         if (manager != nullptr)
         {
             LOG_INFO(
-                "OPEN PROJECT 4: Destroying existing entities");
+                "OPEN PROJECT 3: Destroying existing entities");
 
             manager->DestroyAllEntities();
         }
 
         LOG_INFO(
-            "OPEN PROJECT 5: Unregistering old project components");
+            "OPEN PROJECT 4: Unregistering old project components");
 
         ComponentRegistry::get()
             .UnregisterProjectComponents();
 
         LOG_INFO(
-            "OPEN PROJECT 6: Unloading old project DLL");
+            "OPEN PROJECT 5: Unloading old project DLL");
 
         projectModuleLoader->UnloadProjectModule();
 
         LOG_INFO(
-            "OPEN PROJECT 7: Re-registering engine components");
+            "OPEN PROJECT 6: Re-registering engine components");
 
         RegisterComponents();
     }
     else
     {
         LOG_INFO(
-            "OPEN PROJECT 3: No existing project module");
+            "OPEN PROJECT 2: No existing project module");
     }
 
-
+    // ------------------------------------------------------------
+    // Open project through SceneManager
+    // ------------------------------------------------------------
     LOG_INFO(
-        "OPEN PROJECT 8: Calling SceneManager::OpenProject");
+        "OPEN PROJECT 7: Calling SceneManager::OpenProject");
 
     if (!SceneManager::get().OpenProject(projectPath))
     {
         LOG_ERROR(
             "OPEN PROJECT ERROR: SceneManager::OpenProject FAILED");
 
+        EventSystem::get().Fire(ProjectLoadFailedEvent{});
         return false;
     }
 
     LOG_INFO(
-        "OPEN PROJECT 9: SceneManager project opened");
+        "OPEN PROJECT 8: SceneManager project opened");
 
     const auto projectRoot =
         SceneManager::get().GetProjectRootPath();
 
     LOG_INFO(
-        "OPEN PROJECT 10: Resolved project root: ",
+        "OPEN PROJECT 9: Resolved project root: ",
         projectRoot.string());
 
-
+    // ------------------------------------------------------------
+    // Load project module
+    //
+    // Editor:
+    //     Build + load GameScripts
+    //
+    // Runtime:
+    //     Load already compiled GameScripts.dll
+    // ------------------------------------------------------------
     bool moduleLoaded = false;
 
     if (isEngine)
     {
         LOG_INFO(
-            "OPEN PROJECT 11: Editor mode - building project DLL");
+            "OPEN PROJECT 10: Editor mode - building project DLL");
 
         moduleLoaded =
             projectModuleLoader->LoadProjectModule(
@@ -719,16 +719,17 @@ bool Engine::OpenProject(const std::string &projectPath)
             LOG_ERROR(
                 "OPEN PROJECT ERROR: LoadProjectModule FAILED");
 
+            EventSystem::get().Fire(ProjectLoadFailedEvent{});
             return false;
         }
 
         LOG_INFO(
-            "OPEN PROJECT 12: Project DLL built and loaded");
+            "OPEN PROJECT 11: Project DLL built and loaded");
     }
     else
     {
         LOG_INFO(
-            "OPEN PROJECT 11: Runtime mode - loading existing DLL");
+            "OPEN PROJECT 10: Runtime mode - loading existing DLL");
 
         moduleLoaded =
             projectModuleLoader->LoadCompiledProjectModule(
@@ -739,39 +740,45 @@ bool Engine::OpenProject(const std::string &projectPath)
             LOG_ERROR(
                 "OPEN PROJECT ERROR: LoadCompiledProjectModule FAILED");
 
+            EventSystem::get().Fire(ProjectLoadFailedEvent{});
             return false;
         }
 
         LOG_INFO(
-            "OPEN PROJECT 12: Existing project DLL loaded");
+            "OPEN PROJECT 11: Existing project DLL loaded");
     }
 
-
+    // ------------------------------------------------------------
+    // Register components exposed by project DLL
+    // ------------------------------------------------------------
     LOG_INFO(
-        "OPEN PROJECT 13: Calling RegisterComponents");
+        "OPEN PROJECT 12: Calling RegisterComponents");
 
     RegisterComponents();
 
     LOG_INFO(
-        "OPEN PROJECT 14: RegisterComponents finished");
+        "OPEN PROJECT 13: RegisterComponents finished");
 
-
+    // ------------------------------------------------------------
+    // Editor-only functionality
+    // ------------------------------------------------------------
     if (isEngine)
     {
         LOG_INFO(
-            "OPEN PROJECT 15: Starting script watcher");
+            "OPEN PROJECT 14: Starting script watcher");
 
         projectModuleLoader->StartWatching(
             SceneManager::get().GetScriptsDirectory());
 
         LOG_INFO(
-            "OPEN PROJECT 16: Script watcher started");
+            "OPEN PROJECT 15: Script watcher started");
 
+        // Load an initial editor scene
         auto availableScenes =
             SceneManager::get().GetAvailableScenes();
 
         LOG_INFO(
-            "OPEN PROJECT 17: Available scenes: ",
+            "OPEN PROJECT 16: Available scenes: ",
             availableScenes.size());
 
         if (std::find(
@@ -781,7 +788,7 @@ bool Engine::OpenProject(const std::string &projectPath)
             != availableScenes.end())
         {
             LOG_INFO(
-                "OPEN PROJECT 18: Loading MainNew");
+                "OPEN PROJECT 17: Loading MainNew");
 
             SceneManager::get().LoadScene(
                 "MainNew",
@@ -790,7 +797,7 @@ bool Engine::OpenProject(const std::string &projectPath)
         else if (!availableScenes.empty())
         {
             LOG_INFO(
-                "OPEN PROJECT 18: Loading first available scene");
+                "OPEN PROJECT 17: Loading first available scene");
 
             SceneManager::get().LoadScene(
                 availableScenes.front(),
@@ -799,18 +806,20 @@ bool Engine::OpenProject(const std::string &projectPath)
         else
         {
             LOG_WARNING(
-                "OPEN PROJECT 18: No scenes available");
+                "OPEN PROJECT 17: No scenes available");
         }
     }
     else
     {
+        // Runtime scene is loaded by InitRuntime()
         LOG_INFO(
-            "OPEN PROJECT 15: Runtime mode - skipping editor scene loading");
+            "OPEN PROJECT 14: Runtime mode - skipping editor scene loading");
     }
 
-
     LOG_INFO(
-        "OPEN PROJECT 19: SUCCESS");
+        "OPEN PROJECT 18: SUCCESS");
+
+    EventSystem::get().Fire(ProjectLoadSuccessEvent{});
 
     return true;
 }
@@ -1308,14 +1317,10 @@ void Engine::InitRuntime(
 
 	LOG_INFO("RUNTIME 7: Project opened");
 
-	LOG_INFO("RUNTIME 8: Registering components");
-
-	RegisterComponents();
-
-	LOG_INFO("RUNTIME 9: Components registered");
+	LOG_INFO("RUNTIME 8: Components registered");
 
 	LOG_INFO(
-		"RUNTIME 10: Loading scene: ",
+		"RUNTIME 9: Loading scene: ",
 		startupScene.c_str());
 
 	if (!Load(startupScene))
@@ -1328,15 +1333,15 @@ void Engine::InitRuntime(
 		return;
 	}
 
-	LOG_INFO("RUNTIME 11: Scene loaded");
+	LOG_INFO("RUNTIME 10: Scene loaded");
 
 	manager->Awake();
 
-	LOG_INFO("RUNTIME 12: Entities awakened");
+	LOG_INFO("RUNTIME 11: Entities awakened");
 
 	entitiesAwaken = true;
 
-	LOG_INFO("RUNTIME 13: InitRuntime COMPLETE");
+	LOG_INFO("RUNTIME 12: InitRuntime COMPLETE");
 }
 
 void Engine::RenderRuntime()

@@ -1,13 +1,9 @@
 #include "imguiHandler.h"
 #include "Logger.h"
-#include "SceneManager.h"
 #include "CommandHistory.h"
-#include "Commands/DeleteEntityCommand.h"
 #include "Commands/CopyEntityCommand.h"
 #include "Commands/PasteEntityCommand.h"
 #include "Commands/DuplicateEntityCommand.h"
-#include "GizmoSystem.h"
-#include "HotReloading/ScriptCompiler.h"
 #include <filesystem>
 #include <algorithm>
 #include "StatusManager.h"

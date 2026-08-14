@@ -9,9 +9,20 @@
 #include "ProjectModuleLoader.h"
 #include "Engine.h"
 
+namespace
+{
+
+    const std::vector<std::string> sfmlDlls =
+        {
+            "sfml-graphics-d-2.dll",
+            "sfml-window-d-2.dll",
+            "sfml-system-d-2.dll",
+            "sfml-audio-d-2.dll"};
+}
+
 bool ProjectExporter::Export(
-    const std::filesystem::path& projectRoot,
-    const Settings& settings)
+    const std::filesystem::path &projectRoot,
+    const Settings &settings)
 {
     try
     {
@@ -129,7 +140,7 @@ bool ProjectExporter::Export(
 
         if (settings.copyAssets)
         {
-            //project
+            // project
             if (!CopyProjectAssets(
                     absoluteProjectRoot,
                     exportRoot))
@@ -138,8 +149,8 @@ bool ProjectExporter::Export(
             }
             const std::filesystem::path engineRoot = std::filesystem::current_path();
 
-            //engine
-            if(!CopyProjectAssets(
+            // engine
+            if (!CopyProjectAssets(
                     engineRoot,
                     exportRoot))
             {
@@ -180,15 +191,16 @@ bool ProjectExporter::Export(
             "Executable: ",
             (
                 exportRoot /
-                (settings.executableName + ".exe")
-            ).string().c_str());
+                (settings.executableName + ".exe"))
+                .string()
+                .c_str());
 
         LOG_INFO(
             "============================================");
 
         return true;
     }
-    catch (const std::exception& e)
+    catch (const std::exception &e)
     {
         LOG_ERROR(
             "Export exception: ",
@@ -199,9 +211,9 @@ bool ProjectExporter::Export(
 }
 
 bool ProjectExporter::GenerateRuntimeFiles(
-    const std::filesystem::path& projectRoot,
-    const std::filesystem::path& exportRoot,
-    const Settings& settings)
+    const std::filesystem::path &projectRoot,
+    const std::filesystem::path &exportRoot,
+    const Settings &settings)
 {
     const std::filesystem::path generated =
         exportRoot / "Generated";
@@ -239,8 +251,8 @@ bool ProjectExporter::GenerateRuntimeFiles(
 }
 
 bool ProjectExporter::WriteRuntimeMain(
-    const std::filesystem::path& exportRoot,
-    const Settings& settings)
+    const std::filesystem::path &exportRoot,
+    const Settings &settings)
 {
     const std::filesystem::path mainFile =
         exportRoot / "Generated" / "RuntimeMain.cpp";
@@ -264,7 +276,8 @@ int main()
 
     engine.InitRuntime(
         ".",
-        ")" << settings.startupScene << R"("
+        ")"
+         << settings.startupScene << R"("
     );
 
     while (engine.IsRunning())
@@ -281,11 +294,10 @@ int main()
     return true;
 }
 
-
 bool ProjectExporter::WriteRuntimeCMake(
-    const std::filesystem::path& projectRoot,
-    const std::filesystem::path& exportRoot,
-    const Settings& settings)
+    const std::filesystem::path &projectRoot,
+    const std::filesystem::path &exportRoot,
+    const Settings &settings)
 {
     const std::filesystem::path cmakeFile =
         exportRoot / "CMakeLists.txt";
@@ -302,8 +314,8 @@ bool ProjectExporter::WriteRuntimeCMake(
 
     const std::string engineRoot =
         std::filesystem::absolute(
-            projectRoot.parent_path().parent_path()
-        ).string();
+            projectRoot.parent_path().parent_path())
+            .string();
 
     file << "cmake_minimum_required(VERSION 3.20)\n";
     file << "project("
@@ -323,7 +335,6 @@ bool ProjectExporter::WriteRuntimeCMake(
          << "\")\n\n";
 
     file << "add_compile_definitions(\n";
-    file << "    SFML_STATIC\n";
     file << "    NOMINMAX\n";
     file << "    WIN32_LEAN_AND_MEAN\n";
     file << ")\n\n";
@@ -380,7 +391,7 @@ bool ProjectExporter::WriteRuntimeCMake(
     // SFML
     // ------------------------------------------------------------
 
-    file << "set(SFML_STATIC_LIBRARIES TRUE)\n";
+    file << "set(SFML_STATIC_LIBRARIES FALSE)\n";
 
     file << "set(SFML_DIR "
             "\"${ENGINE_ROOT}/lib/cmake/SFML\")\n";
@@ -398,10 +409,10 @@ bool ProjectExporter::WriteRuntimeCMake(
 
     file << "    ECSEngineCore\n";
 
-    file << "    sfml-graphics-s-d\n";
-    file << "    sfml-window-s-d\n";
-    file << "    sfml-system-s-d\n";
-    file << "    sfml-audio-s-d\n";
+    file << "    sfml-graphics-d\n";
+    file << "    sfml-window-d\n";
+    file << "    sfml-system-d\n";
+    file << "    sfml-audio-d\n";
 
     file << "    opengl32\n";
     file << "    winmm\n";
@@ -435,10 +446,9 @@ bool ProjectExporter::WriteRuntimeCMake(
     return true;
 }
 
-
 bool ProjectExporter::CopyGameScripts(
-    const std::filesystem::path& projectRoot,
-    const std::filesystem::path& exportRoot)
+    const std::filesystem::path &projectRoot,
+    const std::filesystem::path &exportRoot)
 {
     const std::filesystem::path source =
         projectRoot /
@@ -471,10 +481,9 @@ bool ProjectExporter::CopyGameScripts(
         destination);
 }
 
-
 bool ProjectExporter::CopyProjectAssets(
-    const std::filesystem::path& sourceRoot,
-    const std::filesystem::path& exportRoot)
+    const std::filesystem::path &sourceRoot,
+    const std::filesystem::path &exportRoot)
 {
     const std::filesystem::path source =
         sourceRoot / "Assets";
@@ -500,7 +509,7 @@ bool ProjectExporter::CopyProjectAssets(
         source,
         destination,
         std::filesystem::copy_options::recursive |
-        std::filesystem::copy_options::overwrite_existing,
+            std::filesystem::copy_options::overwrite_existing,
         ec);
 
     if (ec)
@@ -515,7 +524,6 @@ bool ProjectExporter::CopyProjectAssets(
     return true;
 }
 
-
 bool ProjectExporter::CopyRuntimeDependencies(
     const std::filesystem::path& projectRoot,
     const std::filesystem::path& exportRoot,
@@ -524,6 +532,9 @@ bool ProjectExporter::CopyRuntimeDependencies(
     const std::filesystem::path engineRoot =
         std::filesystem::absolute(
             projectRoot.parent_path().parent_path());
+
+    const std::filesystem::path binRoot =
+        engineRoot / "bin";
 
     // ------------------------------------------------------------
     // ECSEngineCore.dll
@@ -539,10 +550,34 @@ bool ProjectExporter::CopyRuntimeDependencies(
             engineDll,
             exportRoot / "ECSEngineCore.dll"))
     {
-        LOG_ERROR(
-            "Failed to copy ECSEngineCore.dll");
-
+        LOG_ERROR("Failed to copy ECSEngineCore.dll");
         return false;
+    }
+
+    // ------------------------------------------------------------
+    // SFML DLLs
+    // ------------------------------------------------------------
+
+    const std::vector<std::string> sfmlDlls =
+    {
+        "sfml-graphics-d-2.dll",
+        "sfml-window-d-2.dll",
+        "sfml-system-d-2.dll",
+        "sfml-audio-d-2.dll"
+    };
+
+    for (const auto& dll : sfmlDlls)
+    {
+        if (!CopyFileIfExists(
+                binRoot / dll,
+                exportRoot / dll))
+        {
+            LOG_ERROR(
+                "Failed to copy SFML DLL: ",
+                dll.c_str());
+
+            return false;
+        }
     }
 
     // ------------------------------------------------------------
@@ -552,9 +587,7 @@ bool ProjectExporter::CopyRuntimeDependencies(
     if (settings.copyOpenAL)
     {
         const std::filesystem::path openAL =
-            engineRoot /
-            "bin" /
-            "OpenAL32.dll";
+            binRoot / "OpenAL32.dll";
 
         if (std::filesystem::exists(openAL))
         {
@@ -576,10 +609,9 @@ bool ProjectExporter::CopyRuntimeDependencies(
     return true;
 }
 
-
 bool ProjectExporter::CopyFileIfExists(
-    const std::filesystem::path& source,
-    const std::filesystem::path& destination)
+    const std::filesystem::path &source,
+    const std::filesystem::path &destination)
 {
     if (!std::filesystem::exists(source))
     {
@@ -631,10 +663,9 @@ bool ProjectExporter::CopyFileIfExists(
     return true;
 }
 
-
 bool ProjectExporter::BuildExport(
-    const std::filesystem::path& exportRoot,
-    const Settings& settings)
+    const std::filesystem::path &exportRoot,
+    const Settings &settings)
 {
     const std::filesystem::path buildDirectory =
         exportRoot / "Build";
@@ -716,9 +747,8 @@ bool ProjectExporter::BuildExport(
     return true;
 }
 
-
 std::string ProjectExporter::EscapeCMake(
-    const std::string& value)
+    const std::string &value)
 {
     std::string result;
 
@@ -742,8 +772,8 @@ std::string ProjectExporter::EscapeCMake(
 }
 
 bool ProjectExporter::RunCommand(
-    const std::string& command,
-    const std::filesystem::path& workingDirectory)
+    const std::string &command,
+    const std::filesystem::path &workingDirectory)
 {
     LOG_INFO(
         "COMMAND: ",
