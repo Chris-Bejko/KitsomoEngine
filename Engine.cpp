@@ -23,6 +23,7 @@
 #include "Dialogs/include/InspectorDialog.h"
 #include "Dialogs/include/ConsoleDialog.h"
 #include "Dialogs/include/StatusDialog.h"
+#include "Dialogs/include/ProjectExplorerDialog.h"
 #include "ConsoleManager.h"
 #include "StatusManager.h"
 #include "Sprite.h"
@@ -57,7 +58,6 @@ void Engine::Init()
 	window->setFramerateLimit(1000);
 	if (!ImGui::SFML::Init(GetWindow()))
 	{
-		// std::cerr << "Error initializing IMGUI window" << std::endl;
 		LOG_ERROR("Error initializing IMGUI window");
 	}
 	else
@@ -80,10 +80,12 @@ void Engine::Init()
 	auto inputSystem = new InputSystem();
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
+	//To Do: Extract functions to make this a bit clearer.. should the engine be responsible for assigning dialogs, or the dialog system itself? Or the dialogs should autoregister themselves like components do? Hmm.
 	auto* dialogSystem = new DialogSystem();
 	dialogSystem->AddDialog(std::make_unique<InspectorDialog>(), "Inspector");
 	dialogSystem->AddDialog(std::make_unique<StatusDialog>(), "Status");
 	dialogSystem->AddDialog(std::make_unique<ConsoleDialog>(), "Console");
+	dialogSystem->AddDialog(std::make_unique<ProjectExplorerDialog>(), "Project Explorer");
 	SystemsManager::get().AddSystem(dialogSystem);
 	manager = new EntityManager();
 	projectModuleLoader = std::make_unique<ProjectModuleLoader>();
@@ -92,27 +94,18 @@ void Engine::Init()
 	std::ofstream txtFile;
 	PlayerPrefs::get().Load();
 	RegisterComponents();
-	// Load();
-	// Entity* newEntity = new Entity("Player");
-	// Entity* floorSquare = new Entity("floor Square");
-	// Entity* floorSquare1 = new Entity("floor Square(1)");
-	// Entity* floorSquare2 = new Entity("floor Square(2)");
-	// Entity* floorSquare3 = new Entity("floorSquare(3)");
-	// newEntity->AddComponent<Player>(true, Vector2F(100, 100), "player");
-	// floorSquare->AddComponent<FloorSquare>().Config(Vector2F(250, 100), sf::Color(0, 128, 0, 255));
-	// floorSquare1->AddComponent<FloorSquare>().Config(Vector2F(550, 159), sf::Color::Red);
-	// floorSquare2->AddComponent<FloorSquare>().Config(Vector2F(1000, 500), sf::Color::Magenta);
-	// floorSquare3->AddComponent<FloorSquare>().Config(Vector2F(500, 500), sf::Color::Cyan);
-	// manager->addEntity(newEntity);
-	// manager->addEntity(floorSquare);
-	// manager->addEntity(floorSquare1);
-	// manager->addEntity(floorSquare2);
-	// manager->addEntity(floorSquare3);
 	isRunning = true;
 }
 
 void Engine::Clean()
 {
+	AssetManager::get().clean();
+	if (projectModuleLoader && projectModuleLoader->HasLoadedModule())
+	{
+		projectModuleLoader->StopWatching();
+		manager->DestroyAllEntities();
+		projectModuleLoader->UnloadProjectModule();
+	}
 	window->clear();
 	window->close();
 	isRunning = false;

@@ -14,7 +14,7 @@ endif()
 get_filename_component(ENGINE_ROOT "${ENGINE_ROOT}" ABSOLUTE)
 get_filename_component(PROJECT_ROOT "${PROJECT_ROOT}" ABSOLUTE)
 
-add_compile_definitions(SFML_STATIC NOMINMAX WIN32_LEAN_AND_MEAN ECS_PROJECT_MODULE_BUILD)
+add_compile_definitions(NOMINMAX WIN32_LEAN_AND_MEAN ECS_PROJECT_MODULE_BUILD)
 
 add_library(GameScripts SHARED
     "${PROJECT_ROOT}/Generated/RegisterProjectComponents.cpp"
@@ -37,11 +37,6 @@ set_target_properties(GameScripts PROPERTIES
     COMPILE_PDB_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/PDB"
     COMPILE_PDB_NAME_DEBUG "GameScripts_${BUILD_GENERATION}"
 )
-set_target_properties(GameScripts PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"
-    LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"
-    ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"
-)
 
 target_include_directories(GameScripts PRIVATE
     "${ENGINE_ROOT}"
@@ -59,25 +54,17 @@ target_include_directories(GameScripts PRIVATE
     "${PROJECT_ROOT}/Assets/Scripts"
 )
 
-set(SFML_STATIC_LIBRARIES TRUE)
+set(SFML_STATIC_LIBRARIES FALSE)
 set(SFML_DIR "${ENGINE_ROOT}/lib/cmake/SFML")
 find_package(SFML 2.6 COMPONENTS graphics window system audio REQUIRED)
+
 target_link_directories(GameScripts PRIVATE "${ENGINE_ROOT}/build/Debug" "${ENGINE_ROOT}/lib")
+
 target_link_libraries(GameScripts PRIVATE
     ECSEngineCore
-    sfml-graphics-s-d
-    sfml-window-s-d
-    sfml-system-s-d
-    sfml-audio-s-d
-    opengl32
-    winmm
-    gdi32
-    freetype
-    flac
-    vorbis
-    vorbisenc
-    vorbisfile
-    ogg
-    openal32
+    sfml-graphics
+    sfml-window
+    sfml-system
+    sfml-audio
 )
 

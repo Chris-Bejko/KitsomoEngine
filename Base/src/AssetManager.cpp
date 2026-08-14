@@ -3,6 +3,9 @@
 
 #include <filesystem>
 
+AssetManager::AssetManager()
+{
+}
 AssetManager::~AssetManager()
 {
     clean();
@@ -72,7 +75,7 @@ sf::Font* AssetManager::getFont(const std::string& id)
     auto it = fonts.find(id);
 
     if (it == fonts.end())
-    {
+    {   
         LOG_WARNING("Font not found: ", id);
         return nullptr;
     }
