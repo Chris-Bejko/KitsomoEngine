@@ -99,7 +99,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "-861.333496|-459.890961",
+          "anchorOffset": "-940.000183|-350.713593",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -108,8 +108,8 @@
       },
       {
         "fields": {
-          "position.x": 108.57823181152344,
-          "position.y": 51.48613739013672,
+          "position.x": 35.08317947387695,
+          "position.y": 153.48611450195313,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -200,8 +200,8 @@
       {
         "fields": {
           "ColorID": "Red",
-          "renderOrder": 2,
-          "textureID": "triangle"
+          "Texture": "Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
+          "renderOrder": 2
         },
         "guid": "9b4469c3-bccf-484f-9d05-56a92005b598",
         "type": "Sprite"
@@ -283,8 +283,8 @@
       {
         "fields": {
           "ColorID": "Magenta",
-          "renderOrder": 0,
-          "textureID": "square"
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": 0
         },
         "guid": "b15818af-1928-45fc-98ec-dd0259dc5ad4",
         "type": "Sprite"
@@ -310,8 +310,8 @@
       {
         "fields": {
           "ColorID": "Magenta",
-          "renderOrder": 0,
-          "textureID": "square"
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": 0
         },
         "guid": "3926b45a-f729-4274-adbe-1bea51c3ad2f",
         "type": "Sprite"
@@ -375,8 +375,8 @@
       {
         "fields": {
           "ColorID": "Magenta",
-          "renderOrder": 0,
-          "textureID": "square"
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": 0
         },
         "guid": "8c62c7fe-bdcb-41f9-b111-a0d1653e7ce8",
         "type": "Sprite"
@@ -402,8 +402,8 @@
       {
         "fields": {
           "ColorID": "Magenta",
-          "renderOrder": 0,
-          "textureID": "square"
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": 0
         },
         "guid": "5507e72d-f3c7-4b6c-ac8e-9c5cdf7d7e1d",
         "type": "Sprite"
@@ -512,9 +512,9 @@
     "components": [
       {
         "fields": {
+          "Texture": "",
           "alpha": 1.0,
-          "color": "Red",
-          "textureId": "square"
+          "color": "Red"
         },
         "guid": "57abc700-e9e5-4653-b858-e0d829a9801c",
         "type": "UIImage"
@@ -659,7 +659,7 @@
     "components": [
       {
         "fields": {
-          "anchorOffset": "-360.000000|-325.390991",
+          "anchorOffset": "-354.000183|-21.754211",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -679,8 +679,8 @@
       },
       {
         "fields": {
-          "position.x": 576.9537353515625,
-          "position.y": 177.14398193359375,
+          "position.x": 582.5591430664063,
+          "position.y": 460.8194580078125,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -714,9 +714,9 @@
       },
       {
         "fields": {
+          "Texture": "",
           "alpha": 1.0,
-          "color": "Red",
-          "textureId": "square"
+          "color": "Red"
         },
         "guid": "ca124266-0eca-4cae-9c0b-1e8e68954443",
         "type": "UIImage"
@@ -779,9 +779,9 @@
     "components": [
       {
         "fields": {
+          "Texture": "",
           "alpha": 1.0,
-          "color": "Red",
-          "textureId": "square"
+          "color": "Red"
         },
         "guid": "942d2439-a153-4253-b119-09552e18aeae",
         "type": "UIImage"
@@ -860,6 +860,11 @@
   {
     "components": [
       {
+        "fields": null,
+        "guid": "f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
+        "type": "Camera"
+      },
+      {
         "fields": {
           "position.x": 0.0,
           "position.y": 0.0,
@@ -869,11 +874,6 @@
         },
         "guid": "1b373b78-9145-4ba3-9771-8c62f0606542",
         "type": "Transform"
-      },
-      {
-        "fields": null,
-        "guid": "f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
-        "type": "Camera"
       }
     ],
     "guid": "c318f141-2b23-4586-97e2-9f43420fc842",

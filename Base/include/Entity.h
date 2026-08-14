@@ -331,9 +331,11 @@ public:
 
 	std::string DrawVectorElement(const std::string &current, int fieldType, const std::string &elemId);
 
-	void Entity::DrawCompRefField(std::string &packedStorage, const std::string &typeHint, const std::string &fieldId);
+	void DrawCompRefField(std::string &packedStorage, const std::string &typeHint, const std::string &fieldId);
 
-	void Entity::DrawEntityRefField(std::string &guidStorage, const std::string &fieldId);
+	void DrawEntityRefField(std::string &guidStorage, const std::string &fieldId);
+	void DrawTextureField(std::string& value, const std::string& fieldId);
+
 	void ForceNullParent() { parent = nullptr; }
 
 private:

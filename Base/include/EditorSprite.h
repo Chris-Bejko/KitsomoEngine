@@ -8,7 +8,7 @@ class EditorSprite : public Component
 {
 public:
     EditorSprite() = default;
-    EditorSprite(const std::string &textureId);
+    // EditorSprite(const std::string &textureId);
 
     bool Init() override;
     void draw() override;
@@ -20,11 +20,10 @@ public:
         return _sprite.getGlobalBounds().contains(mousePos);
     }
 
-    std::string textureId = "Assets/editor_entity"; // default editor icon
-
-private:
+    private:
     sf::Sprite sprite;
-    sf::Texture texture;
+    sf::Texture* texture;
+    Texture _texture;
     bool dragging = false;
     bool pendingDrag = false;
     float dragTimer = 0.f;

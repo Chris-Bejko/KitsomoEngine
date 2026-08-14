@@ -5,9 +5,9 @@
 #include <functional>
 #include <memory>
 #include "Vector2.h"
-
+#include "Events.h"
 class ProjectModuleLoader;
-
+class Sprite;
 using ComponentFactory = std::function<void(Entity *, ReadableSerializableVariableMap, std::string)>;
 
 constexpr int SCREEN_WIDTH = 1280;
@@ -68,7 +68,7 @@ public:
 
     void TriggerDragging(std::string newDragged);
 
-    void ClearInpsector();
+    void ClearInspector();
 
     void SetView(sf::View &view);
 
@@ -91,6 +91,7 @@ public:
 
     void QueueDestroy(const std::string& guid);
     bool OpenProject(const std::string &projectPath);
+    void OpenProject(const OpenProjectEvent& event);
     bool ReloadProjectScripts();
     void RequestScriptRecompile();
     void PrepareForProjectModuleUnload();
@@ -108,6 +109,7 @@ public:
     {
         return !isEngine;
     }
+    void Draw(Sprite *sprite);
 private:
     void ProcessHotReloading();
 
@@ -134,4 +136,6 @@ private:
     bool isGameOver = false;
     bool recompileRequested = false;
     std::unique_ptr<ProjectModuleLoader> projectModuleLoader;
+
+    void SubscribeEvents();
 };

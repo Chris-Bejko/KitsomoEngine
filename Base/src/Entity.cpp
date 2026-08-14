@@ -49,7 +49,8 @@ bool Entity::IsActiveInHierarchy() const
 	int depth = 0;
 	while (current != nullptr)
 	{
-		if(current->isPendingDestroy) return false;
+		if (current->isPendingDestroy)
+			return false;
 		if (!current->isActive)
 			return false;
 		current = current->GetParent();
@@ -434,6 +435,66 @@ void Entity::DisplayComponents()
 				DrawCompRefField(*p, it->componentTypeHint, fieldId);
 				break;
 			}
+			case texture_Type:
+			{
+				auto p = reinterpret_cast<std::string *>(it->data);
+
+				// Show filename for display
+				std::string displayName = p->empty() ? "None (drop texture here)" : std::filesystem::path(*p).filename().string();
+
+				ImVec4 boxColor = p->empty() ? ImVec4(0.15f, 0.18f, 0.25f, 1.0f)
+											 : ImVec4(0.1f, 0.25f, 0.1f, 1.0f);
+
+				ImGui::PushStyleColor(ImGuiCol_Button, boxColor);
+				ImGui::Button(displayName.c_str(), ImVec2(-1, 24));
+				ImGui::PopStyleColor();
+
+				// Drop target
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload *payload =
+							ImGui::AcceptDragDropPayload("ASSET_PATH"))
+					{
+						std::string droppedPath =
+							static_cast<const char *>(payload->Data);
+
+						std::string ext =std::filesystem::path(droppedPath).extension().string();
+
+						*p = droppedPath; // store the path directly
+
+						// Sync back to Texture object via SerializableScript
+						if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
+						{
+							// Update textureFields if they exist
+							std::string fieldName(it->name);
+							if (script->textureFields.count(fieldName))
+								script->textureFields[fieldName]->SetPath(droppedPath);
+
+							script->NotifyFieldChanged(fieldName);
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+
+				// Right click to clear
+				if (ImGui::BeginPopupContextItem(("##ctx" + fieldId).c_str()))
+				{
+					if (ImGui::MenuItem("Clear"))
+					{
+						p->clear();
+						if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
+						{
+							std::string fieldName(it->name);
+							if (script->textureFields.count(fieldName))
+								script->textureFields[fieldName]->Clear();
+							script->NotifyFieldChanged(fieldName);
+						}
+					}
+					ImGui::EndPopup();
+				}
+
+				break;
+			}
 			default:
 				assert(0);
 			}
@@ -553,6 +614,9 @@ std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 						ser.fields.stringFields[var.name] = packed;
 						break;
 					}
+					case texture_Type:
+						ser.fields.stringFields[var.name] = *reinterpret_cast<std::string *>(var.data);
+						break;
 					}
 				}
 			}
@@ -811,6 +875,8 @@ std::string Entity::DefaultValue(int fieldType)
 		return "null"; // null entity
 	case compRef_Type:
 		return "null"; // null component
+	case texture_Type:
+		return "null"; // null texture
 	default:
 		return "";
 	}
@@ -941,4 +1007,8 @@ void Entity::DrawCompRefField(std::string &packedStorage,
 		}
 		ImGui::EndDragDropTarget();
 	}
+}
+
+void Entity::DrawTextureField(std::string &value, const std::string &fieldId)
+{
 }

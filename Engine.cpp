@@ -19,7 +19,14 @@
 #include "nlohmann/json.hpp"
 #include "PlayerPrefs.h"
 #include "SceneManager.h"
+#include "DialogManager.h"
+#include "ConsoleManager.h"
+#include "StatusManager.h"
+#include "Sprite.h"
+#include "EventSystem.h"
+
 using json = nlohmann::json;
+
 
 Engine::Engine()
 {
@@ -45,13 +52,21 @@ void Engine::Quit()
 	isRunning = false;
 }
 
+void Engine::SubscribeEvents()
+{
+	SUBSCRIBE_EVENT(OpenProjectEvent, OpenProject);
+
+	// EventSystem::get().Subscribe<OpenProjectEvent>([this](const OpenProjectEvent& event)
+	// {
+	// 	this->OpenProject(event.projectPath);
+	// });
+}
 void Engine::Init()
 {
 	this->window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML works!");
 	window->setFramerateLimit(1000);
 	if (!ImGui::SFML::Init(GetWindow()))
 	{
-		// std::cerr << "Error initializing IMGUI window" << std::endl;
 		LOG_ERROR("Error initializing IMGUI window");
 	}
 	else
@@ -70,10 +85,12 @@ void Engine::Init()
     case LogLevel::Debug:   color = ImVec4(0.4f, 0.85f, 1.0f, 1.0f); break;
     default:                color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); break;
     }
-    ImguiHandler::get().AddConsoleLog(message, color); });
+
+    ConsoleManager::get().AddToConsole(message, level); });
 	auto inputSystem = new InputSystem();
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
+	//To Do: Extract functions to make this a bit clearer.. should the engine be responsible for assigning dialogs, or the dialog system itself? Or the dialogs should autoregister themselves like components do? Hmm.
 	manager = new EntityManager();
 	projectModuleLoader = std::make_unique<ProjectModuleLoader>();
 	SceneManager::get().Init();
@@ -81,27 +98,19 @@ void Engine::Init()
 	std::ofstream txtFile;
 	PlayerPrefs::get().Load();
 	RegisterComponents();
-	// Load();
-	// Entity* newEntity = new Entity("Player");
-	// Entity* floorSquare = new Entity("floor Square");
-	// Entity* floorSquare1 = new Entity("floor Square(1)");
-	// Entity* floorSquare2 = new Entity("floor Square(2)");
-	// Entity* floorSquare3 = new Entity("floorSquare(3)");
-	// newEntity->AddComponent<Player>(true, Vector2F(100, 100), "player");
-	// floorSquare->AddComponent<FloorSquare>().Config(Vector2F(250, 100), sf::Color(0, 128, 0, 255));
-	// floorSquare1->AddComponent<FloorSquare>().Config(Vector2F(550, 159), sf::Color::Red);
-	// floorSquare2->AddComponent<FloorSquare>().Config(Vector2F(1000, 500), sf::Color::Magenta);
-	// floorSquare3->AddComponent<FloorSquare>().Config(Vector2F(500, 500), sf::Color::Cyan);
-	// manager->addEntity(newEntity);
-	// manager->addEntity(floorSquare);
-	// manager->addEntity(floorSquare1);
-	// manager->addEntity(floorSquare2);
-	// manager->addEntity(floorSquare3);
+	SubscribeEvents();
 	isRunning = true;
 }
 
 void Engine::Clean()
 {
+	AssetManager::get().clean();
+	if (projectModuleLoader && projectModuleLoader->HasLoadedModule())
+	{
+		projectModuleLoader->StopWatching();
+		manager->DestroyAllEntities();
+		projectModuleLoader->UnloadProjectModule();
+	}
 	window->clear();
 	window->close();
 	isRunning = false;
@@ -169,7 +178,9 @@ void Engine::Update()
 		ImguiHandler::get().Update(rest);
 	}
 	ProcessDestroyQueue();
+	DialogManager::get().Update();
 	SystemsManager::get().Update();
+	StatusManager::get().Update(dt);
 	UIEventSystem::get().Update();
 }
 
@@ -292,6 +303,19 @@ sf::RenderWindow &Engine::GetWindow()
 	return *window;
 }
 
+void Engine::Draw(Sprite* sprite)
+{
+    if (window == nullptr || sprite == nullptr)
+        return;
+
+    const sf::Sprite sfmlSprite = sprite->GetSprite();
+
+    if (!sfmlSprite.getTexture())
+        return;
+
+    window->draw(sfmlSprite);
+}
+
 EntityManager *Engine::GetManager()
 {
 	return manager;
@@ -319,7 +343,7 @@ void Engine::PrepareForProjectModuleUnload()
 	// Unload the project module to prepare for recompilation
 	manager->ClearAllEntities();
 }
-void Engine::ClearInpsector()
+void Engine::ClearInspector()
 {
 	manager->ClearInspector();
 	manager->SetSelectedEntity(nullptr);
@@ -428,6 +452,9 @@ void Engine::Save(const std::string &filename)
 					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
 					break;
 				case compRef_Type:
+					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
+					break;
+				case texture_Type:
 					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
 					break;
 				}
@@ -583,8 +610,12 @@ void Engine::RegisterComponents()
 	}
 }
 
-bool Engine::OpenProject(
-    const std::string& projectPath)
+void Engine::OpenProject(const OpenProjectEvent& event)
+{
+	this->OpenProject(event.projectPath);
+}
+
+bool Engine::OpenProject(const std::string &projectPath)
 {
     LOG_INFO(
         "OPEN PROJECT 1: BEGIN: ",
@@ -597,6 +628,17 @@ bool Engine::OpenProject(
 
         return false;
     }
+	if (!SceneManager::get().OpenProject(projectPath))
+	{
+		EventSystem::get().Fire(ProjectLoadFailedEvent());
+		return false;
+	}
+
+	if (!projectModuleLoader->LoadProjectModule(SceneManager::get().GetProjectRootPath()))
+	{
+		EventSystem::get().Fire(ProjectLoadFailedEvent());
+		return false;
+	}
 
     LOG_INFO(
         "OPEN PROJECT 2: projectModuleLoader exists");
@@ -789,7 +831,7 @@ bool Engine::ReloadProjectScripts()
 		return false;
 	}
 
-	ImguiHandler::get().ClearInspector();
+	ClearInspector();
 	GizmoSystem::get().SetSelectedEntity(nullptr);
 	UIEventSystem::get().Clear();
 	manager->DestroyAllEntities();
@@ -898,6 +940,11 @@ void Engine::SavePrefab(Entity *entity)
 				fieldsJson[f.name] = packed;
 				break;
 			}
+			case texture_Type:
+			{
+				fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
+				break;
+			}
 			}
 		}
 		compJson["fields"] = fieldsJson;
@@ -961,7 +1008,7 @@ void Engine::ProcessDestroyQueue()
 
 void Engine::Reset()
 {
-	ImguiHandler::get().ClearInspector();
+	ClearInspector();
 	GizmoSystem::get().SetSelectedEntity(nullptr);
 	UIEventSystem::get().Clear();
 

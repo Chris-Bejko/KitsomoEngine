@@ -24,7 +24,6 @@ bool Player::Init()
 {
 
 	LOG_INFO("Player Inititalized");
-	AssetManager::get().loadTexture("circle", "circle.png");
 	// if (!entity->HasComponent<Sprite>())
 	// {
 	// 	entity->AddComponent<Sprite>("triangle", 2, Color(ColorEnum::Red));
@@ -49,8 +48,7 @@ void Player::Awake()
 	// this->camera = &camera->AddComponent<Camera>();
 	// Engine::get().Spawn(camera);
 	Entity *bulletSpawnPoint = new Entity("spawnpoint");
-	AssetManager::get().loadTexture("circle", "circle.png");
-	bulletSpawnPoint->AddComponent<Sprite>("circle");
+	bulletSpawnPoint->AddComponent<Sprite>();
 	bulletSpawnPoint->ValidateAddedComponents();
 	spawnPoint = bulletSpawnPoint->transform;
 	spawnPoint->scale = Vector2F(.03f, .03f);

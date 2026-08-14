@@ -3,53 +3,48 @@
     "components": [
       {
         "fields": {
-          "position.x": -16.000022888183594,
-          "position.y": -37.0,
-          "rotation": 0.0,
-          "scale.x": 2.0,
-          "scale.y": 2.0
+          "bounciness": 0.0,
+          "friction": 0.5,
+          "gravityScale": 1.0,
+          "isKinematic": false,
+          "isStatic": false,
+          "mass": 1.0,
+          "useGravity": true
         },
-        "guid": "",
-        "type": "Transform"
+        "type": "Rigidbody"
+      },
+      {
+        "fields": {
+          "collisionTag": "default",
+          "isTrigger": false,
+          "radius": 50.0
+        },
+        "type": "CircleCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "",
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\circle.png",
+          "renderOrder": 0
+        },
+        "type": "Sprite"
       },
       {
         "fields": {
           "force": 850.0,
           "lastColorString": ""
         },
-        "guid": "",
         "type": "Bullet"
       },
       {
         "fields": {
-          "ColorID": "Red",
-          "renderOrder": 1,
-          "textureID": "circle"
+          "position.x": -16.000022888183594,
+          "position.y": -37.0,
+          "rotation": 0.0,
+          "scale.x": 0.05000000074505806,
+          "scale.y": 0.05000000074505806
         },
-        "guid": "",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "collisionTag": "bullet",
-          "isTrigger": true,
-          "radius": 12.0
-        },
-        "guid": "",
-        "type": "CircleCollider"
-      },
-      {
-        "fields": {
-          "bounciness": 0.0,
-          "friction": 0.5,
-          "gravityScale": 1.0,
-          "isKinematic": true,
-          "isStatic": false,
-          "mass": 1.0,
-          "useGravity": false
-        },
-        "guid": "",
-        "type": "Rigidbody"
+        "type": "Transform"
       }
     ],
     "name": "Bullet",

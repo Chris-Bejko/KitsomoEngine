@@ -6,7 +6,6 @@
 
 bool FloorSquare::Init()
 {
-	AssetManager::get().loadTexture("square", "square.png");
 	Color color;
 	color.SetColor(colorString);
 	entity->transform->scale = Vector2F(0.2, 0.2);

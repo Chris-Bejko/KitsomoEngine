@@ -1,26 +1,29 @@
 #pragma once
 
-#include <map>
+#include <SFML/Graphics.hpp>
 #include <string>
-#include <iostream>
-#include "SFML/Graphics.hpp"
+#include <unordered_map>
 
 class AssetManager
 {
 public:
-    AssetManager();
-
-    sf::Texture getTexture(std::string id);
-    void loadTexture(std::string id, std::string path);
-
-    sf::Font* getFont(const std::string& id);
-    void loadFont(const std::string& id, const std::string& path);
-
-    void clean();
     static AssetManager& get();
 
-private:
-    std::map<std::string, sf::Font> fonts;
-    std::map<std::string, sf::Texture> textures;
+    void loadTexture(const std::string& path);
+    sf::Texture* getTexture(const std::string& path);
 
+    void loadFont(const std::string& id, const std::string& path);
+    sf::Font* getFont(const std::string& id);
+
+    void clean();
+
+private:
+    AssetManager();
+    ~AssetManager();
+
+    AssetManager(const AssetManager&) = delete;
+    AssetManager& operator=(const AssetManager&) = delete;
+
+    std::unordered_map<std::string, sf::Texture> textures;
+    std::unordered_map<std::string, sf::Font> fonts;
 };

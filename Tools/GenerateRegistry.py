@@ -79,7 +79,6 @@ def generate_cmake(scripts):
 
     lines.append(
         "add_compile_definitions("
-        "SFML_STATIC "
         "NOMINMAX "
         "WIN32_LEAN_AND_MEAN "
         "ECS_PROJECT_MODULE_BUILD"
@@ -92,9 +91,7 @@ def generate_cmake(scripts):
     # ------------------------------------------------------------
 
     lines.append("add_library(GameScripts SHARED")
-    lines.append(
-        '    "${PROJECT_ROOT}/Generated/RegisterProjectComponents.cpp"'
-    )
+    lines.append('    "${PROJECT_ROOT}/Generated/RegisterProjectComponents.cpp"')
 
     for script in scripts:
         if script["cpp"] is not None:
@@ -104,10 +101,19 @@ def generate_cmake(scripts):
 
     lines.append(")")
     lines.append("")
+
+    # ------------------------------------------------------------
+    # Build generation
+    # ------------------------------------------------------------
+
     lines.append("if(NOT DEFINED BUILD_GENERATION)")
     lines.append("    set(BUILD_GENERATION 0)")
     lines.append("endif()")
     lines.append("")
+
+    # ------------------------------------------------------------
+    # Output
+    # ------------------------------------------------------------
 
     lines.append("set_target_properties(GameScripts PROPERTIES")
     lines.append('    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/Debug"')
@@ -117,24 +123,6 @@ def generate_cmake(scripts):
     lines.append('    PDB_NAME_DEBUG "GameScripts_${BUILD_GENERATION}"')
     lines.append('    COMPILE_PDB_OUTPUT_DIRECTORY_DEBUG "${PROJECT_ROOT}/build/PDB"')
     lines.append('    COMPILE_PDB_NAME_DEBUG "GameScripts_${BUILD_GENERATION}"')
-    lines.append(")")
-    # ------------------------------------------------------------
-    # Output
-    # ------------------------------------------------------------
-
-    lines.append("set_target_properties(GameScripts PROPERTIES")
-    lines.append(
-        '    RUNTIME_OUTPUT_DIRECTORY_DEBUG '
-        '"${PROJECT_ROOT}/build/Debug"'
-    )
-    lines.append(
-        '    LIBRARY_OUTPUT_DIRECTORY_DEBUG '
-        '"${PROJECT_ROOT}/build/Debug"'
-    )
-    lines.append(
-        '    ARCHIVE_OUTPUT_DIRECTORY_DEBUG '
-        '"${PROJECT_ROOT}/build/Debug"'
-    )
     lines.append(")")
     lines.append("")
 
@@ -160,40 +148,31 @@ def generate_cmake(scripts):
     lines.append("")
 
     # ------------------------------------------------------------
-    # SFML
+    # SFML - Dynamic
     # ------------------------------------------------------------
 
-    lines.append("set(SFML_STATIC_LIBRARIES TRUE)")
-    lines.append(
-        'set(SFML_DIR "${ENGINE_ROOT}/lib/cmake/SFML")'
-    )
+    lines.append("set(SFML_STATIC_LIBRARIES FALSE)")
+    lines.append('set(SFML_DIR "${ENGINE_ROOT}/lib/cmake/SFML")')
+
     lines.append(
         "find_package(SFML 2.6 "
         "COMPONENTS graphics window system audio REQUIRED)"
     )
+    lines.append("")
 
     lines.append(
         'target_link_directories(GameScripts PRIVATE '
         '"${ENGINE_ROOT}/build/Debug" '
         '"${ENGINE_ROOT}/lib")'
     )
+    lines.append("")
 
     lines.append("target_link_libraries(GameScripts PRIVATE")
     lines.append("    ECSEngineCore")
-    lines.append("    sfml-graphics-s-d")
-    lines.append("    sfml-window-s-d")
-    lines.append("    sfml-system-s-d")
-    lines.append("    sfml-audio-s-d")
-    lines.append("    opengl32")
-    lines.append("    winmm")
-    lines.append("    gdi32")
-    lines.append("    freetype")
-    lines.append("    flac")
-    lines.append("    vorbis")
-    lines.append("    vorbisenc")
-    lines.append("    vorbisfile")
-    lines.append("    ogg")
-    lines.append("    openal32")
+    lines.append("    sfml-graphics")
+    lines.append("    sfml-window")
+    lines.append("    sfml-system")
+    lines.append("    sfml-audio")
     lines.append(")")
     lines.append("")
 
@@ -201,7 +180,6 @@ def generate_cmake(scripts):
         "\n".join(lines) + "\n",
         encoding="utf-8"
     )
-
 if __name__ == "__main__":
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     scripts = find_serializable_scripts(SCRIPTS_DIR)
