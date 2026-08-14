@@ -323,7 +323,7 @@ void Engine::PrepareForProjectModuleUnload()
 	// Unload the project module to prepare for recompilation
 	manager->ClearAllEntities();
 }
-void Engine::ClearInpsector()
+void Engine::ClearInspector()
 {
 	manager->ClearInspector();
 	manager->SetSelectedEntity(nullptr);
@@ -612,7 +612,7 @@ bool Engine::ReloadProjectScripts()
 		return false;
 	}
 
-	ImguiHandler::get().ClearInspector();
+	ClearInspector();
 	GizmoSystem::get().SetSelectedEntity(nullptr);
 	UIEventSystem::get().Clear();
 	manager->DestroyAllEntities();
@@ -789,7 +789,7 @@ void Engine::ProcessDestroyQueue()
 
 void Engine::Reset()
 {
-	ImguiHandler::get().ClearInspector();
+	ClearInspector();
 	GizmoSystem::get().SetSelectedEntity(nullptr);
 	UIEventSystem::get().Clear();
 

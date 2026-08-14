@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+class Entity;
+
 struct PlayEvent {};
 struct PauseEvent {};
 struct ResetEvent {};
@@ -15,3 +17,8 @@ struct OpenProjectEvent {
 struct NewProjectEvent {};
 
 struct ReloadScriptsEvent {};
+
+
+struct DeleteEntityEvent {
+    Entity* entity;
+};

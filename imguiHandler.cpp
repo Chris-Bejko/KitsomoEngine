@@ -1,6 +1,7 @@
 #include "imguiHandler.h"
 #include "Logger.h"
 #include "SceneManager.h"
+#include "CommandHistory.h"
 #include "Commands/DeleteEntityCommand.h"
 #include "Commands/CopyEntityCommand.h"
 #include "Commands/PasteEntityCommand.h"
@@ -12,20 +13,13 @@
 #include "StatusManager.h"
 #include "EventSystem.h"
 #include "ColorPalletes.h"
-ImguiHandler *ImguiHandler::s_instance = nullptr;
 
-// Color palette
-
-namespace
+ImguiHandler &ImguiHandler::get()
 {
-	bool IsTextureFile(const std::string &name)
-	{
-		std::string extension = std::filesystem::path(name).extension().string();
-		std::transform(extension.begin(), extension.end(), extension.begin(), [](unsigned char c)
-					   { return static_cast<char>(std::tolower(c)); });
-		return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".bmp" || extension == ".tga" || extension == ".gif";
-	}
+	static ImguiHandler instance;
+	return instance;
 }
+
 void ImguiHandler::ApplyEditorStyle()
 {
 	ImGuiStyle &style = ImGui::GetStyle();
@@ -81,416 +75,18 @@ void ImguiHandler::Update(sf::Time rest)
 	auto &engine = Engine::get();
 	auto &window = engine.GetWindow();
 
-	std::cout << "Engine: " << &engine << '\n';
-	std::cout << "Window: " << &window << '\n';
-
 	auto handle = window.getSystemHandle();
 
-	std::cout << "Handle: " << handle << '\n';
-
 	ImGui::SFML::Update(window, rest);
-	DrawToolbar();
-	// DrawStatusWindow();
-	// DrawConsole();
-	// DrawInspector();
-	// DrawEntities();
-	// DrawProjectExplorer();
-	// DrawProjectLoadWindow();
-
-	// DrawScenePanel();
-	if (savePressed)
-		DrawSaveDialog();
-	if (loadPressed)
-		DrawLoadDialog();
-	if (showDeleteDialog)
-		DrawDeleteConfirmDialog();
-
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) &&
-		sf::Keyboard::isKeyPressed(sf::Keyboard::S) && !savePressed)
-	{
-		str = "saveFile.txt";
-		str.resize(255, '\0');
-		savePressed = true;
-	}
 
 	// Handle entity keyboard shortcuts only in editor mode
 	if (Engine::get().GetCurrentState() == EngineState::Running)
 	{
-		HandleEntityKeyboardShortcuts();
+		HandleKeyboardShortcuts();
 	}
 }
 
-void ImguiHandler::DrawScriptStatus()
-{
-	if (Engine::get().pendingRecompile)
-	{
-		ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f),
-						   "● Recompiling...");
-	}
-	else if (ScriptCompiler::lastCompileFailed)
-	{
-		ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f),
-						   "● Compile Error");
-		if (ImGui::IsItemHovered())
-			ImGui::SetTooltip("%s", ScriptCompiler::lastError.c_str());
-	}
-	else
-	{
-		ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f),
-						   "● Scripts OK");
-	}
-}
-
-void ImguiHandler::DrawToolbar()
-{
-	ImGui::SetNextWindowSize(ImVec2(0, 0), ImGuiCond_Always);
-	ImGui::Begin("##toolbar", nullptr,
-				 ImGuiWindowFlags_NoTitleBar |
-					 ImGuiWindowFlags_NoResize |
-					 ImGuiWindowFlags_NoScrollbar);
-
-	auto stateButton = [](const char *label, ImVec4 color, bool &pressed)
-	{
-		ImGui::PushStyleColor(ImGuiCol_Button, color);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(color.x + 0.1f, color.y + 0.1f, color.z + 0.1f, 1.0f));
-		pressed = ImGui::Button(label, ImVec2(70, 28));
-		ImGui::PopStyleColor(2);
-		return pressed;
-	};
-
-	bool pressed = false;
-	if (!SceneManager::get().HasProjectRoot())
-	{
-		if (stateButton("Open", COLOR_ACCENT, pressed))
-			EventSystem::get().Fire(OpenProjectLoadDialogEvent{});
-		ImGui::SameLine();
-		// if (stateButton("  New", COLOR_SUCCESS, pressed))
-		// 	EventSystem::get().Fire(EventType::NewProject);
-		ImGui::SameLine();
-		ImGui::TextColored(COLOR_WARNING, "No project loaded");
-		ImGui::End();
-		return;
-	}
-
-	switch (Engine::get().GetCurrentState())
-	{
-	case EngineState::Running:
-		if (stateButton("  Play", COLOR_SUCCESS, pressed))
-			OnPlay();
-		ImGui::SameLine();
-		if (stateButton("  Save", COLOR_ACCENT, pressed))
-			OnSave();
-		ImGui::SameLine();
-		if (stateButton("  Load", COLOR_ACCENT, pressed))
-			OnLoad();
-		break;
-
-	case EngineState::PlayMode:
-		if (stateButton(" Pause", COLOR_WARNING, pressed))
-			OnPause();
-		ImGui::SameLine();
-		if (stateButton("  Save", COLOR_ACCENT, pressed))
-			OnSave();
-		ImGui::SameLine();
-		if (stateButton("  Load", COLOR_ACCENT, pressed))
-			OnLoad();
-		break;
-
-	case EngineState::Paused:
-		if (stateButton("  Play", COLOR_SUCCESS, pressed))
-			OnPlay();
-		break;
-	}
-
-	ImGui::SameLine();
-	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.85f, 0.28f, 0.28f, 1.0f));
-	if (ImGui::Button(" Reset", ImVec2(70, 28)))
-		OnReset();
-	ImGui::PopStyleColor(2);
-
-	ImGui::SameLine();
-	ImGui::Separator();
-	ImGui::SameLine();
-
-	auto gizmoButton = [](const char *label, GizmoMode btnMode)
-	{
-		bool active = GizmoSystem::get().GetMode() == btnMode;
-		if (active)
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.25f, 0.52f, 0.95f, 1.0f));
-		if (ImGui::Button(label, ImVec2(40, 28)))
-			GizmoSystem::get().SetMode(btnMode);
-		if (active)
-			ImGui::PopStyleColor();
-	};
-
-	gizmoButton("W", GizmoMode::Move);
-	ImGui::SameLine();
-	gizmoButton("E", GizmoMode::Rotate);
-	ImGui::SameLine();
-	gizmoButton("R", GizmoMode::Scale);
-	ImGui::SameLine();
-
-	// Snap toggle
-	bool snap = GizmoSystem::get().snapEnabled;
-	if (snap)
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.85f, 0.60f, 0.10f, 1.0f));
-	if (ImGui::Button("Snap", ImVec2(50, 28)))
-		GizmoSystem::get().snapEnabled = !GizmoSystem::get().snapEnabled;
-	if (snap)
-		ImGui::PopStyleColor();
-
-	ImGui::SameLine();
-	DrawScriptStatus();
-	ImGui::SameLine();
-	if (ImGui::Button("Reload Scripts", ImVec2(110, 28)))
-	{
-		Engine::get().RequestScriptRecompile();
-	}
-	ImGui::End();
-}
-
-
-void ImguiHandler::DrawSaveDialog()
-{
-	if (Engine::get().GetCurrentState() != EngineState::Running)
-		return;
-
-	ImGui::SetNextWindowSize(ImVec2(380, 0), ImGuiCond_Always);
-	ImGui::Begin("Save Project", &savePressed);
-
-	ImGui::TextColored(COLOR_TEXT_DIM, "Filename");
-	ImGui::SetNextItemWidth(-1);
-	ImGui::InputText("##savefile", &str[0], 255);
-	ImGui::Spacing();
-
-	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_SUCCESS);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.75f, 0.45f, 1.0f));
-	if (ImGui::Button("Save", ImVec2(-1, 28)))
-	{
-		Engine::get().Save(str.c_str());
-		savePressed = false;
-		LOG_INFO("Saved to: ", str.c_str());
-	}
-	ImGui::PopStyleColor(2);
-
-	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.85f, 0.28f, 0.28f, 1.0f));
-	if (ImGui::Button("Cancel", ImVec2(-1, 28)))
-		savePressed = false;
-	ImGui::PopStyleColor(2);
-
-	ImGui::End();
-}
-
-void ImguiHandler::DrawLoadDialog()
-{
-	if (Engine::get().GetCurrentState() != EngineState::Running)
-		return;
-
-	ImGui::SetNextWindowSize(ImVec2(380, 0), ImGuiCond_Always);
-	ImGui::Begin("Load Project", &loadPressed);
-
-	ImGui::TextColored(COLOR_TEXT_DIM, "Filename");
-	ImGui::SetNextItemWidth(-1);
-	ImGui::InputText("##loadfile", &str[0], 255);
-	ImGui::Spacing();
-
-	if (loadError)
-		ImGui::TextColored(ImVec4(1, 0.3f, 0.3f, 1), "File not found!");
-
-	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.35f, 0.62f, 1.0f, 1.0f));
-	if (ImGui::Button("Load", ImVec2(-1, 28)))
-	{
-		if (Engine::get().Load(str.c_str()))
-		{
-			loadPressed = false;
-			loadError = false;
-			LOG_INFO("Loaded: ", str.c_str());
-		}
-		else
-		{
-			loadError = true;
-			LOG_WARNING("File not found: ", str.c_str());
-		}
-	}
-	ImGui::PopStyleColor(2);
-
-	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
-	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.85f, 0.28f, 0.28f, 1.0f));
-	if (ImGui::Button("Cancel", ImVec2(-1, 28)))
-	{
-		loadPressed = false;
-		loadError = false;
-	}
-	ImGui::PopStyleColor(2);
-
-	ImGui::End();
-}
-
-void ImguiHandler::OnPlay()
-{
-	savePressed = false;
-	loadPressed = false;
-	Engine::get().SetEngineState(EngineState::PlayMode);
-}
-void ImguiHandler::OnPause() { Engine::get().SetEngineState(EngineState::Paused); }
-void ImguiHandler::OnReset()
-{
-	savePressed = false;
-	loadPressed = false;
-	Engine::get().SetEngineState(EngineState::Running);
-}
-void ImguiHandler::OnSave()
-{
-	if (!SceneManager::get().HasProjectRoot())
-	{
-		Notify("Load a project before saving", COLOR_WARNING);
-		return;
-	}
-
-	str = "saveFile.txt";
-	str.resize(255, '\0');
-	savePressed = true;
-}
-void ImguiHandler::OnLoad()
-{
-	if (!SceneManager::get().HasProjectRoot())
-	{
-		showOpenProjectDialog = true;
-		Notify("Select a project before loading scenes", COLOR_WARNING);
-		return;
-	}
-
-	str = "saveFile.txt";
-	str.resize(255, '\0');
-	loadPressed = true;
-}
-void ImguiHandler::ClearInspector() { Engine::get().ClearInpsector(); }
-
-void ImguiHandler::Notify(const std::string &message, ImVec4 color, float lifetime)
-{
-	StatusManager::get().Notify(message, color, lifetime);
-}
-
-void ImguiHandler::DrawScenePanel()
-{
-	if (!SceneManager::get().HasProjectRoot())
-		return;
-
-	ImGui::Begin("Scenes");
-
-	// Current scene
-	ImGui::TextColored(COLOR_TEXT_DIM, "CURRENT SCENE");
-	std::string current = SceneManager::get().GetCurrentScene();
-	if (current.empty())
-		ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.0f), "Unsaved scene");
-	else
-		ImGui::TextColored(COLOR_ACCENT, current.c_str());
-
-	ImGui::Separator();
-	ImGui::Spacing();
-
-	// Save buttons
-	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_SUCCESS);
-	if (ImGui::Button("Save Scene", ImVec2(-1, 28)))
-	{
-		if (current.empty())
-			saveScenePressed = true;
-		else
-			SceneManager::get().SaveCurrentScene();
-	}
-	ImGui::PopStyleColor();
-
-	ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
-	if (ImGui::Button("Save Scene As...", ImVec2(-1, 28)))
-		saveScenePressed = true;
-	ImGui::PopStyleColor();
-
-	if (saveScenePressed)
-	{
-		ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
-		ImGui::Begin("Save Scene As", &saveScenePressed);
-		ImGui::SetNextItemWidth(-1);
-		ImGui::InputText("##scenename", &sceneNameBuffer[0], 128);
-		ImGui::PushStyleColor(ImGuiCol_Button, COLOR_SUCCESS);
-		if (ImGui::Button("Save", ImVec2(-1, 28)))
-		{
-			SceneManager::get().SaveSceneAs(std::string(sceneNameBuffer.c_str()));
-			saveScenePressed = false;
-		}
-		ImGui::PopStyleColor();
-		ImGui::End();
-	}
-
-	ImGui::Spacing();
-	ImGui::TextColored(COLOR_TEXT_DIM, "AVAILABLE SCENES");
-	ImGui::Separator();
-	ImGui::Spacing();
-
-	// List available scenes
-	auto scenes = SceneManager::get().GetAvailableScenes();
-	if (scenes.empty())
-	{
-		ImGui::TextColored(COLOR_TEXT_DIM, "No scenes found");
-	}
-	else
-	{
-		for (auto &scene : scenes)
-		{
-			bool isLoaded = scene == current;
-
-			if (isLoaded)
-				ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
-			else
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
-
-			std::string label = (isLoaded ? "* " : "  ") + scene + "##scene";
-			if (ImGui::Button(label.c_str(), ImVec2(-1, 24)))
-			{
-				// Show load options
-				selectedScene = scene;
-				showLoadOptions = true;
-			}
-			ImGui::PopStyleColor();
-		}
-	}
-
-	// Load options popup
-	if (showLoadOptions && !selectedScene.empty())
-	{
-		ImGui::SetNextWindowSize(ImVec2(250, 0), ImGuiCond_Always);
-		ImGui::Begin(("Load: " + selectedScene).c_str(), &showLoadOptions);
-
-		ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
-		if (ImGui::Button("Replace (clear current)", ImVec2(-1, 28)))
-		{
-			SceneManager::get().LoadScene(selectedScene, SceneLoadMode::Replace);
-			showLoadOptions = false;
-		}
-		ImGui::PopStyleColor();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, COLOR_ACCENT);
-		if (ImGui::Button("Additive (keep current)", ImVec2(-1, 28)))
-		{
-			SceneManager::get().LoadScene(selectedScene, SceneLoadMode::Additive);
-			showLoadOptions = false;
-		}
-		ImGui::PopStyleColor();
-
-		ImGui::End();
-	}
-
-	ImGui::End();
-}
-
-void ImguiHandler::DrawProjectLoadWindow()
-{
-	
-}
-
-void ImguiHandler::HandleEntityKeyboardShortcuts()
+void ImguiHandler::HandleKeyboardShortcuts()
 {
 	if (ImGui::GetIO().WantCaptureKeyboard)
 		return; // Don't handle shortcuts if imgui wants keyboard focus
@@ -503,8 +99,8 @@ void ImguiHandler::HandleEntityKeyboardShortcuts()
 	bool currentCtrlC = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::C);
 	if (currentCtrlC && !prevCtrlC && selected != nullptr)
 	{
-		OnCopyEntity();
-		Notify("Entity copied to clipboard", COLOR_SUCCESS);
+		CopyEntity();
+		StatusManager::get().Notify("Entity copied to clipboard", COLOR_SUCCESS);
 	}
 	prevCtrlC = currentCtrlC;
 
@@ -512,8 +108,8 @@ void ImguiHandler::HandleEntityKeyboardShortcuts()
 	bool currentCtrlV = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::V);
 	if (currentCtrlV && !prevCtrlV && EntityClipboard::get().HasContent())
 	{
-		OnPasteEntity();
-		Notify("Entity pasted", COLOR_SUCCESS);
+		PasteEntity();
+		StatusManager::get().Notify("Entity pasted", COLOR_SUCCESS);
 	}
 	prevCtrlV = currentCtrlV;
 
@@ -521,8 +117,8 @@ void ImguiHandler::HandleEntityKeyboardShortcuts()
 	bool currentCtrlD = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::D);
 	if (currentCtrlD && !prevCtrlD && selected != nullptr)
 	{
-		OnDuplicateEntity();
-		Notify("Entity duplicated", COLOR_SUCCESS);
+		DuplicateEntity();
+		StatusManager::get().Notify("Entity duplicated", COLOR_SUCCESS);
 	}
 	prevCtrlD = currentCtrlD;
 
@@ -530,7 +126,7 @@ void ImguiHandler::HandleEntityKeyboardShortcuts()
 	bool currentDelete = sf::Keyboard::isKeyPressed(sf::Keyboard::Delete);
 	if (currentDelete && !prevDelete && selected != nullptr)
 	{
-		OnDeleteEntity();
+		EventSystem::get().Fire(DeleteEntityEvent{selected});
 	}
 	prevDelete = currentDelete;
 
@@ -538,8 +134,8 @@ void ImguiHandler::HandleEntityKeyboardShortcuts()
 	bool currentCtrlZ = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Z);
 	if (currentCtrlZ && !prevCtrlZ)
 	{
-		OnUndo();
-		Notify("Undo: " + CommandHistory::get().GetUndoDescription(), COLOR_ACCENT);
+		Undo();
+		StatusManager::get().Notify("Undo: " + CommandHistory::get().GetUndoDescription(), COLOR_ACCENT);
 	}
 	prevCtrlZ = currentCtrlZ;
 
@@ -547,64 +143,14 @@ void ImguiHandler::HandleEntityKeyboardShortcuts()
 	bool currentCtrlY = ctrlDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Y);
 	if (currentCtrlY && !prevCtrlY)
 	{
-		OnRedo();
-		Notify("Redo: " + CommandHistory::get().GetRedoDescription(), COLOR_ACCENT);
+		Redo();
+		StatusManager::get().Notify("Redo: " + CommandHistory::get().GetRedoDescription(), COLOR_ACCENT);
 	}
 	prevCtrlY = currentCtrlY;
 }
 
-void ImguiHandler::DrawDeleteConfirmDialog()
-{
-	ImGui::SetNextWindowSize(ImVec2(300, 0), ImGuiCond_Always);
-	ImGui::Begin("Delete Entity", &showDeleteDialog, ImGuiWindowFlags_AlwaysAutoResize);
 
-	if (entityToDelete)
-	{
-		ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.2f, 1.0f), "Delete entity:");
-		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(1.0f, 1.0f, 1.0f, 1.0f), entityToDelete->GetName().c_str());
-		ImGui::Text("This action cannot be undone.");
-		ImGui::Spacing();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, COLOR_DANGER);
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.95f, 0.38f, 0.38f, 1.0f));
-		if (ImGui::Button("Delete", ImVec2(140, 28)))
-		{
-			// Create and execute the delete command
-			auto deleteCmd = std::make_unique<DeleteEntityCommand>(entityToDelete);
-			CommandHistory::get().Execute(std::move(deleteCmd));
-			Notify("Entity deleted", COLOR_DANGER);
-			showDeleteDialog = false;
-			entityToDelete = nullptr;
-		}
-		ImGui::PopStyleColor(2);
-
-		ImGui::SameLine();
-
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
-		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.35f, 0.55f, 1.0f));
-		if (ImGui::Button("Cancel", ImVec2(140, 28)))
-		{
-			showDeleteDialog = false;
-			entityToDelete = nullptr;
-		}
-		ImGui::PopStyleColor(2);
-	}
-
-	ImGui::End();
-}
-
-void ImguiHandler::OnDeleteEntity()
-{
-	auto selected = Engine::get().GetManager()->GetSelectedEntity();
-	if (selected != nullptr)
-	{
-		entityToDelete = selected;
-		showDeleteDialog = true;
-	}
-}
-
-void ImguiHandler::OnCopyEntity()
+void ImguiHandler::CopyEntity()
 {
 	auto selected = Engine::get().GetManager()->GetSelectedEntity();
 	if (selected != nullptr)
@@ -614,7 +160,7 @@ void ImguiHandler::OnCopyEntity()
 	}
 }
 
-void ImguiHandler::OnPasteEntity()
+void ImguiHandler::PasteEntity()
 {
 	if (EntityClipboard::get().HasContent())
 	{
@@ -623,7 +169,7 @@ void ImguiHandler::OnPasteEntity()
 	}
 }
 
-void ImguiHandler::OnDuplicateEntity()
+void ImguiHandler::DuplicateEntity()
 {
 	auto selected = Engine::get().GetManager()->GetSelectedEntity();
 	if (selected != nullptr)
@@ -633,7 +179,7 @@ void ImguiHandler::OnDuplicateEntity()
 	}
 }
 
-void ImguiHandler::OnUndo()
+void ImguiHandler::Undo()
 {
 	if (CommandHistory::get().CanUndo())
 	{
@@ -641,7 +187,7 @@ void ImguiHandler::OnUndo()
 	}
 }
 
-void ImguiHandler::OnRedo()
+void ImguiHandler::Redo()
 {
 	if (CommandHistory::get().CanRedo())
 	{

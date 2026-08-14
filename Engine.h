@@ -68,7 +68,7 @@ public:
 
     void TriggerDragging(std::string newDragged);
 
-    void ClearInpsector();
+    void ClearInspector();
 
     void SetView(sf::View &view);
 
