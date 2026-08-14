@@ -1,8 +1,7 @@
+#include "ColorPalletes.h"
 #include "ConsoleDialog.h"
 #include "DialogManager.h"
 REGISTER_DIALOG(ConsoleDialog);
-static const ImVec4 COLOR_DANGER = ImVec4(0.75f, 0.18f, 0.18f, 1.0f);
-static const ImVec4 COLOR_TEXT_DIM = ImVec4(0.55f, 0.55f, 0.60f, 1.0f);
 namespace
 {
 	ImVec4 GetValueColor(LogLevel level)

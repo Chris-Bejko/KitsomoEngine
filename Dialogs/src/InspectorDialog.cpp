@@ -2,9 +2,9 @@
 #include "Entity.h"
 #include "Engine.h"
 #include "imgui.h"
+#include "ColorPalletes.h"
 #include "DialogManager.h"
 REGISTER_DIALOG(InspectorDialog);
-static const ImVec4 COLOR_TEXT_DIM = ImVec4(0.55f, 0.55f, 0.60f, 1.0f);
 
 void InspectorDialog::Draw()
 {

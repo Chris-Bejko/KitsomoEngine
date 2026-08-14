@@ -2,10 +2,43 @@
   {
     "components": [
       {
-        "fields": null,
-        "guid": "f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
-        "type": "Camera"
+        "fields": {
+          "alignment": "Center",
+          "color": "White",
+          "fontId": "dmPrison",
+          "fontSize": 33,
+          "text": "High Score:"
+        },
+        "guid": "2e51edb1-f7d7-442f-9c0c-1e10fb4b3342",
+        "type": "UIText"
       },
+      {
+        "fields": {
+          "anchorOffset": "47.333374|27.779968",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "6aceb95b-6dbe-463d-97d3-2262c02d844e",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "position.x": 957.5086669921875,
+          "position.y": 507.0971984863281,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "43f815a9-b4c3-4407-8e9d-ffaca23dfb6b",
+        "type": "Transform"
+      }
+    ],
+    "guid": "78029789-044a-4d3b-8a8f-6d8c5e5f7627",
+    "name": "High Score",
+    "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
+  },
+  {
+    "components": [
       {
         "fields": {
           "position.x": 0.0,
@@ -14,264 +47,26 @@
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "1b373b78-9145-4ba3-9771-8c62f0606542",
+        "guid": "28c7bfe2-6276-45de-8f3b-2133fea1040e",
         "type": "Transform"
       }
     ],
-    "guid": "c318f141-2b23-4586-97e2-9f43420fc842",
-    "name": "Camera",
+    "guid": "c2360255-75bf-4a82-ba46-fea492927809",
+    "name": "MainEnv",
     "parent": ""
   },
   {
     "components": [
       {
         "fields": {
-          "alignment": "Center",
-          "color": "White",
-          "fontId": "dmPrison",
-          "fontSize": 29,
-          "text": "Main Menu"
+          "Environment": "c2360255-75bf-4a82-ba46-fea492927809",
+          "GameManager": "c654de34-f964-48af-8341-8dcea5cd045c|968f3aff-082c-40eb-b7ba-697b2e1084db",
+          "enemyPrefab": "Enemy",
+          "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
+          "spawnInterval": 3.0
         },
-        "guid": "4d8b18be-e9e0-4875-94bb-7ef77e189c91",
-        "type": "UIText"
-      },
-      {
-        "fields": {
-          "anchorOffset": "0.000000|0.000000",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
-        },
-        "guid": "5ee49d26-f3fd-41de-94b9-205cfb7ead4c",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 341.004638671875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "4566288d-9e7e-444c-bd02-011438fb9307",
-        "type": "Transform"
-      }
-    ],
-    "guid": "f7062ed0-6df5-47f2-a9fe-74e2e28e4f3f",
-    "name": "Main Menu Text",
-    "parent": "4399b10c-367d-491a-91b2-2fee063e5bfb"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "interactable": true,
-          "targetText": ""
-        },
-        "guid": "62853400-36ed-4dde-8322-80aaecaeeca8",
-        "type": "UIButton"
-      },
-      {
-        "fields": {
-          "anchorOffset": "-360.000061|-150.000000",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
-        },
-        "guid": "a17f3d9a-2ae6-4bfc-85a5-3de7c074af7f",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "Texture": "",
-          "alpha": 1.0,
-          "color": "Red"
-        },
-        "guid": "942d2439-a153-4253-b119-09552e18aeae",
-        "type": "UIImage"
-      },
-      {
-        "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 341.004638671875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "3df421dd-ff86-44de-a3ab-b572125d51be",
-        "type": "Transform"
-      }
-    ],
-    "guid": "4399b10c-367d-491a-91b2-2fee063e5bfb",
-    "name": "Main menu",
-    "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "alignment": "Center",
-          "color": "White",
-          "fontId": "dmPrison",
-          "fontSize": 31,
-          "text": "Play again"
-        },
-        "guid": "9cbacc90-f925-4440-8374-79b0b2ee96df",
-        "type": "UIText"
-      },
-      {
-        "fields": {
-          "anchorOffset": "0.000000|0.000000",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
-        },
-        "guid": "94f95bdd-9f04-4c96-8a80-03740479729d",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 247.57870483398438,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "dbbc983b-ebfe-42be-ab0d-724268af7a8d",
-        "type": "Transform"
-      }
-    ],
-    "guid": "e60e55d7-35a7-4542-89b3-b20174fc113d",
-    "name": "Play again Text",
-    "parent": "197d8213-1d1a-483d-a0ac-f9b4e05080ce"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "Texture": "",
-          "alpha": 1.0,
-          "color": "Red"
-        },
-        "guid": "ca124266-0eca-4cae-9c0b-1e8e68954443",
-        "type": "UIImage"
-      },
-      {
-        "fields": {
-          "anchorOffset": "-360.000061|-250.000000",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
-        },
-        "guid": "8b51b7bc-c50a-49b7-a708-5249e50aca23",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "interactable": true,
-          "targetText": "e60e55d7-35a7-4542-89b3-b20174fc113d"
-        },
-        "guid": "d9bb0149-04ac-40d7-8f6a-572e60623efe",
-        "type": "UIButton"
-      },
-      {
-        "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 247.57870483398438,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "ed3303b4-2270-45c1-9331-e939d96960de",
-        "type": "Transform"
-      }
-    ],
-    "guid": "197d8213-1d1a-483d-a0ac-f9b4e05080ce",
-    "name": "Play again ",
-    "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "alignment": "Center",
-          "color": "White",
-          "fontId": "dmPrison",
-          "fontSize": 33,
-          "text": "Score: "
-        },
-        "guid": "c530e9b1-a3fb-446f-b3bb-d5cd005630ec",
-        "type": "UIText"
-      },
-      {
-        "fields": {
-          "anchorOffset": "-360.000000|-325.390991",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
-        },
-        "guid": "65ab512b-142a-44e0-a22a-45723144fa27",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "position.x": 576.9537353515625,
-          "position.y": 177.14398193359375,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "76b151fb-0933-4123-a8bb-d352eec58b18",
-        "type": "Transform"
-      }
-    ],
-    "guid": "e434ef22-8d31-4caa-b9fc-11b1067ffb6c",
-    "name": "Score text",
-    "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "alignment": "Center",
-          "color": "White",
-          "fontId": "dmPrison",
-          "fontSize": 33,
-          "text": "You Lost :("
-        },
-        "guid": "ed74bb4e-cb2e-4a14-a736-5ecb5280003e",
-        "type": "UIText"
-      },
-      {
-        "fields": {
-          "anchorOffset": "-366.666687|-457.403015",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
-        },
-        "guid": "5dedb9a5-aed9-4224-8623-34dc3c52d030",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "position.x": 570.7252807617188,
-          "position.y": 53.81053924560547,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "2eae2f79-205d-411b-abfd-85f0625b6ea4",
-        "type": "Transform"
-      }
-    ],
-    "guid": "c1644fdf-1c1a-438a-974a-e6c8e2409d9a",
-    "name": "Lose Title",
-    "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "referenceResolution": "1920.000000|1080.000000",
-          "renderMode": "ScreenSpace",
-          "scaleMode": "ScaleWithScreenSize"
-        },
-        "guid": "467ab5b4-d397-4d49-bfeb-52c910b0264c",
-        "type": "Canvas"
+        "guid": "cc20a329-bc90-45d4-8ac7-e3f39d96a7d9",
+        "type": "EnemySpawner"
       },
       {
         "fields": {
@@ -281,13 +76,13 @@
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "188423c4-7c6a-40df-9edc-ff4219c03be1",
+        "guid": "6365195c-0fcc-49e4-b774-9b8739bd7a3f",
         "type": "Transform"
       }
     ],
-    "guid": "83270db5-fa83-407e-9506-bd1d99b422b5",
-    "name": "EndUI",
-    "parent": ""
+    "guid": "1ea485fb-8ec8-4841-b3ce-5000c1e6c886",
+    "name": "EnemySpawner",
+    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
   },
   {
     "components": [
@@ -296,429 +91,36 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 24,
-          "text": "Play now"
+          "fontSize": 30,
+          "text": "Score: {0}"
         },
-        "guid": "6ab118f6-c2d5-48e7-b137-49a0954a6449",
+        "guid": "abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
         "type": "UIText"
       },
       {
         "fields": {
-          "anchorOffset": "0.000000|0.000000",
+          "anchorOffset": "-940.000183|-350.713593",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "47fc678c-a67e-454b-a508-cdf8fec66d74",
+        "guid": "f4dc1135-fc20-4b0b-b4b4-fe61d8de322c",
         "type": "UIRect"
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 177.1435546875,
+          "position.x": 35.08317947387695,
+          "position.y": 153.48611450195313,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "dc78abe9-5c39-4332-8b13-d6492c7c41c8",
+        "guid": "a5f4ecdc-a993-4f7a-aac1-84c0db5f82f7",
         "type": "Transform"
       }
     ],
-    "guid": "d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4",
-    "name": "PlayText",
-    "parent": "4a1cf809-e074-4d9f-873a-53dd9428ed04"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "interactable": true,
-          "targetText": "d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4"
-        },
-        "guid": "bcde682b-d9b5-46dd-a439-c350617c00e6",
-        "type": "UIButton"
-      },
-      {
-        "fields": {
-          "anchorOffset": "-360.000061|-325.391449",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
-        },
-        "guid": "5e35e883-d431-4a6c-bee3-a73064a3ba8a",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "Texture": "",
-          "alpha": 1.0,
-          "color": "Red"
-        },
-        "guid": "57abc700-e9e5-4653-b858-e0d829a9801c",
-        "type": "UIImage"
-      },
-      {
-        "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 177.1435546875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "38217d89-f792-4215-b48f-10f32eea4e05",
-        "type": "Transform"
-      }
-    ],
-    "guid": "4a1cf809-e074-4d9f-873a-53dd9428ed04",
-    "name": "Play Button",
-    "parent": "ea9d9612-2219-44ad-b406-748ab473d088"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "alignment": "Center",
-          "color": "White",
-          "fontId": "dmPrison",
-          "fontSize": 33,
-          "text": "Color Bullets REMAKEEEE"
-        },
-        "guid": "1fcd9e17-7475-40d2-a996-923520dc1897",
-        "type": "UIText"
-      },
-      {
-        "fields": {
-          "anchorOffset": "-362.000000|-457.403381",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
-        },
-        "guid": "e906b191-8c36-479f-898a-6932979b2b41",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "position.x": 575.085205078125,
-          "position.y": 53.81017303466797,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "a8d4ad8f-c611-45a3-8ee3-fdeb35e374b6",
-        "type": "Transform"
-      }
-    ],
-    "guid": "12383c99-0ef9-4c6f-b78d-e87bdb2bfa40",
-    "name": "Title",
-    "parent": "ea9d9612-2219-44ad-b406-748ab473d088"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "referenceResolution": "1920.000000|1080.000000",
-          "renderMode": "ScreenSpace",
-          "scaleMode": "ScaleWithScreenSize"
-        },
-        "guid": "6f7d2cf6-eb05-4716-b639-8cf156d7288d",
-        "type": "Canvas"
-      },
-      {
-        "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "583738e8-241e-4698-bcc3-f51c24654e36",
-        "type": "Transform"
-      }
-    ],
-    "guid": "ea9d9612-2219-44ad-b406-748ab473d088",
-    "name": "StartUI",
-    "parent": ""
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "colorString": "Green"
-        },
-        "guid": "4437c923-e031-4c38-967d-8407c908c210",
-        "type": "FloorSquare"
-      },
-      {
-        "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
-        },
-        "guid": "d85b038d-cfa0-4816-aa39-68e34d0b3a61",
-        "type": "BoxCollider"
-      },
-      {
-        "fields": {
-          "ColorID": "Magenta",
-          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
-          "renderOrder": 0
-        },
-        "guid": "5507e72d-f3c7-4b6c-ac8e-9c5cdf7d7e1d",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "position.x": -1005.1074829101563,
-          "position.y": -814.217041015625,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
-        },
-        "guid": "28e5337d-7573-4e67-8580-0cdce495c76d",
-        "type": "Transform"
-      }
-    ],
-    "guid": "ff9d1783-31a4-4d29-96e5-c15699ad0b7f",
-    "name": "Floor Square (3)",
-    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "ColorID": "Magenta",
-          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
-          "renderOrder": 0
-        },
-        "guid": "8c62c7fe-bdcb-41f9-b111-a0d1653e7ce8",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
-        },
-        "guid": "55ca71ff-5f86-463f-b427-4f49ee16ebd9",
-        "type": "BoxCollider"
-      },
-      {
-        "fields": {
-          "colorString": "Cyan"
-        },
-        "guid": "c9376e08-6c50-4f04-a913-50419d3c086c",
-        "type": "FloorSquare"
-      },
-      {
-        "fields": {
-          "position.x": 403.7344055175781,
-          "position.y": -199.8209228515625,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
-        },
-        "guid": "18513d7a-d5c7-4ad6-b640-d3bda9009851",
-        "type": "Transform"
-      }
-    ],
-    "guid": "738cf525-f469-4782-a530-87250ab4cc37",
-    "name": "Floor Square (2)",
-    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "colorString": "Blue"
-        },
-        "guid": "2cf69c65-0f22-4b23-ad08-5207dbeb6b0c",
-        "type": "FloorSquare"
-      },
-      {
-        "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
-        },
-        "guid": "a9ac476c-d499-4b06-9a27-0039ff7de1e2",
-        "type": "BoxCollider"
-      },
-      {
-        "fields": {
-          "ColorID": "Magenta",
-          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
-          "renderOrder": 0
-        },
-        "guid": "3926b45a-f729-4274-adbe-1bea51c3ad2f",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "position.x": 283.2917175292969,
-          "position.y": -317.5133361816406,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
-        },
-        "guid": "c9a1cf46-0679-43c5-a680-fd8c96302624",
-        "type": "Transform"
-      }
-    ],
-    "guid": "af8a14ad-a601-4de0-b555-68729497ff5f",
-    "name": "Floor Square (1)",
-    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "ColorID": "Magenta",
-          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
-          "renderOrder": 0
-        },
-        "guid": "b15818af-1928-45fc-98ec-dd0259dc5ad4",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
-        },
-        "guid": "7094b86e-ca5b-429f-bc2b-c426e80fa1ef",
-        "type": "BoxCollider"
-      },
-      {
-        "fields": {
-          "colorString": "Magenta"
-        },
-        "guid": "a4391a24-b049-4501-a936-13450559fef9",
-        "type": "FloorSquare"
-      },
-      {
-        "fields": {
-          "position.x": 197.8181915283203,
-          "position.y": -150.42437744140625,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
-        },
-        "guid": "9f62bd39-8a69-452d-aeaf-8bddef6c2b7b",
-        "type": "Transform"
-      }
-    ],
-    "guid": "b5e4915e-526c-4276-a1dc-f4be673bd9b9",
-    "name": "Floor Square",
-    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "filePath": "",
-          "isLooping": false,
-          "pitch": 1.0,
-          "volume": 80.0
-        },
-        "guid": "685878f4-3375-4477-ac0a-71f28eeb5510",
-        "type": "AudioSource"
-      },
-      {
-        "fields": {
-          "bounciness": 0.0,
-          "friction": 0.5,
-          "gravityScale": 1.0,
-          "isKinematic": true,
-          "isStatic": false,
-          "mass": 1.0,
-          "useGravity": false
-        },
-        "guid": "2202bae2-d4aa-4a30-9c48-533f626f3da4",
-        "type": "Rigidbody"
-      },
-      {
-        "fields": {
-          "Camera": "c318f141-2b23-4586-97e2-9f43420fc842|f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
-          "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|9b4469c3-bccf-484f-9d05-56a92005b598",
-          "bulletPrefab": "Bullet",
-          "cooldown": 0.5,
-          "floorTouchSound": "Audio/powerUp.wav",
-          "lastColorString": "",
-          "moveSpeed": 350.0,
-          "shootSound": "Audio/explosion.wav"
-        },
-        "guid": "032ea708-4efb-45b6-a06b-02f7b0b890d4",
-        "type": "Player"
-      },
-      {
-        "fields": {
-          "ColorID": "Red",
-          "Texture": "Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
-          "renderOrder": 2
-        },
-        "guid": "9b4469c3-bccf-484f-9d05-56a92005b598",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
-          "collisionTag": "player",
-          "isTrigger": true,
-          "vertices": "2.791113|-499.497528;-535.390930|471.992981;570.063293|471.992981"
-        },
-        "guid": "1eea6922-d86d-4928-9274-b78f51618efc",
-        "type": "PolygonCollider"
-      },
-      {
-        "fields": {
-          "position.x": -338.666748046875,
-          "position.y": -509.6548767089844,
-          "rotation": 0.0,
-          "scale.x": 0.05000000074505806,
-          "scale.y": 0.05000000074505806
-        },
-        "guid": "83e3d555-0e00-468f-bf73-7dada7ec8190",
-        "type": "Transform"
-      }
-    ],
-    "guid": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
-    "name": "Player",
-    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "referenceResolution": "1920.000000|1080.000000",
-          "renderMode": "ScreenSpace",
-          "scaleMode": "ScaleWithScreenSize"
-        },
-        "guid": "aa8ba336-3c60-4cef-9a1c-0438d94be3d3",
-        "type": "Canvas"
-      },
-      {
-        "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "96f2654d-9e81-450d-873e-7a1d43e3938a",
-        "type": "Transform"
-      }
-    ],
-    "guid": "c9ec4c50-f310-4e5f-8070-6d19b0525a3a",
-    "name": "EnvCanvas",
-    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
+    "guid": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f",
+    "name": "Score Text",
+    "parent": "c9ec4c50-f310-4e5f-8070-6d19b0525a3a"
   },
   {
     "components": [
@@ -761,52 +163,12 @@
     "components": [
       {
         "fields": {
-          "anchorOffset": "-861.333496|-459.890961",
-          "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
+          "referenceResolution": "1920.000000|1080.000000",
+          "renderMode": "ScreenSpace",
+          "scaleMode": "ScaleWithScreenSize"
         },
-        "guid": "f4dc1135-fc20-4b0b-b4b4-fe61d8de322c",
-        "type": "UIRect"
-      },
-      {
-        "fields": {
-          "alignment": "Center",
-          "color": "White",
-          "fontId": "dmPrison",
-          "fontSize": 30,
-          "text": "Score: {0}"
-        },
-        "guid": "abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
-        "type": "UIText"
-      },
-      {
-        "fields": {
-          "position.x": 108.57823181152344,
-          "position.y": 51.48613739013672,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
-        },
-        "guid": "a5f4ecdc-a993-4f7a-aac1-84c0db5f82f7",
-        "type": "Transform"
-      }
-    ],
-    "guid": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f",
-    "name": "Score Text",
-    "parent": "c9ec4c50-f310-4e5f-8070-6d19b0525a3a"
-  },
-  {
-    "components": [
-      {
-        "fields": {
-          "Environment": "c2360255-75bf-4a82-ba46-fea492927809",
-          "GameManager": "c654de34-f964-48af-8341-8dcea5cd045c|968f3aff-082c-40eb-b7ba-697b2e1084db",
-          "enemyPrefab": "Enemy",
-          "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
-          "spawnInterval": 3.0
-        },
-        "guid": "cc20a329-bc90-45d4-8ac7-e3f39d96a7d9",
-        "type": "EnemySpawner"
+        "guid": "aa8ba336-3c60-4cef-9a1c-0438d94be3d3",
+        "type": "Canvas"
       },
       {
         "fields": {
@@ -816,41 +178,307 @@
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "6365195c-0fcc-49e4-b774-9b8739bd7a3f",
+        "guid": "96f2654d-9e81-450d-873e-7a1d43e3938a",
         "type": "Transform"
       }
     ],
-    "guid": "1ea485fb-8ec8-4841-b3ce-5000c1e6c886",
-    "name": "EnemySpawner",
+    "guid": "c9ec4c50-f310-4e5f-8070-6d19b0525a3a",
+    "name": "EnvCanvas",
     "parent": "c2360255-75bf-4a82-ba46-fea492927809"
   },
   {
     "components": [
       {
         "fields": {
+          "collisionTag": "player",
+          "isTrigger": true,
+          "vertices": "2.791113|-499.497528;-535.390930|471.992981;570.063293|471.992981"
+        },
+        "guid": "1eea6922-d86d-4928-9274-b78f51618efc",
+        "type": "PolygonCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "Red",
+          "Texture": "Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
+          "renderOrder": 2
+        },
+        "guid": "9b4469c3-bccf-484f-9d05-56a92005b598",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "Camera": "c318f141-2b23-4586-97e2-9f43420fc842|f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
+          "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|9b4469c3-bccf-484f-9d05-56a92005b598",
+          "bulletPrefab": "Bullet",
+          "cooldown": 0.5,
+          "floorTouchSound": "Audio/powerUp.wav",
+          "lastColorString": "",
+          "moveSpeed": 350.0,
+          "shootSound": "Audio/explosion.wav"
+        },
+        "guid": "032ea708-4efb-45b6-a06b-02f7b0b890d4",
+        "type": "Player"
+      },
+      {
+        "fields": {
+          "bounciness": 0.0,
+          "friction": 0.5,
+          "gravityScale": 1.0,
+          "isKinematic": true,
+          "isStatic": false,
+          "mass": 1.0,
+          "useGravity": false
+        },
+        "guid": "2202bae2-d4aa-4a30-9c48-533f626f3da4",
+        "type": "Rigidbody"
+      },
+      {
+        "fields": {
+          "filePath": "",
+          "isLooping": false,
+          "pitch": 1.0,
+          "volume": 80.0
+        },
+        "guid": "685878f4-3375-4477-ac0a-71f28eeb5510",
+        "type": "AudioSource"
+      },
+      {
+        "fields": {
+          "position.x": -338.666748046875,
+          "position.y": -509.6548767089844,
+          "rotation": 0.0,
+          "scale.x": 0.05000000074505806,
+          "scale.y": 0.05000000074505806
+        },
+        "guid": "83e3d555-0e00-468f-bf73-7dada7ec8190",
+        "type": "Transform"
+      }
+    ],
+    "guid": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
+    "name": "Player",
+    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "colorString": "Magenta"
+        },
+        "guid": "a4391a24-b049-4501-a936-13450559fef9",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "7094b86e-ca5b-429f-bc2b-c426e80fa1ef",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": 0
+        },
+        "guid": "b15818af-1928-45fc-98ec-dd0259dc5ad4",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "position.x": 197.8181915283203,
+          "position.y": -150.42437744140625,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
+        },
+        "guid": "9f62bd39-8a69-452d-aeaf-8bddef6c2b7b",
+        "type": "Transform"
+      }
+    ],
+    "guid": "b5e4915e-526c-4276-a1dc-f4be673bd9b9",
+    "name": "Floor Square (3)",
+    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": 0
+        },
+        "guid": "3926b45a-f729-4274-adbe-1bea51c3ad2f",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "a9ac476c-d499-4b06-9a27-0039ff7de1e2",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "colorString": "Blue"
+        },
+        "guid": "2cf69c65-0f22-4b23-ad08-5207dbeb6b0c",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "position.x": 283.2917175292969,
+          "position.y": -317.5133361816406,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
+        },
+        "guid": "c9a1cf46-0679-43c5-a680-fd8c96302624",
+        "type": "Transform"
+      }
+    ],
+    "guid": "af8a14ad-a601-4de0-b555-68729497ff5f",
+    "name": "Floor Square (2)",
+    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "colorString": "Cyan"
+        },
+        "guid": "c9376e08-6c50-4f04-a913-50419d3c086c",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "55ca71ff-5f86-463f-b427-4f49ee16ebd9",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": 0
+        },
+        "guid": "8c62c7fe-bdcb-41f9-b111-a0d1653e7ce8",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "position.x": 403.7344055175781,
+          "position.y": -199.8209228515625,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
+        },
+        "guid": "18513d7a-d5c7-4ad6-b640-d3bda9009851",
+        "type": "Transform"
+      }
+    ],
+    "guid": "738cf525-f469-4782-a530-87250ab4cc37",
+    "name": "Floor Square (1)",
+    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": 0
+        },
+        "guid": "5507e72d-f3c7-4b6c-ac8e-9c5cdf7d7e1d",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "d85b038d-cfa0-4816-aa39-68e34d0b3a61",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "colorString": "Green"
+        },
+        "guid": "4437c923-e031-4c38-967d-8407c908c210",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "position.x": -1005.1074829101563,
+          "position.y": -814.217041015625,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
+        },
+        "guid": "28e5337d-7573-4e67-8580-0cdce495c76d",
+        "type": "Transform"
+      }
+    ],
+    "guid": "ff9d1783-31a4-4d29-96e5-c15699ad0b7f",
+    "name": "Floor Square",
+    "parent": "c2360255-75bf-4a82-ba46-fea492927809"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "referenceResolution": "1920.000000|1080.000000",
+          "renderMode": "ScreenSpace",
+          "scaleMode": "ScaleWithScreenSize"
+        },
+        "guid": "6f7d2cf6-eb05-4716-b639-8cf156d7288d",
+        "type": "Canvas"
+      },
+      {
+        "fields": {
           "position.x": 0.0,
           "position.y": 0.0,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "28c7bfe2-6276-45de-8f3b-2133fea1040e",
+        "guid": "583738e8-241e-4698-bcc3-f51c24654e36",
         "type": "Transform"
       }
     ],
-    "guid": "c2360255-75bf-4a82-ba46-fea492927809",
-    "name": "MainEnv",
+    "guid": "ea9d9612-2219-44ad-b406-748ab473d088",
+    "name": "StartUI",
     "parent": ""
   },
   {
     "components": [
       {
         "fields": {
-          "anchorOffset": "47.333374|27.779968",
+          "anchorOffset": "-362.000000|-457.403381",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
-        "guid": "6aceb95b-6dbe-463d-97d3-2262c02d844e",
+        "guid": "e906b191-8c36-479f-898a-6932979b2b41",
         "type": "UIRect"
       },
       {
@@ -859,25 +487,397 @@
           "color": "White",
           "fontId": "dmPrison",
           "fontSize": 33,
-          "text": "High Score:"
+          "text": "Color Bullets REMAKEEEE"
         },
-        "guid": "2e51edb1-f7d7-442f-9c0c-1e10fb4b3342",
+        "guid": "1fcd9e17-7475-40d2-a996-923520dc1897",
         "type": "UIText"
       },
       {
         "fields": {
-          "position.x": 957.5086669921875,
-          "position.y": 507.0971984863281,
+          "position.x": 575.085205078125,
+          "position.y": 53.81017303466797,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
         },
-        "guid": "43f815a9-b4c3-4407-8e9d-ffaca23dfb6b",
+        "guid": "a8d4ad8f-c611-45a3-8ee3-fdeb35e374b6",
         "type": "Transform"
       }
     ],
-    "guid": "78029789-044a-4d3b-8a8f-6d8c5e5f7627",
-    "name": "High Score",
+    "guid": "12383c99-0ef9-4c6f-b78d-e87bdb2bfa40",
+    "name": "Title",
+    "parent": "ea9d9612-2219-44ad-b406-748ab473d088"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "Texture": "",
+          "alpha": 1.0,
+          "color": "Red"
+        },
+        "guid": "57abc700-e9e5-4653-b858-e0d829a9801c",
+        "type": "UIImage"
+      },
+      {
+        "fields": {
+          "anchorOffset": "-360.000061|-325.391449",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "5e35e883-d431-4a6c-bee3-a73064a3ba8a",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "interactable": true,
+          "targetText": "d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4"
+        },
+        "guid": "bcde682b-d9b5-46dd-a439-c350617c00e6",
+        "type": "UIButton"
+      },
+      {
+        "fields": {
+          "position.x": 576.9536743164063,
+          "position.y": 177.1435546875,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "38217d89-f792-4215-b48f-10f32eea4e05",
+        "type": "Transform"
+      }
+    ],
+    "guid": "4a1cf809-e074-4d9f-873a-53dd9428ed04",
+    "name": "Play Button",
+    "parent": "ea9d9612-2219-44ad-b406-748ab473d088"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "anchorOffset": "0.000000|0.000000",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "47fc678c-a67e-454b-a508-cdf8fec66d74",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alignment": "Center",
+          "color": "White",
+          "fontId": "dmPrison",
+          "fontSize": 24,
+          "text": "Play now"
+        },
+        "guid": "6ab118f6-c2d5-48e7-b137-49a0954a6449",
+        "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 576.9536743164063,
+          "position.y": 177.1435546875,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "dc78abe9-5c39-4332-8b13-d6492c7c41c8",
+        "type": "Transform"
+      }
+    ],
+    "guid": "d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4",
+    "name": "PlayText",
+    "parent": "4a1cf809-e074-4d9f-873a-53dd9428ed04"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "referenceResolution": "1920.000000|1080.000000",
+          "renderMode": "ScreenSpace",
+          "scaleMode": "ScaleWithScreenSize"
+        },
+        "guid": "467ab5b4-d397-4d49-bfeb-52c910b0264c",
+        "type": "Canvas"
+      },
+      {
+        "fields": {
+          "position.x": 0.0,
+          "position.y": 0.0,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "188423c4-7c6a-40df-9edc-ff4219c03be1",
+        "type": "Transform"
+      }
+    ],
+    "guid": "83270db5-fa83-407e-9506-bd1d99b422b5",
+    "name": "EndUI",
+    "parent": ""
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "anchorOffset": "-366.666687|-457.403015",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "5dedb9a5-aed9-4224-8623-34dc3c52d030",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alignment": "Center",
+          "color": "White",
+          "fontId": "dmPrison",
+          "fontSize": 33,
+          "text": "You Lost :("
+        },
+        "guid": "ed74bb4e-cb2e-4a14-a736-5ecb5280003e",
+        "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 570.7252807617188,
+          "position.y": 53.81053924560547,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "2eae2f79-205d-411b-abfd-85f0625b6ea4",
+        "type": "Transform"
+      }
+    ],
+    "guid": "c1644fdf-1c1a-438a-974a-e6c8e2409d9a",
+    "name": "Lose Title",
     "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "anchorOffset": "-354.000183|-21.754211",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "65ab512b-142a-44e0-a22a-45723144fa27",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alignment": "Center",
+          "color": "White",
+          "fontId": "dmPrison",
+          "fontSize": 33,
+          "text": "Score: "
+        },
+        "guid": "c530e9b1-a3fb-446f-b3bb-d5cd005630ec",
+        "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 582.5591430664063,
+          "position.y": 460.8194580078125,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "76b151fb-0933-4123-a8bb-d352eec58b18",
+        "type": "Transform"
+      }
+    ],
+    "guid": "e434ef22-8d31-4caa-b9fc-11b1067ffb6c",
+    "name": "Score text",
+    "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "interactable": true,
+          "targetText": "e60e55d7-35a7-4542-89b3-b20174fc113d"
+        },
+        "guid": "d9bb0149-04ac-40d7-8f6a-572e60623efe",
+        "type": "UIButton"
+      },
+      {
+        "fields": {
+          "anchorOffset": "-360.000061|-250.000000",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "8b51b7bc-c50a-49b7-a708-5249e50aca23",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "Texture": "",
+          "alpha": 1.0,
+          "color": "Red"
+        },
+        "guid": "ca124266-0eca-4cae-9c0b-1e8e68954443",
+        "type": "UIImage"
+      },
+      {
+        "fields": {
+          "position.x": 576.9536743164063,
+          "position.y": 247.57870483398438,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "ed3303b4-2270-45c1-9331-e939d96960de",
+        "type": "Transform"
+      }
+    ],
+    "guid": "197d8213-1d1a-483d-a0ac-f9b4e05080ce",
+    "name": "Play again ",
+    "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "anchorOffset": "0.000000|0.000000",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "94f95bdd-9f04-4c96-8a80-03740479729d",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alignment": "Center",
+          "color": "White",
+          "fontId": "dmPrison",
+          "fontSize": 31,
+          "text": "Play again"
+        },
+        "guid": "9cbacc90-f925-4440-8374-79b0b2ee96df",
+        "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 576.9536743164063,
+          "position.y": 247.57870483398438,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "dbbc983b-ebfe-42be-ab0d-724268af7a8d",
+        "type": "Transform"
+      }
+    ],
+    "guid": "e60e55d7-35a7-4542-89b3-b20174fc113d",
+    "name": "Play again Text",
+    "parent": "197d8213-1d1a-483d-a0ac-f9b4e05080ce"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "Texture": "",
+          "alpha": 1.0,
+          "color": "Red"
+        },
+        "guid": "942d2439-a153-4253-b119-09552e18aeae",
+        "type": "UIImage"
+      },
+      {
+        "fields": {
+          "anchorOffset": "-360.000061|-150.000000",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "a17f3d9a-2ae6-4bfc-85a5-3de7c074af7f",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "interactable": true,
+          "targetText": ""
+        },
+        "guid": "62853400-36ed-4dde-8322-80aaecaeeca8",
+        "type": "UIButton"
+      },
+      {
+        "fields": {
+          "position.x": 576.9536743164063,
+          "position.y": 341.004638671875,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "3df421dd-ff86-44de-a3ab-b572125d51be",
+        "type": "Transform"
+      }
+    ],
+    "guid": "4399b10c-367d-491a-91b2-2fee063e5bfb",
+    "name": "Main menu",
+    "parent": "83270db5-fa83-407e-9506-bd1d99b422b5"
+  },
+  {
+    "components": [
+      {
+        "fields": {
+          "anchorOffset": "0.000000|0.000000",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
+        },
+        "guid": "5ee49d26-f3fd-41de-94b9-205cfb7ead4c",
+        "type": "UIRect"
+      },
+      {
+        "fields": {
+          "alignment": "Center",
+          "color": "White",
+          "fontId": "dmPrison",
+          "fontSize": 29,
+          "text": "Main Menu"
+        },
+        "guid": "4d8b18be-e9e0-4875-94bb-7ef77e189c91",
+        "type": "UIText"
+      },
+      {
+        "fields": {
+          "position.x": 576.9536743164063,
+          "position.y": 341.004638671875,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "4566288d-9e7e-444c-bd02-011438fb9307",
+        "type": "Transform"
+      }
+    ],
+    "guid": "f7062ed0-6df5-47f2-a9fe-74e2e28e4f3f",
+    "name": "Main Menu Text",
+    "parent": "4399b10c-367d-491a-91b2-2fee063e5bfb"
+  },
+  {
+    "components": [
+      {
+        "fields": null,
+        "guid": "f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
+        "type": "Camera"
+      },
+      {
+        "fields": {
+          "position.x": 0.0,
+          "position.y": 0.0,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "1b373b78-9145-4ba3-9771-8c62f0606542",
+        "type": "Transform"
+      }
+    ],
+    "guid": "c318f141-2b23-4586-97e2-9f43420fc842",
+    "name": "Camera",
+    "parent": ""
   }
 ]

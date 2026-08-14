@@ -10,16 +10,12 @@
 #include <filesystem>
 #include <algorithm>
 #include "StatusManager.h"
+#include "EventSystem.h"
+#include "ColorPalletes.h"
 ImguiHandler *ImguiHandler::s_instance = nullptr;
 
 // Color palette
-static const ImVec4 COLOR_ACCENT = ImVec4(0.25f, 0.52f, 0.95f, 1.0f);
-static const ImVec4 COLOR_SUCCESS = ImVec4(0.18f, 0.65f, 0.35f, 1.0f);
-static const ImVec4 COLOR_DANGER = ImVec4(0.75f, 0.18f, 0.18f, 1.0f);
-static const ImVec4 COLOR_WARNING = ImVec4(0.85f, 0.60f, 0.10f, 1.0f);
-static const ImVec4 COLOR_PANEL_BG = ImVec4(0.11f, 0.11f, 0.13f, 1.0f);
-static const ImVec4 COLOR_HEADER = ImVec4(0.18f, 0.18f, 0.22f, 1.0f);
-static const ImVec4 COLOR_TEXT_DIM = ImVec4(0.55f, 0.55f, 0.60f, 1.0f);
+
 namespace
 {
 	bool IsTextureFile(const std::string &name)
@@ -99,7 +95,7 @@ void ImguiHandler::Update(sf::Time rest)
 	// DrawInspector();
 	// DrawEntities();
 	// DrawProjectExplorer();
-	DrawProjectLoadWindow();
+	// DrawProjectLoadWindow();
 
 	// DrawScenePanel();
 	if (savePressed)
@@ -165,11 +161,11 @@ void ImguiHandler::DrawToolbar()
 	bool pressed = false;
 	if (!SceneManager::get().HasProjectRoot())
 	{
-		if (stateButton(" Open", COLOR_ACCENT, pressed))
-			showOpenProjectDialog = true;
+		if (stateButton("Open", COLOR_ACCENT, pressed))
+			EventSystem::get().Fire(OpenProjectLoadDialogEvent{});
 		ImGui::SameLine();
-		if (stateButton("  New", COLOR_SUCCESS, pressed))
-			showNewProjectDialog = true;
+		// if (stateButton("  New", COLOR_SUCCESS, pressed))
+		// 	EventSystem::get().Fire(EventType::NewProject);
 		ImGui::SameLine();
 		ImGui::TextColored(COLOR_WARNING, "No project loaded");
 		ImGui::End();
@@ -491,69 +487,7 @@ void ImguiHandler::DrawScenePanel()
 
 void ImguiHandler::DrawProjectLoadWindow()
 {
-	if (!showOpenProjectDialog && SceneManager::get().HasProjectRoot())
-		return;
-
-	ImGui::SetNextWindowSize(ImVec2(520, 0), ImGuiCond_FirstUseEver);
-	if (!ImGui::Begin("Open Project", &showOpenProjectDialog))
-	{
-		ImGui::End();
-		return;
-	}
-
-	ImGui::TextColored(COLOR_TEXT_DIM, "DISCOVERED PROJECTS");
-	ImGui::Separator();
-	auto projects = SceneManager::get().GetAvailableProjects();
-	if (projects.empty())
-	{
-		ImGui::TextColored(COLOR_TEXT_DIM, "No projects found under Projects/");
-	}
-	else
-	{
-		for (const auto &projectPath : projects)
-		{
-			std::string label = projectPath.filename().string();
-			if (ImGui::Button(label.c_str(), ImVec2(-1, 26)))
-			{
-				if (Engine::get().OpenProject(projectPath.string()))
-				{
-					projectExplorerDirectory.clear();
-					loadProjectPathError = false;
-					showOpenProjectDialog = false;
-				}
-			}
-		}
-	}
-
-	ImGui::Spacing();
-	ImGui::TextColored(COLOR_TEXT_DIM, "OPEN BY PATH");
-	ImGui::Separator();
-	ImGui::SetNextItemWidth(-1);
-	ImGui::InputText("##projectPath", &loadProjectPathBuffer[0], loadProjectPathBuffer.size() + 1);
-	if (loadProjectPathError)
-		ImGui::TextColored(COLOR_DANGER, "Project folder not found or invalid");
-
-	if (ImGui::Button("Open Path", ImVec2(-1, 28)))
-	{
-		std::string path = loadProjectPathBuffer.c_str();
-		if (Engine::get().OpenProject(path))
-		{
-			projectExplorerDirectory.clear();
-			loadProjectPathError = false;
-			showOpenProjectDialog = false;
-		}
-		else
-		{
-			loadProjectPathError = true;
-		}
-	}
-
-	if (!SceneManager::get().HasProjectRoot())
-	{
-		ImGui::TextColored(COLOR_WARNING, "The editor is currently in no-project mode.");
-	}
-
-	ImGui::End();
+	
 }
 
 void ImguiHandler::HandleEntityKeyboardShortcuts()

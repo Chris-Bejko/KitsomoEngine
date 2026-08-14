@@ -23,7 +23,10 @@
 #include "ConsoleManager.h"
 #include "StatusManager.h"
 #include "Sprite.h"
+#include "EventSystem.h"
+
 using json = nlohmann::json;
+
 
 Engine::Engine()
 {
@@ -48,6 +51,15 @@ void Engine::Quit()
 	isRunning = false;
 }
 
+void Engine::SubscribeEvents()
+{
+	SUBSCRIBE_EVENT(OpenProjectEvent, OpenProject);
+
+	// EventSystem::get().Subscribe<OpenProjectEvent>([this](const OpenProjectEvent& event)
+	// {
+	// 	this->OpenProject(event.projectPath);
+	// });
+}
 void Engine::Init()
 {
 	this->window = new sf::RenderWindow(sf::VideoMode(1280, 720), "SFML works!");
@@ -72,6 +84,7 @@ void Engine::Init()
     case LogLevel::Debug:   color = ImVec4(0.4f, 0.85f, 1.0f, 1.0f); break;
     default:                color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f); break;
     }
+
     ConsoleManager::get().AddToConsole(message, level); });
 	auto inputSystem = new InputSystem();
 	this->inputSystem = inputSystem;
@@ -84,6 +97,7 @@ void Engine::Init()
 	std::ofstream txtFile;
 	PlayerPrefs::get().Load();
 	RegisterComponents();
+	SubscribeEvents();
 	isRunning = true;
 }
 
@@ -538,6 +552,11 @@ void Engine::RegisterComponents()
 	}
 }
 
+void Engine::OpenProject(const OpenProjectEvent& event)
+{
+	this->OpenProject(event.projectPath);
+}
+
 bool Engine::OpenProject(const std::string &projectPath)
 {
 	if (projectModuleLoader && projectModuleLoader->HasLoadedModule())
@@ -551,11 +570,13 @@ bool Engine::OpenProject(const std::string &projectPath)
 
 	if (!SceneManager::get().OpenProject(projectPath))
 	{
+		EventSystem::get().Fire(ProjectLoadFailedEvent());
 		return false;
 	}
 
 	if (!projectModuleLoader->LoadProjectModule(SceneManager::get().GetProjectRootPath()))
 	{
+		EventSystem::get().Fire(ProjectLoadFailedEvent());
 		return false;
 	}
 
@@ -571,7 +592,7 @@ bool Engine::OpenProject(const std::string &projectPath)
 	{
 		SceneManager::get().LoadScene(availableScenes.front(), SceneLoadMode::Replace);
 	}
-
+	EventSystem::get().Fire(ProjectLoadSuccessEvent());
 	return true;
 }
 

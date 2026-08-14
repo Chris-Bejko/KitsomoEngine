@@ -1,11 +1,9 @@
 #include "Engine.h"
 #include "SceneManager.h"
 #include "EntitiesDialog.h"
+#include "ColorPalletes.h"
 #include "DialogManager.h"
 REGISTER_DIALOG(EntitiesDialog);
-
-static const ImVec4 COLOR_SUCCESS = ImVec4(0.18f, 0.65f, 0.35f, 1.0f);
-static const ImVec4 COLOR_TEXT_DIM = ImVec4(0.55f, 0.55f, 0.60f, 1.0f);
 
 EntitiesDialog::EntitiesDialog() {};
 void EntitiesDialog::Open()

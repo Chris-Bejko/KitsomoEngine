@@ -5,7 +5,7 @@
 #include <functional>
 #include <memory>
 #include "Vector2.h"
-
+#include "Events.h"
 class ProjectModuleLoader;
 class Sprite;
 using ComponentFactory = std::function<void(Entity *, ReadableSerializableVariableMap, std::string)>;
@@ -91,6 +91,7 @@ public:
 
     void QueueDestroy(const std::string& guid);
     bool OpenProject(const std::string &projectPath);
+    void OpenProject(const OpenProjectEvent& event);
     bool ReloadProjectScripts();
     void RequestScriptRecompile();
     void PrepareForProjectModuleUnload();
@@ -121,4 +122,6 @@ private:
     bool isGameOver = false;
     bool recompileRequested = false;
     std::unique_ptr<ProjectModuleLoader> projectModuleLoader;
+
+    void SubscribeEvents();
 };
