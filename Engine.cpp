@@ -25,6 +25,7 @@
 #include "Dialogs/include/StatusDialog.h"
 #include "ConsoleManager.h"
 #include "StatusManager.h"
+#include "Sprite.h"
 using json = nlohmann::json;
 
 Engine::Engine()
@@ -284,6 +285,19 @@ sf::RenderWindow &Engine::GetWindow()
 	return *window;
 }
 
+void Engine::Draw(Sprite* sprite)
+{
+    if (window == nullptr || sprite == nullptr)
+        return;
+
+    const sf::Sprite sfmlSprite = sprite->GetSprite();
+
+    if (!sfmlSprite.getTexture())
+        return;
+
+    window->draw(sfmlSprite);
+}
+
 EntityManager *Engine::GetManager()
 {
 	return manager;
@@ -420,6 +434,9 @@ void Engine::Save(const std::string &filename)
 					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
 					break;
 				case compRef_Type:
+					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
+					break;
+				case texture_Type:
 					fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
 					break;
 				}
@@ -697,6 +714,11 @@ void Engine::SavePrefab(Entity *entity)
 					}
 				}
 				fieldsJson[f.name] = packed;
+				break;
+			}
+			case texture_Type:
+			{
+				fieldsJson[f.name] = *reinterpret_cast<std::string *>(f.data);
 				break;
 			}
 			}
