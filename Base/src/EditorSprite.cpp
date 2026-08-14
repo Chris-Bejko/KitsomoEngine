@@ -6,14 +6,18 @@
 #include "UIRect.h"
 #include "Canvas.h"
 #include "ComponentRegistry.h"
-EditorSprite::EditorSprite(const std::string &texId) : textureId(texId) {}
+
 REGISTER_COMPONENT(EditorSprite)
 bool EditorSprite::Init()
 {
-    AssetManager::get().loadTexture(textureId, textureId + ".png");
-    texture = AssetManager::get().getTexture(textureId);
-    sprite.setTexture(texture);
-    sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
+    std::string textureId = "Assets/Textures/editor_entity.png"; // default editor icon
+    _texture.SetPath(textureId);
+    AssetManager::get().loadTexture(_texture.GetPath());
+    texture = AssetManager::get().getTexture(_texture.GetPath());
+    // AssetManager::get().loadTexture(textureId, textureId + ".png");
+    // texture = AssetManager::get().getTexture(textureId);
+    sprite.setTexture(*texture);
+    sprite.setOrigin((sf::Vector2f)texture->getSize() / 2.f);
     sprite.setScale(0.05f, 0.05f);
     return true;
 }

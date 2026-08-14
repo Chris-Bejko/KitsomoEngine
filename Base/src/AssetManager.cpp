@@ -1,79 +1,87 @@
 #include "AssetManager.h"
 #include "Logger.h"
 
-AssetManager::AssetManager()
-{
-	//if (TTF_Init() != 0)
-	  //  std::cerr << TTF_GetError() << std::endl;
+#include <filesystem>
 
-	//if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) != 0)
-	  //  std::cerr << TTF_GetError() << std::endl;
-}
-
-sf::Texture AssetManager::getTexture(std::string id)
+AssetManager::~AssetManager()
 {
-	return textures[id];
+    clean();
 }
 
 AssetManager& AssetManager::get()
 {
-	static AssetManager instance;
-	return instance;
+    static AssetManager instance;
+    return instance;
 }
-void AssetManager::loadTexture(std::string id, std::string path)
+
+void AssetManager::loadTexture(const std::string& path)
 {
-	if (textures.count(id) <= 0)
-	{
-		sf::Texture texture;
-		if (texture.loadFromFile(path.c_str()))
-		{
-			textures[id] = texture;
-			LOG_INFO("Texture: [" + path + "] loaded.");
-		}
-		else
-			LOG_ERROR("Error loading image: " + path);
-	}
+    const std::string key = std::filesystem::path(path).lexically_normal().string();
+
+    if (textures.find(key) != textures.end())
+        return;
+
+    sf::Texture texture;
+
+    if (!texture.loadFromFile(key))
+    {
+        LOG_ERROR("Failed to load texture: ", key);
+        return;
+    }
+
+    textures.emplace(key, std::move(texture));
+
+    LOG_INFO("Texture loaded: ", key, " (", textures.at(key).getSize().x, "x", textures.at(key).getSize().y, ")");
+}
+
+sf::Texture* AssetManager::getTexture(const std::string& path)
+{
+    const std::string key = std::filesystem::path(path).lexically_normal().string();
+
+    auto it = textures.find(key);
+
+    if (it == textures.end())
+    {
+        LOG_WARNING("Texture not found: ", key);
+        return nullptr;
+    }
+
+    return &it->second;
 }
 
 void AssetManager::loadFont(const std::string& id, const std::string& path)
 {
-    if (fonts.count(id) == 0)
+    if (fonts.find(id) != fonts.end())
+        return;
+
+    sf::Font font;
+
+    if (!font.loadFromFile(path))
     {
-        sf::Font font;
-        if (font.loadFromFile(path))
-        {
-            fonts[id] = font;
-            LOG_INFO("Font loaded: ", id.c_str());
-        }
-        else
-            LOG_ERROR("Failed to load font: ", path.c_str());
+        LOG_ERROR("Failed to load font: ", path);
+        return;
     }
+
+    fonts.emplace(id, std::move(font));
+
+    LOG_INFO("Font loaded: ", id);
 }
 
 sf::Font* AssetManager::getFont(const std::string& id)
 {
-    if (fonts.count(id) > 0)
-        return &fonts[id];
-    LOG_WARNING("Font not found: ", id.c_str());
-    return nullptr;
+    auto it = fonts.find(id);
+
+    if (it == fonts.end())
+    {
+        LOG_WARNING("Font not found: ", id);
+        return nullptr;
+    }
+
+    return &it->second;
 }
 
 void AssetManager::clean()
 {
-	/*for (auto it = textures.begin(); it != textures.end(); it++)
-	{
-		SDL_DestroyTexture(it->second);
-		textures.erase(it);
-	}
-
-	textures.clear();
-
-	for (auto it = fonts.begin(); it != fonts.end(); it++)
-	{
-		TTF_CloseFont(it->second);
-		fonts.erase(it);
-	}
-
-	fonts.clear();
-	std::cout << "Assets Cleared." << std::endl;*/
+    textures.clear();
+    fonts.clear();
 }

@@ -20,7 +20,16 @@ static const ImVec4 COLOR_WARNING = ImVec4(0.85f, 0.60f, 0.10f, 1.0f);
 static const ImVec4 COLOR_PANEL_BG = ImVec4(0.11f, 0.11f, 0.13f, 1.0f);
 static const ImVec4 COLOR_HEADER = ImVec4(0.18f, 0.18f, 0.22f, 1.0f);
 static const ImVec4 COLOR_TEXT_DIM = ImVec4(0.55f, 0.55f, 0.60f, 1.0f);
-
+namespace
+{
+	bool IsTextureFile(const std::string &name)
+	{
+		std::string extension = std::filesystem::path(name).extension().string();
+		std::transform(extension.begin(), extension.end(), extension.begin(), [](unsigned char c)
+					   { return static_cast<char>(std::tolower(c)); });
+		return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".bmp" || extension == ".tga" || extension == ".gif";
+	}
+}
 void ImguiHandler::ApplyEditorStyle()
 {
 	ImGuiStyle &style = ImGui::GetStyle();
@@ -73,8 +82,8 @@ void ImguiHandler::Update(sf::Time rest)
 {
 	if (Engine::get().IsLoading())
 		return;
-	auto& engine = Engine::get();
-	auto& window = engine.GetWindow();
+	auto &engine = Engine::get();
+	auto &window = engine.GetWindow();
 
 	std::cout << "Engine: " << &engine << '\n';
 	std::cout << "Window: " << &window << '\n';
@@ -116,26 +125,25 @@ void ImguiHandler::Update(sf::Time rest)
 	}
 }
 
-
 void ImguiHandler::DrawScriptStatus()
 {
-    if (Engine::get().pendingRecompile)
-    {
-        ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f),
-                           "● Recompiling...");
-    }
-    else if (ScriptCompiler::lastCompileFailed)
-    {
-        ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f),
-                           "● Compile Error");
-        if (ImGui::IsItemHovered())
-            ImGui::SetTooltip("%s", ScriptCompiler::lastError.c_str());
-    }
-    else
-    {
-        ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f),
-                           "● Scripts OK");
-    }
+	if (Engine::get().pendingRecompile)
+	{
+		ImGui::TextColored(ImVec4(1.0f, 0.8f, 0.0f, 1.0f),
+						   "● Recompiling...");
+	}
+	else if (ScriptCompiler::lastCompileFailed)
+	{
+		ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f),
+						   "● Compile Error");
+		if (ImGui::IsItemHovered())
+			ImGui::SetTooltip("%s", ScriptCompiler::lastError.c_str());
+	}
+	else
+	{
+		ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f),
+						   "● Scripts OK");
+	}
 }
 
 void ImguiHandler::DrawToolbar()
@@ -495,7 +503,7 @@ void ImguiHandler::DrawStatusWindow()
 					 ImGuiWindowFlags_NoScrollbar |
 					 ImGuiWindowFlags_AlwaysAutoResize);
 
-	float dt = Engine::get().GetDt(); 
+	float dt = Engine::get().GetDt();
 	for (auto it = notifications.begin(); it != notifications.end();)
 	{
 		it->lifetime -= dt;
@@ -663,8 +671,8 @@ void ImguiHandler::DrawProjectExplorer()
 	ImGui::Separator();
 
 	std::filesystem::path baseDir = projectExplorerDirectory.empty()
-		? SceneManager::get().GetProjectRootPath()
-		: projectExplorerDirectory;
+										? SceneManager::get().GetProjectRootPath()
+										: projectExplorerDirectory;
 
 	if (!std::filesystem::exists(baseDir))
 		baseDir = SceneManager::get().GetProjectRootPath();
@@ -679,9 +687,7 @@ void ImguiHandler::DrawProjectExplorer()
 	for (const auto &entry : std::filesystem::directory_iterator(baseDir))
 		entries.push_back(entry);
 	std::sort(entries.begin(), entries.end(), [](const auto &a, const auto &b)
-	{
-		return a.path().filename().string() < b.path().filename().string();
-	});
+			  { return a.path().filename().string() < b.path().filename().string(); });
 
 	for (const auto &entry : entries)
 	{
@@ -689,7 +695,7 @@ void ImguiHandler::DrawProjectExplorer()
 		const std::string name = path.filename().string();
 		const bool isDirectory = std::filesystem::is_directory(path);
 		const bool shouldIgnore = name == "Generated" || name == "build";
-		if (isDirectory && ! shouldIgnore)
+		if (isDirectory && !shouldIgnore)
 		{
 			if (ImGui::Button(("[DIR] " + name).c_str(), ImVec2(-1, 24)))
 				projectExplorerDirectory = path;
@@ -708,7 +714,20 @@ void ImguiHandler::DrawProjectExplorer()
 			}
 			else if (!isDirectory)
 			{
-				ImGui::Button(name.c_str(), ImVec2(-1, 24));
+				if (IsTextureFile(name))
+				{
+					ImGui::Button(name.c_str(), ImVec2(-1, 24));
+
+					if (ImGui::BeginDragDropSource())
+					{
+						const std::string absolutePath = std::filesystem::relative(path).string();
+						ImGui::SetDragDropPayload("ASSET_PATH", absolutePath.c_str(), absolutePath.size() + 1);
+						ImGui::Text("%s", name.c_str());
+						ImGui::EndDragDropSource();
+					}
+				}
+				else
+					ImGui::Button(name.c_str(), ImVec2(-1, 24));
 			}
 		}
 	}
@@ -864,7 +883,7 @@ void ImguiHandler::DrawProjectLoadWindow()
 	}
 	else
 	{
-		for (const auto& projectPath : projects)
+		for (const auto &projectPath : projects)
 		{
 			std::string label = projectPath.filename().string();
 			if (ImGui::Button(label.c_str(), ImVec2(-1, 26)))

@@ -9,35 +9,48 @@ DECLARE_COMPONENT_RULES(UIImage, false)
 REGISTER_COMPONENT(UIImage)
 REGISTER_SERIALIZABLE_COMPONENT(UIImage)
 
-UIImage::UIImage(const std::string &texId)
+UIImage::UIImage(const std::string& texturePath)
 {
-    textureId = texId;
+    _texture.SetPath(texturePath);
 }
 
 bool UIImage::Init()
 {
-    Field("textureId", textureId);
+    Field("Texture", _texture);
     Field("color", colorString);
     Field("alpha", alpha);
+
     if (!entity->HasComponent<UIRect>())
         entity->AddComponent<UIRect>();
-    if (!textureId.empty())
-        UpdateSprite();
+
+    UpdateSprite();
+
     return true;
 }
 
 void UIImage::UpdateSprite()
 {
-    if (textureId.empty())
+    const std::string& path = _texture.GetPath();
+
+    if (path.empty())
+    {
+        uiTexture = nullptr;
         return;
-    AssetManager::get().loadTexture(textureId, textureId + ".png");
-    uiTexture = AssetManager::get().getTexture(textureId);
-    uiSprite.setTexture(uiTexture);
+    }
+
+    AssetManager::get().loadTexture(path);
+    uiTexture = AssetManager::get().getTexture(path);
+
+    if (uiTexture == nullptr)
+        return;
+
+    uiSprite.setTexture(*uiTexture, true);
 }
 
 void UIImage::draw()
 {
-    Canvas *canvas = entity->GetComponent<UIRect>().GetCanvas();
+    Canvas* canvas = entity->GetComponent<UIRect>().GetCanvas();
+
     if (!canvas)
         return;
 
@@ -52,37 +65,49 @@ void UIImage::draw()
 
     Vector2F screenPos = entity->GetComponent<UIRect>().GetScreenPosition();
 
-    // Scale sprite to fit size
-    if (uiTexture.getSize().x > 0 && uiTexture.getSize().y > 0)
+    if (uiTexture && uiTexture->getSize().x > 0 && uiTexture->getSize().y > 0)
     {
         Vector2F size = entity->GetComponent<UIRect>().sizeDelta;
+
         uiSprite.setScale(
-            size.x / uiTexture.getSize().x,
-            size.y / uiTexture.getSize().y);
+            size.x / uiTexture->getSize().x,
+            size.y / uiTexture->getSize().y);
     }
-    sf::Vector2f screenPosSf = sf::Vector2f(screenPos.x, screenPos.y);
-    uiSprite.setPosition(screenPosSf);
+
+    uiSprite.setPosition(screenPos.x, screenPos.y);
+
     Engine::get().GetWindow().draw(uiSprite);
 
     if (screenSpace)
         Engine::get().GetWindow().setView(prevView);
 }
 
-void UIImage::update(float dt) {}
-void UIImage::updateEngine(float dt) { update(dt); }
-
-void UIImage::SetTexture(const std::string &texId)
+void UIImage::update(float dt)
 {
-    textureId = texId;
     UpdateSprite();
 }
 
-void UIImage::SetColor(sf::Color color) { uiSprite.setColor(color); }
+void UIImage::updateEngine(float dt)
+{
+    update(dt);
+}
+
+void UIImage::SetTexture(const std::string& texturePath)
+{
+    _texture.SetPath(texturePath);
+    UpdateSprite();
+}
+
+void UIImage::SetColor(sf::Color color)
+{
+    uiSprite.setColor(color);
+}
 
 void UIImage::SetAlpha(float a)
 {
     alpha = a;
+
     sf::Color c = uiSprite.getColor();
-    c.a = (sf::Uint8)(a * 255);
+    c.a = static_cast<sf::Uint8>(a * 255);
     uiSprite.setColor(c);
 }

@@ -7,7 +7,7 @@
 #include "Vector2.h"
 
 class ProjectModuleLoader;
-
+class Sprite;
 using ComponentFactory = std::function<void(Entity *, ReadableSerializableVariableMap, std::string)>;
 
 constexpr int SCREEN_WIDTH = 1280;
@@ -94,6 +94,7 @@ public:
     bool ReloadProjectScripts();
     void RequestScriptRecompile();
     void PrepareForProjectModuleUnload();
+    void Draw(Sprite *sprite);
 private:
     void ProcessHotReloading();
 

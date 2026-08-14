@@ -61,6 +61,8 @@ void SerializableScript::Serialize()
     for (auto &[name, field] : componentPtrFields)
         if (*field.ptr)
             field.guidStorage = (*field.ptr)->entity->GetGUID() + "|" + (*field.ptr)->GetGUID();
+    for (auto &[name, texture] : textureFields)
+        textureStrings[name] = texture->GetPath();
 }
 
 void SerializableScript::InitSerializedFields(ReadableSerializableVariableMap map)
@@ -133,6 +135,15 @@ void SerializableScript::InitSerializedFields(ReadableSerializableVariableMap ma
                     componentPtrFields[fieldName].guidStorage = map.stringFields[fieldName];
                 if (vectorPtrFields.count(fieldName))
                     vectorStrings[fieldName] = map.stringFields[fieldName];
+            }
+            break;
+
+        case texture_Type:
+            if (map.stringFields.count(fieldName))
+            {
+                *reinterpret_cast<std::string *>(var.data) = map.stringFields[fieldName];
+                if (textureFields.count(fieldName))
+                    textureFields[fieldName]->SetPath(map.stringFields[fieldName]);
             }
             break;
         }

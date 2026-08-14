@@ -1,266 +1,217 @@
 #include "Sprite.h"
-#include "Engine.h"
-#include "imguiHandler.h"
-#include "Logger.h"
+
 #include "BoxCollider.h"
+#include "CommandHistory.h"
 #include "Commands/MoveEntityCommand.h"
-#include "Commands/CommandHistory.h"
-#include "GizmoSystem.h"
 #include "ComponentRegistry.h"
+#include "Engine.h"
+#include "GizmoSystem.h"
+#include "ImguiHandler.h"
+#include "Logger.h"
 
 DECLARE_COMPONENT_RULES(Sprite, false)
 REGISTER_COMPONENT(Sprite)
 REGISTER_SERIALIZABLE_COMPONENT(Sprite)
 
-Sprite::Sprite(std::string textureId, int renderOrder, Color color)
+Sprite::Sprite(
+    std::string texturePath,
+    int renderOrder,
+    Color color)
 {
-	textureID = textureId;
-	ColorID = color.SerializeColor();
-	sprite.setColor(color.GetColorEnum());
-	SetRenderOrder(renderOrder);
+    _texture.SetPath(texturePath);
+
+    ColorID = color.SerializeColor();
+
+    sprite.setColor(color.GetColorEnum());
+
+    SetRenderOrder(renderOrder);
 }
 
 bool Sprite::Init()
 {
-	Field("textureID", textureID);
-	Field("ColorID", ColorID);
-	Field("renderOrder", renderOrder);
-	if (!textureID.empty())
-	{
-		// Try to load texture if not already in AssetManager
-		AssetManager::get().loadTexture(textureID, textureID + ".png");
-		texture = AssetManager::get().getTexture(textureID);
-		sprite.setTexture(texture);
-		sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
-		LOG_DEBUG("Texture '", textureID, "' size: ", texture.getSize().x, "x", texture.getSize().y);
-	}
-	return true;
+    Field("Texture", _texture);
+    Field("ColorID", ColorID);
+    Field("renderOrder", renderOrder);
+
+    RefreshTexture();
+    RefreshColor();
+
+    return true;
+}
+
+void Sprite::RefreshTexture()
+{
+    const std::string& path = _texture.GetPath();
+
+    if (path.empty())
+    {
+        texture = nullptr;
+        width = 0;
+        height = 0;
+        lastTexturePath.clear();
+        return;
+    }
+
+    if (path == lastTexturePath && texture != nullptr)
+        return;
+
+    AssetManager::get().loadTexture(path);
+
+    texture = AssetManager::get().getTexture(path);
+
+    sprite.setTexture(*texture);
+
+    width = static_cast<int>(texture->getSize().x);
+    height = static_cast<int>(texture->getSize().y);
+
+    sprite.setOrigin(
+        static_cast<sf::Vector2f>(texture->getSize()) / 2.f);
+
+    lastTexturePath = path;
+}
+
+void Sprite::RefreshColor()
+{
+    if (ColorID == lastColorID)
+        return;
+
+    Color color;
+    color.SetColor(ColorID);
+
+    sprite.setColor(color.GetColorEnum());
+
+    lastColorID = ColorID;
+}
+
+void Sprite::OnFieldChanged(
+    const std::string &fieldName)
+{
+    if (fieldName == "Texture")
+    {
+        RefreshTexture();
+    }
+    else if (fieldName == "ColorID")
+    {
+        RefreshColor();
+    }
 }
 
 void Sprite::draw()
 {
-	// LOG_DEBUG("Drawing sprite at: ", sprite.getPosition().x, ", ", sprite.getPosition().y, " texture: ", textureID, " color: ", ColorID);
-	Engine::get().GetWindow().draw(sprite);
+    Engine::get().Draw(this);
 }
 
 void Sprite::update(float dt)
 {
-	if (textureID != lastTextureID)
-	{
-		AssetManager::get().loadTexture(textureID, textureID + ".png");
-		texture = AssetManager::get().getTexture(textureID);
-		sprite.setTexture(texture);
-		sprite.setOrigin((sf::Vector2f)texture.getSize() / 2.f);
-		lastTextureID = textureID;
-	}
-	if (ColorID != lastColorID)
-	{
-		Color color;
-		color.SetColor(ColorID);
-		sprite.setColor(color.GetColorEnum());
-		lastColorID = ColorID;
-	}
-	sprite.setTexture(texture);
-	auto worldPos = entity->transform->GetWorldPosition();
-	auto worldRot = entity->transform->GetWorldRotation();
-	auto worldScale = entity->transform->GetWorldScale();
+    RefreshTexture();
+    RefreshColor();
 
-	sprite.setPosition(worldPos.x, worldPos.y);
-	sprite.setRotation(worldRot);
-	sprite.setScale(worldScale.x, worldScale.y);
+    if (entity == nullptr)
+        return;
 
-	// // Track drag start
-	// if (dragging && !wasDragging)
-	// {
-	// 	dragStartPosition = entity->GetComponent<Transform>().position;
-	// }
+    if (texture != nullptr)
+        sprite.setTexture(*texture);
 
-	// if (dragging)
-	// {
-	// 	sf::Vector2f worldTarget(mousePos.x - mouseRectOffset.x,
-	// 							 mousePos.y - mouseRectOffset.y);
+    auto worldPos = entity->transform->GetWorldPosition();
+    auto worldRot = entity->transform->GetWorldRotation();
+    auto worldScale = entity->transform->GetWorldScale();
 
-	// 	if (entity->transform->GetParent() != nullptr)
-	// 	{
-	// 		// Convert world position to local space
-	// 		Vector2F parentWorld = entity->transform->GetParent()->GetWorldPosition();
-	// 		float parentRot = entity->transform->GetParent()->GetWorldRotation() * 3.14159f / 180.f;
-	// 		Vector2F parentScale = entity->transform->GetParent()->GetWorldScale();
-
-	// 		float dx = worldTarget.x - parentWorld.x;
-	// 		float dy = worldTarget.y - parentWorld.y;
-
-	// 		// Inverse rotate and scale
-	// 		float cosR = cos(-parentRot);
-	// 		float sinR = sin(-parentRot);
-	// 		float localX = (dx * cosR - dy * sinR) / parentScale.x;
-	// 		float localY = (dx * sinR + dy * cosR) / parentScale.y;
-
-	// 		entity->GetComponent<Transform>().SetPosition(localX, localY);
-	// 	}
-	// 	else
-	// 	{
-	// 		entity->GetComponent<Transform>().SetPosition(worldTarget.x, worldTarget.y);
-	// 	}
-	// }
-
-	// // Track drag end and create command
-	// if (!dragging && wasDragging)
-	// {
-	// 	Vector2F currentPos = entity->GetComponent<Transform>().position;
-	// 	// Only create a command if the position actually changed
-	// 	if (currentPos.x != dragStartPosition.x || currentPos.y != dragStartPosition.y)
-	// 	{
-	// 		auto moveCmd = std::make_unique<MoveEntityCommand>(entity, dragStartPosition, currentPos);
-	// 		CommandHistory::get().Execute(std::move(moveCmd));
-	// 	}
-	// }
-
-	// wasDragging = dragging;
-}
-
-int Sprite::GetHeight()
-{
-	return height;
-}
-
-int Sprite::GetWidth()
-{
-	return width;
+    sprite.setPosition(worldPos.x, worldPos.y);
+    sprite.setRotation(worldRot);
+    sprite.setScale(worldScale.x, worldScale.y);
 }
 
 void Sprite::updateEngine(float dt)
 {
-	update(dt);
+    update(dt);
+}
 
-	// if (entity->HasComponent<BoxCollider>() && entity->GetComponent<BoxCollider>().editMode)
-	// 	return;
+int Sprite::GetHeight()
+{
+    return height;
+}
 
-	// if (GizmoSystem::get().IsGizmoDragging()) return;
-	// if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	// {
-	// 	mousePos = Engine::get().GetWindow().mapPixelToCoords(sf::Mouse::getPosition(Engine::get().GetWindow()));
-
-	// 	if (isMouseOver(sprite, mousePos.x, mousePos.y) && (!Engine::get().DraggingEntity() || Engine::get().GetDraggedEntity() == entity->GetName()))
-	// 	{
-	// 		if (!dragging && !pendingDrag)
-	// 		{
-	// 			float currentTime = ImGui::GetTime();
-	// 			if (lastClickTime > 0.f && (currentTime - lastClickTime) < 0.3f)
-	// 			{
-	// 				Engine::get().FocusOnEntity(entity);
-	// 				lastClickTime = 0.f;
-	// 			}
-	// 			else
-	// 			{
-	// 				lastClickTime = currentTime;
-	// 			}
-	// 			pendingDrag = true;
-	// 			dragTimer = 0.f;
-	// 		}
-
-	// 		if (pendingDrag)
-	// 		{
-	// 			dragTimer += dt;
-	// 			if (dragTimer >= dragDelay)
-	// 			{
-	// 				if (entity->transform->GetParent() != nullptr)
-	// 				{
-	// 					// offset in local space
-	// 					Vector2F worldPos = entity->transform->GetWorldPosition();
-	// 					mouseRectOffset = sf::Vector2f(
-	// 						mousePos.x - worldPos.x,
-	// 						mousePos.y - worldPos.y);
-	// 				}
-	// 				else
-	// 				{
-	// 					mouseRectOffset = sf::Vector2f(
-	// 						mousePos.x - entity->transform->position.x,
-	// 						mousePos.y - entity->transform->position.y);
-	// 				}
-	// 				Engine::get().TriggerDragging(entity->GetName());
-	// 				ImguiHandler::get().ClearInspector();
-	// 				entity->displayComponents = true;
-	// 				Engine::get().GetManager()->SetSelectedEntity(entity);
-	// 				dragging = true;
-	// 				pendingDrag = false;
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// else
-	// {
-	// 	Engine::get().TriggerDragging("");
-	// 	dragging = false;
-	// 	pendingDrag = false;
-	// 	dragTimer = 0.f;
-	// }
+int Sprite::GetWidth()
+{
+    return width;
 }
 
 sf::Vector2f Sprite::GetScale()
 {
-	return sprite.getScale();
+    return sprite.getScale();
 }
 
 sf::FloatRect Sprite::GetGlobalBounds()
 {
-	return sprite.getGlobalBounds();
+    return sprite.getGlobalBounds();
 }
 
-sf::FloatRect Sprite::TranslateHitbox(sf::FloatRect &hitbox)
+sf::FloatRect Sprite::TranslateHitbox(
+    sf::FloatRect &hitbox)
 {
-	return sprite.getTransform().transformRect(hitbox);
+    return sprite.getTransform().transformRect(hitbox);
 }
 
 sf::Vector2f Sprite::GetPosition()
 {
-	return sprite.getPosition();
+    return sprite.getPosition();
 }
 
 sf::Vector2f Sprite::GetOrigin()
 {
-	return (sf::Vector2f)texture.getSize() / 2.0f;
+    return texture ? static_cast<sf::Vector2f>(texture->getSize()) / 2.f : sf::Vector2f();
 }
 
 sf::Sprite Sprite::GetSprite()
 {
-	return sprite;
+    return sprite;
 }
 
 void Sprite::SetColor(const sf::Color &color)
 {
-	sprite.setColor(color);
+    sprite.setColor(color);
 }
 
 void Sprite::SetColor(Color color)
 {
-	ColorID = color.SerializeColor();
-	if (entity->GetName().find("Bullet") != std::string::npos)
-		LOG_DEBUG("Setting bullet color to: ", ColorID);
-	sprite.setColor(color.GetColorEnum());
+    ColorID = color.SerializeColor();
+
+    if (entity != nullptr && entity->GetName().find("Bullet") != std::string::npos)
+    {
+        LOG_DEBUG("Setting bullet color to: ", ColorID);
+    }
+
+    sprite.setColor(color.GetColorEnum());
+
+    lastColorID = ColorID;
 }
 
-void Sprite::SetOrigin(const Vector2F &origin)
+void Sprite::SetOrigin(
+    const Vector2F &origin)
 {
-	sprite.setOrigin(sf::Vector2f(origin.x, origin.y));
+    sprite.setOrigin(
+        sf::Vector2f(origin.x, origin.y));
 }
 
 sf::Vector2f Sprite::GetRotation()
 {
-	return sf::Vector2f();
+    return sf::Vector2f();
 }
 
-bool Sprite::isMouseOver(const sf::Sprite &sprite, int mouseX, int mouseY)
+bool Sprite::isMouseOver(
+    const sf::Sprite &sprite,
+    int mouseX,
+    int mouseY)
 {
-	return sprite.getGlobalBounds().contains(mouseX, mouseY);
+    return sprite.getGlobalBounds().contains(static_cast<float>(mouseX), static_cast<float>(mouseY));
 }
 
 int Sprite::RenderOrder()
 {
-	return renderOrder;
+    return renderOrder;
 }
 
 void Sprite::SetRenderOrder(int i)
 {
-	renderOrder = i;
+    renderOrder = i;
 }

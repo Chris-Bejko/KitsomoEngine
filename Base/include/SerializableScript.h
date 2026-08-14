@@ -5,6 +5,7 @@
 #include <functional>
 #include <sstream>
 #include <regex>
+#include "Texture.h"
 
 struct EntityPtrField
 {
@@ -57,6 +58,12 @@ public:
         });
     }
 
+    void Field(const char* name, Texture& texture)
+    {
+        textureFields[name] = &texture;
+        textureStrings[name] = texture.GetName();
+        serializables.push_back({name, &textureStrings[name], texture_Type});
+    }
     // Entity* field
     void Field(const char *name, Entity *&ptr);
 
@@ -276,6 +283,8 @@ protected:
     std::map<std::string, std::string> vectorStrings;
     std::map<std::string, VectorFieldEntry> vectorFields;
     std::map<std::string, VectorPtrFieldEntry> vectorPtrFields;
+    std::map<std::string, std::string> textureStrings;
+    std::map<std::string, Texture*> textureFields;
     bool fieldsRegistered = false;
     std::vector<std::string> fieldNameStorage; // keeps names alive
 
