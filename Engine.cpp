@@ -19,11 +19,7 @@
 #include "nlohmann/json.hpp"
 #include "PlayerPrefs.h"
 #include "SceneManager.h"
-#include "DialogSystem.h"
-#include "Dialogs/include/InspectorDialog.h"
-#include "Dialogs/include/ConsoleDialog.h"
-#include "Dialogs/include/StatusDialog.h"
-#include "Dialogs/include/ProjectExplorerDialog.h"
+#include "DialogManager.h"
 #include "ConsoleManager.h"
 #include "StatusManager.h"
 #include "Sprite.h"
@@ -81,12 +77,6 @@ void Engine::Init()
 	this->inputSystem = inputSystem;
 	SystemsManager::get().AddSystem(inputSystem);
 	//To Do: Extract functions to make this a bit clearer.. should the engine be responsible for assigning dialogs, or the dialog system itself? Or the dialogs should autoregister themselves like components do? Hmm.
-	auto* dialogSystem = new DialogSystem();
-	dialogSystem->AddDialog(std::make_unique<InspectorDialog>(), "Inspector");
-	dialogSystem->AddDialog(std::make_unique<StatusDialog>(), "Status");
-	dialogSystem->AddDialog(std::make_unique<ConsoleDialog>(), "Console");
-	dialogSystem->AddDialog(std::make_unique<ProjectExplorerDialog>(), "Project Explorer");
-	SystemsManager::get().AddSystem(dialogSystem);
 	manager = new EntityManager();
 	projectModuleLoader = std::make_unique<ProjectModuleLoader>();
 	SceneManager::get().Init();
@@ -165,6 +155,7 @@ void Engine::Update()
 	Timedelta::deltaTime = dt;
 	ImguiHandler::get().Update(rest);
 	ProcessDestroyQueue();
+	DialogManager::get().Update();
 	SystemsManager::get().Update();
 	StatusManager::get().Update(dt);
 	UIEventSystem::get().Update();

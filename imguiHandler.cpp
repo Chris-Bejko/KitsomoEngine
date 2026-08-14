@@ -101,8 +101,7 @@ void ImguiHandler::Update(sf::Time rest)
 	// DrawProjectExplorer();
 	DrawProjectLoadWindow();
 
-	if (Engine::get().GetCurrentState() == EngineState::Running && SceneManager::get().HasProjectRoot())
-		DrawScenePanel();
+	// DrawScenePanel();
 	if (savePressed)
 		DrawSaveDialog();
 	if (loadPressed)

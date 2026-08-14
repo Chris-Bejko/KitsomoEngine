@@ -1,6 +1,8 @@
 #include "StatusDialog.h"
 #include "imgui.h"
 #include <algorithm>
+#include "DialogManager.h"
+REGISTER_DIALOG(StatusDialog);
 
 static const ImVec4 COLOR_TEXT_DIM = ImVec4(0.55f, 0.55f, 0.60f, 1.0f);
 

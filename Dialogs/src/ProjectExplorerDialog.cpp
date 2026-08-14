@@ -5,7 +5,8 @@
 #include <algorithm>
 #include <cstring>
 #include <vector>
-
+#include "DialogManager.h"
+REGISTER_DIALOG(ProjectExplorerDialog);
 static const ImVec4 COLOR_TEXT_DIM = ImVec4(0.55f, 0.55f, 0.60f, 1.0f);
 static const ImVec4 COLOR_WARNING = ImVec4(0.95f, 0.78f, 0.2f, 1.0f);
 namespace
