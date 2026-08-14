@@ -97,7 +97,7 @@ void ImguiHandler::Update(sf::Time rest)
 	// DrawStatusWindow();
 	// DrawConsole();
 	// DrawInspector();
-	DrawEntities();
+	// DrawEntities();
 	// DrawProjectExplorer();
 	DrawProjectLoadWindow();
 
