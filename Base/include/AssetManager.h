@@ -18,7 +18,7 @@ public:
     void clean();
 
 private:
-    AssetManager() = default;
+    AssetManager();
     ~AssetManager();
 
     AssetManager(const AssetManager&) = delete;

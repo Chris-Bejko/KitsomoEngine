@@ -99,7 +99,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "-861.333496|-459.890961",
+          "anchorOffset": "-940.000183|-350.713593",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -108,8 +108,8 @@
       },
       {
         "fields": {
-          "position.x": 108.57823181152344,
-          "position.y": 51.48613739013672,
+          "position.x": 35.08317947387695,
+          "position.y": 153.48611450195313,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -200,7 +200,7 @@
       {
         "fields": {
           "ColorID": "Red",
-          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
+          "Texture": "Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
           "renderOrder": 2
         },
         "guid": "9b4469c3-bccf-484f-9d05-56a92005b598",
@@ -512,9 +512,9 @@
     "components": [
       {
         "fields": {
+          "Texture": "",
           "alpha": 1.0,
-          "color": "Red",
-          "textureId": "square"
+          "color": "Red"
         },
         "guid": "57abc700-e9e5-4653-b858-e0d829a9801c",
         "type": "UIImage"
@@ -659,7 +659,7 @@
     "components": [
       {
         "fields": {
-          "anchorOffset": "-360.000000|-325.390991",
+          "anchorOffset": "-354.000183|-21.754211",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -679,8 +679,8 @@
       },
       {
         "fields": {
-          "position.x": 576.9537353515625,
-          "position.y": 177.14398193359375,
+          "position.x": 582.5591430664063,
+          "position.y": 460.8194580078125,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -714,9 +714,9 @@
       },
       {
         "fields": {
+          "Texture": "",
           "alpha": 1.0,
-          "color": "Red",
-          "textureId": "square"
+          "color": "Red"
         },
         "guid": "ca124266-0eca-4cae-9c0b-1e8e68954443",
         "type": "UIImage"
@@ -779,9 +779,9 @@
     "components": [
       {
         "fields": {
+          "Texture": "",
           "alpha": 1.0,
-          "color": "Red",
-          "textureId": "square"
+          "color": "Red"
         },
         "guid": "942d2439-a153-4253-b119-09552e18aeae",
         "type": "UIImage"

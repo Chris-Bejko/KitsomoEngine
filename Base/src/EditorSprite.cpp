@@ -120,7 +120,7 @@ void EditorSprite::updateEngine(float dt)
                 if (dragTimer >= dragDelay)
                 {
                     Engine::get().TriggerDragging(entity->GetName());
-                    ImguiHandler::get().ClearInspector();
+                    Engine::get().ClearInspector();
                     entity->displayComponents = true;
                     Engine::get().GetManager()->SetSelectedEntity(entity);
                     dragging = true;
