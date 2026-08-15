@@ -6,7 +6,7 @@
 #include <sstream>
 #include <regex>
 #include "Texture.h"
-
+#include "Audio.h"
 struct EntityPtrField
 {
     Entity **ptr;
@@ -62,7 +62,14 @@ public:
     {
         textureFields[name] = &texture;
         textureStrings[name] = texture.GetName();
-        serializables.push_back({name, &textureStrings[name], texture_Type});
+        serializables.push_back({name, &textureStrings[name], file_Type});
+    }
+
+    void Field(const char* name, Audio& audio)
+    {
+        audioFields[name] = &audio;
+        audioStrings[name] = audio.GetName();
+        serializables.push_back({name, &audioStrings[name], file_Type});
     }
     // Entity* field
     void Field(const char *name, Entity *&ptr);
@@ -285,6 +292,8 @@ protected:
     std::map<std::string, VectorPtrFieldEntry> vectorPtrFields;
     std::map<std::string, std::string> textureStrings;
     std::map<std::string, Texture*> textureFields;
+    std::map<std::string, Audio*> audioFields;
+    std::map<std::string, std::string> audioStrings;
     bool fieldsRegistered = false;
     std::vector<std::string> fieldNameStorage; // keeps names alive
 

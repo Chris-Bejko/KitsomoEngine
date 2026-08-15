@@ -11,15 +11,20 @@ AssetManager::~AssetManager()
     clean();
 }
 
-AssetManager& AssetManager::get()
+AssetManager &AssetManager::get()
 {
     static AssetManager instance;
     return instance;
 }
 
-void AssetManager::loadTexture(const std::string& path)
+void AssetManager::loadTexture(const std::string &path, bool isEditorAsset)
 {
-    const std::string key = std::filesystem::path(path).lexically_normal().string();
+    std::string key = std::filesystem::path(path).lexically_normal().string();
+    if (!isEditorAsset)
+    {
+        const auto resolvedPath = ResolvePath(path);
+        key = std::filesystem::weakly_canonical(resolvedPath).string();
+    }
 
     if (textures.find(key) != textures.end())
         return;
@@ -37,9 +42,14 @@ void AssetManager::loadTexture(const std::string& path)
     LOG_INFO("Texture loaded: ", key, " (", textures.at(key).getSize().x, "x", textures.at(key).getSize().y, ")");
 }
 
-sf::Texture* AssetManager::getTexture(const std::string& path)
+sf::Texture *AssetManager::getTexture(const std::string &path, bool isEditorAsset)
 {
-    const std::string key = std::filesystem::path(path).lexically_normal().string();
+    std::string key = std::filesystem::path(path).lexically_normal().string();
+    if(!isEditorAsset)
+    {
+        const auto resolvedPath = ResolvePath(path);
+        key = std::filesystem::weakly_canonical(resolvedPath).string();
+    }
 
     auto it = textures.find(key);
 
@@ -52,7 +62,7 @@ sf::Texture* AssetManager::getTexture(const std::string& path)
     return &it->second;
 }
 
-void AssetManager::loadFont(const std::string& id, const std::string& path)
+void AssetManager::loadFont(const std::string &id, const std::string &path)
 {
     if (fonts.find(id) != fonts.end())
         return;
@@ -70,12 +80,12 @@ void AssetManager::loadFont(const std::string& id, const std::string& path)
     LOG_INFO("Font loaded: ", id);
 }
 
-sf::Font* AssetManager::getFont(const std::string& id)
+sf::Font *AssetManager::getFont(const std::string &id)
 {
     auto it = fonts.find(id);
 
     if (it == fonts.end())
-    {   
+    {
         LOG_WARNING("Font not found: ", id);
         return nullptr;
     }
@@ -87,4 +97,12 @@ void AssetManager::clean()
 {
     textures.clear();
     fonts.clear();
+}
+
+std::filesystem::path AssetManager::ResolvePath(const std::string &path)
+{
+    if (std::filesystem::path(path).is_absolute())
+        return path;
+
+    return SceneManager::get().ResolveProjectPath(path);
 }

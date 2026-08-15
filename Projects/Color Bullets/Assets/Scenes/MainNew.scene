@@ -14,7 +14,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "47.333374|27.779968",
+          "anchorOffset": "47.333374|37.056488",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -24,7 +24,7 @@
       {
         "fields": {
           "position.x": 957.5086669921875,
-          "position.y": 507.0971984863281,
+          "position.y": 515.7638549804688,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -200,7 +200,7 @@
       {
         "fields": {
           "ColorID": "Red",
-          "Texture": "Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
           "renderOrder": 2
         },
         "guid": "9b4469c3-bccf-484f-9d05-56a92005b598",
@@ -208,6 +208,7 @@
       },
       {
         "fields": {
+          "AudioSource": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|685878f4-3375-4477-ac0a-71f28eeb5510",
           "Camera": "c318f141-2b23-4586-97e2-9f43420fc842|f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
           "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|9b4469c3-bccf-484f-9d05-56a92005b598",
           "bulletPrefab": "Bullet",
@@ -235,7 +236,7 @@
       },
       {
         "fields": {
-          "filePath": "",
+          "AudioFile": "",
           "isLooping": false,
           "pitch": 1.0,
           "volume": 80.0

@@ -15,7 +15,7 @@ enum VariableType
     mathVector_Type,
     entityRef_Type,
     compRef_Type,
-    texture_Type,
+    file_Type,
 };
 
 struct SerializableVariable

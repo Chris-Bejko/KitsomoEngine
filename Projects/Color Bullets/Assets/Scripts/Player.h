@@ -4,7 +4,7 @@
 #include "Color.h"
 #include "SerializableScript.h"
 #include "Sprite.h"
-
+#include "AudioSource.h"
 class Player : public SerializableScript
 {
 public:
@@ -18,6 +18,7 @@ public:
 
 	void Awake() override final;
 
+	void OnFieldChanged(const std::string& fieldName) override final;
 	void updateEngine(float dt) override final;
 
 	void update(float dt) override final;
@@ -45,8 +46,9 @@ private:
 	sf::Vector2f mousePos;
 
 	std::string bulletPrefab = "Bullet";
-	std::string shootSound = "Audio/explosion.wav";
-	std::string floorTouchSound = "Audio/powerUp.wav";
+	Audio shootSound;
+	Audio floorTouchSound;
+	AudioSource* audioSource;
 	Sprite* sprite;
 	void Move(const Vector2F movement);
 	void LookAtMouse();

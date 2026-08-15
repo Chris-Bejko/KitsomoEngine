@@ -31,6 +31,7 @@ public:
 
     void Update(float dt);
     void Draw();
+    void Clear() { selectedEntity = nullptr; activeDrag = GizmoAxis::None; }
 
     void SetSelectedEntity(Entity *entity) { selectedEntity = entity; }
     void SetMode(GizmoMode mode) { this->mode = mode; }
@@ -41,7 +42,6 @@ public:
     float snapSize = 16.f;
     bool IsGizmoDragging() { return activeDrag != GizmoAxis::None; }
     Entity* GetSelectedEntity() { return selectedEntity; }
-    
 private:
     GizmoSystem() = default;
 

@@ -24,10 +24,6 @@ bool Player::Init()
 {
 
 	LOG_INFO("Player Inititalized");
-	// if (!entity->HasComponent<Sprite>())
-	// {
-	// 	entity->AddComponent<Sprite>("triangle", 2, Color(ColorEnum::Red));
-	// }
 	entity->transform->scale = Vector2F(0.05f, 0.05f);
 	LOG_DEBUG("Player initialized with position: ", entity->transform->position.x, ", ", entity->transform->position.y, "and scale: ", entity->transform->scale.x, ", ", entity->transform->scale.y);
 	Field("lastColorString", lastColorString);
@@ -38,15 +34,13 @@ bool Player::Init()
 	Field("floorTouchSound", floorTouchSound);
 	Field("Sprite", sprite);
 	Field("Camera", camera);
+	Field("AudioSource", audioSource);
 	return true;
 }
 
 void Player::Awake()
 {
 	entity->transform->position = initPos;
-	// Entity *camera = new Entity("Camera");
-	// this->camera = &camera->AddComponent<Camera>();
-	// Engine::get().Spawn(camera);
 	Entity *bulletSpawnPoint = new Entity("spawnpoint");
 	bulletSpawnPoint->AddComponent<Sprite>();
 	bulletSpawnPoint->ValidateAddedComponents();
@@ -85,11 +79,10 @@ void Player::update(float dt)
 			spawned.SetColor(lastColor);
 		}
 
-		if (entity->HasComponent<AudioSource>())
+		if (audioSource)
 		{
-			auto &audio = entity->GetComponent<AudioSource>();
-			audio.LoadAudio(shootSound);
-			audio.Play();
+			audioSource->LoadAudio(shootSound);
+			audioSource->Play();
 		}
 	}
 
@@ -143,17 +136,15 @@ void Player::OnTriggerEnter(Collider &other)
 			LOG_DEBUG("Player triggered with floor square of the same color, no color change");
 			return;
 		}
-		if (entity->HasComponent<AudioSource>())
+		if (audioSource)
 		{
-			auto &audio = entity->GetComponent<AudioSource>();
-			audio.LoadAudio(floorTouchSound);
-			audio.Play();
+			audioSource->LoadAudio(floorTouchSound);
+			audioSource->Play();
 		}
 		lastColor = otherColor;
 		lastColorString = lastColor.SerializeColor();
 
 		LOG_DEBUG("Player triggered with FloorSquare, changing color to match the floor square's color: ", lastColor.SerializeColor());
-		// entity->GetComponent<Sprite>().SetColor(lastColor);
 	}
 }
 
@@ -182,4 +173,19 @@ void Player::LookAtMouse()
 	auto mouseAngle = -atan2(mousePos.x - entity->transform->position.x, mousePos.y - entity->transform->position.y) * 180 / 3.14159;
 
 	entity->transform->LookAt(mouseAngle + 180);
+}
+
+
+void Player::OnFieldChanged(const std::string &fieldName)
+{
+	if (fieldName == "shootSound")
+	{
+		audioSource->LoadAudio(shootSound);
+		auto path = shootSound.GetPath();
+	}
+	else if (fieldName == "floorTouchSound")
+	{
+		auto path = floorTouchSound.GetPath();
+		audioSource->LoadAudio(floorTouchSound);
+	}
 }

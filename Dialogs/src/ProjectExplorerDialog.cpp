@@ -1,23 +1,19 @@
 #include "ProjectExplorerDialog.h"
+
+#include "ProjectExplorerManager.h"
 #include "SceneManager.h"
-#include "imgui.h"
+#include "DialogManager.h"
+#include "EventSystem.h"
 #include "ColorPalletes.h"
 
-#include <algorithm>
+#include "imgui.h"
+
 #include <cstring>
+#include <filesystem>
 #include <vector>
-#include "DialogManager.h"
+
 REGISTER_DIALOG(ProjectExplorerDialog);
-namespace
-{
-	bool IsTextureFile(const std::string &name)
-	{
-		std::string extension = std::filesystem::path(name).extension().string();
-		std::transform(extension.begin(), extension.end(), extension.begin(), [](unsigned char c)
-					   { return static_cast<char>(std::tolower(c)); });
-		return extension == ".png" || extension == ".jpg" || extension == ".jpeg" || extension == ".bmp" || extension == ".tga" || extension == ".gif";
-	}
-}
+
 ProjectExplorerDialog::ProjectExplorerDialog()
 {
     SetName("Project Explorer");
@@ -35,26 +31,28 @@ void ProjectExplorerDialog::Draw()
 {
     ImGui::Begin("Project Explorer");
 
-    if (ImGui::Button("New Project", ImVec2(100, 26)))
-        showNewProjectDialog = true;
+    DrawToolbar();
 
-    ImGui::SameLine();
-
-    if (ImGui::Button(SceneManager::get().HasProjectRoot() ? "Refresh" : "Open Project", ImVec2(90, 26)))
-    {
-        if (SceneManager::get().HasProjectRoot())
-            projectExplorerDirectory = std::filesystem::path();
-        else
-            ; // Open project dialog will be moved here later
-    }
+    // ---------------------------------------------------------
+    // No project loaded
+    // ---------------------------------------------------------
 
     if (!SceneManager::get().HasProjectRoot())
     {
         ImGui::Separator();
-        ImGui::TextColored(COLOR_TEXT_DIM, "PROJECT ROOT");
-        ImGui::TextColored(COLOR_WARNING, "No project selected");
+
+        ImGui::TextColored(
+            COLOR_TEXT_DIM,
+            "PROJECT ROOT");
+
+        ImGui::TextColored(
+            COLOR_WARNING,
+            "No project selected");
+
         ImGui::Spacing();
-        ImGui::TextWrapped("Open or create a project to browse assets and scenes.");
+
+        ImGui::TextWrapped(
+            "Open or create a project to browse assets and scenes.");
 
         DrawProjectCreationPopup();
 
@@ -62,17 +60,76 @@ void ProjectExplorerDialog::Draw()
         return;
     }
 
+    // ---------------------------------------------------------
+    // Project information
+    // ---------------------------------------------------------
+
     ImGui::Separator();
-    ImGui::TextColored(COLOR_TEXT_DIM, "PROJECT ROOT");
-    ImGui::TextWrapped("%s", SceneManager::get().GetProjectRoot().c_str());
+
+    ImGui::TextColored(
+        COLOR_TEXT_DIM,
+        "PROJECT ROOT");
+
+    ImGui::TextWrapped(
+        "%s",
+        SceneManager::get().GetProjectRoot().c_str());
+
     ImGui::Spacing();
 
     DrawProjectCreationPopup();
+
+    // ---------------------------------------------------------
+    // Assets
+    // ---------------------------------------------------------
+
     DrawAssets();
+
+    // ---------------------------------------------------------
+    // Actions
+    // ---------------------------------------------------------
+
     DrawActions();
 
     ImGui::End();
 }
+
+// =============================================================
+// Toolbar
+// =============================================================
+
+void ProjectExplorerDialog::DrawToolbar()
+{
+    if (ImGui::Button(
+            "New Project",
+            ImVec2(100, 26)))
+    {
+        showNewProjectDialog = true;
+    }
+
+    ImGui::SameLine();
+
+    if (ImGui::Button(
+            SceneManager::get().HasProjectRoot()
+                ? "Refresh"
+                : "Open Project",
+            ImVec2(90, 26)))
+    {
+        if (SceneManager::get().HasProjectRoot())
+        {
+            ProjectExplorerManager::get().SetDirectory(
+                SceneManager::get().GetProjectRootPath());
+        }
+        else
+        {
+            EventSystem::get().Fire(
+                OpenProjectLoadDialogEvent{});
+        }
+    }
+}
+
+// =============================================================
+// Create Project
+// =============================================================
 
 void ProjectExplorerDialog::DrawProjectCreationPopup()
 {
@@ -82,133 +139,243 @@ void ProjectExplorerDialog::DrawProjectCreationPopup()
         showNewProjectDialog = false;
     }
 
-    if (!ImGui::BeginPopupModal("Create New Project", nullptr, ImGuiWindowFlags_AlwaysAutoResize))
+    if (!ImGui::BeginPopupModal(
+            "Create New Project",
+            nullptr,
+            ImGuiWindowFlags_AlwaysAutoResize))
+    {
         return;
+    }
 
-    ImGui::Text("Choose a project name:");
+    ImGui::Text(
+        "Choose a project name:");
 
     char buffer[128] = {0};
-    std::strncpy(buffer, newProjectNameBuffer.c_str(), sizeof(buffer) - 1);
 
-    if (ImGui::InputText("##newProjectName", buffer, sizeof(buffer)))
-        newProjectNameBuffer = buffer;
+    std::strncpy(
+        buffer,
+        newProjectNameBuffer.c_str(),
+        sizeof(buffer) - 1);
 
-    if (ImGui::Button("Create", ImVec2(120, 0)))
+    if (ImGui::InputText(
+            "##newProjectName",
+            buffer,
+            sizeof(buffer)))
     {
-        if (SceneManager::get().CreateNewProject(newProjectNameBuffer))
+        newProjectNameBuffer = buffer;
+    }
+
+    if (ImGui::Button(
+            "Create",
+            ImVec2(120, 0)))
+    {
+        if (SceneManager::get().CreateNewProject(
+                newProjectNameBuffer))
         {
-            projectExplorerDirectory = std::filesystem::path();
+            ProjectExplorerManager::get().SetDirectory(
+                SceneManager::get().GetProjectRootPath());
+
             newProjectNameBuffer = "MyProject";
+
             ImGui::CloseCurrentPopup();
         }
     }
 
     ImGui::SameLine();
 
-    if (ImGui::Button("Cancel", ImVec2(120, 0)))
+    if (ImGui::Button(
+            "Cancel",
+            ImVec2(120, 0)))
+    {
         ImGui::CloseCurrentPopup();
+    }
 
     ImGui::EndPopup();
 }
 
+// =============================================================
+// Assets
+// =============================================================
+
 void ProjectExplorerDialog::DrawAssets()
 {
     ImGui::Spacing();
-    ImGui::TextColored(COLOR_TEXT_DIM, "ASSETS");
+
+    ImGui::TextColored(
+        COLOR_TEXT_DIM,
+        "ASSETS");
+
     ImGui::Separator();
 
-    std::filesystem::path baseDir =
-        projectExplorerDirectory.empty()
-            ? SceneManager::get().GetProjectRootPath()
-            : projectExplorerDirectory;
+    auto& explorer =
+        ProjectExplorerManager::get();
 
-    if (!std::filesystem::exists(baseDir))
-        baseDir = SceneManager::get().GetProjectRootPath();
+    const std::filesystem::path projectRoot =
+        SceneManager::get().GetProjectRootPath();
 
-    if (!projectExplorerDirectory.empty())
+    // ---------------------------------------------------------
+    // Make sure the explorer starts at the project root
+    // ---------------------------------------------------------
+
+    if (explorer.GetDirectory().empty())
     {
-        if (ImGui::Button("..", ImVec2(-1, 24)))
-            projectExplorerDirectory = baseDir.parent_path();
+        explorer.SetDirectory(projectRoot);
     }
 
-    std::vector<std::filesystem::directory_entry> entries;
+    std::filesystem::path currentDirectory =
+        explorer.GetDirectory();
 
-    for (const auto& entry : std::filesystem::directory_iterator(baseDir))
-        entries.push_back(entry);
+    // ---------------------------------------------------------
+    // Safety check
+    // ---------------------------------------------------------
 
-    std::sort(entries.begin(), entries.end(),
-        [](const auto& a, const auto& b)
+    if (!std::filesystem::exists(currentDirectory))
+    {
+        explorer.SetDirectory(projectRoot);
+        currentDirectory = projectRoot;
+    }
+
+    // ---------------------------------------------------------
+    // Parent directory
+    // ---------------------------------------------------------
+
+    if (currentDirectory != projectRoot)
+    {
+        if (ImGui::Button(
+                "..",
+                ImVec2(-1, 24)))
         {
-            return a.path().filename().string() < b.path().filename().string();
-        });
+            const auto parent =
+                currentDirectory.parent_path();
+
+            // Don't allow navigation outside
+            // the project root.
+            if (!parent.empty() &&
+                parent.string().find(
+                    projectRoot.string()) == 0)
+            {
+                explorer.SetDirectory(parent);
+            }
+        }
+    }
+
+    // ---------------------------------------------------------
+    // Directory contents
+    // ---------------------------------------------------------
+
+    const auto entries =
+        explorer.GetEntries();
 
     for (const auto& entry : entries)
     {
         const auto path = entry.path();
-        const std::string name = path.filename().string();
-        const bool isDirectory = std::filesystem::is_directory(path);
-        const bool shouldIgnore = name == "Generated" || name == "build";
 
-       	if (isDirectory && !shouldIgnore)
-		{
-			if (ImGui::Button(("[DIR] " + name).c_str(), ImVec2(-1, 24)))
-				projectExplorerDirectory = path;
-		}
-		else
-		{
-			const std::string ext = path.extension().string();
-			if (ext == ".scene")
-			{
-				if (ImGui::Button(("[SCENE] " + name).c_str(), ImVec2(-1, 24)))
-					SceneManager::get().LoadScene(path.stem().string(), SceneLoadMode::Replace);
-			}
-			else if (ext == ".prefab")
-			{
-				ImGui::Button(("[PREFAB] " + name).c_str(), ImVec2(-1, 24));
-			}
-			else if (!isDirectory)
-			{
-				if (IsTextureFile(name))
-				{
-					ImGui::Button(name.c_str(), ImVec2(-1, 24));
+        const std::string name =
+            path.filename().string();
 
-					if (ImGui::BeginDragDropSource())
-					{
-						const std::string absolutePath = std::filesystem::relative(path).string();
-						ImGui::SetDragDropPayload("ASSET_PATH", absolutePath.c_str(), absolutePath.size() + 1);
-						ImGui::Text("%s", name.c_str());
-						ImGui::EndDragDropSource();
-					}
-				}
-				else
-					ImGui::Button(name.c_str(), ImVec2(-1, 24));
-			}
-		}
-	}
+        // -----------------------------------------------------
+        // Directories
+        // -----------------------------------------------------
+
+        if (entry.is_directory())
+        {
+            // Don't expose generated/build directories.
+            if (name == "Generated" ||
+                name == "build")
+            {
+                continue;
+            }
+
+            if (ImGui::Button(
+                    ("[DIR] " + name).c_str(),
+                    ImVec2(-1, 24)))
+            {
+                explorer.SetDirectory(path);
+            }
+
+            continue;
+        }
+
+        // -----------------------------------------------------
+        // Files
+        // -----------------------------------------------------
+
+        FileType* fileType =
+            explorer.GetFileType(path);
+
+        if (fileType)
+        {
+            fileType->Draw(path);
+        }
+        else
+        {
+            DrawUnknownFile(path);
+        }
+    }
 }
+
+// =============================================================
+// Unknown files
+// =============================================================
+
+void ProjectExplorerDialog::DrawUnknownFile(
+    const std::filesystem::path& path)
+{
+    ImGui::Button(
+        path.filename().string().c_str(),
+        ImVec2(-1, 24));
+}
+
+// =============================================================
+// Actions
+// =============================================================
 
 void ProjectExplorerDialog::DrawActions()
 {
     ImGui::Spacing();
-    ImGui::TextColored(COLOR_TEXT_DIM, "ACTIONS");
+
+    ImGui::TextColored(
+        COLOR_TEXT_DIM,
+        "ACTIONS");
+
     ImGui::Separator();
 
-    if (ImGui::Button("New Scene", ImVec2(-1, 28)))
+    if (ImGui::Button(
+            "New Scene",
+            ImVec2(-1, 28)))
     {
-        std::filesystem::path baseDir =
-            projectExplorerDirectory.empty()
-                ? SceneManager::get().GetProjectRootPath()
-                : projectExplorerDirectory;
+        auto& explorer =
+            ProjectExplorerManager::get();
 
-        std::string sceneName = "NewScene";
-        std::filesystem::path scenePath = baseDir / (sceneName + ".scene");
+        std::filesystem::path baseDir =
+            explorer.GetDirectory();
+
+        if (baseDir.empty())
+        {
+            baseDir =
+                SceneManager::get().GetProjectRootPath();
+        }
+
+        std::string sceneName =
+            "NewScene";
+
+        std::filesystem::path scenePath =
+            baseDir / (sceneName + ".scene");
 
         int suffix = 1;
 
         while (std::filesystem::exists(scenePath))
-            scenePath = baseDir / (sceneName + std::to_string(suffix++) + ".scene");
+        {
+            scenePath =
+                baseDir /
+                (sceneName +
+                 std::to_string(suffix++) +
+                 ".scene");
+        }
 
-        SceneManager::get().SaveSceneAs(scenePath.stem().string());
-        projectExplorerDirectory = baseDir;
+        SceneManager::get().SaveSceneAs(
+            scenePath.stem().string());
+
+        explorer.SetDirectory(baseDir);
     }
 }

@@ -162,10 +162,7 @@ bool ProjectExporter::Export(
         // Copy engine/runtime dependencies
         // --------------------------------------------------------
 
-        if (!CopyRuntimeDependencies(
-                absoluteProjectRoot,
-                exportRoot,
-                settings))
+        if (!CopyRuntimeDependencies(absoluteProjectRoot, exportRoot, settings))
         {
             return false;
         }
@@ -174,37 +171,24 @@ bool ProjectExporter::Export(
         // Build executable
         // --------------------------------------------------------
 
-        if (!BuildExport(
-                exportRoot,
-                settings))
+        if (!BuildExport(exportRoot, settings))
         {
             return false;
         }
 
-        LOG_INFO(
-            "============================================");
+        LOG_INFO("============================================");
 
-        LOG_INFO(
-            "EXPORT SUCCESSFUL");
+        LOG_INFO("EXPORT SUCCESSFUL");
 
-        LOG_INFO(
-            "Executable: ",
-            (
-                exportRoot /
-                (settings.executableName + ".exe"))
-                .string()
-                .c_str());
+        LOG_INFO("Executable: ", (exportRoot / (settings.executableName + ".exe")).string().c_str());
 
-        LOG_INFO(
-            "============================================");
+        LOG_INFO("============================================");
 
         return true;
     }
     catch (const std::exception &e)
     {
-        LOG_ERROR(
-            "Export exception: ",
-            e.what());
+        LOG_ERROR("Export exception: ", e.what());
 
         return false;
     }
@@ -215,34 +199,25 @@ bool ProjectExporter::GenerateRuntimeFiles(
     const std::filesystem::path &exportRoot,
     const Settings &settings)
 {
-    const std::filesystem::path generated =
-        exportRoot / "Generated";
+    const std::filesystem::path generated = exportRoot / "Generated";
 
     std::error_code ec;
 
-    std::filesystem::create_directories(
-        generated,
-        ec);
+    std::filesystem::create_directories(generated, ec);
 
     if (ec)
     {
-        LOG_ERROR(
-            "Failed to create Generated directory");
+        LOG_ERROR("Failed to create Generated directory");
 
         return false;
     }
 
-    if (!WriteRuntimeMain(
-            exportRoot,
-            settings))
+    if (!WriteRuntimeMain(exportRoot, settings))
     {
         return false;
     }
 
-    if (!WriteRuntimeCMake(
-            projectRoot,
-            exportRoot,
-            settings))
+    if (!WriteRuntimeCMake(projectRoot, exportRoot, settings))
     {
         return false;
     }
@@ -283,7 +258,7 @@ int main()
     while (engine.IsRunning())
     {
         engine.Events();
-        engine.Update();
+        engine.UpdateRuntime();
         engine.RenderRuntime();
     }
 
@@ -299,23 +274,18 @@ bool ProjectExporter::WriteRuntimeCMake(
     const std::filesystem::path &exportRoot,
     const Settings &settings)
 {
-    const std::filesystem::path cmakeFile =
-        exportRoot / "CMakeLists.txt";
+    const std::filesystem::path cmakeFile = exportRoot / "CMakeLists.txt";
 
     std::ofstream file(cmakeFile);
 
     if (!file)
     {
-        LOG_ERROR(
-            "Failed to create runtime CMakeLists.txt");
+        LOG_ERROR("Failed to create runtime CMakeLists.txt");
 
         return false;
     }
 
-    const std::string engineRoot =
-        std::filesystem::absolute(
-            projectRoot.parent_path().parent_path())
-            .string();
+    const std::string engineRoot = std::filesystem::absolute(projectRoot.parent_path().parent_path()).string();
 
     file << "cmake_minimum_required(VERSION 3.20)\n";
     file << "project("
@@ -446,9 +416,7 @@ bool ProjectExporter::WriteRuntimeCMake(
     return true;
 }
 
-bool ProjectExporter::CopyGameScripts(
-    const std::filesystem::path &projectRoot,
-    const std::filesystem::path &exportRoot)
+bool ProjectExporter::CopyGameScripts(const std::filesystem::path &projectRoot, const std::filesystem::path &exportRoot)
 {
     const std::filesystem::path source =
         projectRoot /
@@ -464,59 +432,40 @@ bool ProjectExporter::CopyGameScripts(
 
     std::error_code ec;
 
-    std::filesystem::create_directories(
-        destination.parent_path(),
-        ec);
+    std::filesystem::create_directories(destination.parent_path(), ec);
 
     if (ec)
     {
-        LOG_ERROR(
-            "Failed to create runtime DLL directory");
+        LOG_ERROR("Failed to create runtime DLL directory");
 
         return false;
     }
 
-    return CopyFileIfExists(
-        source,
-        destination);
+    return CopyFileIfExists(source, destination);
 }
 
-bool ProjectExporter::CopyProjectAssets(
-    const std::filesystem::path &sourceRoot,
-    const std::filesystem::path &exportRoot)
+bool ProjectExporter::CopyProjectAssets(const std::filesystem::path &sourceRoot, const std::filesystem::path &exportRoot)
 {
-    const std::filesystem::path source =
-        sourceRoot / "Assets";
+    const std::filesystem::path source = sourceRoot / "Assets";
 
-    const std::filesystem::path destination =
-        exportRoot / "Assets";
+    const std::filesystem::path destination = exportRoot / "Assets";
 
     if (!std::filesystem::exists(source))
     {
-        LOG_ERROR(
-            "Project Assets directory does not exist: ",
-            source.string().c_str());
+        LOG_ERROR("Project Assets directory does not exist: ", source.string().c_str());
 
         return false;
     }
 
-    LOG_INFO(
-        "Copying project assets...");
+    LOG_INFO("Copying project assets...");
 
     std::error_code ec;
 
-    std::filesystem::copy(
-        source,
-        destination,
-        std::filesystem::copy_options::recursive |
-            std::filesystem::copy_options::overwrite_existing,
-        ec);
+    std::filesystem::copy(source, destination, std::filesystem::copy_options::recursive | std::filesystem::copy_options::overwrite_existing, ec);
 
     if (ec)
     {
-        LOG_ERROR(
-            "Failed to copy project assets: ",
-            ec.message().c_str());
+        LOG_ERROR("Failed to copy project assets: ", ec.message().c_str());
 
         return false;
     }
@@ -524,17 +473,11 @@ bool ProjectExporter::CopyProjectAssets(
     return true;
 }
 
-bool ProjectExporter::CopyRuntimeDependencies(
-    const std::filesystem::path& projectRoot,
-    const std::filesystem::path& exportRoot,
-    const Settings& settings)
+bool ProjectExporter::CopyRuntimeDependencies(const std::filesystem::path &projectRoot, const std::filesystem::path &exportRoot, const Settings &settings)
 {
-    const std::filesystem::path engineRoot =
-        std::filesystem::absolute(
-            projectRoot.parent_path().parent_path());
+    const std::filesystem::path engineRoot = std::filesystem::absolute(projectRoot.parent_path().parent_path());
 
-    const std::filesystem::path binRoot =
-        engineRoot / "bin";
+    const std::filesystem::path binRoot = engineRoot / "bin";
 
     // ------------------------------------------------------------
     // ECSEngineCore.dll
@@ -546,9 +489,7 @@ bool ProjectExporter::CopyRuntimeDependencies(
         "Debug" /
         "ECSEngineCore.dll";
 
-    if (!CopyFileIfExists(
-            engineDll,
-            exportRoot / "ECSEngineCore.dll"))
+    if (!CopyFileIfExists(engineDll, exportRoot / "ECSEngineCore.dll"))
     {
         LOG_ERROR("Failed to copy ECSEngineCore.dll");
         return false;
@@ -559,22 +500,17 @@ bool ProjectExporter::CopyRuntimeDependencies(
     // ------------------------------------------------------------
 
     const std::vector<std::string> sfmlDlls =
-    {
-        "sfml-graphics-d-2.dll",
-        "sfml-window-d-2.dll",
-        "sfml-system-d-2.dll",
-        "sfml-audio-d-2.dll"
-    };
-
-    for (const auto& dll : sfmlDlls)
-    {
-        if (!CopyFileIfExists(
-                binRoot / dll,
-                exportRoot / dll))
         {
-            LOG_ERROR(
-                "Failed to copy SFML DLL: ",
-                dll.c_str());
+            "sfml-graphics-d-2.dll",
+            "sfml-window-d-2.dll",
+            "sfml-system-d-2.dll",
+            "sfml-audio-d-2.dll"};
+
+    for (const auto &dll : sfmlDlls)
+    {
+        if (!CopyFileIfExists(binRoot / dll, exportRoot / dll))
+        {
+            LOG_ERROR("Failed to copy SFML DLL: ", dll.c_str());
 
             return false;
         }
@@ -591,9 +527,7 @@ bool ProjectExporter::CopyRuntimeDependencies(
 
         if (std::filesystem::exists(openAL))
         {
-            if (!CopyFileIfExists(
-                    openAL,
-                    exportRoot / "OpenAL32.dll"))
+            if (!CopyFileIfExists(openAL, exportRoot / "OpenAL32.dll"))
             {
                 return false;
             }

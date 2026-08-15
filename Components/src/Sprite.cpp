@@ -41,7 +41,7 @@ bool Sprite::Init()
 
 void Sprite::RefreshTexture()
 {
-    const std::string& path = _texture.GetPath();
+    const std::string &path = _texture.GetPath();
 
     if (path.empty())
     {
@@ -58,6 +58,9 @@ void Sprite::RefreshTexture()
     AssetManager::get().loadTexture(path);
 
     texture = AssetManager::get().getTexture(path);
+    
+    if (!texture)
+        return;
 
     sprite.setTexture(*texture);
 

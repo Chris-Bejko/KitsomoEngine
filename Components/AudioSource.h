@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 #include "SerializableScript.h"
-
+#include "Audio.h"
 
 class AudioSource : public SerializableScript
 {
@@ -13,6 +13,7 @@ class AudioSource : public SerializableScript
 
         bool Init() override;
         void update(float dt) override;
+        void OnFieldChanged(const std::string& fieldName) override;
 
         // Audio control methods
         void Play();
@@ -21,9 +22,10 @@ class AudioSource : public SerializableScript
         void SetVolume(float volume);
         void SetLoop(bool loop);
         void SetPitch(float pitch);
-
+        
         // Audio file management
         bool LoadAudio(const std::string& filePath);
+        bool LoadAudio(Audio& audio);
         
         // Getters
         float GetVolume() const;
@@ -42,7 +44,7 @@ class AudioSource : public SerializableScript
     private:
         std::unique_ptr<sf::Sound> sound;
         std::unique_ptr<sf::SoundBuffer> soundBuffer;
-        std::string currentFilePath;
+        Audio audioFile;
         float volume = 80.0f;
         bool isLooping = false;
         float pitch = 1.0f;

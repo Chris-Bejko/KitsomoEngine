@@ -3,14 +3,16 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <unordered_map>
+#include <filesystem>
+#include "SceneManager.h"
 
 class AssetManager
 {
 public:
     static AssetManager& get();
 
-    void loadTexture(const std::string& path);
-    sf::Texture* getTexture(const std::string& path);
+    void loadTexture(const std::string& path, bool isEditorAsset = false);
+    sf::Texture* getTexture(const std::string& path, bool isEditorAsset = false);
 
     void loadFont(const std::string& id, const std::string& path);
     sf::Font* getFont(const std::string& id);
@@ -23,7 +25,9 @@ private:
 
     AssetManager(const AssetManager&) = delete;
     AssetManager& operator=(const AssetManager&) = delete;
-
+    
     std::unordered_map<std::string, sf::Texture> textures;
     std::unordered_map<std::string, sf::Font> fonts;
+
+    std::filesystem::path ResolvePath(const std::string& path);
 };

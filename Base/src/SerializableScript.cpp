@@ -137,8 +137,7 @@ void SerializableScript::InitSerializedFields(ReadableSerializableVariableMap ma
                     vectorStrings[fieldName] = map.stringFields[fieldName];
             }
             break;
-
-        case texture_Type:
+        case file_Type:
             if (map.stringFields.count(fieldName))
             {
                 *reinterpret_cast<std::string *>(var.data) = map.stringFields[fieldName];

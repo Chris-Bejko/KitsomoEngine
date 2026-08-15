@@ -9,14 +9,14 @@ REGISTER_COMPONENT(AudioSource)
 REGISTER_SERIALIZABLE_COMPONENT(AudioSource)
 
 AudioSource::AudioSource()
-    : sound(nullptr), soundBuffer(nullptr), currentFilePath(""),
+    : sound(nullptr), soundBuffer(nullptr), audioFile(),
       volume(80.0f), isLooping(false), pitch(1.0f)
 {
 }
 
 bool AudioSource::Init()
 {
-    Field("filePath", currentFilePath);
+    Field("AudioFile", audioFile);
     Field("volume", volume);
     Field("isLooping", isLooping);
     Field("pitch", pitch);
@@ -26,6 +26,10 @@ bool AudioSource::Init()
 void AudioSource::update(float dt)
 {
     // Update can be extended for future functionality like fade-in/fade-out
+}
+bool AudioSource::LoadAudio(Audio& audio)
+{
+    return LoadAudio(audio.GetPath());
 }
 
 bool AudioSource::LoadAudio(const std::string &filePath)
@@ -45,7 +49,7 @@ bool AudioSource::LoadAudio(const std::string &filePath)
         // If successful, replace the old buffer and create new sound
         soundBuffer = std::move(newBuffer);
         sound = std::make_unique<sf::Sound>(*soundBuffer);
-        currentFilePath = filePath;
+        audioFile.SetPath(filePath);
 
         return true;
     }
@@ -211,8 +215,17 @@ void AudioSource::DrawEditorButton()
     ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Playing Offset: %.2f s", GetPlayingOffset());
 
     // File loaded
-    if (!currentFilePath.empty())
-        ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "File: %s", currentFilePath.c_str());
+    if (!audioFile.GetPath().empty())
+        ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "File: %s", audioFile.GetName().c_str());
     else
         ImGui::TextColored(ImVec4(0.8f, 0.2f, 0.2f, 1.0f), "No audio file loaded");
+}
+
+
+void AudioSource::OnFieldChanged(const std::string& fieldName)
+{
+    if (fieldName == "AudioFile")
+    {
+        LoadAudio(audioFile.GetPath());
+    }
 }
