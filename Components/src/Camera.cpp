@@ -24,7 +24,6 @@ bool Camera::Init()
 
 void Camera::update(float dt)
 {
-	LOG_INFO("Camera UPDATE this: ", this);
     Engine::get().SetView(view);
 }
 

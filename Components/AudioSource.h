@@ -40,10 +40,11 @@ class AudioSource : public SerializableScript
 
         // Editor
         void DrawEditorButton() override;
-
+        void SetAudio(const Audio& audio);
+        void RefreshAudio();
     private:
-        std::unique_ptr<sf::Sound> sound;
-        std::unique_ptr<sf::SoundBuffer> soundBuffer;
+        sf::Sound sound;
+        sf::SoundBuffer* soundBuffer = nullptr;
         Audio audioFile;
         float volume = 80.0f;
         bool isLooping = false;

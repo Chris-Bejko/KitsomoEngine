@@ -3,23 +3,28 @@
 #include <imgui.h>
 #include <algorithm>
 #include "ComponentRegistry.h"
+#include "AssetManager.h"
 
 DECLARE_COMPONENT_RULES(AudioSource, false)
 REGISTER_COMPONENT(AudioSource)
 REGISTER_SERIALIZABLE_COMPONENT(AudioSource)
 
 AudioSource::AudioSource()
-    : sound(nullptr), soundBuffer(nullptr), audioFile(),
+    : sound(), soundBuffer(nullptr), audioFile(),
       volume(80.0f), isLooping(false), pitch(1.0f)
 {
 }
 
 bool AudioSource::Init()
 {
-    Field("AudioFile", audioFile);
+    // Field("AudioFile", audioFile);
     Field("volume", volume);
     Field("isLooping", isLooping);
     Field("pitch", pitch);
+    RefreshAudio();
+    sound.setVolume(volume);
+    sound.setLoop(isLooping);
+    sound.setPitch(pitch);
     return true;
 }
 
@@ -27,125 +32,97 @@ void AudioSource::update(float dt)
 {
     // Update can be extended for future functionality like fade-in/fade-out
 }
-bool AudioSource::LoadAudio(Audio& audio)
+
+void AudioSource::SetAudio(const Audio& audio)
 {
-    return LoadAudio(audio.GetPath());
+    Stop();
+
+    audioFile = audio;
+    RefreshAudio();
 }
 
-bool AudioSource::LoadAudio(const std::string &filePath)
+void AudioSource::RefreshAudio()
 {
-    try
+    sound.stop();
+    soundBuffer = nullptr;
+
+    const std::string& path = audioFile.GetPath();
+
+    if (path.empty())
     {
-        // Create new sound buffer
-        auto newBuffer = std::make_unique<sf::SoundBuffer>();
-
-        // Try to load the audio file
-        if (!newBuffer->loadFromFile(filePath))
-        {
-            std::cerr << "Failed to load audio file: " << filePath << std::endl;
-            return false;
-        }
-
-        // If successful, replace the old buffer and create new sound
-        soundBuffer = std::move(newBuffer);
-        sound = std::make_unique<sf::Sound>(*soundBuffer);
-        audioFile.SetPath(filePath);
-
-        return true;
+        sound.resetBuffer();
+        return;
     }
-    catch (const std::exception &e)
+
+    AssetManager::get().LoadAudio(path);
+
+    soundBuffer = AssetManager::get().GetAudio(path);
+
+    if (soundBuffer == nullptr)
     {
-        std::cerr << "Exception loading audio: " << e.what() << std::endl;
-        return false;
+        sound.resetBuffer();
+        LOG_ERROR("AudioSource failed to resolve audio: ", path);
+        return;
     }
+
+    sound.setBuffer(*soundBuffer);
+    sound.setVolume(volume);
+    sound.setLoop(isLooping);
+    sound.setPitch(pitch);
 }
 
 void AudioSource::Play()
 {
-    if (sound)
-    {
-        sound->play();
-    }
+    sound.play();
 }
 
 void AudioSource::Pause()
 {
-    if (sound)
-    {
-        sound->pause();
-    }
+    sound.pause();
 }
 
 void AudioSource::Stop()
 {
-    if (sound)
-    {
-        sound->stop();
-    }
+    sound.stop();
 }
 
 void AudioSource::SetVolume(float volume)
 {
-    if (sound)
-    {
-        // Clamp volume between 0 and 100
-        float clampedVolume = std::max(0.0f, std::min(100.0f, volume));
-        sound->setVolume(clampedVolume);
-    }
+    // Clamp volume between 0 and 100
+    float clampedVolume = std::max(0.0f, std::min(100.0f, volume));
+    sound.setVolume(clampedVolume);
 }
 
 void AudioSource::SetLoop(bool loop)
 {
-    if (sound)
-    {
-        sound->setLoop(loop);
-    }
+    sound.setLoop(loop);
 }
 
 void AudioSource::SetPitch(float pitch)
 {
-    if (sound)
-    {
-        // Pitch should be positive
-        float validPitch = std::max(0.01f, pitch);
-        sound->setPitch(validPitch);
-    }
+    // Pitch should be positive
+    float validPitch = std::max(0.01f, pitch);
+    sound.setPitch(validPitch);
 }
 
 float AudioSource::GetVolume() const
 {
-    if (sound)
-    {
-        return sound->getVolume();
-    }
-    return 0.0f;
+    return sound.getVolume();
 }
 
 bool AudioSource::IsPlaying() const
 {
-    if (sound)
-    {
-        return sound->getStatus() == sf::Sound::Playing;
-    }
-    return false;
+    return sound.getStatus() == sf::Sound::Playing;
 }
 
 bool AudioSource::IsLooping() const
 {
-    if (sound)
-    {
-        return sound->getLoop();
-    }
-    return false;
+    return sound.getLoop();
 }
 
 float AudioSource::GetPitch() const
 {
-    if (sound)
-    {
-        return sound->getPitch();
-    }
-    return 1.0f;
+    return sound.getPitch();
 }
 
 float AudioSource::GetDuration() const
@@ -159,19 +136,12 @@ float AudioSource::GetDuration() const
 
 float AudioSource::GetPlayingOffset() const
 {
-    if (sound)
-    {
-        return sound->getPlayingOffset().asSeconds();
-    }
-    return 0.0f;
+    return sound.getPlayingOffset().asSeconds();
 }
 
 void AudioSource::SetPlayingOffset(float offset)
 {
-    if (sound)
-    {
-        sound->setPlayingOffset(sf::seconds(offset));
-    }
+    sound.setPlayingOffset(sf::seconds(offset));
 }
     
 void AudioSource::DrawEditorButton()
@@ -205,7 +175,7 @@ void AudioSource::DrawEditorButton()
     ImGui::Spacing();
     if (IsPlaying())
         ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Status: Playing");
-    else if (sound && sound->getStatus() == sf::Sound::Paused)
+    else if (sound.getStatus() == sf::Sound::Paused)
         ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.2f, 1.0f), "Status: Paused");
     else
         ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), "Status: Stopped");
@@ -226,6 +196,6 @@ void AudioSource::OnFieldChanged(const std::string& fieldName)
 {
     if (fieldName == "AudioFile")
     {
-        LoadAudio(audioFile.GetPath());
+        RefreshAudio();
     }
 }
