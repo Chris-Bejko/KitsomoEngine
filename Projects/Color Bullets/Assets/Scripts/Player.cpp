@@ -81,7 +81,7 @@ void Player::update(float dt)
 
 		if (audioSource)
 		{
-			audioSource->LoadAudio(shootSound);
+			audioSource->SetAudio(shootSound);
 			audioSource->Play();
 		}
 	}
@@ -138,7 +138,7 @@ void Player::OnTriggerEnter(Collider &other)
 		}
 		if (audioSource)
 		{
-			audioSource->LoadAudio(floorTouchSound);
+			audioSource->SetAudio(floorTouchSound);
 			audioSource->Play();
 		}
 		lastColor = otherColor;
@@ -173,19 +173,4 @@ void Player::LookAtMouse()
 	auto mouseAngle = -atan2(mousePos.x - entity->transform->position.x, mousePos.y - entity->transform->position.y) * 180 / 3.14159;
 
 	entity->transform->LookAt(mouseAngle + 180);
-}
-
-
-void Player::OnFieldChanged(const std::string &fieldName)
-{
-	if (fieldName == "shootSound")
-	{
-		audioSource->LoadAudio(shootSound);
-		auto path = shootSound.GetPath();
-	}
-	else if (fieldName == "floorTouchSound")
-	{
-		auto path = floorTouchSound.GetPath();
-		audioSource->LoadAudio(floorTouchSound);
-	}
 }

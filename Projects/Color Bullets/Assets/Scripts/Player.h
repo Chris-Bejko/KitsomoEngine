@@ -18,7 +18,6 @@ public:
 
 	void Awake() override final;
 
-	void OnFieldChanged(const std::string& fieldName) override final;
 	void updateEngine(float dt) override final;
 
 	void update(float dt) override final;
