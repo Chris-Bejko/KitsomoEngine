@@ -1,56 +1,30 @@
 #pragma once
 
-#include <filesystem>
-#include <string>
+#include "AssetReference.h"
+#include <SFML/Audio.hpp>
 
-class Audio
+class Audio : public AssetReference
 {
 public:
     Audio() = default;
+    explicit Audio(const std::string& path);
 
-    Audio(const std::string& absolutePath)
-    {
-        SetPath(absolutePath);
-    }
+    ~Audio() override;
 
-    Audio(const char* absolutePath)
-    {
-        SetPath(absolutePath ? absolutePath : "");
-    }
+    Audio(const Audio& other);
+    Audio& operator=(const Audio& other);
 
-    void SetPath(const std::string& absolutePath)
-    {
-        path = std::filesystem::path(absolutePath).lexically_normal().string();
-        name = std::filesystem::path(path).filename().string();
-    }
+    Audio(Audio&& other) noexcept;
+    Audio& operator=(Audio&& other) noexcept;
 
-    const std::string& GetPath() const
-    {
-        return path;
-    }
+    void SetPath(const std::string& path);
 
-    const std::string& GetName() const
-    {
-        return name;
-    }
+    bool Load() override;
+    void Unload() override;
+    bool IsLoaded() const override;
 
-    bool Empty() const
-    {
-        return path.empty();
-    }
-
-    bool Exists() const
-    {
-        return !path.empty() && std::filesystem::exists(path);
-    }
-
-    void Clear()
-    {
-        path.clear();
-        name.clear();
-    }
+    sf::SoundBuffer* GetBuffer() const;
 
 private:
-    std::string path;
-    std::string name;
+    sf::SoundBuffer* buffer = nullptr;
 };

@@ -23,10 +23,6 @@ class AudioSource : public SerializableScript
         void SetLoop(bool loop);
         void SetPitch(float pitch);
         
-        // Audio file management
-        bool LoadAudio(const std::string& filePath);
-        bool LoadAudio(Audio& audio);
-        
         // Getters
         float GetVolume() const;
         bool IsPlaying() const;
@@ -44,7 +40,6 @@ class AudioSource : public SerializableScript
         void RefreshAudio();
     private:
         sf::Sound sound;
-        sf::SoundBuffer* soundBuffer = nullptr;
         Audio audioFile;
         float volume = 80.0f;
         bool isLooping = false;

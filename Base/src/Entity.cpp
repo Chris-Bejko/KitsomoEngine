@@ -458,20 +458,17 @@ void Entity::DisplayComponents()
 						std::string droppedPath =
 							static_cast<const char *>(payload->Data);
 
-						std::string ext =std::filesystem::path(droppedPath).extension().string();
-
-						*p = droppedPath; // store the path directly
-
-						// Sync back to Asset object via SerializableScript
+						std::string ext = std::filesystem::path(droppedPath).extension().string();
+						std::string fieldName(it->name);
 						if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
 						{
-							// Update textureFields if they exist
-							std::string fieldName(it->name);
-							if (script->textureFields.count(fieldName))
-								script->textureFields[fieldName]->SetPath(droppedPath);
-							if(script->audioFields.count(fieldName))
-								script->audioFields[fieldName]->SetPath(droppedPath);
-							script->NotifyFieldChanged(fieldName);
+							if (auto *asset = script->GetAssetReference(fieldName))
+							{
+								asset->SetPath(droppedPath);
+								asset->Load();
+
+								script->NotifyFieldChanged(fieldName);
+							}
 						}
 					}
 					ImGui::EndDragDropTarget();
@@ -482,12 +479,15 @@ void Entity::DisplayComponents()
 				{
 					if (ImGui::MenuItem("Clear"))
 					{
-						p->clear();
 						if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
 						{
 							std::string fieldName(it->name);
-							if (script->textureFields.count(fieldName))
-								script->textureFields[fieldName]->Clear();
+
+							if (auto *asset = script->GetAssetReference(fieldName))
+							{
+								asset->SetPath("");
+							}
+
 							script->NotifyFieldChanged(fieldName);
 						}
 					}

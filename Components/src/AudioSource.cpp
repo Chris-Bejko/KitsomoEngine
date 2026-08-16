@@ -10,14 +10,14 @@ REGISTER_COMPONENT(AudioSource)
 REGISTER_SERIALIZABLE_COMPONENT(AudioSource)
 
 AudioSource::AudioSource()
-    : sound(), soundBuffer(nullptr), audioFile(),
+    : sound(), audioFile(),
       volume(80.0f), isLooping(false), pitch(1.0f)
 {
 }
 
 bool AudioSource::Init()
 {
-    // Field("AudioFile", audioFile);
+    Field("AudioFile", audioFile);
     Field("volume", volume);
     Field("isLooping", isLooping);
     Field("pitch", pitch);
@@ -32,40 +32,54 @@ void AudioSource::update(float dt)
 {
     // Update can be extended for future functionality like fade-in/fade-out
 }
-
 void AudioSource::SetAudio(const Audio& audio)
 {
     Stop();
 
     audioFile = audio;
+
     RefreshAudio();
 }
 
 void AudioSource::RefreshAudio()
 {
-    sound.stop();
-    soundBuffer = nullptr;
+    Stop();
 
-    const std::string& path = audioFile.GetPath();
-
-    if (path.empty())
+    if (!audioFile.HasPath())
     {
         sound.resetBuffer();
         return;
     }
 
-    AssetManager::get().LoadAudio(path);
+    // Audio is responsible for loading itself.
+    if (!audioFile.IsLoaded())
+    {
+        if (!audioFile.Load())
+        {
+            sound.resetBuffer();
 
-    soundBuffer = AssetManager::get().GetAudio(path);
+            LOG_ERROR(
+                "AudioSource failed to load audio: ",
+                audioFile.GetPath());
 
-    if (soundBuffer == nullptr)
+            return;
+        }
+    }
+
+    sf::SoundBuffer* buffer = audioFile.GetBuffer();
+
+    if (buffer == nullptr)
     {
         sound.resetBuffer();
-        LOG_ERROR("AudioSource failed to resolve audio: ", path);
+
+        LOG_ERROR(
+            "AudioSource failed to resolve audio: ",
+            audioFile.GetPath());
+
         return;
     }
 
-    sound.setBuffer(*soundBuffer);
+    sound.setBuffer(*buffer);
     sound.setVolume(volume);
     sound.setLoop(isLooping);
     sound.setPitch(pitch);
@@ -127,9 +141,11 @@ float AudioSource::GetPitch() const
 
 float AudioSource::GetDuration() const
 {
-    if (soundBuffer)
+    if (audioFile.IsLoaded())
     {
-        return soundBuffer->getDuration().asSeconds();
+        sf::SoundBuffer* buffer = audioFile.GetBuffer();
+        if (buffer)
+            return buffer->getDuration().asSeconds();
     }
     return 0.0f;
 }
@@ -190,12 +206,8 @@ void AudioSource::DrawEditorButton()
     else
         ImGui::TextColored(ImVec4(0.8f, 0.2f, 0.2f, 1.0f), "No audio file loaded");
 }
-
-
 void AudioSource::OnFieldChanged(const std::string& fieldName)
 {
     if (fieldName == "AudioFile")
-    {
         RefreshAudio();
-    }
 }

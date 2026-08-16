@@ -535,7 +535,8 @@ bool Engine::Load(std::string fileName)
 		return false;
 	}
 
-	GizmoSystem::get().SetSelectedEntity(nullptr);
+	if(isEngine)
+		GizmoSystem::get().SetSelectedEntity(nullptr);
 
 	SpawnEntities(entities);
 
@@ -1343,7 +1344,7 @@ void Engine::InitRuntime(
 	}
 
 	LOG_INFO("RUNTIME 10: Scene loaded");
-
+	
 	manager->Awake();
 
 	LOG_INFO("RUNTIME 11: Entities awakened");
