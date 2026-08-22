@@ -70,14 +70,6 @@ void InspectorDialog::Draw()
 			{
 				LOG_INFO("Inspector: adding component '", componentName, "' to entity '", displayEntity->GetName().c_str(), "'");
 				displayEntity->AddComponentByName(componentName);
-				// if (displayEntity->AddComponentByName(componentName))
-				// {
-				// 	LOG_INFO("Inspector: successfully added component '", componentName, "'");
-				// }
-				// else
-				// {
-				// 	LOG_WARNING("Inspector: failed to add component '", componentName, "' to entity '", displayEntity->GetName().c_str(), "'");
-				// }
 			}
 		}
 
