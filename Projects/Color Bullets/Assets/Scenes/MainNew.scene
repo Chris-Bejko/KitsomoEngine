@@ -14,7 +14,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "47.333374|27.779968",
+          "anchorOffset": "0.000000|0.000000",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -23,8 +23,8 @@
       },
       {
         "fields": {
-          "position.x": 957.5086669921875,
-          "position.y": 507.0971984863281,
+          "position.x": 576.9536743164063,
+          "position.y": 341.004638671875,
           "rotation": 0.0,
           "scale.x": 1.0,
           "scale.y": 1.0
@@ -199,27 +199,31 @@
       },
       {
         "fields": {
-          "ColorID": "Red",
-          "Texture": "Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
-          "renderOrder": 2
+          "anchorOffset": "0.000000|0.000000",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
         },
         "guid": "9b4469c3-bccf-484f-9d05-56a92005b598",
         "type": "Sprite"
       },
       {
         "fields": {
-          "Camera": "c318f141-2b23-4586-97e2-9f43420fc842|f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
-          "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|9b4469c3-bccf-484f-9d05-56a92005b598",
-          "bulletPrefab": "Bullet",
-          "cooldown": 0.5,
-          "floorTouchSound": "Audio/powerUp.wav",
-          "lastColorString": "",
-          "moveSpeed": 350.0,
-          "shootSound": "Audio/explosion.wav"
+          "position.x": 576.9536743164063,
+          "position.y": 177.1435546875,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
         },
-        "guid": "032ea708-4efb-45b6-a06b-02f7b0b890d4",
-        "type": "Player"
-      },
+        "guid": "dc78abe9-5c39-4332-8b13-d6492c7c41c8",
+        "type": "Transform"
+      }
+    ],
+    "guid": "d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4",
+    "name": "PlayText",
+    "parent": "4a1cf809-e074-4d9f-873a-53dd9428ed04"
+  },
+  {
+    "components": [
       {
         "fields": {
           "bounciness": 0.0,
@@ -235,21 +239,29 @@
       },
       {
         "fields": {
-          "filePath": "",
-          "isLooping": false,
-          "pitch": 1.0,
-          "volume": 80.0
+          "anchorOffset": "-360.000061|-325.391449",
+          "pivot": "0.500000|0.500000",
+          "sizeDelta": "100.000000|50.000000"
         },
         "guid": "685878f4-3375-4477-ac0a-71f28eeb5510",
         "type": "AudioSource"
       },
       {
         "fields": {
-          "position.x": -338.666748046875,
-          "position.y": -509.6548767089844,
+          "Texture": "",
+          "alpha": 1.0,
+          "color": "Red"
+        },
+        "guid": "57abc700-e9e5-4653-b858-e0d829a9801c",
+        "type": "UIImage"
+      },
+      {
+        "fields": {
+          "position.x": 576.9536743164063,
+          "position.y": 177.1435546875,
           "rotation": 0.0,
-          "scale.x": 0.05000000074505806,
-          "scale.y": 0.05000000074505806
+          "scale.x": 1.0,
+          "scale.y": 1.0
         },
         "guid": "83e3d555-0e00-468f-bf73-7dada7ec8190",
         "type": "Transform"

@@ -82,15 +82,9 @@ private:
 
     ComponentTypeRegistry() = default;
 
-    std::unordered_map<
-        std::string,
-        ComponentID
-    > nameToID;
+    std::unordered_map<std::string,ComponentID> nameToID;
 
-    std::unordered_map<
-        std::type_index,
-        ComponentID
-    > typeIDs;
+    std::unordered_map<std::type_index,ComponentID> typeIDs;
 
     ComponentID nextID = 0;
 };

@@ -13,10 +13,7 @@ DECLARE_COMPONENT_RULES(Sprite, false)
 REGISTER_COMPONENT(Sprite)
 REGISTER_SERIALIZABLE_COMPONENT(Sprite)
 
-Sprite::Sprite(
-    std::string texturePath,
-    int renderOrder,
-    Color color)
+Sprite::Sprite(std::string texturePath, int renderOrder, Color color)
 {
     _texture.SetPath(texturePath);
 
@@ -83,8 +80,7 @@ void Sprite::RefreshColor()
     lastColorID = ColorID;
 }
 
-void Sprite::OnFieldChanged(
-    const std::string &fieldName)
+void Sprite::OnFieldChanged(const std::string &fieldName)
 {
     if (fieldName == "Texture")
     {
@@ -146,8 +142,7 @@ sf::FloatRect Sprite::GetGlobalBounds()
     return sprite.getGlobalBounds();
 }
 
-sf::FloatRect Sprite::TranslateHitbox(
-    sf::FloatRect &hitbox)
+sf::FloatRect Sprite::TranslateHitbox(sf::FloatRect &hitbox)
 {
     return sprite.getTransform().transformRect(hitbox);
 }
@@ -184,8 +179,22 @@ void Sprite::SetColor(Color color)
     sprite.setColor(color.GetColorEnum());
 
     lastColorID = ColorID;
-}
 
+    sf::Texture *tex = _texture.GetTexture();
+
+    if (!tex)
+    {
+        sprite = sf::Sprite();
+        return;
+    }
+
+    width = static_cast<int>(tex->getSize().x);
+    height = static_cast<int>(tex->getSize().y);
+
+    sprite.setOrigin(
+        static_cast<sf::Vector2f>(tex->getSize()) / 2.f);
+    sprite.setTexture(*tex, true);
+}
 void Sprite::SetOrigin(
     const Vector2F &origin)
 {
@@ -198,10 +207,7 @@ sf::Vector2f Sprite::GetRotation()
     return sf::Vector2f();
 }
 
-bool Sprite::isMouseOver(
-    const sf::Sprite &sprite,
-    int mouseX,
-    int mouseY)
+bool Sprite::isMouseOver(const sf::Sprite &sprite, int mouseX, int mouseY)
 {
     return sprite.getGlobalBounds().contains(static_cast<float>(mouseX), static_cast<float>(mouseY));
 }

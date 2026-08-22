@@ -1,16 +1,12 @@
 #include "ComponentTypeRegistry.h"
 
-ComponentTypeRegistry&
-ComponentTypeRegistry::get()
+ComponentTypeRegistry &ComponentTypeRegistry::get()
 {
     static ComponentTypeRegistry instance;
     return instance;
 }
 
-
-ComponentID
-ComponentTypeRegistry::GetOrCreateID(
-    const std::string& name)
+ComponentID ComponentTypeRegistry::GetOrCreateID(const std::string &name)
 {
     auto it = nameToID.find(name);
 
@@ -31,10 +27,7 @@ ComponentTypeRegistry::GetOrCreateID(
     return id;
 }
 
-
-ComponentID
-ComponentTypeRegistry::GetID(
-    const std::string& name) const
+ComponentID ComponentTypeRegistry::GetID(const std::string &name) const
 {
     auto it = nameToID.find(name);
 
@@ -46,12 +39,9 @@ ComponentTypeRegistry::GetID(
     return it->second;
 }
 
-
-void
-ComponentTypeRegistry::UnregisterProjectTypes(
-    const std::vector<std::type_index>& types)
+void ComponentTypeRegistry::UnregisterProjectTypes(const std::vector<std::type_index> &types)
 {
-    for (const auto& type : types)
+    for (const auto &type : types)
     {
         typeIDs.erase(type);
     }

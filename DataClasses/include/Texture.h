@@ -24,11 +24,6 @@ public:
         name = std::filesystem::path(path).filename().string();
     }
 
-    const std::string& GetPath() const
-    {
-        return path;
-    }
-
     const std::string& GetName() const
     {
         return name;
