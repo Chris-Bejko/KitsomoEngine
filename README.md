@@ -26,13 +26,16 @@ This project was also heavily influenced by the game I made as a remake of [Colo
 - Serialization support for scenes, entities, and editor data
 
 ## What it does not include, but might be added  
-- Proper File explorer navigation in-engine
-- A scripting language & Hot reloading of it
-- Unity-style building  (from inside the engine), though it is possible to build your game with some hard coded paths :)
+- Proper File explorer navigation in-engine -> Currently being done on Build Pipeline branch
+- A scripting language & Hot reloading of it -> No scripting language yet, but Hot Reloading is officially a thing, though it can probably be better
+- Unity-style building  (from inside the engine) -> Build Pipeline branch exists to provide such support, very near to finished
+- Cursor state update -> Blocking events like hot reloading now just freeze the game. It would be nice to be able to set a "Loading" cursor. imgui/sfml probably has something there. 
 
 ## What can be improved   
 I am aware that potential employers and recruiters might be looking at this page, and the code is clearly not perfect.
-- One thing that bothers me is how I approached drawing all the ImGui windows. I made one file , imguiHandler.cpp, and just started adding to it. This could be refactored to feature a more abstract and object oriented approach, making it easy for users to also make their own dialogs easily. 
+- One thing that bothers me is how I approached drawing all the ImGui windows. I made one file , imguiHandler.cpp, and just started adding to it. This could be refactored to feature a more abstract and object oriented approach, making it easy for users to also make their own dialogs easily. -> Almost fixed, dialogs are separate now, but they are blocked on editor game mode :D.
+- Entities is responsible for drawing the serialized components on the inspector. This was deliberate but there is probably a better way.. looking into it.
+- 
 - To be continued (But if you are a recruiter, feel free to ask me about my design decisions :).)
 
 ## Tech stack
