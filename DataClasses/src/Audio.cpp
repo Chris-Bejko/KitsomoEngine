@@ -57,19 +57,6 @@ Audio& Audio::operator=(Audio&& other) noexcept
     return *this;
 }
 
-void Audio::SetPath(const std::string& newPath)
-{
-    if (path == newPath && IsLoaded())
-        return;
-
-    Unload();
-
-    path = newPath;
-
-    if (!path.empty())
-        Load();
-}
-
 bool Audio::Load()
 {
     if (path.empty())

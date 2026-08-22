@@ -17,8 +17,6 @@ public:
     Audio(Audio&& other) noexcept;
     Audio& operator=(Audio&& other) noexcept;
 
-    void SetPath(const std::string& path);
-
     bool Load() override;
     void Unload() override;
     bool IsLoaded() const override;

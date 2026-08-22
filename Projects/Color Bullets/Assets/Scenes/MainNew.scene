@@ -652,10 +652,10 @@
           "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|9b4469c3-bccf-484f-9d05-56a92005b598",
           "bulletPrefab": "Bullet",
           "cooldown": 0.5,
-          "floorTouchSound": "Audio/powerUp.wav",
+          "floorTouchSound": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Audio/powerUp.wav",
           "lastColorString": "",
           "moveSpeed": 350.0,
-          "shootSound": "Audio/explosion.wav"
+          "shootSound": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Audio/explosion.wav"
         },
         "guid": "032ea708-4efb-45b6-a06b-02f7b0b890d4",
         "type": "Player"

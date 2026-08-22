@@ -55,19 +55,6 @@ Texture &Texture::operator=(Texture &&other) noexcept
     return *this;
 }
 
-void Texture::SetPath(const std::string &newPath)
-{
-    if (path == newPath && IsLoaded())
-        return;
-
-    Unload();
-
-    path = newPath;
-
-    if (!path.empty())
-        Load();
-}
-
 bool Texture::Load()
 {
     if (path.empty())
