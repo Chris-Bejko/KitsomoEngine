@@ -22,3 +22,5 @@ struct ReloadScriptsEvent {};
 struct DeleteEntityEvent {
     Entity* entity;
 };
+
+struct OpenExportDialogEvent {};

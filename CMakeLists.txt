@@ -14,12 +14,13 @@ file(GLOB BASE_SOURCES        CONFIGURE_DEPENDS "Base/src/*.cpp")
 file(GLOB MANAGER_SOURCES     CONFIGURE_DEPENDS "Managers/src/*.cpp")
 file(GLOB SYSTEM_SOURCES      CONFIGURE_DEPENDS "Systems/src/*.cpp")
 file(GLOB DATA_SOURCES        CONFIGURE_DEPENDS "DataClasses/src/*.cpp")
-file(GLOB DIALOG_SOURCES        CONFIGURE_DEPENDS "Dialogs/src/*.cpp")
+file(GLOB DIALOG_SOURCES       CONFIGURE_DEPENDS "Dialogs/src/*.cpp")
 file(GLOB TOOL_SOURCES        CONFIGURE_DEPENDS "Tools/src/*.cpp")
-file(GLOB HOT_RELOAD_SOURCES  CONFIGURE_DEPENDS "HotReloading/*.cpp")
+file(GLOB HOT_RELOAD_SOURCES  CONFIGURE_DEPENDS "HotReloading/src/*.cpp")
 file(GLOB COLLISION_SOURCES   CONFIGURE_DEPENDS "Collision/*.cpp")
 file(GLOB UI_SOURCES          CONFIGURE_DEPENDS "UI/*.cpp")
 file(GLOB COMPONENTS_SOURCES  CONFIGURE_DEPENDS "Components/src/*.cpp")
+file(GLOB PROJECT_EXPLORER_SOURCES  CONFIGURE_DEPENDS "ProjectExplorer/src/*.cpp")
 list(REMOVE_ITEM ROOT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp")
 
 set(IMGUI_SOURCES
@@ -40,6 +41,7 @@ add_library(ECSEngineCore SHARED
     ${HOT_RELOAD_SOURCES}
     ${COLLISION_SOURCES}
     ${COMPONENTS_SOURCES}
+    ${PROJECT_EXPLORER_SOURCES}
     ${UI_SOURCES}
     ${IMGUI_SOURCES}
     ${DIALOG_SOURCES}
@@ -62,6 +64,7 @@ target_include_directories(ECSEngineCore PUBLIC
     Dialogs/include/
     Dialogs/include/base/
     HotReloading/include/
+    ProjectExplorer/include/
     Components/
     imgui/
     include/

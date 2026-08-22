@@ -435,12 +435,12 @@ void Entity::DisplayComponents()
 				DrawCompRefField(*p, it->componentTypeHint, fieldId);
 				break;
 			}
-			case texture_Type:
+			case file_Type:
 			{
 				auto p = reinterpret_cast<std::string *>(it->data);
 
 				// Show filename for display
-				std::string displayName = p->empty() ? "None (drop texture here)" : std::filesystem::path(*p).filename().string();
+				std::string displayName = p->empty() ? "None (drop asset here)" : std::filesystem::path(*p).filename().string();
 
 				ImVec4 boxColor = p->empty() ? ImVec4(0.15f, 0.18f, 0.25f, 1.0f)
 											 : ImVec4(0.1f, 0.25f, 0.1f, 1.0f);
@@ -458,19 +458,17 @@ void Entity::DisplayComponents()
 						std::string droppedPath =
 							static_cast<const char *>(payload->Data);
 
-						std::string ext =std::filesystem::path(droppedPath).extension().string();
-
-						*p = droppedPath; // store the path directly
-
-						// Sync back to Texture object via SerializableScript
+						std::string ext = std::filesystem::path(droppedPath).extension().string();
+						std::string fieldName(it->name);
 						if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
 						{
-							// Update textureFields if they exist
-							std::string fieldName(it->name);
-							if (script->textureFields.count(fieldName))
-								script->textureFields[fieldName]->SetPath(droppedPath);
+							if (auto *asset = script->GetAssetReference(fieldName))
+							{
+								asset->SetPath(droppedPath);
+								asset->Load();
 
-							script->NotifyFieldChanged(fieldName);
+								script->NotifyFieldChanged(fieldName);
+							}
 						}
 					}
 					ImGui::EndDragDropTarget();
@@ -481,12 +479,15 @@ void Entity::DisplayComponents()
 				{
 					if (ImGui::MenuItem("Clear"))
 					{
-						p->clear();
 						if (auto *script = dynamic_cast<SerializableScript *>(e.get()))
 						{
 							std::string fieldName(it->name);
-							if (script->textureFields.count(fieldName))
-								script->textureFields[fieldName]->Clear();
+
+							if (auto *asset = script->GetAssetReference(fieldName))
+							{
+								asset->SetPath("");
+							}
+
 							script->NotifyFieldChanged(fieldName);
 						}
 					}
@@ -614,7 +615,7 @@ std::vector<SerializableComponent> Entity::GetAllComponentVariables()
 						ser.fields.stringFields[var.name] = packed;
 						break;
 					}
-					case texture_Type:
+					case file_Type:
 						ser.fields.stringFields[var.name] = *reinterpret_cast<std::string *>(var.data);
 						break;
 					}
@@ -875,8 +876,8 @@ std::string Entity::DefaultValue(int fieldType)
 		return "null"; // null entity
 	case compRef_Type:
 		return "null"; // null component
-	case texture_Type:
-		return "null"; // null texture
+	case file_Type:
+		return "null"; // null asset
 	default:
 		return "";
 	}

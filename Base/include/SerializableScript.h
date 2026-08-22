@@ -6,7 +6,7 @@
 #include <sstream>
 #include <regex>
 #include "Texture.h"
-
+#include "Audio.h"
 struct EntityPtrField
 {
     Entity **ptr;
@@ -58,12 +58,13 @@ public:
         });
     }
 
-    void Field(const char* name, Texture& texture)
+    void Field(const char* name, AssetReference& asset)
     {
-        textureFields[name] = &texture;
-        textureStrings[name] = texture.GetName();
-        serializables.push_back({name, &textureStrings[name], texture_Type});
+        assetFields[name] = &asset;
+        assetStrings[name] = asset.GetName();
+        serializables.push_back({name, &assetStrings[name], file_Type});
     }
+
     // Entity* field
     void Field(const char *name, Entity *&ptr);
 
@@ -275,7 +276,15 @@ public:
     virtual void OnFieldChanged(const std::string &fieldName) {}
     void NotifyFieldChanged(const std::string &fieldName) { OnFieldChanged(fieldName); }
     virtual bool Init() override { return true; }
+    AssetReference* GetAssetReference(const std::string& fieldName)
+    {
+        auto it = assetFields.find(fieldName);
 
+        if (it == assetFields.end())
+            return nullptr;
+
+        return it->second;
+    }
 protected:
     std::vector<SerializableVariable> serializables;
     std::map<std::string, EntityPtrField> entityPtrFields;
@@ -283,8 +292,8 @@ protected:
     std::map<std::string, std::string> vectorStrings;
     std::map<std::string, VectorFieldEntry> vectorFields;
     std::map<std::string, VectorPtrFieldEntry> vectorPtrFields;
-    std::map<std::string, std::string> textureStrings;
-    std::map<std::string, Texture*> textureFields;
+    std::map<std::string, std::string> assetStrings;
+    std::unordered_map<std::string, AssetReference*> assetFields;
     bool fieldsRegistered = false;
     std::vector<std::string> fieldNameStorage; // keeps names alive
 

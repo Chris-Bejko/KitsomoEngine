@@ -60,8 +60,7 @@ public:
         const std::string& fieldName) override;
 
 private:
-
-    void RefreshTexture();
+    void UpdateSprite();
     void RefreshColor();
 
 private:

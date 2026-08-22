@@ -13,7 +13,9 @@ bool EditorSprite::Init()
     std::string textureId = "Assets/Textures/editor_entity.png"; // default editor icon
     _texture.SetPath(textureId);
     AssetManager::get().loadTexture(_texture.GetPath());
-    texture = AssetManager::get().getTexture(_texture.GetPath());
+    texture = AssetManager::get().getTexture(_texture.GetPath(), true);
+    if(!texture)
+        return false;
     // AssetManager::get().loadTexture(textureId, textureId + ".png");
     // texture = AssetManager::get().getTexture(textureId);
     sprite.setTexture(*texture);

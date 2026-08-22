@@ -1,5 +1,6 @@
 // AUTO-GENERATED - DO NOT EDIT
-#include "HotReloading/ProjectModuleAPI.h"
+#include "HotReloading/include/ProjectComponentRegistration.h"
+#include "HotReloading/include/ProjectModuleAPI.h"
 
 #include "Bullet.h"
 #include "Enemy.h"

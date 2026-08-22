@@ -1,0 +1,32 @@
+[
+  {
+    "components": [
+      {
+        "fields": {
+          "position.x": 0.0,
+          "position.y": 0.0,
+          "rotation": 0.0,
+          "scale.x": 1.0,
+          "scale.y": 1.0
+        },
+        "guid": "",
+        "type": "Transform"
+      },
+      {
+        "fields": {
+          "All Floor Squares": "b5e4915e-526c-4276-a1dc-f4be673bd9b9|941b7f59-b8d2-4d02-a48b-cf15b66f34c0;b5e4915e-526c-4276-a1dc-f4be673bd9b9|649c0277-c45a-429a-b11a-1e948a3cb08e",
+          "Bools": "1;1;1;1",
+          "ExampleSerializedVector": "1;2;5151",
+          "button": "",
+          "player": "",
+          "score": 0,
+          "scoreText": ""
+        },
+        "guid": "",
+        "type": "GameManager"
+      }
+    ],
+    "name": "GameManager",
+    "parent": ""
+  }
+]
