@@ -535,7 +535,7 @@ bool Engine::Load(std::string fileName)
 		return false;
 	}
 
-	if(isEngine)
+	if (isEngine)
 		GizmoSystem::get().SetSelectedEntity(nullptr);
 
 	SpawnEntities(entities);
@@ -1223,19 +1223,37 @@ void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 	for (auto &e : entities)
 	{
 		Entity *ent = new Entity(e.entityName, e.guiD);
+
 		for (auto &c : e.components)
 		{
 			auto it = componentRegistry.find(c.componentName);
+			if(c.guiD == "d9bb0149-04ac-40d7-8f6a-572e60623efe")
+			{
+				LOG_DEBUG("Found component: ", c.componentName.c_str(), " with GUID: ", c.guiD.c_str());
+			}
 			if (it != componentRegistry.end())
 				it->second(ent, c.fields, c.guiD);
 			else
 				LOG_WARNING("Unknown component: ", c.componentName.c_str());
 		}
+
 		manager->addEntity(ent);
 	}
 
-	// Second pass - link parents after all entities exist
+	// PASS 2: Finish component initialization.
 	manager->ValidateAdded();
+
+	// PASS 3: Resolve Entity*/Component* references.
+	for (auto &ent : manager->GetEntities())
+	{
+		for (auto &component : ent->GetComponents())
+		{
+			if (auto *script = dynamic_cast<SerializableScript *>(component.get()))
+				script->ResolvePointers();
+		}
+	}
+
+	// PASS 4: Build hierarchy.
 	for (auto &e : entities)
 	{
 		if (e.parentGUID.empty())
@@ -1248,15 +1266,13 @@ void Engine::SpawnEntities(const std::vector<SerializableEntity> &entities)
 		{
 			if (ent->GetGUID() == e.guiD)
 				child = ent.get();
+
 			if (ent->GetGUID() == e.parentGUID)
 				parent = ent.get();
 		}
 
 		if (child && parent)
-		{
 			child->SetParent(parent);
-			LOG_DEBUG("Parented '", e.guiD.c_str(), "' to '", e.parentGUID.c_str(), "'");
-		}
 	}
 }
 void Engine::FocusOnEntity(Entity *entity)
@@ -1344,7 +1360,7 @@ void Engine::InitRuntime(
 	}
 
 	LOG_INFO("RUNTIME 10: Scene loaded");
-	
+
 	manager->Awake();
 
 	LOG_INFO("RUNTIME 11: Entities awakened");

@@ -2,13 +2,6 @@
 
 #include <filesystem>
 
-// TODO:
-// Replace this with your actual project/runtime root resolver.
-//
-// The important architectural point is that AssetReference stores
-// project-relative paths and resolves them only when loading.
-//
-// For now, paths are resolved relative to the current working directory.
 std::filesystem::path AssetReference::ResolvePath(
     const std::string& projectRelativePath)
 {

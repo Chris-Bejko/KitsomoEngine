@@ -61,6 +61,7 @@ public:
 
 	std::string GetUniqueName(const std::string &baseName);
 	std::vector<std::unique_ptr<Entity>> &GetEntities() { return entities; }
+	std::vector<std::unique_ptr<Entity>> &GetUnvalidatedEntities() { return to_add; }
 	void DisplayEntityNode(Entity *e);
 	Entity *GetDragHoveredEntity() { return dragHoveredEntity; }
 	void DisplayComponentsOf(Entity *e);
