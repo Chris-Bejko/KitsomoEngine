@@ -8,11 +8,10 @@ REGISTER_DIALOG(InspectorDialog);
 
 void InspectorDialog::Draw()
 {
-    ImGui::Begin("Inspector");
+	ImGui::Begin("Inspector");
 
-	bool isDragging = ImGui::GetDragDropPayload() != nullptr &&
-					  ImGui::GetDragDropPayload()->IsDataType("ENTITY"); // changed to ENTITY
-
+	bool isDragging = ImGui::GetDragDropPayload() != nullptr && ImGui::GetDragDropPayload()->IsDataType("ENTITY");
+	bool isDraggingComponent = ImGui::GetDragDropPayload() != nullptr && ImGui::GetDragDropPayload()->IsDataType("SCRIPT");
 	Entity *dragHovered = Engine::get().GetManager()->GetDragHoveredEntity();
 
 	// Show hovered entity during drag, otherwise show selected
@@ -46,23 +45,44 @@ void InspectorDialog::Draw()
 		ImGui::End();
 		return;
 	}
-	if (displayEntity == nullptr)
-	{
-		ImGui::TextColored(COLOR_TEXT_DIM, "No entity selected.");
-		ImGui::End();
-		return;
-	}
 
-	if (isDragging && dragHovered != nullptr &&
-		dragHovered != Engine::get().GetManager()->GetSelectedEntity())
+	if (isDragging && dragHovered != nullptr && dragHovered != Engine::get().GetManager()->GetSelectedEntity())
 	{
-		ImGui::TextColored(ImVec4(0.95f, 0.78f, 0.2f, 1.0f),
-						   "Drop target: %s", displayEntity->GetName().c_str());
+		ImGui::TextColored(ImVec4(0.95f, 0.78f, 0.2f, 1.0f), "Drop target: %s", displayEntity->GetName().c_str());
 		ImGui::Separator();
 	}
 
 	Engine::get().GetManager()->DisplayComponentsOf(displayEntity);
+	
+	if (isDraggingComponent)
+	{
+		ImGui::Separator();
+		// ImGui::Button("_______",  ImVec2(-1, 24));
+		ImGui::TextColored(ImVec4(0.2f, 0.8f, 1.0f, 1.0f), "Drop component here to add it");
+	}
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("SCRIPT"))
+		{
+			const char *componentName = static_cast<const char *>(payload->Data);
 
+			if (componentName && componentName[0] != '\0')
+			{
+				LOG_INFO("Inspector: adding component '", componentName, "' to entity '", displayEntity->GetName().c_str(), "'");
+				displayEntity->AddComponentByName(componentName);
+				// if (displayEntity->AddComponentByName(componentName))
+				// {
+				// 	LOG_INFO("Inspector: successfully added component '", componentName, "'");
+				// }
+				// else
+				// {
+				// 	LOG_WARNING("Inspector: failed to add component '", componentName, "' to entity '", displayEntity->GetName().c_str(), "'");
+				// }
+			}
+		}
+
+		ImGui::EndDragDropTarget();
+	}
 	if (!isDragging)
 	{
 		ImGui::Spacing();
@@ -77,14 +97,12 @@ void InspectorDialog::Draw()
 	ImGui::End();
 }
 
-
 void InspectorDialog::Open()
 {
-    SetName("Inspector");
+	SetName("Inspector");
 }
-
 
 void InspectorDialog::Close()
 {
-    // No specific close behavior for the inspector dialog
+	// No specific close behavior for the inspector dialog
 }
