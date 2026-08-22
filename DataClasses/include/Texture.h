@@ -1,56 +1,32 @@
 #pragma once
 
-#include <filesystem>
-#include <string>
+#include "AssetReference.h"
+#include <SFML/Graphics.hpp>
 
-class Texture
+class Texture : public AssetReference
 {
 public:
     Texture() = default;
+    explicit Texture(const std::string& path);
 
-    Texture(const std::string& absolutePath)
-    {
-        SetPath(absolutePath);
-    }
+    ~Texture() override;
 
-    Texture(const char* absolutePath)
-    {
-        SetPath(absolutePath ? absolutePath : "");
-    }
+    Texture(const Texture& other);
+    Texture& operator=(const Texture& other);
 
-    void SetPath(const std::string& absolutePath)
-    {
-        path = std::filesystem::path(absolutePath).lexically_normal().string();
-        name = std::filesystem::path(path).filename().string();
-    }
+    Texture(Texture&& other) noexcept;
+    Texture& operator=(Texture&& other) noexcept;
 
-    const std::string& GetPath() const
-    {
-        return path;
-    }
+    void SetPath(const std::string& path);
 
-    const std::string& GetName() const
-    {
-        return name;
-    }
+    bool Load() override;
+    void Unload() override;
+    bool IsLoaded() const override;
 
-    bool Empty() const
-    {
-        return path.empty();
-    }
+    sf::Texture* GetTexture() const;
 
-    bool Exists() const
-    {
-        return !path.empty() && std::filesystem::exists(path);
-    }
-
-    void Clear()
-    {
-        path.clear();
-        name.clear();
-    }
+    sf::Vector2u GetSize() const;
 
 private:
-    std::string path;
-    std::string name;
+    sf::Texture* texture = nullptr;
 };

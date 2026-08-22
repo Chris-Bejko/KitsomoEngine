@@ -8,17 +8,23 @@ REGISTER_SERIALIZABLE_COMPONENT(Camera)
 
 bool Camera::Init()
 {
-	sf::View view;
-	sf::Vector2f size(Engine::get().GetWindow().getSize().x, Engine::get().GetWindow().getSize().y);
-	view.setSize(size);
-	this->view = view;
-	transform = &entity->GetComponent<Transform>();
-	return true;
+	LOG_INFO("========== CAMERA INIT ==========");
+    LOG_INFO("Camera this: ", this);
+    LOG_INFO("Entity: ", entity);
+    const auto windowSize = Engine::get().GetWindow().getSize();
+
+    view.setSize(
+        static_cast<float>(windowSize.x),
+        static_cast<float>(windowSize.y));
+
+    transform = &entity->GetComponent<Transform>();
+
+    return true;
 }
 
 void Camera::update(float dt)
 {
-	Engine::get().SetView(view);
+    Engine::get().SetView(view);
 }
 
 void Camera::Follow(sf::Vector2f position)

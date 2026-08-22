@@ -1,0 +1,1902 @@
+[16:12:55] [INFO]    RUNTIME 1: InitRuntime BEGIN
+[16:12:55] [INFO]    Font loaded: dmPrison
+[16:12:55] [INFO]    RUNTIME 2: Creating window
+[16:12:55] [INFO]    RUNTIME 3: Creating input
+[16:12:55] [INFO]    RUNTIME 4: Creating EntityManager
+[16:12:55] [INFO]    RUNTIME 5: Initializing SceneManager
+[16:12:55] [INFO]    SceneManager initialized without an active project
+[16:12:55] [INFO]    RUNTIME 6: Opening project
+[16:12:55] [INFO]    OPEN PROJECT 1: BEGIN: .
+[16:12:55] [INFO]    OPEN PROJECT 2: No existing project module
+[16:12:55] [INFO]    OPEN PROJECT 7: Calling SceneManager::OpenProject
+[16:12:55] [INFO]    Opened project: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export
+[16:12:55] [INFO]    OPEN PROJECT 8: SceneManager project opened
+[16:12:55] [INFO]    OPEN PROJECT 9: Resolved project root: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export
+[16:12:55] [INFO]    OPEN PROJECT 10: Runtime mode - loading existing DLL
+[16:12:55] [INFO]    DLL 1: LoadCompiledProjectModule BEGIN
+[16:12:55] [INFO]    DLL 2: DLL path = C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\build\Debug\GameScripts.dll
+[16:12:55] [INFO]    DLL 4: Calling LoadLibrary
+[16:12:55] [INFO]    DLL 6: LoadLibrary SUCCESS
+[16:12:55] [INFO]    DLL 8: RegisterProjectComponents found
+[16:12:55] [INFO]    DLL 9: Calling RegisterProjectComponents
+[16:12:55] [INFO]    DLL requested registration: Bullet
+[16:12:55] [INFO]    RegisterExternal: Bullet
+[16:12:55] [INFO]    RegisterExternal SUCCESS: Bullet
+[16:12:55] [INFO]    Descriptor count now: 14
+[16:12:55] [INFO]    RegisterExternal result for Bullet: SUCCESS
+[16:12:55] [INFO]    DLL requested registration: Enemy
+[16:12:55] [INFO]    RegisterExternal: Enemy
+[16:12:55] [INFO]    RegisterExternal SUCCESS: Enemy
+[16:12:55] [INFO]    Descriptor count now: 15
+[16:12:55] [INFO]    RegisterExternal result for Enemy: SUCCESS
+[16:12:55] [INFO]    DLL requested registration: EnemySpawner
+[16:12:55] [INFO]    RegisterExternal: EnemySpawner
+[16:12:55] [INFO]    RegisterExternal SUCCESS: EnemySpawner
+[16:12:55] [INFO]    Descriptor count now: 16
+[16:12:55] [INFO]    RegisterExternal result for EnemySpawner: SUCCESS
+[16:12:55] [INFO]    DLL requested registration: FloorSquare
+[16:12:55] [INFO]    RegisterExternal: FloorSquare
+[16:12:55] [INFO]    RegisterExternal SUCCESS: FloorSquare
+[16:12:55] [INFO]    Descriptor count now: 17
+[16:12:55] [INFO]    RegisterExternal result for FloorSquare: SUCCESS
+[16:12:55] [INFO]    DLL requested registration: GameManager
+[16:12:55] [INFO]    RegisterExternal: GameManager
+[16:12:55] [INFO]    RegisterExternal SUCCESS: GameManager
+[16:12:55] [INFO]    Descriptor count now: 18
+[16:12:55] [INFO]    RegisterExternal result for GameManager: SUCCESS
+[16:12:55] [INFO]    DLL requested registration: Player
+[16:12:55] [INFO]    RegisterExternal: Player
+[16:12:55] [INFO]    RegisterExternal SUCCESS: Player
+[16:12:55] [INFO]    Descriptor count now: 19
+[16:12:55] [INFO]    RegisterExternal result for Player: SUCCESS
+[16:12:55] [INFO]    DLL 10: RegisterProjectComponents returned
+[16:12:55] [INFO]    OPEN PROJECT 11: Existing project DLL loaded
+[16:12:55] [INFO]    OPEN PROJECT 12: Calling RegisterComponents
+[16:12:55] [INFO]    Registering component: Sprite
+[16:12:55] [INFO]    Registering component: AudioSource
+[16:12:55] [INFO]    Registering component: BoxCollider
+[16:12:55] [INFO]    Registering component: Camera
+[16:12:55] [INFO]    Registering component: Bullet
+[16:12:55] [INFO]    Registering component: PolygonCollider
+[16:12:55] [INFO]    Registering component: EnemySpawner
+[16:12:55] [INFO]    Registering component: CircleCollider
+[16:12:55] [INFO]    Registering component: Canvas
+[16:12:55] [INFO]    Registering component: Rigidbody
+[16:12:55] [INFO]    Registering component: Transform
+[16:12:55] [INFO]    Registering component: UIButton
+[16:12:55] [INFO]    Registering component: Player
+[16:12:55] [INFO]    Registering component: UIImage
+[16:12:55] [INFO]    Registering component: UIText
+[16:12:55] [INFO]    Registering component: UIRect
+[16:12:55] [INFO]    Registering component: Enemy
+[16:12:55] [INFO]    Registering component: FloorSquare
+[16:12:55] [INFO]    Registering component: GameManager
+[16:12:55] [INFO]    OPEN PROJECT 13: RegisterComponents finished
+[16:12:55] [INFO]    OPEN PROJECT 14: Runtime mode - skipping editor scene loading
+[16:12:55] [INFO]    OPEN PROJECT 18: SUCCESS
+[16:12:55] [INFO]    RUNTIME 7: Project opened
+[16:12:55] [INFO]    RUNTIME 8: Components registered
+[16:12:55] [INFO]    RUNTIME 9: Loading scene: MainNew
+[16:12:55] [INFO]    Loading file: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Assets/Scenes\MainNew.scene
+[16:12:55] [INFO]    Texture loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Assets\Textures\editor_entity.png (512x512)
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [INFO]    ========== CAMERA INIT ==========
+[16:12:55] [INFO]    Camera this: 00000292C7A38D20
+[16:12:55] [INFO]    Entity: 00000292C7A6DB70
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [DEBUG]   Found component: UIButton with GUID: d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [INFO]    Texture loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\Assets\Textures\square.png (125x125)
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:55] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:55] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:55] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:55] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:55] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/powerUp.wav
+[16:12:55] [INFO]    Texture loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\Assets\Textures\triangle.png (1152x1024)
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [INFO]    RUNTIME 10: Scene loaded
+[16:12:55] [DEBUG]   Resolve EntityRef: Environment | GUID=c2360255-75bf-4a82-ba46-fea492927809 | entity=MainEnv | OK
+[16:12:55] [DEBUG]   Resolve EntityRef: player | GUID=0d6607ed-1435-48f5-9c5a-1dbefee638ba | entity=Player | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: GameManager | Entity=c654de34-f964-48af-8341-8dcea5cd045c | entity=GameManager
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=GameManager | component=class Transform | GUID=7328081e-f048-4cb8-a7c0-14ea69c2fb00 | lookingFor=968f3aff-082c-40eb-b7ba-697b2e1084db
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=GameManager | component=class EditorSprite | GUID=abad1194-039d-43c8-b132-752ee3936dc7 | lookingFor=968f3aff-082c-40eb-b7ba-697b2e1084db
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=GameManager | component=class GameManager | GUID=968f3aff-082c-40eb-b7ba-697b2e1084db | lookingFor=968f3aff-082c-40eb-b7ba-697b2e1084db
+[16:12:55] [DEBUG]   Resolve ComponentRef: GameManager | Entity=c654de34-f964-48af-8341-8dcea5cd045c | Component=968f3aff-082c-40eb-b7ba-697b2e1084db | entity=GameManager | OK
+[16:12:55] [DEBUG]   Resolve EntityRef: endUI | GUID=83270db5-fa83-407e-9506-bd1d99b422b5 | entity=EndUI | OK
+[16:12:55] [DEBUG]   Resolve EntityRef: environment | GUID=c2360255-75bf-4a82-ba46-fea492927809 | entity=MainEnv | OK
+[16:12:55] [DEBUG]   Resolve EntityRef: player | GUID=0d6607ed-1435-48f5-9c5a-1dbefee638ba | entity=Player | OK
+[16:12:55] [DEBUG]   Resolve EntityRef: startUI | GUID=ea9d9612-2219-44ad-b406-748ab473d088 | entity=StartUI | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: finalScore | Entity=e434ef22-8d31-4caa-b9fc-11b1067ffb6c | entity=Score text
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Score text | component=class Transform | GUID=76b151fb-0933-4123-a8bb-d352eec58b18 | lookingFor=c530e9b1-a3fb-446f-b3bb-d5cd005630ec
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Score text | component=class EditorSprite | GUID=ce57ae5b-0145-4694-8b3a-b98439285b8d | lookingFor=c530e9b1-a3fb-446f-b3bb-d5cd005630ec
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Score text | component=class UIText | GUID=c530e9b1-a3fb-446f-b3bb-d5cd005630ec | lookingFor=c530e9b1-a3fb-446f-b3bb-d5cd005630ec
+[16:12:55] [DEBUG]   Resolve ComponentRef: finalScore | Entity=e434ef22-8d31-4caa-b9fc-11b1067ffb6c | Component=c530e9b1-a3fb-446f-b3bb-d5cd005630ec | entity=Score text | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: highScoreText | Entity=78029789-044a-4d3b-8a8f-6d8c5e5f7627 | entity=High Score
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=High Score | component=class UIText | GUID=2e51edb1-f7d7-442f-9c0c-1e10fb4b3342 | lookingFor=2e51edb1-f7d7-442f-9c0c-1e10fb4b3342
+[16:12:55] [DEBUG]   Resolve ComponentRef: highScoreText | Entity=78029789-044a-4d3b-8a8f-6d8c5e5f7627 | Component=2e51edb1-f7d7-442f-9c0c-1e10fb4b3342 | entity=High Score | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: mainMenuButton | Entity=4399b10c-367d-491a-91b2-2fee063e5bfb | entity=Main menu
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Main menu | component=class Transform | GUID=3df421dd-ff86-44de-a3ab-b572125d51be | lookingFor=62853400-36ed-4dde-8322-80aaecaeeca8
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Main menu | component=class EditorSprite | GUID=6def8cf6-5f17-4024-bf9b-fa5ec0b23b77 | lookingFor=62853400-36ed-4dde-8322-80aaecaeeca8
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Main menu | component=class UIButton | GUID=62853400-36ed-4dde-8322-80aaecaeeca8 | lookingFor=62853400-36ed-4dde-8322-80aaecaeeca8
+[16:12:55] [DEBUG]   Resolve ComponentRef: mainMenuButton | Entity=4399b10c-367d-491a-91b2-2fee063e5bfb | Component=62853400-36ed-4dde-8322-80aaecaeeca8 | entity=Main menu | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: playAgainButton | Entity=197d8213-1d1a-483d-a0ac-f9b4e05080ce | entity=Play again 
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class Transform | GUID=ed3303b4-2270-45c1-9331-e939d96960de | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class EditorSprite | GUID=3feacc37-bf87-4833-894d-e8d99ab33387 | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class UIImage | GUID=ca124266-0eca-4cae-9c0b-1e8e68954443 | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class UIRect | GUID=8b51b7bc-c50a-49b7-a708-5249e50aca23 | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class UIButton | GUID=d9bb0149-04ac-40d7-8f6a-572e60623efe | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:12:55] [DEBUG]   Resolve ComponentRef: playAgainButton | Entity=197d8213-1d1a-483d-a0ac-f9b4e05080ce | Component=d9bb0149-04ac-40d7-8f6a-572e60623efe | entity=Play again  | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: playButton | Entity=4a1cf809-e074-4d9f-873a-53dd9428ed04 | entity=Play Button
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Play Button | component=class Transform | GUID=38217d89-f792-4215-b48f-10f32eea4e05 | lookingFor=bcde682b-d9b5-46dd-a439-c350617c00e6
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Play Button | component=class EditorSprite | GUID=33e9bac2-1323-4aa8-a4ee-898af7e6abab | lookingFor=bcde682b-d9b5-46dd-a439-c350617c00e6
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Play Button | component=class UIButton | GUID=bcde682b-d9b5-46dd-a439-c350617c00e6 | lookingFor=bcde682b-d9b5-46dd-a439-c350617c00e6
+[16:12:55] [DEBUG]   Resolve ComponentRef: playButton | Entity=4a1cf809-e074-4d9f-873a-53dd9428ed04 | Component=bcde682b-d9b5-46dd-a439-c350617c00e6 | entity=Play Button | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: scoreText | Entity=7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f | entity=Score Text
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Score Text | component=class UIText | GUID=abdd52fb-e4b3-4c42-8f30-968f168ecaa7 | lookingFor=abdd52fb-e4b3-4c42-8f30-968f168ecaa7
+[16:12:55] [DEBUG]   Resolve ComponentRef: scoreText | Entity=7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f | Component=abdd52fb-e4b3-4c42-8f30-968f168ecaa7 | entity=Score Text | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: AudioSource | Entity=0d6607ed-1435-48f5-9c5a-1dbefee638ba | entity=Player
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class PolygonCollider | GUID=1eea6922-d86d-4928-9274-b78f51618efc | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class Sprite | GUID=9b4469c3-bccf-484f-9d05-56a92005b598 | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class Player | GUID=032ea708-4efb-45b6-a06b-02f7b0b890d4 | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class Rigidbody | GUID=2202bae2-d4aa-4a30-9c48-533f626f3da4 | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class AudioSource | GUID=685878f4-3375-4477-ac0a-71f28eeb5510 | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:12:55] [DEBUG]   Resolve ComponentRef: AudioSource | Entity=0d6607ed-1435-48f5-9c5a-1dbefee638ba | Component=685878f4-3375-4477-ac0a-71f28eeb5510 | entity=Player | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: Camera | Entity=c318f141-2b23-4586-97e2-9f43420fc842 | entity=Camera
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Camera | component=class Transform | GUID=1b373b78-9145-4ba3-9771-8c62f0606542 | lookingFor=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Camera | component=class EditorSprite | GUID=7d41c96b-70f7-49e5-9fab-17b0c1271956 | lookingFor=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Camera | component=class Camera | GUID=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417 | lookingFor=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417
+[16:12:55] [DEBUG]   Resolve ComponentRef: Camera | Entity=c318f141-2b23-4586-97e2-9f43420fc842 | Component=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417 | entity=Camera | OK
+[16:12:55] [DEBUG]   Entity found for ComponentRef: Sprite | Entity=0d6607ed-1435-48f5-9c5a-1dbefee638ba | entity=Player
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class PolygonCollider | GUID=1eea6922-d86d-4928-9274-b78f51618efc | lookingFor=9b4469c3-bccf-484f-9d05-56a92005b598
+[16:12:55] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class Sprite | GUID=9b4469c3-bccf-484f-9d05-56a92005b598 | lookingFor=9b4469c3-bccf-484f-9d05-56a92005b598
+[16:12:55] [DEBUG]   Resolve ComponentRef: Sprite | Entity=0d6607ed-1435-48f5-9c5a-1dbefee638ba | Component=9b4469c3-bccf-484f-9d05-56a92005b598 | entity=Player | OK
+[16:12:55] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:55] [DEBUG]   Resolve EntityRef: targetText | GUID=d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4 | entity=PlayText | OK
+[16:12:55] [DEBUG]   Resolve EntityRef: targetText | GUID=e60e55d7-35a7-4542-89b3-b20174fc113d | entity=Play again Text | OK
+[16:12:55] [DEBUG]   Resolve EntityRef: targetText | GUID=<empty> | SKIPPED
+[16:12:55] [INFO]    RUNTIME 11: Entities awakened
+[16:12:55] [INFO]    RUNTIME 12: InitRuntime COMPLETE
+[16:12:57] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:57] [DEBUG]   Spawning component: Rigidbody
+[16:12:57] [DEBUG]   Spawning component: CircleCollider
+[16:12:57] [DEBUG]   Spawning component: Sprite
+[16:12:57] [INFO]    Texture loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\Assets\Textures\circle.png (512x512)
+[16:12:57] [DEBUG]   Spawning component: Bullet
+[16:12:57] [DEBUG]   Spawning component: Transform
+[16:12:57] [INFO]    Spawned prefab with name'Bullet' at 11.3298, -16.4814
+[16:12:57] [DEBUG]   Setting bullet color to: White
+[16:12:57] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:57] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:57] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:57] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:57] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:57] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:57] [ERROR]   AudioSource failed to load audio: Audio/explosion.wav
+[16:12:57] [DEBUG]   OnTriggerEnter - collision started
+[16:12:57] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:57] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:57] [DEBUG]   OnTriggerExit - collision ended
+[16:12:58] [DEBUG]   OnTriggerEnter - collision started
+[16:12:58] [DEBUG]   Setting bullet color to: Blue
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:58] [DEBUG]   Spawning component: Rigidbody
+[16:12:58] [DEBUG]   Spawning component: CircleCollider
+[16:12:58] [DEBUG]   Spawning component: Sprite
+[16:12:58] [DEBUG]   Spawning component: Bullet
+[16:12:58] [DEBUG]   Spawning component: Transform
+[16:12:58] [INFO]    Spawned prefab with name'Bullet (1)' at 15.8292, -19.6513
+[16:12:58] [DEBUG]   Setting bullet color to: White
+[16:12:58] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:58] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:58] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:58] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:58] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:58] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:58] [ERROR]   AudioSource failed to load audio: Audio/explosion.wav
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerEnter - collision started
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerExit - collision ended
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerExit - collision ended
+[16:12:58] [DEBUG]   OnTriggerEnter - collision started
+[16:12:58] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:58] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:58] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/powerUp.wav
+[16:12:58] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:58] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:58] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/powerUp.wav
+[16:12:58] [ERROR]   AudioSource failed to load audio: Audio/powerUp.wav
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:58] [DEBUG]   Spawning component: Rigidbody
+[16:12:58] [DEBUG]   Spawning component: CircleCollider
+[16:12:58] [DEBUG]   Spawning component: Sprite
+[16:12:58] [DEBUG]   Spawning component: Bullet
+[16:12:58] [DEBUG]   Spawning component: Transform
+[16:12:58] [INFO]    Spawned prefab with name'Bullet (2)' at 177.957, -166.574
+[16:12:58] [DEBUG]   Setting bullet color to: Magenta
+[16:12:58] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:58] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:58] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:58] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:58] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:58] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:58] [ERROR]   AudioSource failed to load audio: Audio/explosion.wav
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerEnter - collision started
+[16:12:58] [DEBUG]   OnTriggerEnter - collision started
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerExit - collision ended
+[16:12:58] [DEBUG]   OnTriggerExit - collision ended
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerEnter - collision started
+[16:12:58] [DEBUG]   Setting bullet color to: Blue
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerExit - collision ended
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:58] [DEBUG]   OnTriggerExit - collision ended
+[16:12:59] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:59] [DEBUG]   Spawning component: Rigidbody
+[16:12:59] [DEBUG]   Spawning component: CircleCollider
+[16:12:59] [DEBUG]   Spawning component: Sprite
+[16:12:59] [DEBUG]   Spawning component: Bullet
+[16:12:59] [DEBUG]   Spawning component: Transform
+[16:12:59] [INFO]    Spawned prefab with name'Bullet (3)' at 276.855, -267.068
+[16:12:59] [DEBUG]   Setting bullet color to: Magenta
+[16:12:59] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:59] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:59] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:59] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:59] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:59] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:59] [ERROR]   AudioSource failed to load audio: Audio/explosion.wav
+[16:12:59] [DEBUG]   OnTriggerEnter - collision started
+[16:12:59] [DEBUG]   OnTriggerEnter - collision started
+[16:12:59] [DEBUG]   Setting bullet color to: Blue
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerExit - collision ended
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerExit - collision ended
+[16:12:59] [DEBUG]   OnTriggerEnter - collision started
+[16:12:59] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:59] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:59] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/powerUp.wav
+[16:12:59] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:59] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\powerUp.wav
+[16:12:59] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/powerUp.wav
+[16:12:59] [ERROR]   AudioSource failed to load audio: Audio/powerUp.wav
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:12:59] [DEBUG]   Spawning component: Rigidbody
+[16:12:59] [DEBUG]   Spawning component: CircleCollider
+[16:12:59] [DEBUG]   Spawning component: Sprite
+[16:12:59] [DEBUG]   Spawning component: Bullet
+[16:12:59] [DEBUG]   Spawning component: Transform
+[16:12:59] [INFO]    Spawned prefab with name'Bullet (4)' at 284.237, -320.032
+[16:12:59] [DEBUG]   Setting bullet color to: Blue
+[16:12:59] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:59] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:59] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:59] [ERROR]   Failed to load audio: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:59] [WARNING] Audio not found: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio\explosion.wav
+[16:12:59] [ERROR]   Failed to load audio asset: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Audio/explosion.wav
+[16:12:59] [ERROR]   AudioSource failed to load audio: Audio/explosion.wav
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerEnter - collision started
+[16:12:59] [DEBUG]   OnTriggerEnter - collision started
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerExit - collision ended
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerExit - collision ended
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:12:59] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:00] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:00] [DEBUG]   OnTriggerExit - collision ended
+[16:13:00] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:00] [DEBUG]   Spawning component: Rigidbody
+[16:13:00] [DEBUG]   Spawning component: Sprite
+[16:13:00] [DEBUG]   Spawning component: PolygonCollider
+[16:13:00] [DEBUG]   Spawning component: Enemy
+[16:13:00] [DEBUG]   Spawning component: Transform
+[16:13:00] [INFO]    Spawned prefab with name'Enemy' at 231.96, 182.82
+[16:13:13] [INFO]    RUNTIME 1: InitRuntime BEGIN
+[16:13:13] [INFO]    Font loaded: dmPrison
+[16:13:13] [INFO]    RUNTIME 2: Creating window
+[16:13:14] [INFO]    RUNTIME 3: Creating input
+[16:13:14] [INFO]    RUNTIME 4: Creating EntityManager
+[16:13:14] [INFO]    RUNTIME 5: Initializing SceneManager
+[16:13:14] [INFO]    SceneManager initialized without an active project
+[16:13:14] [INFO]    RUNTIME 6: Opening project
+[16:13:14] [INFO]    OPEN PROJECT 1: BEGIN: .
+[16:13:14] [INFO]    OPEN PROJECT 2: No existing project module
+[16:13:14] [INFO]    OPEN PROJECT 7: Calling SceneManager::OpenProject
+[16:13:14] [INFO]    Opened project: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export
+[16:13:14] [INFO]    OPEN PROJECT 8: SceneManager project opened
+[16:13:14] [INFO]    OPEN PROJECT 9: Resolved project root: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export
+[16:13:14] [INFO]    OPEN PROJECT 10: Runtime mode - loading existing DLL
+[16:13:14] [INFO]    DLL 1: LoadCompiledProjectModule BEGIN
+[16:13:14] [INFO]    DLL 2: DLL path = C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\build\Debug\GameScripts.dll
+[16:13:14] [INFO]    DLL 4: Calling LoadLibrary
+[16:13:14] [INFO]    DLL 6: LoadLibrary SUCCESS
+[16:13:14] [INFO]    DLL 8: RegisterProjectComponents found
+[16:13:14] [INFO]    DLL 9: Calling RegisterProjectComponents
+[16:13:14] [INFO]    DLL requested registration: Bullet
+[16:13:14] [INFO]    RegisterExternal: Bullet
+[16:13:14] [INFO]    RegisterExternal SUCCESS: Bullet
+[16:13:14] [INFO]    Descriptor count now: 14
+[16:13:14] [INFO]    RegisterExternal result for Bullet: SUCCESS
+[16:13:14] [INFO]    DLL requested registration: Enemy
+[16:13:14] [INFO]    RegisterExternal: Enemy
+[16:13:14] [INFO]    RegisterExternal SUCCESS: Enemy
+[16:13:14] [INFO]    Descriptor count now: 15
+[16:13:14] [INFO]    RegisterExternal result for Enemy: SUCCESS
+[16:13:14] [INFO]    DLL requested registration: EnemySpawner
+[16:13:14] [INFO]    RegisterExternal: EnemySpawner
+[16:13:14] [INFO]    RegisterExternal SUCCESS: EnemySpawner
+[16:13:14] [INFO]    Descriptor count now: 16
+[16:13:14] [INFO]    RegisterExternal result for EnemySpawner: SUCCESS
+[16:13:14] [INFO]    DLL requested registration: FloorSquare
+[16:13:14] [INFO]    RegisterExternal: FloorSquare
+[16:13:14] [INFO]    RegisterExternal SUCCESS: FloorSquare
+[16:13:14] [INFO]    Descriptor count now: 17
+[16:13:14] [INFO]    RegisterExternal result for FloorSquare: SUCCESS
+[16:13:14] [INFO]    DLL requested registration: GameManager
+[16:13:14] [INFO]    RegisterExternal: GameManager
+[16:13:14] [INFO]    RegisterExternal SUCCESS: GameManager
+[16:13:14] [INFO]    Descriptor count now: 18
+[16:13:14] [INFO]    RegisterExternal result for GameManager: SUCCESS
+[16:13:14] [INFO]    DLL requested registration: Player
+[16:13:14] [INFO]    RegisterExternal: Player
+[16:13:14] [INFO]    RegisterExternal SUCCESS: Player
+[16:13:14] [INFO]    Descriptor count now: 19
+[16:13:14] [INFO]    RegisterExternal result for Player: SUCCESS
+[16:13:14] [INFO]    DLL 10: RegisterProjectComponents returned
+[16:13:14] [INFO]    OPEN PROJECT 11: Existing project DLL loaded
+[16:13:14] [INFO]    OPEN PROJECT 12: Calling RegisterComponents
+[16:13:14] [INFO]    Registering component: Sprite
+[16:13:14] [INFO]    Registering component: AudioSource
+[16:13:14] [INFO]    Registering component: BoxCollider
+[16:13:14] [INFO]    Registering component: Camera
+[16:13:14] [INFO]    Registering component: Bullet
+[16:13:14] [INFO]    Registering component: PolygonCollider
+[16:13:14] [INFO]    Registering component: EnemySpawner
+[16:13:14] [INFO]    Registering component: CircleCollider
+[16:13:14] [INFO]    Registering component: Canvas
+[16:13:14] [INFO]    Registering component: Rigidbody
+[16:13:14] [INFO]    Registering component: Transform
+[16:13:14] [INFO]    Registering component: UIButton
+[16:13:14] [INFO]    Registering component: Player
+[16:13:14] [INFO]    Registering component: UIImage
+[16:13:14] [INFO]    Registering component: UIText
+[16:13:14] [INFO]    Registering component: UIRect
+[16:13:14] [INFO]    Registering component: Enemy
+[16:13:14] [INFO]    Registering component: FloorSquare
+[16:13:14] [INFO]    Registering component: GameManager
+[16:13:14] [INFO]    OPEN PROJECT 13: RegisterComponents finished
+[16:13:14] [INFO]    OPEN PROJECT 14: Runtime mode - skipping editor scene loading
+[16:13:14] [INFO]    OPEN PROJECT 18: SUCCESS
+[16:13:14] [INFO]    RUNTIME 7: Project opened
+[16:13:14] [INFO]    RUNTIME 8: Components registered
+[16:13:14] [INFO]    RUNTIME 9: Loading scene: MainNew
+[16:13:14] [INFO]    Loading file: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Assets/Scenes\MainNew.scene
+[16:13:14] [INFO]    Texture loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Assets\Textures\editor_entity.png (512x512)
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [INFO]    ========== CAMERA INIT ==========
+[16:13:14] [INFO]    Camera this: 000001D5F11C80A0
+[16:13:14] [INFO]    Entity: 000001D5F11CC610
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [DEBUG]   Found component: UIButton with GUID: d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [INFO]    Texture loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\Assets\Textures\square.png (125x125)
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [INFO]    Audio loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Assets\Audio\explosion.wav (13691 samples)
+[16:13:14] [INFO]    Audio loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Export\Assets\Audio\powerUp.wav (26314 samples)
+[16:13:14] [INFO]    Texture loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\Assets\Textures\triangle.png (1152x1024)
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [INFO]    RUNTIME 10: Scene loaded
+[16:13:14] [DEBUG]   Resolve EntityRef: Environment | GUID=c2360255-75bf-4a82-ba46-fea492927809 | entity=MainEnv | OK
+[16:13:14] [DEBUG]   Resolve EntityRef: player | GUID=0d6607ed-1435-48f5-9c5a-1dbefee638ba | entity=Player | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: GameManager | Entity=c654de34-f964-48af-8341-8dcea5cd045c | entity=GameManager
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=GameManager | component=class Transform | GUID=7328081e-f048-4cb8-a7c0-14ea69c2fb00 | lookingFor=968f3aff-082c-40eb-b7ba-697b2e1084db
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=GameManager | component=class EditorSprite | GUID=049184f5-f4e6-47b1-ad2b-196a68067d72 | lookingFor=968f3aff-082c-40eb-b7ba-697b2e1084db
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=GameManager | component=class GameManager | GUID=968f3aff-082c-40eb-b7ba-697b2e1084db | lookingFor=968f3aff-082c-40eb-b7ba-697b2e1084db
+[16:13:14] [DEBUG]   Resolve ComponentRef: GameManager | Entity=c654de34-f964-48af-8341-8dcea5cd045c | Component=968f3aff-082c-40eb-b7ba-697b2e1084db | entity=GameManager | OK
+[16:13:14] [DEBUG]   Resolve EntityRef: endUI | GUID=83270db5-fa83-407e-9506-bd1d99b422b5 | entity=EndUI | OK
+[16:13:14] [DEBUG]   Resolve EntityRef: environment | GUID=c2360255-75bf-4a82-ba46-fea492927809 | entity=MainEnv | OK
+[16:13:14] [DEBUG]   Resolve EntityRef: player | GUID=0d6607ed-1435-48f5-9c5a-1dbefee638ba | entity=Player | OK
+[16:13:14] [DEBUG]   Resolve EntityRef: startUI | GUID=ea9d9612-2219-44ad-b406-748ab473d088 | entity=StartUI | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: finalScore | Entity=e434ef22-8d31-4caa-b9fc-11b1067ffb6c | entity=Score text
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Score text | component=class Transform | GUID=76b151fb-0933-4123-a8bb-d352eec58b18 | lookingFor=c530e9b1-a3fb-446f-b3bb-d5cd005630ec
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Score text | component=class EditorSprite | GUID=197780e0-c418-4815-8f12-a7f96d66eecd | lookingFor=c530e9b1-a3fb-446f-b3bb-d5cd005630ec
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Score text | component=class UIText | GUID=c530e9b1-a3fb-446f-b3bb-d5cd005630ec | lookingFor=c530e9b1-a3fb-446f-b3bb-d5cd005630ec
+[16:13:14] [DEBUG]   Resolve ComponentRef: finalScore | Entity=e434ef22-8d31-4caa-b9fc-11b1067ffb6c | Component=c530e9b1-a3fb-446f-b3bb-d5cd005630ec | entity=Score text | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: highScoreText | Entity=78029789-044a-4d3b-8a8f-6d8c5e5f7627 | entity=High Score
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=High Score | component=class UIText | GUID=2e51edb1-f7d7-442f-9c0c-1e10fb4b3342 | lookingFor=2e51edb1-f7d7-442f-9c0c-1e10fb4b3342
+[16:13:14] [DEBUG]   Resolve ComponentRef: highScoreText | Entity=78029789-044a-4d3b-8a8f-6d8c5e5f7627 | Component=2e51edb1-f7d7-442f-9c0c-1e10fb4b3342 | entity=High Score | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: mainMenuButton | Entity=4399b10c-367d-491a-91b2-2fee063e5bfb | entity=Main menu
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Main menu | component=class Transform | GUID=3df421dd-ff86-44de-a3ab-b572125d51be | lookingFor=62853400-36ed-4dde-8322-80aaecaeeca8
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Main menu | component=class EditorSprite | GUID=cf2c0e59-0e4f-4623-a9d8-5e8a5feead27 | lookingFor=62853400-36ed-4dde-8322-80aaecaeeca8
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Main menu | component=class UIButton | GUID=62853400-36ed-4dde-8322-80aaecaeeca8 | lookingFor=62853400-36ed-4dde-8322-80aaecaeeca8
+[16:13:14] [DEBUG]   Resolve ComponentRef: mainMenuButton | Entity=4399b10c-367d-491a-91b2-2fee063e5bfb | Component=62853400-36ed-4dde-8322-80aaecaeeca8 | entity=Main menu | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: playAgainButton | Entity=197d8213-1d1a-483d-a0ac-f9b4e05080ce | entity=Play again 
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class Transform | GUID=ed3303b4-2270-45c1-9331-e939d96960de | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class EditorSprite | GUID=51c64c74-431c-46a5-ad09-46a8d0a988a7 | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class UIImage | GUID=ca124266-0eca-4cae-9c0b-1e8e68954443 | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class UIRect | GUID=8b51b7bc-c50a-49b7-a708-5249e50aca23 | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Play again  | component=class UIButton | GUID=d9bb0149-04ac-40d7-8f6a-572e60623efe | lookingFor=d9bb0149-04ac-40d7-8f6a-572e60623efe
+[16:13:14] [DEBUG]   Resolve ComponentRef: playAgainButton | Entity=197d8213-1d1a-483d-a0ac-f9b4e05080ce | Component=d9bb0149-04ac-40d7-8f6a-572e60623efe | entity=Play again  | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: playButton | Entity=4a1cf809-e074-4d9f-873a-53dd9428ed04 | entity=Play Button
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Play Button | component=class Transform | GUID=38217d89-f792-4215-b48f-10f32eea4e05 | lookingFor=bcde682b-d9b5-46dd-a439-c350617c00e6
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Play Button | component=class EditorSprite | GUID=0f0517d4-e419-4806-b985-6706266fa3f8 | lookingFor=bcde682b-d9b5-46dd-a439-c350617c00e6
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Play Button | component=class UIButton | GUID=bcde682b-d9b5-46dd-a439-c350617c00e6 | lookingFor=bcde682b-d9b5-46dd-a439-c350617c00e6
+[16:13:14] [DEBUG]   Resolve ComponentRef: playButton | Entity=4a1cf809-e074-4d9f-873a-53dd9428ed04 | Component=bcde682b-d9b5-46dd-a439-c350617c00e6 | entity=Play Button | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: scoreText | Entity=7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f | entity=Score Text
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Score Text | component=class UIText | GUID=abdd52fb-e4b3-4c42-8f30-968f168ecaa7 | lookingFor=abdd52fb-e4b3-4c42-8f30-968f168ecaa7
+[16:13:14] [DEBUG]   Resolve ComponentRef: scoreText | Entity=7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f | Component=abdd52fb-e4b3-4c42-8f30-968f168ecaa7 | entity=Score Text | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: AudioSource | Entity=0d6607ed-1435-48f5-9c5a-1dbefee638ba | entity=Player
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class PolygonCollider | GUID=1eea6922-d86d-4928-9274-b78f51618efc | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class Sprite | GUID=9b4469c3-bccf-484f-9d05-56a92005b598 | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class Player | GUID=032ea708-4efb-45b6-a06b-02f7b0b890d4 | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class Rigidbody | GUID=2202bae2-d4aa-4a30-9c48-533f626f3da4 | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class AudioSource | GUID=685878f4-3375-4477-ac0a-71f28eeb5510 | lookingFor=685878f4-3375-4477-ac0a-71f28eeb5510
+[16:13:14] [DEBUG]   Resolve ComponentRef: AudioSource | Entity=0d6607ed-1435-48f5-9c5a-1dbefee638ba | Component=685878f4-3375-4477-ac0a-71f28eeb5510 | entity=Player | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: Camera | Entity=c318f141-2b23-4586-97e2-9f43420fc842 | entity=Camera
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Camera | component=class Transform | GUID=1b373b78-9145-4ba3-9771-8c62f0606542 | lookingFor=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Camera | component=class EditorSprite | GUID=62432493-ef0b-4f1f-9888-e6578fd8f145 | lookingFor=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Camera | component=class Camera | GUID=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417 | lookingFor=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417
+[16:13:14] [DEBUG]   Resolve ComponentRef: Camera | Entity=c318f141-2b23-4586-97e2-9f43420fc842 | Component=f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417 | entity=Camera | OK
+[16:13:14] [DEBUG]   Entity found for ComponentRef: Sprite | Entity=0d6607ed-1435-48f5-9c5a-1dbefee638ba | entity=Player
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class PolygonCollider | GUID=1eea6922-d86d-4928-9274-b78f51618efc | lookingFor=9b4469c3-bccf-484f-9d05-56a92005b598
+[16:13:14] [DEBUG]   RESOLVE SEARCH: entity=Player | component=class Sprite | GUID=9b4469c3-bccf-484f-9d05-56a92005b598 | lookingFor=9b4469c3-bccf-484f-9d05-56a92005b598
+[16:13:14] [DEBUG]   Resolve ComponentRef: Sprite | Entity=0d6607ed-1435-48f5-9c5a-1dbefee638ba | Component=9b4469c3-bccf-484f-9d05-56a92005b598 | entity=Player | OK
+[16:13:14] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:14] [DEBUG]   Resolve EntityRef: targetText | GUID=d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4 | entity=PlayText | OK
+[16:13:14] [DEBUG]   Resolve EntityRef: targetText | GUID=e60e55d7-35a7-4542-89b3-b20174fc113d | entity=Play again Text | OK
+[16:13:14] [DEBUG]   Resolve EntityRef: targetText | GUID=<empty> | SKIPPED
+[16:13:14] [INFO]    RUNTIME 11: Entities awakened
+[16:13:14] [INFO]    RUNTIME 12: InitRuntime COMPLETE
+[16:13:18] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:18] [DEBUG]   Spawning component: Rigidbody
+[16:13:18] [DEBUG]   Spawning component: CircleCollider
+[16:13:18] [DEBUG]   Spawning component: Sprite
+[16:13:18] [INFO]    Texture loaded: C:\Users\kitso\Documents\CPP Game\CPP PRoject\ECSEngine\Projects\Color Bullets\Assets\Textures\circle.png (512x512)
+[16:13:18] [DEBUG]   Spawning component: Bullet
+[16:13:18] [DEBUG]   Spawning component: Transform
+[16:13:18] [INFO]    Spawned prefab with name'Bullet' at 4.42594, -19.5041
+[16:13:18] [DEBUG]   Setting bullet color to: White
+[16:13:18] [DEBUG]   OnTriggerEnter - collision started
+[16:13:18] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:18] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:18] [DEBUG]   OnTriggerExit - collision ended
+[16:13:18] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:18] [DEBUG]   Spawning component: Rigidbody
+[16:13:18] [DEBUG]   Spawning component: CircleCollider
+[16:13:18] [DEBUG]   Spawning component: Sprite
+[16:13:18] [DEBUG]   Spawning component: Bullet
+[16:13:18] [DEBUG]   Spawning component: Transform
+[16:13:18] [INFO]    Spawned prefab with name'Bullet (1)' at 6.93617, -18.7587
+[16:13:18] [DEBUG]   Setting bullet color to: White
+[16:13:19] [DEBUG]   OnTriggerEnter - collision started
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerExit - collision ended
+[16:13:19] [DEBUG]   OnTriggerEnter - collision started
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:19] [DEBUG]   OnTriggerExit - collision ended
+[16:13:20] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:20] [DEBUG]   Spawning component: Rigidbody
+[16:13:20] [DEBUG]   Spawning component: CircleCollider
+[16:13:20] [DEBUG]   Spawning component: Sprite
+[16:13:20] [DEBUG]   Spawning component: Bullet
+[16:13:20] [DEBUG]   Spawning component: Transform
+[16:13:20] [INFO]    Spawned prefab with name'Bullet (2)' at 225, -214.019
+[16:13:20] [DEBUG]   Setting bullet color to: Magenta
+[16:13:20] [DEBUG]   OnTriggerEnter - collision started
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerExit - collision ended
+[16:13:20] [DEBUG]   OnTriggerEnter - collision started
+[16:13:20] [DEBUG]   Setting bullet color to: Blue
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerExit - collision ended
+[16:13:20] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:20] [DEBUG]   Spawning component: Rigidbody
+[16:13:20] [DEBUG]   Spawning component: Sprite
+[16:13:20] [DEBUG]   Spawning component: PolygonCollider
+[16:13:20] [DEBUG]   Spawning component: Enemy
+[16:13:20] [DEBUG]   Spawning component: Transform
+[16:13:20] [INFO]    Spawned prefab with name'Enemy' at 129.994, 265.88
+[16:13:20] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:20] [DEBUG]   Spawning component: Rigidbody
+[16:13:20] [DEBUG]   Spawning component: CircleCollider
+[16:13:20] [DEBUG]   Spawning component: Sprite
+[16:13:20] [DEBUG]   Spawning component: Bullet
+[16:13:20] [DEBUG]   Spawning component: Transform
+[16:13:20] [INFO]    Spawned prefab with name'Bullet (3)' at 233.128, -211.363
+[16:13:20] [DEBUG]   Setting bullet color to: Magenta
+[16:13:20] [DEBUG]   OnTriggerEnter - collision started
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:20] [DEBUG]   OnTriggerEnter - collision started
+[16:13:20] [DEBUG]   Setting bullet color to: Blue
+[16:13:20] [DEBUG]   OnTriggerExit - collision ended
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerExit - collision ended
+[16:13:21] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:21] [DEBUG]   Spawning component: Rigidbody
+[16:13:21] [DEBUG]   Spawning component: CircleCollider
+[16:13:21] [DEBUG]   Spawning component: Sprite
+[16:13:21] [DEBUG]   Spawning component: Bullet
+[16:13:21] [DEBUG]   Spawning component: Transform
+[16:13:21] [INFO]    Spawned prefab with name'Bullet (4)' at 233.18, -211.332
+[16:13:21] [DEBUG]   Setting bullet color to: Magenta
+[16:13:21] [DEBUG]   OnTriggerEnter - collision started
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerEnter - collision started
+[16:13:21] [DEBUG]   Setting bullet color to: Blue
+[16:13:21] [DEBUG]   OnTriggerExit - collision ended
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:21] [DEBUG]   OnTriggerExit - collision ended
+[16:13:22] [DEBUG]   OnTriggerEnter - collision started
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:22] [DEBUG]   Spawning component: Rigidbody
+[16:13:22] [DEBUG]   Spawning component: CircleCollider
+[16:13:22] [DEBUG]   Spawning component: Sprite
+[16:13:22] [DEBUG]   Spawning component: Bullet
+[16:13:22] [DEBUG]   Spawning component: Transform
+[16:13:22] [INFO]    Spawned prefab with name'Bullet (5)' at 187.22, -169.094
+[16:13:22] [DEBUG]   Setting bullet color to: Magenta
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:22] [DEBUG]   OnTriggerEnter - collision started
+[16:13:22] [DEBUG]   OnTriggerEnter - collision started
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerExit - collision ended
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerExit - collision ended
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerEnter - collision started
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerExit - collision ended
+[16:13:23] [DEBUG]   OnTriggerEnter - collision started
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:23] [DEBUG]   Spawning component: Rigidbody
+[16:13:23] [DEBUG]   Spawning component: CircleCollider
+[16:13:23] [DEBUG]   Spawning component: Sprite
+[16:13:23] [DEBUG]   Spawning component: Bullet
+[16:13:23] [DEBUG]   Spawning component: Transform
+[16:13:23] [INFO]    Spawned prefab with name'Bullet' at 248.271, -128.708
+[16:13:23] [DEBUG]   Setting bullet color to: Magenta
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerEnter - collision started
+[16:13:23] [DEBUG]   OnTriggerEnter - collision started
+[16:13:23] [DEBUG]   OnTriggerExit - collision ended
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerExit - collision ended
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:23] [DEBUG]   Spawning component: Rigidbody
+[16:13:23] [DEBUG]   Spawning component: Sprite
+[16:13:23] [DEBUG]   Spawning component: PolygonCollider
+[16:13:23] [DEBUG]   Spawning component: Enemy
+[16:13:23] [DEBUG]   Spawning component: Transform
+[16:13:23] [INFO]    Spawned prefab with name'Enemy' at 872.888, -590.544
+[16:13:23] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:23] [DEBUG]   OnTriggerExit - collision ended
+[16:13:24] [DEBUG]   OnTriggerEnter - collision started
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerExit - collision ended
+[16:13:24] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:24] [DEBUG]   Spawning component: Rigidbody
+[16:13:24] [DEBUG]   Spawning component: CircleCollider
+[16:13:24] [DEBUG]   Spawning component: Sprite
+[16:13:24] [DEBUG]   Spawning component: Bullet
+[16:13:24] [DEBUG]   Spawning component: Transform
+[16:13:24] [INFO]    Spawned prefab with name'Bullet (1)' at 448.143, -283.436
+[16:13:24] [DEBUG]   Setting bullet color to: Cyan
+[16:13:24] [DEBUG]   OnTriggerEnter - collision started
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:24] [DEBUG]   OnTriggerEnter - collision started
+[16:13:24] [DEBUG]   OnTriggerExit - collision ended
+[16:13:24] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:25] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:25] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:25] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:25] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:25] [DEBUG]   OnTriggerExit - collision ended
+[16:13:25] [DEBUG]   OnTriggerEnter - collision started
+[16:13:25] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:25] [DEBUG]   OnTriggerExit - collision ended
+[16:13:25] [DEBUG]   OnTriggerEnter - collision started
+[16:13:27] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:27] [DEBUG]   Spawning component: Rigidbody
+[16:13:27] [DEBUG]   Spawning component: CircleCollider
+[16:13:27] [DEBUG]   Spawning component: Sprite
+[16:13:27] [DEBUG]   Spawning component: Bullet
+[16:13:27] [DEBUG]   Spawning component: Transform
+[16:13:27] [INFO]    Spawned prefab with name'Bullet (1)' at 305.646, -153.726
+[16:13:27] [DEBUG]   Setting bullet color to: Cyan
+[16:13:27] [DEBUG]   OnTriggerEnter - collision started
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerExit - collision ended
+[16:13:27] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:27] [DEBUG]   Spawning component: Rigidbody
+[16:13:27] [DEBUG]   Spawning component: CircleCollider
+[16:13:27] [DEBUG]   Spawning component: Sprite
+[16:13:27] [DEBUG]   Spawning component: Bullet
+[16:13:27] [DEBUG]   Spawning component: Transform
+[16:13:27] [INFO]    Spawned prefab with name'Bullet (2)' at 308.89, -151.927
+[16:13:27] [DEBUG]   Setting bullet color to: Cyan
+[16:13:27] [DEBUG]   OnTriggerEnter - collision started
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerEnter - collision started
+[16:13:27] [DEBUG]   OnTriggerExit - collision ended
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:27] [DEBUG]   OnTriggerExit - collision ended
+[16:13:28] [DEBUG]   OnTriggerEnter - collision started
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerExit - collision ended
+[16:13:28] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:28] [DEBUG]   Spawning component: Rigidbody
+[16:13:28] [DEBUG]   Spawning component: CircleCollider
+[16:13:28] [DEBUG]   Spawning component: Sprite
+[16:13:28] [DEBUG]   Spawning component: Bullet
+[16:13:28] [DEBUG]   Spawning component: Transform
+[16:13:28] [INFO]    Spawned prefab with name'Bullet (3)' at 433.168, -264.492
+[16:13:28] [DEBUG]   Setting bullet color to: Cyan
+[16:13:28] [DEBUG]   OnTriggerEnter - collision started
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerExit - collision ended
+[16:13:28] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:28] [DEBUG]   Spawning component: Rigidbody
+[16:13:28] [DEBUG]   Spawning component: Sprite
+[16:13:28] [DEBUG]   Spawning component: PolygonCollider
+[16:13:28] [DEBUG]   Spawning component: Enemy
+[16:13:28] [DEBUG]   Spawning component: Transform
+[16:13:28] [INFO]    Spawned prefab with name'Enemy' at -280.13, -146.85
+[16:13:28] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:28] [DEBUG]   Spawning component: Rigidbody
+[16:13:28] [DEBUG]   Spawning component: CircleCollider
+[16:13:28] [DEBUG]   Spawning component: Sprite
+[16:13:28] [DEBUG]   Spawning component: Bullet
+[16:13:28] [DEBUG]   Spawning component: Transform
+[16:13:28] [INFO]    Spawned prefab with name'Bullet (4)' at 365.241, -372.55
+[16:13:28] [DEBUG]   Setting bullet color to: Cyan
+[16:13:28] [DEBUG]   OnTriggerEnter - collision started
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerEnter - collision started
+[16:13:28] [DEBUG]   Setting bullet color to: Blue
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerExit - collision ended
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerExit - collision ended
+[16:13:28] [DEBUG]   OnTriggerEnter - collision started
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:28] [DEBUG]   OnTriggerExit - collision ended
+[16:13:29] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:29] [DEBUG]   Spawning component: Rigidbody
+[16:13:29] [DEBUG]   Spawning component: CircleCollider
+[16:13:29] [DEBUG]   Spawning component: Sprite
+[16:13:29] [DEBUG]   Spawning component: Bullet
+[16:13:29] [DEBUG]   Spawning component: Transform
+[16:13:29] [INFO]    Spawned prefab with name'Bullet' at 191.881, -182.43
+[16:13:29] [DEBUG]   Setting bullet color to: Blue
+[16:13:29] [DEBUG]   OnTriggerEnter - collision started
+[16:13:29] [DEBUG]   OnTriggerEnter - collision started
+[16:13:29] [DEBUG]   OnTriggerEnter - collision started
+[16:13:29] [DEBUG]   Setting bullet color to: Magenta
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerExit - collision ended
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerExit - collision ended
+[16:13:29] [DEBUG]   OnTriggerExit - collision ended
+[16:13:29] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:29] [DEBUG]   Spawning component: Rigidbody
+[16:13:29] [DEBUG]   Spawning component: CircleCollider
+[16:13:29] [DEBUG]   Spawning component: Sprite
+[16:13:29] [DEBUG]   Spawning component: Bullet
+[16:13:29] [DEBUG]   Spawning component: Transform
+[16:13:29] [INFO]    Spawned prefab with name'Bullet (5)' at 137.041, -101.082
+[16:13:29] [DEBUG]   Setting bullet color to: Magenta
+[16:13:29] [DEBUG]   OnTriggerEnter - collision started
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:29] [DEBUG]   OnTriggerExit - collision ended
+[16:13:29] [DEBUG]   OnTriggerEnter - collision started
+[16:13:30] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:30] [DEBUG]   Spawning component: Rigidbody
+[16:13:30] [DEBUG]   Spawning component: CircleCollider
+[16:13:30] [DEBUG]   Spawning component: Sprite
+[16:13:30] [DEBUG]   Spawning component: Bullet
+[16:13:30] [DEBUG]   Spawning component: Transform
+[16:13:30] [INFO]    Spawned prefab with name'Bullet (5)' at 146.391, -82.3564
+[16:13:30] [DEBUG]   Setting bullet color to: Magenta
+[16:13:30] [DEBUG]   OnTriggerEnter - collision started
+[16:13:30] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:30] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:30] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:30] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:30] [DEBUG]   OnTriggerExit - collision ended
+[16:13:30] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:30] [DEBUG]   Spawning component: Rigidbody
+[16:13:30] [DEBUG]   Spawning component: CircleCollider
+[16:13:30] [DEBUG]   Spawning component: Sprite
+[16:13:30] [DEBUG]   Spawning component: Bullet
+[16:13:30] [DEBUG]   Spawning component: Transform
+[16:13:30] [INFO]    Spawned prefab with name'Bullet (6)' at 167.448, -82.3001
+[16:13:30] [DEBUG]   Setting bullet color to: Magenta
+[16:13:30] [DEBUG]   OnTriggerEnter - collision started
+[16:13:30] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:30] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:30] [DEBUG]   OnTriggerExit - collision ended
+[16:13:31] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:31] [DEBUG]   Spawning component: Rigidbody
+[16:13:31] [DEBUG]   Spawning component: CircleCollider
+[16:13:31] [DEBUG]   Spawning component: Sprite
+[16:13:31] [DEBUG]   Spawning component: Bullet
+[16:13:31] [DEBUG]   Spawning component: Transform
+[16:13:31] [INFO]    Spawned prefab with name'Bullet (7)' at 157.953, -119.308
+[16:13:31] [DEBUG]   Setting bullet color to: Magenta
+[16:13:31] [DEBUG]   OnTriggerEnter - collision started
+[16:13:31] [DEBUG]   OnTriggerEnter - collision started
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerExit - collision ended
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerExit - collision ended
+[16:13:31] [DEBUG]   OnTriggerEnter - collision started
+[16:13:31] [DEBUG]   Setting bullet color to: Blue
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:31] [DEBUG]   Spawning component: Rigidbody
+[16:13:31] [DEBUG]   Spawning component: Sprite
+[16:13:31] [DEBUG]   Spawning component: PolygonCollider
+[16:13:31] [DEBUG]   Spawning component: Enemy
+[16:13:31] [DEBUG]   Spawning component: Transform
+[16:13:31] [INFO]    Spawned prefab with name'Enemy' at 101.965, -559.333
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerExit - collision ended
+[16:13:31] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:31] [DEBUG]   Spawning component: Rigidbody
+[16:13:31] [DEBUG]   Spawning component: CircleCollider
+[16:13:31] [DEBUG]   Spawning component: Sprite
+[16:13:31] [DEBUG]   Spawning component: Bullet
+[16:13:31] [DEBUG]   Spawning component: Transform
+[16:13:31] [INFO]    Spawned prefab with name'Bullet (8)' at 176.894, -101.019
+[16:13:31] [DEBUG]   Setting bullet color to: Magenta
+[16:13:31] [DEBUG]   OnTriggerEnter - collision started
+[16:13:31] [DEBUG]   OnTriggerEnter - collision started
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerExit - collision ended
+[16:13:31] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:31] [DEBUG]   OnTriggerExit - collision ended
+[16:13:32] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:32] [DEBUG]   Spawning component: Rigidbody
+[16:13:32] [DEBUG]   Spawning component: CircleCollider
+[16:13:32] [DEBUG]   Spawning component: Sprite
+[16:13:32] [DEBUG]   Spawning component: Bullet
+[16:13:32] [DEBUG]   Spawning component: Transform
+[16:13:32] [INFO]    Spawned prefab with name'Bullet (1)' at 176.963, -99.6054
+[16:13:32] [DEBUG]   Setting bullet color to: Magenta
+[16:13:32] [DEBUG]   OnTriggerEnter - collision started
+[16:13:32] [DEBUG]   OnTriggerEnter - collision started
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerExit - collision ended
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerExit - collision ended
+[16:13:32] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:32] [DEBUG]   Spawning component: Rigidbody
+[16:13:32] [DEBUG]   Spawning component: CircleCollider
+[16:13:32] [DEBUG]   Spawning component: Sprite
+[16:13:32] [DEBUG]   Spawning component: Bullet
+[16:13:32] [DEBUG]   Spawning component: Transform
+[16:13:32] [INFO]    Spawned prefab with name'Bullet (2)' at 176.28, -104.521
+[16:13:32] [DEBUG]   Setting bullet color to: Magenta
+[16:13:32] [DEBUG]   OnTriggerEnter - collision started
+[16:13:32] [DEBUG]   OnTriggerEnter - collision started
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerExit - collision ended
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:32] [DEBUG]   OnTriggerExit - collision ended
+[16:13:32] [DEBUG]   OnTriggerEnter - collision started
+[16:13:32] [DEBUG]   Setting bullet color to: Cyan
+[16:13:32] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerExit - collision ended
+[16:13:33] [DEBUG]   OnTriggerEnter - collision started
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:33] [DEBUG]   OnTriggerExit - collision ended
+[16:13:33] [DEBUG]   OnTriggerEnter - collision started
+[16:13:33] [DEBUG]   OnTriggerExit - collision ended
+[16:13:34] [DEBUG]   OnTriggerEnter - collision started
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerExit - collision ended
+[16:13:34] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:34] [DEBUG]   Spawning component: Rigidbody
+[16:13:34] [DEBUG]   Spawning component: CircleCollider
+[16:13:34] [DEBUG]   Spawning component: Sprite
+[16:13:34] [DEBUG]   Spawning component: Bullet
+[16:13:34] [DEBUG]   Spawning component: Transform
+[16:13:34] [INFO]    Spawned prefab with name'Bullet' at 295.668, -377.972
+[16:13:34] [DEBUG]   Setting bullet color to: Blue
+[16:13:34] [DEBUG]   OnTriggerEnter - collision started
+[16:13:34] [DEBUG]   OnTriggerEnter - collision started
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerEnter - collision started
+[16:13:34] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:34] [DEBUG]   Spawning component: Rigidbody
+[16:13:34] [DEBUG]   Spawning component: Sprite
+[16:13:34] [DEBUG]   Spawning component: PolygonCollider
+[16:13:34] [DEBUG]   Spawning component: Enemy
+[16:13:34] [DEBUG]   Spawning component: Transform
+[16:13:34] [INFO]    Spawned prefab with name'Enemy' at -137.699, 78.213
+[16:13:34] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:34] [DEBUG]   Spawning component: Rigidbody
+[16:13:34] [DEBUG]   Spawning component: CircleCollider
+[16:13:34] [DEBUG]   Spawning component: Sprite
+[16:13:34] [DEBUG]   Spawning component: Bullet
+[16:13:34] [DEBUG]   Spawning component: Transform
+[16:13:34] [INFO]    Spawned prefab with name'Bullet' at 303.602, -365.566
+[16:13:34] [DEBUG]   Setting bullet color to: Blue
+[16:13:34] [DEBUG]   OnTriggerEnter - collision started
+[16:13:34] [DEBUG]   OnTriggerEnter - collision started
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerExit - collision ended
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:34] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerExit - collision ended
+[16:13:35] [DEBUG]   OnTriggerEnter - collision started
+[16:13:35] [DEBUG]   Setting bullet color to: Magenta
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerExit - collision ended
+[16:13:35] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:35] [DEBUG]   Spawning component: Rigidbody
+[16:13:35] [DEBUG]   Spawning component: CircleCollider
+[16:13:35] [DEBUG]   Spawning component: Sprite
+[16:13:35] [DEBUG]   Spawning component: Bullet
+[16:13:35] [DEBUG]   Spawning component: Transform
+[16:13:35] [INFO]    Spawned prefab with name'Bullet (3)' at 168.856, -295.145
+[16:13:35] [DEBUG]   Setting bullet color to: Blue
+[16:13:35] [DEBUG]   OnTriggerEnter - collision started
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerExit - collision ended
+[16:13:35] [DEBUG]   OnTriggerEnter - collision started
+[16:13:35] [DEBUG]   Setting bullet color to: Magenta
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerExit - collision ended
+[16:13:35] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:35] [DEBUG]   Spawning component: Rigidbody
+[16:13:35] [DEBUG]   Spawning component: CircleCollider
+[16:13:35] [DEBUG]   Spawning component: Sprite
+[16:13:35] [DEBUG]   Spawning component: Bullet
+[16:13:35] [DEBUG]   Spawning component: Transform
+[16:13:35] [INFO]    Spawned prefab with name'Bullet (4)' at 69.7757, -120.467
+[16:13:35] [DEBUG]   Setting bullet color to: Blue
+[16:13:35] [DEBUG]   OnTriggerEnter - collision started
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:35] [DEBUG]   OnTriggerExit - collision ended
+[16:13:36] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:36] [DEBUG]   Spawning component: Rigidbody
+[16:13:36] [DEBUG]   Spawning component: CircleCollider
+[16:13:36] [DEBUG]   Spawning component: Sprite
+[16:13:36] [DEBUG]   Spawning component: Bullet
+[16:13:36] [DEBUG]   Spawning component: Transform
+[16:13:36] [INFO]    Spawned prefab with name'Bullet (5)' at 80.4975, 24.1288
+[16:13:36] [DEBUG]   Setting bullet color to: Blue
+[16:13:36] [DEBUG]   OnTriggerEnter - collision started
+[16:13:36] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:36] [DEBUG]   OnTriggerExit - collision ended
+[16:13:36] [DEBUG]   OnTriggerEnter - collision started
+[16:13:36] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:36] [DEBUG]   Spawning component: Rigidbody
+[16:13:36] [DEBUG]   Spawning component: CircleCollider
+[16:13:36] [DEBUG]   Spawning component: Sprite
+[16:13:36] [DEBUG]   Spawning component: Bullet
+[16:13:36] [DEBUG]   Spawning component: Transform
+[16:13:36] [INFO]    Spawned prefab with name'Bullet (5)' at 257.168, 14.4916
+[16:13:36] [DEBUG]   Setting bullet color to: Blue
+[16:13:36] [DEBUG]   OnTriggerEnter - collision started
+[16:13:36] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:36] [DEBUG]   OnTriggerExit - collision ended
+[16:13:37] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:37] [DEBUG]   Spawning component: Rigidbody
+[16:13:37] [DEBUG]   Spawning component: CircleCollider
+[16:13:37] [DEBUG]   Spawning component: Sprite
+[16:13:37] [DEBUG]   Spawning component: Bullet
+[16:13:37] [DEBUG]   Spawning component: Transform
+[16:13:37] [INFO]    Spawned prefab with name'Bullet (1)' at 436.684, -71.0828
+[16:13:37] [DEBUG]   Setting bullet color to: Blue
+[16:13:37] [DEBUG]   OnTriggerEnter - collision started
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerExit - collision ended
+[16:13:37] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:37] [DEBUG]   Spawning component: Rigidbody
+[16:13:37] [DEBUG]   Spawning component: Sprite
+[16:13:37] [DEBUG]   Spawning component: PolygonCollider
+[16:13:37] [DEBUG]   Spawning component: Enemy
+[16:13:37] [DEBUG]   Spawning component: Transform
+[16:13:37] [INFO]    Spawned prefab with name'Enemy' at 1145.51, -359.295
+[16:13:37] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:37] [DEBUG]   Spawning component: Rigidbody
+[16:13:37] [DEBUG]   Spawning component: CircleCollider
+[16:13:37] [DEBUG]   Spawning component: Sprite
+[16:13:37] [DEBUG]   Spawning component: Bullet
+[16:13:37] [DEBUG]   Spawning component: Transform
+[16:13:37] [INFO]    Spawned prefab with name'Bullet (2)' at 332.074, -251.782
+[16:13:37] [DEBUG]   Setting bullet color to: Blue
+[16:13:37] [DEBUG]   OnTriggerEnter - collision started
+[16:13:37] [DEBUG]   OnTriggerEnter - collision started
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerEnter - collision started
+[16:13:37] [DEBUG]   Setting bullet color to: Cyan
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerExit - collision ended
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:37] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerExit - collision ended
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerExit - collision ended
+[16:13:38] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:38] [DEBUG]   Spawning component: Rigidbody
+[16:13:38] [DEBUG]   Spawning component: CircleCollider
+[16:13:38] [DEBUG]   Spawning component: Sprite
+[16:13:38] [DEBUG]   Spawning component: Bullet
+[16:13:38] [DEBUG]   Spawning component: Transform
+[16:13:38] [INFO]    Spawned prefab with name'Bullet (6)' at 154.694, -412.687
+[16:13:38] [DEBUG]   Setting bullet color to: Blue
+[16:13:38] [DEBUG]   OnTriggerEnter - collision started
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerExit - collision ended
+[16:13:38] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:38] [DEBUG]   Spawning component: Rigidbody
+[16:13:38] [DEBUG]   Spawning component: CircleCollider
+[16:13:38] [DEBUG]   Spawning component: Sprite
+[16:13:38] [DEBUG]   Spawning component: Bullet
+[16:13:38] [DEBUG]   Spawning component: Transform
+[16:13:38] [INFO]    Spawned prefab with name'Bullet (7)' at 21.3512, -364.201
+[16:13:38] [DEBUG]   Setting bullet color to: Blue
+[16:13:38] [DEBUG]   OnTriggerEnter - collision started
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:38] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerExit - collision ended
+[16:13:39] [DEBUG]   OnTriggerEnter - collision started
+[16:13:39] [DEBUG]   Setting bullet color to: Magenta
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerExit - collision ended
+[16:13:39] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:39] [DEBUG]   Spawning component: Rigidbody
+[16:13:39] [DEBUG]   Spawning component: CircleCollider
+[16:13:39] [DEBUG]   Spawning component: Sprite
+[16:13:39] [DEBUG]   Spawning component: Bullet
+[16:13:39] [DEBUG]   Spawning component: Transform
+[16:13:39] [INFO]    Spawned prefab with name'Bullet (8)' at 187.085, -187.052
+[16:13:39] [DEBUG]   Setting bullet color to: Blue
+[16:13:39] [DEBUG]   OnTriggerEnter - collision started
+[16:13:39] [DEBUG]   OnTriggerEnter - collision started
+[16:13:39] [DEBUG]   Setting bullet color to: Magenta
+[16:13:39] [DEBUG]   OnTriggerEnter - collision started
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerExit - collision ended
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerExit - collision ended
+[16:13:39] [DEBUG]   OnTriggerExit - collision ended
+[16:13:39] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:39] [DEBUG]   Spawning component: Rigidbody
+[16:13:39] [DEBUG]   Spawning component: CircleCollider
+[16:13:39] [DEBUG]   Spawning component: Sprite
+[16:13:39] [DEBUG]   Spawning component: Bullet
+[16:13:39] [DEBUG]   Spawning component: Transform
+[16:13:39] [INFO]    Spawned prefab with name'Bullet' at 381.707, -71.3746
+[16:13:39] [DEBUG]   Setting bullet color to: Magenta
+[16:13:39] [DEBUG]   OnTriggerEnter - collision started
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:39] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerExit - collision ended
+[16:13:40] [DEBUG]   OnTriggerEnter - collision started
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerExit - collision ended
+[16:13:40] [DEBUG]   OnTriggerEnter - collision started
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:40] [DEBUG]   Spawning component: Rigidbody
+[16:13:40] [DEBUG]   Spawning component: CircleCollider
+[16:13:40] [DEBUG]   Spawning component: Sprite
+[16:13:40] [DEBUG]   Spawning component: Bullet
+[16:13:40] [DEBUG]   Spawning component: Transform
+[16:13:40] [INFO]    Spawned prefab with name'Bullet (3)' at 386.544, -222.56
+[16:13:40] [DEBUG]   Setting bullet color to: Cyan
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerEnter - collision started
+[16:13:40] [DEBUG]   OnTriggerEnter - collision started
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerExit - collision ended
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerEnter - collision started
+[16:13:40] [DEBUG]   Setting bullet color to: Blue
+[16:13:40] [DEBUG]   OnTriggerExit - collision ended
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:40] [DEBUG]   Spawning component: Rigidbody
+[16:13:40] [DEBUG]   Spawning component: Sprite
+[16:13:40] [DEBUG]   Spawning component: PolygonCollider
+[16:13:40] [DEBUG]   Spawning component: Enemy
+[16:13:40] [DEBUG]   Spawning component: Transform
+[16:13:40] [INFO]    Spawned prefab with name'Enemy (1)' at 1104.94, -206.969
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerExit - collision ended
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerEnter - collision started
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerExit - collision ended
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerExit - collision ended
+[16:13:40] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:40] [DEBUG]   Spawning component: Rigidbody
+[16:13:40] [DEBUG]   Spawning component: CircleCollider
+[16:13:40] [DEBUG]   Spawning component: Sprite
+[16:13:40] [DEBUG]   Spawning component: Bullet
+[16:13:40] [DEBUG]   Spawning component: Transform
+[16:13:40] [INFO]    Spawned prefab with name'Bullet (4)' at 240.969, -371.817
+[16:13:40] [DEBUG]   Setting bullet color to: Blue
+[16:13:40] [DEBUG]   OnTriggerEnter - collision started
+[16:13:40] [DEBUG]   OnTriggerEnter - collision started
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerExit - collision ended
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:40] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerExit - collision ended
+[16:13:41] [DEBUG]   OnTriggerEnter - collision started
+[16:13:41] [DEBUG]   Setting bullet color to: Cyan
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerExit - collision ended
+[16:13:41] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:41] [DEBUG]   Spawning component: Rigidbody
+[16:13:41] [DEBUG]   Spawning component: CircleCollider
+[16:13:41] [DEBUG]   Spawning component: Sprite
+[16:13:41] [DEBUG]   Spawning component: Bullet
+[16:13:41] [DEBUG]   Spawning component: Transform
+[16:13:41] [INFO]    Spawned prefab with name'Bullet (9)' at 68.1198, -243.296
+[16:13:41] [DEBUG]   Setting bullet color to: Blue
+[16:13:41] [DEBUG]   OnTriggerEnter - collision started
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerExit - collision ended
+[16:13:41] [DEBUG]   OnTriggerEnter - collision started
+[16:13:41] [DEBUG]   Setting bullet color to: Magenta
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerExit - collision ended
+[16:13:41] [DEBUG]   OnTriggerEnter - collision started
+[16:13:41] [DEBUG]   Setting bullet color to: Cyan
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerExit - collision ended
+[16:13:41] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:41] [DEBUG]   Spawning component: Rigidbody
+[16:13:41] [DEBUG]   Spawning component: CircleCollider
+[16:13:41] [DEBUG]   Spawning component: Sprite
+[16:13:41] [DEBUG]   Spawning component: Bullet
+[16:13:41] [DEBUG]   Spawning component: Transform
+[16:13:41] [INFO]    Spawned prefab with name'Bullet (5)' at -18.8941, -75.7522
+[16:13:41] [DEBUG]   Setting bullet color to: Blue
+[16:13:41] [DEBUG]   OnTriggerEnter - collision started
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:41] [DEBUG]   OnTriggerExit - collision ended
+[16:13:42] [DEBUG]   OnTriggerEnter - collision started
+[16:13:42] [DEBUG]   Setting bullet color to: Magenta
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerExit - collision ended
+[16:13:42] [DEBUG]   OnTriggerEnter - collision started
+[16:13:42] [DEBUG]   Setting bullet color to: Cyan
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:42] [DEBUG]   Spawning component: Rigidbody
+[16:13:42] [DEBUG]   Spawning component: CircleCollider
+[16:13:42] [DEBUG]   Spawning component: Sprite
+[16:13:42] [DEBUG]   Spawning component: Bullet
+[16:13:42] [DEBUG]   Spawning component: Transform
+[16:13:42] [INFO]    Spawned prefab with name'Bullet (1)' at -19.5773, 97.2472
+[16:13:42] [DEBUG]   Setting bullet color to: Blue
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerEnter - collision started
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerExit - collision ended
+[16:13:42] [DEBUG]   OnTriggerExit - collision ended
+[16:13:42] [DEBUG]   OnTriggerEnter - collision started
+[16:13:42] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:42] [DEBUG]   Spawning component: Rigidbody
+[16:13:42] [DEBUG]   Spawning component: CircleCollider
+[16:13:42] [DEBUG]   Spawning component: Sprite
+[16:13:42] [DEBUG]   Spawning component: Bullet
+[16:13:42] [DEBUG]   Spawning component: Transform
+[16:13:42] [INFO]    Spawned prefab with name'Bullet (2)' at 143.376, 68.2272
+[16:13:42] [DEBUG]   Setting bullet color to: Blue
+[16:13:42] [DEBUG]   OnTriggerEnter - collision started
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:42] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:43] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:43] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:43] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:43] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:43] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [WARNING] Texture not found: Assets\Textures\editor_entity.png
+[16:13:43] [DEBUG]   Spawning component: Rigidbody
+[16:13:43] [DEBUG]   Spawning component: CircleCollider
+[16:13:43] [DEBUG]   Spawning component: Sprite
+[16:13:43] [DEBUG]   Spawning component: Bullet
+[16:13:43] [DEBUG]   Spawning component: Transform
+[16:13:43] [INFO]    Spawned prefab with name'Bullet (5)' at 208.148, -50.3083
+[16:13:43] [DEBUG]   Setting bullet color to: Blue
+[16:13:43] [DEBUG]   OnTriggerEnter - collision started
+[16:13:43] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:43] [DEBUG]   OnTriggerStay - collision continuous
+[16:13:43] [DEBUG]   OnTriggerEnter - collision started
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:43] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:44] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:45] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:46] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:47] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended
+[16:13:48] [DEBUG]   OnTriggerExit - collision ended

@@ -1,5 +1,5 @@
 #include "ToolbarDialog.h"
-#include "HotReloading/ScriptCompiler.h"
+#include "HotReloading/include/ScriptCompiler.h"
 #include "imgui.h"
 #include "ColorPalletes.h"
 #include "SceneManager.h"
@@ -108,6 +108,8 @@ void ToolbarDialog::Draw()
 	{
 		Engine::get().RequestScriptRecompile();
 	}
+    if (ImGui::Button("Export", ImVec2(80, 28)))
+        EventSystem::get().Fire(OpenExportDialogEvent{});
 	ImGui::End();
 }
 

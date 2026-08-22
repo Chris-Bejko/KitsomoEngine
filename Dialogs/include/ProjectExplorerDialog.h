@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Dialog.h"
+
 #include <filesystem>
 #include <string>
 
@@ -14,11 +15,15 @@ public:
     void Close() override;
 
 private:
-    std::filesystem::path projectExplorerDirectory;
-    bool showNewProjectDialog = false;
-    std::string newProjectNameBuffer = "MyProject";
-
+    void DrawToolbar();
     void DrawProjectCreationPopup();
     void DrawAssets();
     void DrawActions();
+    void DrawUnknownFile(
+        const std::filesystem::path& path);
+
+    bool showNewProjectDialog = false;
+
+    std::string newProjectNameBuffer =
+        "MyProject";
 };

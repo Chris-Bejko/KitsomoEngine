@@ -1,0 +1,47 @@
+[
+  {
+    "components": [
+      {
+        "fields": {
+          "colorString": "Magenta"
+        },
+        "guid": "",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "collisionTag": "floor",
+          "hitbox.height": 123.95291137695313,
+          "hitbox.left": 0.5803680419921875,
+          "hitbox.top": 0.333343505859375,
+          "hitbox.width": 123.67306518554688,
+          "isTrigger": true
+        },
+        "guid": "",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "renderOrder": 0,
+          "textureID": "square"
+        },
+        "guid": "",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "position.x": 197.8181915283203,
+          "position.y": -150.42437744140625,
+          "rotation": 0.0,
+          "scale.x": 0.25,
+          "scale.y": 0.25
+        },
+        "guid": "",
+        "type": "Transform"
+      }
+    ],
+    "name": "Floor Square",
+    "parent": ""
+  }
+]

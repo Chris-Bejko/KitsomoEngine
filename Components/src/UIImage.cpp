@@ -30,21 +30,19 @@ bool UIImage::Init()
 
 void UIImage::UpdateSprite()
 {
-    const std::string& path = _texture.GetPath();
+    // Texture* texture = GetTextureReference();
 
-    if (path.empty())
+    if (!_texture.IsLoaded())
     {
+        uiSprite = sf::Sprite();
         uiTexture = nullptr;
         return;
     }
 
-    AssetManager::get().loadTexture(path);
-    uiTexture = AssetManager::get().getTexture(path);
+    uiTexture = _texture.GetTexture();
 
-    if (uiTexture == nullptr)
-        return;
-
-    uiSprite.setTexture(*uiTexture, true);
+    if (uiTexture)
+        uiSprite.setTexture(*uiTexture, true);
 }
 
 void UIImage::draw()

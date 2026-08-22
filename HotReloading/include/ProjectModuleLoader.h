@@ -25,7 +25,7 @@ public:
     bool HasLoadedModule() const;
     const std::vector<std::string> &GetLoadedComponentNames() const;
     void RegisterLoadedComponent(const std::string &name);
-
+    bool LoadCompiledProjectModule(const std::filesystem::path& projectRoot);
 private:
     bool BuildProjectModule(const std::filesystem::path &projectRoot);
     bool LoadCompiledModule(const std::filesystem::path &projectRoot);

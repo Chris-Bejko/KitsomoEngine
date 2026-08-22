@@ -61,8 +61,8 @@ void SerializableScript::Serialize()
     for (auto &[name, field] : componentPtrFields)
         if (*field.ptr)
             field.guidStorage = (*field.ptr)->entity->GetGUID() + "|" + (*field.ptr)->GetGUID();
-    for (auto &[name, texture] : textureFields)
-        textureStrings[name] = texture->GetPath();
+    for (auto &[name, asset] : assetFields)
+        assetStrings[name] = asset->GetPath();
 }
 
 void SerializableScript::InitSerializedFields(ReadableSerializableVariableMap map)
@@ -137,13 +137,12 @@ void SerializableScript::InitSerializedFields(ReadableSerializableVariableMap ma
                     vectorStrings[fieldName] = map.stringFields[fieldName];
             }
             break;
-
-        case texture_Type:
+        case file_Type:
             if (map.stringFields.count(fieldName))
             {
                 *reinterpret_cast<std::string *>(var.data) = map.stringFields[fieldName];
-                if (textureFields.count(fieldName))
-                    textureFields[fieldName]->SetPath(map.stringFields[fieldName]);
+                if (assetFields.count(fieldName))
+                    assetFields[fieldName]->SetPath(map.stringFields[fieldName]);
             }
             break;
         }
@@ -152,40 +151,105 @@ void SerializableScript::InitSerializedFields(ReadableSerializableVariableMap ma
 
 void SerializableScript::ResolvePointers()
 {
+    auto *manager = Engine::get().GetManager();
+    std::vector<Entity *> allEntities;
+
+    for (auto &e : manager->GetEntities())
+        allEntities.push_back(e.get());
+
+    for (auto &e : manager->GetUnvalidatedEntities())
+        allEntities.push_back(e.get());
+        
     for (auto &[name, field] : entityPtrFields)
     {
         if (field.guidStorage.empty())
+        {
+            LOG_DEBUG("Resolve EntityRef: ", name, " | GUID=<empty> | SKIPPED");
             continue;
-        for (auto &e : Engine::get().GetManager()->GetEntities())
+        }
+
+        bool found = false;
+
+        for (auto &e : allEntities)
+        {
             if (e->GetGUID() == field.guidStorage)
             {
-                *field.ptr = e.get();
+                *field.ptr = e;
+                found = true;
+                LOG_DEBUG("Resolve EntityRef: ", name, " | GUID=", field.guidStorage, " | entity=", e->GetName(), " | OK");
                 break;
             }
+        }
+
+        if (!found)
+        {
+            *field.ptr = nullptr;
+            LOG_WARNING("Resolve EntityRef: ", name, " | GUID=", field.guidStorage, " | NOT FOUND");
+        }
     }
 
     for (auto &[name, field] : componentPtrFields)
     {
         if (field.guidStorage.empty())
+        {
+            LOG_DEBUG("Resolve ComponentRef: ", name, " | GUID=<empty> | SKIPPED");
             continue;
+        }
+
         auto pipe = field.guidStorage.find('|');
+
         if (pipe == std::string::npos)
+        {
+            LOG_WARNING("Resolve ComponentRef: ", name, " | GUID=", field.guidStorage, " | INVALID FORMAT");
             continue;
+        }
+
         std::string entityGUID = field.guidStorage.substr(0, pipe);
         std::string compGUID = field.guidStorage.substr(pipe + 1);
-        for (auto &e : Engine::get().GetManager()->GetEntities())
+
+        bool found = false;
+
+        for (auto &e : allEntities)
         {
             if (e->GetGUID() != entityGUID)
                 continue;
+
+            std::vector<Component *> allComponents;
+
             for (auto &comp : e->GetComponents())
+                allComponents.push_back(comp.get());
+
+            for (auto &comp : e->GetUnvalidatedComponents())
+                allComponents.push_back(comp.get());
+
+            LOG_DEBUG("Entity found for ComponentRef: ", name, " | Entity=", entityGUID, " | entity=", e->GetName());
+            for (auto &comp : allComponents)
+            {
+                LOG_DEBUG("RESOLVE SEARCH: entity=", e->GetName(), " | component=", typeid(*comp).name(), " | GUID=", comp->GetGUID(), " | lookingFor=", compGUID);
                 if (comp->GetGUID() == compGUID)
                 {
-                    *field.ptr = comp.get();
+                    *field.ptr = comp;
+                    found = true;
+
+                    LOG_DEBUG("Resolve ComponentRef: ", name, " | Entity=", entityGUID, " | Component=", compGUID, " | entity=", e->GetName(), " | OK");
                     break;
                 }
+            }
+
+            if (found)
+                break;
+        }
+
+        if (!found)
+        {
+            *field.ptr = nullptr;
+            LOG_WARNING("Resolve ComponentRef: ", name, " | Entity=", entityGUID, " | Component=", compGUID, " | NOT FOUND");
         }
     }
 
     for (auto &[name, entry] : vectorPtrFields)
+    {
         entry.resolve(vectorStrings[name]);
+        LOG_DEBUG("Resolve VectorPtr: ", name, " | entries=", vectorStrings[name].size(), " | RESOLVED");
+    }
 }

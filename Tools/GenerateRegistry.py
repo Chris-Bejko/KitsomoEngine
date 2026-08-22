@@ -38,7 +38,8 @@ def find_serializable_scripts(folder: Path):
 def generate_registry(scripts):
     lines = []
     lines.append("// AUTO-GENERATED - DO NOT EDIT")
-    lines.append('#include "HotReloading/ProjectModuleAPI.h"')
+    lines.append('#include "HotReloading/include/ProjectComponentRegistration.h"')
+    lines.append('#include "HotReloading/include/ProjectModuleAPI.h"')
     lines.append("")
 
     for script in scripts:

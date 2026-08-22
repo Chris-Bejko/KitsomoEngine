@@ -33,41 +33,9 @@ bool Sprite::Init()
     Field("ColorID", ColorID);
     Field("renderOrder", renderOrder);
 
-    RefreshTexture();
     RefreshColor();
 
     return true;
-}
-
-void Sprite::RefreshTexture()
-{
-    const std::string& path = _texture.GetPath();
-
-    if (path.empty())
-    {
-        texture = nullptr;
-        width = 0;
-        height = 0;
-        lastTexturePath.clear();
-        return;
-    }
-
-    if (path == lastTexturePath && texture != nullptr)
-        return;
-
-    AssetManager::get().loadTexture(path);
-
-    texture = AssetManager::get().getTexture(path);
-
-    sprite.setTexture(*texture);
-
-    width = static_cast<int>(texture->getSize().x);
-    height = static_cast<int>(texture->getSize().y);
-
-    sprite.setOrigin(
-        static_cast<sf::Vector2f>(texture->getSize()) / 2.f);
-
-    lastTexturePath = path;
 }
 
 void Sprite::RefreshColor()
@@ -86,11 +54,7 @@ void Sprite::RefreshColor()
 void Sprite::OnFieldChanged(
     const std::string &fieldName)
 {
-    if (fieldName == "Texture")
-    {
-        RefreshTexture();
-    }
-    else if (fieldName == "ColorID")
+    if (fieldName == "ColorID")
     {
         RefreshColor();
     }
@@ -103,7 +67,7 @@ void Sprite::draw()
 
 void Sprite::update(float dt)
 {
-    RefreshTexture();
+    UpdateSprite();
     RefreshColor();
 
     if (entity == nullptr)
@@ -185,7 +149,30 @@ void Sprite::SetColor(Color color)
 
     lastColorID = ColorID;
 }
+void Sprite::UpdateSprite()
+{
+    if (!_texture.IsLoaded())
+    {
+        sprite = sf::Sprite();
+        return;
+    }
 
+    sf::Texture* tex = _texture.GetTexture();
+
+    if (!tex)
+    {
+        sprite = sf::Sprite();
+        return;
+    }
+
+    
+    width = static_cast<int>(tex->getSize().x);
+    height = static_cast<int>(tex->getSize().y);
+
+    sprite.setOrigin(
+        static_cast<sf::Vector2f>(tex->getSize()) / 2.f);
+    sprite.setTexture(*tex, true);
+}
 void Sprite::SetOrigin(
     const Vector2F &origin)
 {

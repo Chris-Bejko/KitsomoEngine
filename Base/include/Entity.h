@@ -114,18 +114,14 @@ public:
 
 		comp->SetGUID(componentGuid);
 
-
 		if (comp->Init())
 		{
-			const ComponentID id =
-				getComponentTypeID<T>();
+
+			const ComponentID id = getComponentTypeID<T>();
 
 			if (id == INVALID_COMPONENT_ID)
 			{
-				LOG_ERROR(
-					"Component has no registered ID: ",
-					typeid(T).name()
-				);
+				LOG_ERROR("Component has no registered ID: ", typeid(T).name());
 
 				return *static_cast<T*>(nullptr);
 			}
@@ -133,20 +129,15 @@ public:
 
 			if (id >= maxComponents)
 			{
-				LOG_ERROR(
-					"Component ID exceeds ECS limit: ",
-					id
-				);
+				LOG_ERROR("Component ID exceeds ECS limit: ", id);
 
 				return *static_cast<T*>(nullptr);
 			}
 
 
-			componentsList[id] =
-				comp;
+			componentsList[id] = comp;
 
-			componentsBitset[id] =
-				true;
+			componentsBitset[id] = true;
 
 			return *comp;
 		}
@@ -160,12 +151,9 @@ public:
 		const ComponentID id =
 			getComponentTypeID<T>();
 
-		if (id == INVALID_COMPONENT_ID ||
-			id >= maxComponents)
+		if (id == INVALID_COMPONENT_ID || id >= maxComponents)
 		{
-			LOG_ERROR(
-				"Attempted to GetComponent with invalid ID"
-			);
+			LOG_ERROR("Attempted to GetComponent with invalid ID");
 
 			return *static_cast<T*>(nullptr);
 		}
@@ -307,6 +295,7 @@ public:
 	void InitializeComponentFields(const std::vector<SerializableComponent> &serializedComps);
 
 	const std::vector<std::unique_ptr<Component>> &GetComponents() { return components; }
+	const std::vector<std::unique_ptr<Component>> &GetUnvalidatedComponents() { return to_Add; }
 	void SetParent(Entity *newParent);
 	void AddChild(Entity *child);
 	void RemoveChild(Entity *child);
