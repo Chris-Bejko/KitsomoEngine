@@ -281,8 +281,7 @@ public:
 
 	void DisplayAvailableComponents();
 
-	std::vector<SerializableComponent> GetAllComponentVariables();
-
+	std::vector<SerializedComponent> GetSerializedComponents();
 	bool DeletePressed();
 
 	// Component factory - add component by name string
@@ -311,19 +310,6 @@ public:
 			return;
 		m_guid = guid;
 	}
-
-	void DrawVectorField(SerializableScript *script,
-						 const char *fieldName,
-						 const std::string &fieldId);
-
-	std::string DefaultValue(int fieldType);
-
-	std::string DrawVectorElement(const std::string &current, int fieldType, const std::string &elemId);
-
-	void DrawCompRefField(std::string &packedStorage, const std::string &typeHint, const std::string &fieldId);
-
-	void DrawEntityRefField(std::string &guidStorage, const std::string &fieldId);
-	void DrawTextureField(std::string& value, const std::string& fieldId);
 
 	void ForceNullParent() { parent = nullptr; }
 

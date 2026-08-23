@@ -420,7 +420,7 @@ std::vector<SerializableEntity> EntityManager::SerializeEntities()
 	{
 		SerializableEntity ser;
 		ser.entityName = e->GetName();
-		ser.components = e->GetAllComponentVariables();
+		ser.components = e->GetSerializedComponents();
 		entitiesSerialized.push_back(ser);
 	}
 

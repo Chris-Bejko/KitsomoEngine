@@ -95,7 +95,6 @@ Vector2F Transform::GetWorldPosition()
 {
 	try
 	{
-
 		if (parent == nullptr || parent->entity == nullptr)
 			return position;
 

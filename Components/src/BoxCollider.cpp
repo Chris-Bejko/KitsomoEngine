@@ -242,7 +242,6 @@ void BoxCollider::UpdateEditMode()
 
         // Update visual
         SetUpColliderVisuals();
-        Serialize();
     }
 }
 

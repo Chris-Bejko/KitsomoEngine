@@ -140,6 +140,5 @@ void CircleCollider::UpdateEditMode()
         radius = std::max(1.f, std::sqrt(d.x * d.x + d.y * d.y));
         colliderVisual.setRadius(radius);
         colliderVisual.setOrigin(radius, radius);
-        Serialize();
     }
 }

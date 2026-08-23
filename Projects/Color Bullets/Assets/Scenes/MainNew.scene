@@ -2,17 +2,12 @@
   {
     "components": [
       {
-        "fields": null,
-        "guid": "f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
-        "type": "Camera"
-      },
-      {
         "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "0.000000",
+          "position.y": "0.000000",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "1b373b78-9145-4ba3-9771-8c62f0606542",
         "type": "Transform"
@@ -29,7 +24,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 29,
+          "fontSize": "29",
           "text": "Main Menu"
         },
         "guid": "4d8b18be-e9e0-4875-94bb-7ef77e189c91",
@@ -46,11 +41,11 @@
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 341.004638671875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "576.953674",
+          "position.y": "341.004639",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "4566288d-9e7e-444c-bd02-011438fb9307",
         "type": "Transform"
@@ -64,7 +59,7 @@
     "components": [
       {
         "fields": {
-          "interactable": true,
+          "interactable": "1",
           "targetText": ""
         },
         "guid": "62853400-36ed-4dde-8322-80aaecaeeca8",
@@ -82,7 +77,7 @@
       {
         "fields": {
           "Texture": "",
-          "alpha": 1.0,
+          "alpha": "1.000000",
           "color": "Red"
         },
         "guid": "942d2439-a153-4253-b119-09552e18aeae",
@@ -90,11 +85,11 @@
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 341.004638671875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "576.953674",
+          "position.y": "341.004639",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "3df421dd-ff86-44de-a3ab-b572125d51be",
         "type": "Transform"
@@ -111,7 +106,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 31,
+          "fontSize": "31",
           "text": "Play again"
         },
         "guid": "9cbacc90-f925-4440-8374-79b0b2ee96df",
@@ -128,11 +123,11 @@
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 247.57870483398438,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "576.953674",
+          "position.y": "247.578705",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "dbbc983b-ebfe-42be-ab0d-724268af7a8d",
         "type": "Transform"
@@ -147,7 +142,7 @@
       {
         "fields": {
           "Texture": "",
-          "alpha": 1.0,
+          "alpha": "1.000000",
           "color": "Red"
         },
         "guid": "ca124266-0eca-4cae-9c0b-1e8e68954443",
@@ -164,19 +159,19 @@
       },
       {
         "fields": {
-          "interactable": true,
-          "targetText": "e60e55d7-35a7-4542-89b3-b20174fc113d"
+          "interactable": "1",
+          "targetText": ""
         },
         "guid": "d9bb0149-04ac-40d7-8f6a-572e60623efe",
         "type": "UIButton"
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 247.57870483398438,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "576.953674",
+          "position.y": "247.578705",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "ed3303b4-2270-45c1-9331-e939d96960de",
         "type": "Transform"
@@ -193,7 +188,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 33,
+          "fontSize": "33",
           "text": "Score: "
         },
         "guid": "c530e9b1-a3fb-446f-b3bb-d5cd005630ec",
@@ -201,7 +196,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "-354.000183|-21.754211",
+          "anchorOffset": "-658.666809|-372.120911",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -210,11 +205,11 @@
       },
       {
         "fields": {
-          "position.x": 582.5591430664063,
-          "position.y": 460.8194580078125,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "297.921509",
+          "position.y": "133.486115",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "76b151fb-0933-4123-a8bb-d352eec58b18",
         "type": "Transform"
@@ -231,7 +226,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 33,
+          "fontSize": "33",
           "text": "You Lost :("
         },
         "guid": "ed74bb4e-cb2e-4a14-a736-5ecb5280003e",
@@ -239,7 +234,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "-366.666687|-457.403015",
+          "anchorOffset": "-310.000061|-457.403015",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -248,11 +243,11 @@
       },
       {
         "fields": {
-          "position.x": 570.7252807617188,
-          "position.y": 53.81053924560547,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "623.666626",
+          "position.y": "53.810539",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "2eae2f79-205d-411b-abfd-85f0625b6ea4",
         "type": "Transform"
@@ -275,11 +270,11 @@
       },
       {
         "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "0.000000",
+          "position.y": "0.000000",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "188423c4-7c6a-40df-9edc-ff4219c03be1",
         "type": "Transform"
@@ -296,7 +291,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 24,
+          "fontSize": "24",
           "text": "Play now"
         },
         "guid": "6ab118f6-c2d5-48e7-b137-49a0954a6449",
@@ -313,11 +308,11 @@
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 177.1435546875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "576.953674",
+          "position.y": "177.143555",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "dc78abe9-5c39-4332-8b13-d6492c7c41c8",
         "type": "Transform"
@@ -331,8 +326,8 @@
     "components": [
       {
         "fields": {
-          "interactable": true,
-          "targetText": "d7cdbc2d-14f8-4c5a-93ba-40d51861f9e4"
+          "interactable": "1",
+          "targetText": ""
         },
         "guid": "bcde682b-d9b5-46dd-a439-c350617c00e6",
         "type": "UIButton"
@@ -349,7 +344,7 @@
       {
         "fields": {
           "Texture": "",
-          "alpha": 1.0,
+          "alpha": "1.000000",
           "color": "Red"
         },
         "guid": "57abc700-e9e5-4653-b858-e0d829a9801c",
@@ -357,11 +352,11 @@
       },
       {
         "fields": {
-          "position.x": 576.9536743164063,
-          "position.y": 177.1435546875,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "576.953674",
+          "position.y": "177.143555",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "38217d89-f792-4215-b48f-10f32eea4e05",
         "type": "Transform"
@@ -378,7 +373,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 33,
+          "fontSize": "33",
           "text": "Color Bullets REMAKEEEE"
         },
         "guid": "1fcd9e17-7475-40d2-a996-923520dc1897",
@@ -386,7 +381,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "-362.000000|-457.403381",
+          "anchorOffset": "-310.000000|-456.689789",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -395,11 +390,11 @@
       },
       {
         "fields": {
-          "position.x": 575.085205078125,
-          "position.y": 53.81017303466797,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "623.666687",
+          "position.y": "54.476860",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "a8d4ad8f-c611-45a3-8ee3-fdeb35e374b6",
         "type": "Transform"
@@ -422,11 +417,11 @@
       },
       {
         "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "0.000000",
+          "position.y": "0.000000",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "583738e8-241e-4698-bcc3-f51c24654e36",
         "type": "Transform"
@@ -447,12 +442,12 @@
       },
       {
         "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
+          "collisionTag": "Enter tag",
+          "hitbox.height": "0.000000",
+          "hitbox.left": "0.000000",
+          "hitbox.top": "0.000000",
+          "hitbox.width": "0.000000",
+          "isTrigger": "0"
         },
         "guid": "d85b038d-cfa0-4816-aa39-68e34d0b3a61",
         "type": "BoxCollider"
@@ -461,18 +456,18 @@
         "fields": {
           "ColorID": "Magenta",
           "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
-          "renderOrder": 0
+          "renderOrder": "0"
         },
         "guid": "5507e72d-f3c7-4b6c-ac8e-9c5cdf7d7e1d",
         "type": "Sprite"
       },
       {
         "fields": {
-          "position.x": -1005.1074829101563,
-          "position.y": -814.217041015625,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
+          "position.x": "-1005.107483",
+          "position.y": "-814.217041",
+          "rotation": "0.000000",
+          "scale.x": "0.250000",
+          "scale.y": "0.250000"
         },
         "guid": "28e5337d-7573-4e67-8580-0cdce495c76d",
         "type": "Transform"
@@ -488,19 +483,19 @@
         "fields": {
           "ColorID": "Magenta",
           "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
-          "renderOrder": 0
+          "renderOrder": "0"
         },
         "guid": "8c62c7fe-bdcb-41f9-b111-a0d1653e7ce8",
         "type": "Sprite"
       },
       {
         "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
+          "collisionTag": "Enter tag",
+          "hitbox.height": "0.000000",
+          "hitbox.left": "0.000000",
+          "hitbox.top": "0.000000",
+          "hitbox.width": "0.000000",
+          "isTrigger": "0"
         },
         "guid": "55ca71ff-5f86-463f-b427-4f49ee16ebd9",
         "type": "BoxCollider"
@@ -514,11 +509,11 @@
       },
       {
         "fields": {
-          "position.x": 403.7344055175781,
-          "position.y": -199.8209228515625,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
+          "position.x": "403.734406",
+          "position.y": "-199.820923",
+          "rotation": "0.000000",
+          "scale.x": "0.250000",
+          "scale.y": "0.250000"
         },
         "guid": "18513d7a-d5c7-4ad6-b640-d3bda9009851",
         "type": "Transform"
@@ -539,12 +534,12 @@
       },
       {
         "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
+          "collisionTag": "Enter tag",
+          "hitbox.height": "0.000000",
+          "hitbox.left": "0.000000",
+          "hitbox.top": "0.000000",
+          "hitbox.width": "0.000000",
+          "isTrigger": "0"
         },
         "guid": "a9ac476c-d499-4b06-9a27-0039ff7de1e2",
         "type": "BoxCollider"
@@ -553,18 +548,18 @@
         "fields": {
           "ColorID": "Magenta",
           "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
-          "renderOrder": 0
+          "renderOrder": "0"
         },
         "guid": "3926b45a-f729-4274-adbe-1bea51c3ad2f",
         "type": "Sprite"
       },
       {
         "fields": {
-          "position.x": 283.2917175292969,
-          "position.y": -317.5133361816406,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
+          "position.x": "283.291718",
+          "position.y": "-317.513336",
+          "rotation": "0.000000",
+          "scale.x": "0.250000",
+          "scale.y": "0.250000"
         },
         "guid": "c9a1cf46-0679-43c5-a680-fd8c96302624",
         "type": "Transform"
@@ -580,19 +575,19 @@
         "fields": {
           "ColorID": "Magenta",
           "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
-          "renderOrder": 0
+          "renderOrder": "0"
         },
         "guid": "b15818af-1928-45fc-98ec-dd0259dc5ad4",
         "type": "Sprite"
       },
       {
         "fields": {
-          "collisionTag": "floor",
-          "hitbox.height": 123.95291137695313,
-          "hitbox.left": 0.5803680419921875,
-          "hitbox.top": 0.333343505859375,
-          "hitbox.width": 123.67306518554688,
-          "isTrigger": true
+          "collisionTag": "Enter tag",
+          "hitbox.height": "0.000000",
+          "hitbox.left": "0.000000",
+          "hitbox.top": "0.000000",
+          "hitbox.width": "0.000000",
+          "isTrigger": "0"
         },
         "guid": "7094b86e-ca5b-429f-bc2b-c426e80fa1ef",
         "type": "BoxCollider"
@@ -606,11 +601,11 @@
       },
       {
         "fields": {
-          "position.x": 197.8181915283203,
-          "position.y": -150.42437744140625,
-          "rotation": 0.0,
-          "scale.x": 0.25,
-          "scale.y": 0.25
+          "position.x": "197.818192",
+          "position.y": "-150.424377",
+          "rotation": "0.000000",
+          "scale.x": "0.250000",
+          "scale.y": "0.250000"
         },
         "guid": "9f62bd39-8a69-452d-aeaf-8bddef6c2b7b",
         "type": "Transform"
@@ -625,36 +620,36 @@
       {
         "fields": {
           "AudioFile": "",
-          "isLooping": false,
-          "pitch": 1.0,
-          "volume": 80.0
+          "isLooping": "0",
+          "pitch": "1.000000",
+          "volume": "80.000000"
         },
         "guid": "685878f4-3375-4477-ac0a-71f28eeb5510",
         "type": "AudioSource"
       },
       {
         "fields": {
-          "bounciness": 0.0,
-          "friction": 0.5,
-          "gravityScale": 1.0,
-          "isKinematic": true,
-          "isStatic": false,
-          "mass": 1.0,
-          "useGravity": false
+          "bounciness": "0.000000",
+          "friction": "0.500000",
+          "gravityScale": "1.000000",
+          "isKinematic": "1",
+          "isStatic": "0",
+          "mass": "1.000000",
+          "useGravity": "0"
         },
         "guid": "2202bae2-d4aa-4a30-9c48-533f626f3da4",
         "type": "Rigidbody"
       },
       {
         "fields": {
-          "AudioSource": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|685878f4-3375-4477-ac0a-71f28eeb5510",
-          "Camera": "c318f141-2b23-4586-97e2-9f43420fc842|f1fc96a0-2a9a-4e9f-b551-8a71a8ebd417",
-          "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|9b4469c3-bccf-484f-9d05-56a92005b598",
+          "AudioSource": "",
+          "Camera": "",
+          "Sprite": "",
           "bulletPrefab": "Bullet",
-          "cooldown": 0.5,
+          "cooldown": "0.500000",
           "floorTouchSound": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Audio/powerUp.wav",
           "lastColorString": "",
-          "moveSpeed": 350.0,
+          "moveSpeed": "350.000000",
           "shootSound": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Audio/explosion.wav"
         },
         "guid": "032ea708-4efb-45b6-a06b-02f7b0b890d4",
@@ -664,27 +659,27 @@
         "fields": {
           "ColorID": "Red",
           "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
-          "renderOrder": 2
+          "renderOrder": "2"
         },
         "guid": "9b4469c3-bccf-484f-9d05-56a92005b598",
         "type": "Sprite"
       },
       {
         "fields": {
-          "collisionTag": "player",
-          "isTrigger": true,
-          "vertices": "2.791113|-499.497528;-535.390930|471.992981;570.063293|471.992981"
+          "collisionTag": "default",
+          "isTrigger": "0",
+          "vertices": "0.000000|-500.000000;563.164795|480.368774;-583.379517|513.451355"
         },
         "guid": "1eea6922-d86d-4928-9274-b78f51618efc",
         "type": "PolygonCollider"
       },
       {
         "fields": {
-          "position.x": -338.666748046875,
-          "position.y": -509.6548767089844,
-          "rotation": 0.226837158203125,
-          "scale.x": 0.05000000074505806,
-          "scale.y": 0.05000000074505806
+          "position.x": "-338.666748",
+          "position.y": "-509.654877",
+          "rotation": "0.226837",
+          "scale.x": "0.050000",
+          "scale.y": "0.050000"
         },
         "guid": "83e3d555-0e00-468f-bf73-7dada7ec8190",
         "type": "Transform"
@@ -707,11 +702,11 @@
       },
       {
         "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "0.000000",
+          "position.y": "0.000000",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "96f2654d-9e81-450d-873e-7a1d43e3938a",
         "type": "Transform"
@@ -725,30 +720,30 @@
     "components": [
       {
         "fields": {
-          "GameState": 0,
-          "endUI": "83270db5-fa83-407e-9506-bd1d99b422b5",
-          "environment": "c2360255-75bf-4a82-ba46-fea492927809",
-          "finalScore": "e434ef22-8d31-4caa-b9fc-11b1067ffb6c|c530e9b1-a3fb-446f-b3bb-d5cd005630ec",
-          "highScore": 0,
-          "highScoreText": "78029789-044a-4d3b-8a8f-6d8c5e5f7627|2e51edb1-f7d7-442f-9c0c-1e10fb4b3342",
-          "mainMenuButton": "4399b10c-367d-491a-91b2-2fee063e5bfb|62853400-36ed-4dde-8322-80aaecaeeca8",
-          "playAgainButton": "197d8213-1d1a-483d-a0ac-f9b4e05080ce|d9bb0149-04ac-40d7-8f6a-572e60623efe",
-          "playButton": "4a1cf809-e074-4d9f-873a-53dd9428ed04|bcde682b-d9b5-46dd-a439-c350617c00e6",
-          "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
-          "score": 3,
-          "scoreText": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f|abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
-          "startUI": "ea9d9612-2219-44ad-b406-748ab473d088"
+          "GameState": "0",
+          "endUI": "",
+          "environment": "",
+          "finalScore": "",
+          "highScore": "0",
+          "highScoreText": "",
+          "mainMenuButton": "",
+          "playAgainButton": "",
+          "playButton": "",
+          "player": "",
+          "score": "3",
+          "scoreText": "",
+          "startUI": ""
         },
         "guid": "968f3aff-082c-40eb-b7ba-697b2e1084db",
         "type": "GameManager"
       },
       {
         "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "0.000000",
+          "position.y": "0.000000",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "7328081e-f048-4cb8-a7c0-14ea69c2fb00",
         "type": "Transform"
@@ -774,7 +769,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 30,
+          "fontSize": "30",
           "text": "Score: {0}"
         },
         "guid": "abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
@@ -782,11 +777,11 @@
       },
       {
         "fields": {
-          "position.x": 35.08317947387695,
-          "position.y": 153.48611450195313,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "35.083179",
+          "position.y": "153.486115",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "a5f4ecdc-a993-4f7a-aac1-84c0db5f82f7",
         "type": "Transform"
@@ -800,22 +795,22 @@
     "components": [
       {
         "fields": {
-          "Environment": "c2360255-75bf-4a82-ba46-fea492927809",
-          "GameManager": "c654de34-f964-48af-8341-8dcea5cd045c|968f3aff-082c-40eb-b7ba-697b2e1084db",
+          "Environment": "",
+          "GameManager": "",
           "enemyPrefab": "Enemy",
-          "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
-          "spawnInterval": 3.0
+          "player": "",
+          "spawnInterval": "3.000000"
         },
         "guid": "cc20a329-bc90-45d4-8ac7-e3f39d96a7d9",
         "type": "EnemySpawner"
       },
       {
         "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "0.000000",
+          "position.y": "0.000000",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "6365195c-0fcc-49e4-b774-9b8739bd7a3f",
         "type": "Transform"
@@ -829,11 +824,11 @@
     "components": [
       {
         "fields": {
-          "position.x": 0.0,
-          "position.y": 0.0,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "0.000000",
+          "position.y": "0.000000",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "28c7bfe2-6276-45de-8f3b-2133fea1040e",
         "type": "Transform"
@@ -859,7 +854,7 @@
           "alignment": "Center",
           "color": "White",
           "fontId": "dmPrison",
-          "fontSize": 33,
+          "fontSize": "33",
           "text": "High Score:"
         },
         "guid": "2e51edb1-f7d7-442f-9c0c-1e10fb4b3342",
@@ -867,11 +862,11 @@
       },
       {
         "fields": {
-          "position.x": 957.5086669921875,
-          "position.y": 515.7638549804688,
-          "rotation": 0.0,
-          "scale.x": 1.0,
-          "scale.y": 1.0
+          "position.x": "957.508667",
+          "position.y": "515.763855",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
         },
         "guid": "43f815a9-b4c3-4407-8e9d-ffaca23dfb6b",
         "type": "Transform"

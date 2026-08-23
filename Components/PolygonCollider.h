@@ -23,7 +23,6 @@ public:
     std::vector<Vector2F> &GetLocalVertices() { return vertices; }
 
     void DrawEditorButton() override;
-    void InitSerializedFields(ReadableSerializableVariableMap map) override;
     void OnFieldChanged(const std::string &fieldName) override
     {
         if (fieldName == "vertices")

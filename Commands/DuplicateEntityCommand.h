@@ -18,28 +18,36 @@ public:
             return;
 
         std::string newName = Engine::get().GetManager()->GetUniqueName(originalEntity->GetName());
-        auto components = originalEntity->GetAllComponentVariables();
-
         duplicatedEntity = new Entity(newName);
 
-        for (const auto &comp : components)
+        for (const auto &originalComponent : originalEntity->GetComponents())
         {
-            if (comp.componentName == "Transform")
+            if (!originalComponent || typeid(*originalComponent).name() == typeid(Transform).name())
                 continue;
-            duplicatedEntity->AddComponentByName(comp.componentName);
+
+            SerializedComponent serialized;
+            std::string componentName = typeid(*originalComponent).name();
+            componentName = std::regex_replace(componentName, std::regex("class "), "");
+            serialized.SetType(componentName);
+
+            for (const auto &field : originalComponent->GetSerializedFields())
+            {
+                if (field)
+                    serialized.AddSerializedField(field->GetName(), field->Serialize());
+            }
+
+            auto it = ComponentRegistry::get().GetAll().find(componentName);
+            if (it != ComponentRegistry::get().GetAll().end())
+                it->second.factory(duplicatedEntity, serialized);
         }
 
-        duplicatedEntity->ValidateAddedComponents();
-        duplicatedEntity->InitializeComponentFields(components);
-
-        // Place at mouse position
         auto mousePixel = sf::Mouse::getPosition(Engine::get().GetWindow());
         auto mouseWorld = Engine::get().GetWindow().mapPixelToCoords(mousePixel);
+
         if (duplicatedEntity->HasComponent<Transform>())
             duplicatedEntity->GetComponent<Transform>().position = Vector2F(mouseWorld.x, mouseWorld.y);
 
         Engine::get().GetManager()->ClearInspector();
-
         Engine::get().Spawn(duplicatedEntity);
         Engine::get().GetManager()->SetSelectedEntity(duplicatedEntity);
     }

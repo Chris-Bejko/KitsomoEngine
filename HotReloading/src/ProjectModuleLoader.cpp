@@ -12,16 +12,11 @@
 #include "Engine.h"
 #include <Windows.h>
 
-
 namespace
 {
     ProjectModuleLoader *g_activeModuleLoader = nullptr;
 
-    void RegisterProjectComponentFromModule(
-        const char *name,
-        bool allowsMultiple,
-        ComponentAddDefaultFn addDefault,
-        ComponentApplySerializedFn applySerialized)
+    void RegisterProjectComponentFromModule(const char *name, bool allowsMultiple, ComponentAddDefaultFn addDefault, ComponentApplySerializedFn factory)
     {
         LOG_INFO(
             "DLL requested registration: ",
@@ -34,19 +29,9 @@ namespace
             return;
         }
 
-        const bool registered =
-            ComponentRegistry::get().RegisterExternal(
-                name,
-                allowsMultiple,
-                addDefault,
-                applySerialized,
-                true);
+        const bool registered = ComponentRegistry::get().RegisterExternal(name, allowsMultiple, addDefault, factory);
 
-        LOG_INFO(
-            "RegisterExternal result for ",
-            name,
-            ": ",
-            registered ? "SUCCESS" : "FAILED");
+        LOG_INFO("RegisterExternal result for ", name, ": ", registered ? "SUCCESS" : "FAILED");
 
         if (registered)
         {
@@ -79,8 +64,7 @@ ProjectModuleLoader::~ProjectModuleLoader()
 // GameScripts.dll must remain available for rebuilding.
 // ============================================================
 
-bool ProjectModuleLoader::LoadProjectModule(
-    const std::filesystem::path &projectRoot)
+bool ProjectModuleLoader::LoadProjectModule(const std::filesystem::path &projectRoot)
 {
     if (!BuildProjectModule(projectRoot))
     {
@@ -99,61 +83,43 @@ bool ProjectModuleLoader::LoadProjectModule(
 //
 // Simply load the already compiled GameScripts.dll.
 // ============================================================
-bool ProjectModuleLoader::LoadCompiledProjectModule(
-    const std::filesystem::path &projectRoot)
+bool ProjectModuleLoader::LoadCompiledProjectModule(const std::filesystem::path &projectRoot)
 {
     LOG_INFO("DLL 1: LoadCompiledProjectModule BEGIN");
 
-    const std::filesystem::path sourceDll =
-        projectRoot /
-        "build" /
-        "Debug" /
-        "GameScripts.dll";
+    const std::filesystem::path sourceDll = projectRoot / "build" / "Debug" / "GameScripts.dll";
 
-    LOG_INFO(
-        "DLL 2: DLL path = ",
-        sourceDll.string().c_str());
+    LOG_INFO("DLL 2: DLL path = ", sourceDll.string().c_str());
 
     if (!std::filesystem::exists(sourceDll))
     {
-        LOG_ERROR(
-            "DLL 3: GameScripts.dll does not exist");
+        LOG_ERROR("DLL 3: GameScripts.dll does not exist");
 
         return false;
     }
 
     LOG_INFO("DLL 4: Calling LoadLibrary");
 
-    HMODULE loadedModule =
-        LoadLibraryA(
-            sourceDll.string().c_str());
+    HMODULE loadedModule = LoadLibraryA(sourceDll.string().c_str());
 
     if (loadedModule == nullptr)
     {
         const DWORD error = GetLastError();
 
-        LOG_ERROR(
-            "DLL 5: LoadLibrary FAILED. Error = ",
-            std::to_string(error).c_str());
+        LOG_ERROR("DLL 5: LoadLibrary FAILED. Error = ", std::to_string(error).c_str());
 
         return false;
     }
 
     LOG_INFO("DLL 6: LoadLibrary SUCCESS");
 
-    auto registerFn =
-        reinterpret_cast<RegisterProjectComponentsExport>(
-            GetProcAddress(
-                loadedModule,
-                "RegisterProjectComponents"));
+    auto registerFn = reinterpret_cast<RegisterProjectComponentsExport>(GetProcAddress(loadedModule, "RegisterProjectComponents"));
 
     if (registerFn == nullptr)
     {
         const DWORD error = GetLastError();
 
-        LOG_ERROR(
-            "DLL 7: RegisterProjectComponents NOT FOUND. Error = ",
-            std::to_string(error).c_str());
+        LOG_ERROR("DLL 7: RegisterProjectComponents NOT FOUND. Error = ", std::to_string(error).c_str());
 
         FreeLibrary(loadedModule);
 
@@ -190,8 +156,7 @@ bool ProjectModuleLoader::LoadCompiledProjectModule(
 // Load new DLL
 // ============================================================
 
-bool ProjectModuleLoader::RebuildProjectModule(
-    const std::filesystem::path &projectRoot)
+bool ProjectModuleLoader::RebuildProjectModule(const std::filesystem::path &projectRoot)
 {
     // --------------------------------------------------------
     // Build new project DLL
@@ -215,8 +180,7 @@ bool ProjectModuleLoader::RebuildProjectModule(
     // the old project DLL.
     // --------------------------------------------------------
 
-    ComponentRegistry::get()
-        .UnregisterProjectComponents();
+    ComponentRegistry::get().UnregisterProjectComponents();
 
     // --------------------------------------------------------
     // Unload old live DLL.
@@ -250,14 +214,9 @@ bool ProjectModuleLoader::RebuildProjectModule(
 // allowing CMake/MSBuild to rebuild it during hot reload.
 // ============================================================
 
-bool ProjectModuleLoader::LoadCompiledModule(
-    const std::filesystem::path &projectRoot)
+bool ProjectModuleLoader::LoadCompiledModule(const std::filesystem::path &projectRoot)
 {
-    const std::filesystem::path sourceDll =
-        projectRoot /
-        "build" /
-        "Debug" /
-        "GameScripts.dll";
+    const std::filesystem::path sourceDll = projectRoot / "build" / "Debug" / "GameScripts.dll";
 
     // --------------------------------------------------------
     // Verify source DLL
@@ -265,9 +224,7 @@ bool ProjectModuleLoader::LoadCompiledModule(
 
     if (!std::filesystem::exists(sourceDll))
     {
-        LOG_ERROR(
-            "Compiled project module not found: ",
-            sourceDll.string().c_str());
+        LOG_ERROR("Compiled project module not found: ", sourceDll.string().c_str());
 
         return false;
     }
@@ -276,22 +233,15 @@ bool ProjectModuleLoader::LoadCompiledModule(
     // Create live module directory
     // --------------------------------------------------------
 
-    const std::filesystem::path liveDirectory =
-        projectRoot /
-        "Generated" /
-        "LoadedModules";
+    const std::filesystem::path liveDirectory = projectRoot / "Generated" / "LoadedModules";
 
     std::error_code error;
 
-    std::filesystem::create_directories(
-        liveDirectory,
-        error);
+    std::filesystem::create_directories(liveDirectory, error);
 
     if (error)
     {
-        LOG_ERROR(
-            "Failed to create live module directory: ",
-            liveDirectory.string().c_str());
+        LOG_ERROR("Failed to create live module directory: ", liveDirectory.string().c_str());
 
         return false;
     }
@@ -302,52 +252,34 @@ bool ProjectModuleLoader::LoadCompiledModule(
 
     ++loadGeneration;
 
-    const std::filesystem::path liveDll =
-        liveDirectory /
-        ("GameScripts_live_" +
-         std::to_string(loadGeneration) +
-         ".dll");
+    const std::filesystem::path liveDll = liveDirectory / ("GameScripts_live_" + std::to_string(loadGeneration) + ".dll");
 
     // --------------------------------------------------------
     // Copy compiled DLL
     // --------------------------------------------------------
 
-    std::filesystem::copy_file(
-        sourceDll,
-        liveDll,
-        std::filesystem::copy_options::overwrite_existing,
-        error);
+    std::filesystem::copy_file(sourceDll, liveDll, std::filesystem::copy_options::overwrite_existing, error);
 
     if (error)
     {
-        LOG_ERROR(
-            "Failed to copy project DLL to live module: ",
-            error.message().c_str());
+        LOG_ERROR("Failed to copy project DLL to live module: ", error.message().c_str());
 
         return false;
     }
 
-    LOG_INFO(
-        "Loading live project module: ",
-        liveDll.string().c_str());
+    LOG_INFO("Loading live project module: ", liveDll.string().c_str());
 
     // --------------------------------------------------------
     // Load DLL
     // --------------------------------------------------------
 
-    HMODULE loadedModule =
-        LoadLibraryA(
-            liveDll.string().c_str());
+    HMODULE loadedModule = LoadLibraryA(liveDll.string().c_str());
 
     if (loadedModule == nullptr)
     {
-        LOG_ERROR(
-            "Failed to load project module: ",
-            liveDll.string().c_str());
+        LOG_ERROR("Failed to load project module: ", liveDll.string().c_str());
 
-        std::filesystem::remove(
-            liveDll,
-            error);
+        std::filesystem::remove(liveDll, error);
 
         return false;
     }
@@ -356,22 +288,15 @@ bool ProjectModuleLoader::LoadCompiledModule(
     // Find registration function
     // --------------------------------------------------------
 
-    auto registerFn =
-        reinterpret_cast<RegisterProjectComponentsExport>(
-            GetProcAddress(
-                loadedModule,
-                "RegisterProjectComponents"));
+    auto registerFn = reinterpret_cast<RegisterProjectComponentsExport>(GetProcAddress(loadedModule, "RegisterProjectComponents"));
 
     if (registerFn == nullptr)
     {
-        LOG_ERROR(
-            "RegisterProjectComponents export not found in project module");
+        LOG_ERROR("RegisterProjectComponents export not found in project module");
 
         FreeLibrary(loadedModule);
 
-        std::filesystem::remove(
-            liveDll,
-            error);
+        std::filesystem::remove(liveDll, error);
 
         return false;
     }
@@ -394,8 +319,7 @@ bool ProjectModuleLoader::LoadCompiledModule(
 
     g_activeModuleLoader = this;
 
-    registerFn(
-        &RegisterProjectComponentFromModule);
+    registerFn(&RegisterProjectComponentFromModule);
 
     g_activeModuleLoader = nullptr;
 
@@ -430,9 +354,7 @@ void ProjectModuleLoader::UnloadProjectModule()
 
     if (moduleHandle != nullptr)
     {
-        FreeLibrary(
-            reinterpret_cast<HMODULE>(
-                moduleHandle));
+        FreeLibrary(reinterpret_cast<HMODULE>(moduleHandle));
 
         moduleHandle = nullptr;
     }
@@ -443,31 +365,19 @@ void ProjectModuleLoader::UnloadProjectModule()
 
     if (!loadedDllPath.empty())
     {
-        const std::string filename =
-            loadedDllPath.filename().string();
+        const std::string filename = loadedDllPath.filename().string();
 
-        const bool isLiveModule =
-            filename.rfind(
-                "GameScripts_live_",
-                0) == 0;
+        const bool isLiveModule = filename.rfind("GameScripts_live_", 0) == 0;
 
-        if (isLiveModule &&
-            std::filesystem::exists(
-                loadedDllPath))
+        if (isLiveModule && std::filesystem::exists(loadedDllPath))
         {
             std::error_code error;
 
-            std::filesystem::remove(
-                loadedDllPath,
-                error);
+            std::filesystem::remove(loadedDllPath, error);
 
             if (error)
             {
-                LOG_WARNING(
-                    "Failed to remove old live project module: ",
-                    loadedDllPath.string().c_str(),
-                    " : ",
-                    error.message().c_str());
+                LOG_WARNING("Failed to remove old live project module: ", loadedDllPath.string().c_str(), " : ", error.message().c_str());
             }
         }
     }
@@ -480,27 +390,19 @@ void ProjectModuleLoader::UnloadProjectModule()
 // Hot reload watcher
 // ============================================================
 
-void ProjectModuleLoader::StartWatching(
-    const std::filesystem::path &scriptsDirectory)
+void ProjectModuleLoader::StartWatching(const std::filesystem::path &scriptsDirectory)
 {
     StopWatching();
 
-    watchedScriptsDirectory =
-        scriptsDirectory;
+    watchedScriptsDirectory = scriptsDirectory;
 
-    if (watchedScriptsDirectory.empty() ||
-        !std::filesystem::exists(
-            watchedScriptsDirectory))
+    if (watchedScriptsDirectory.empty() || !std::filesystem::exists(watchedScriptsDirectory))
     {
         return;
     }
 
-    watcher.Watch(
-        watchedScriptsDirectory.string(),
-        [this](std::string)
-        {
-            reloadRequested = true;
-        });
+    watcher.Watch(watchedScriptsDirectory.string(), [this](std::string)
+                  { reloadRequested = true; });
 }
 
 // ============================================================
@@ -535,8 +437,7 @@ bool ProjectModuleLoader::HasLoadedModule() const
 
 // ============================================================
 
-const std::vector<std::string> &
-ProjectModuleLoader::GetLoadedComponentNames() const
+const std::vector<std::string> &ProjectModuleLoader::GetLoadedComponentNames() const
 {
     return loadedComponentNames;
 }
@@ -545,19 +446,16 @@ ProjectModuleLoader::GetLoadedComponentNames() const
 // Build
 // ============================================================
 
-bool ProjectModuleLoader::BuildProjectModule(
-    const std::filesystem::path &projectRoot)
+bool ProjectModuleLoader::BuildProjectModule(const std::filesystem::path &projectRoot)
 {
-    return ScriptCompiler::GenerateAndCompile(
-        projectRoot.string());
+    return ScriptCompiler::GenerateAndCompile(projectRoot.string());
 }
 
 // ============================================================
 // Component tracking
 // ============================================================
 
-void ProjectModuleLoader::RegisterLoadedComponent(
-    const std::string &name)
+void ProjectModuleLoader::RegisterLoadedComponent(const std::string &name)
 {
     loadedComponentNames.push_back(name);
 }

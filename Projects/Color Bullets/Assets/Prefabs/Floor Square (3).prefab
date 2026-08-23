@@ -1,0 +1,53 @@
+[
+  {
+    "components": [
+      {
+        "fields": {
+          "colorString": "Magenta"
+        },
+        "guid": "a4391a24-b049-4501-a936-13450559fef9",
+        "type": "FloorSquare"
+      },
+      {
+        "fields": {
+          "collisionTag": "Enter tag",
+          "hitbox.height": "126.595886",
+          "hitbox.left": "4.794800",
+          "hitbox.top": "-1.710693",
+          "hitbox.width": "116.076904",
+          "isTrigger": "0"
+        },
+        "guid": "7094b86e-ca5b-429f-bc2b-c426e80fa1ef",
+        "type": "BoxCollider"
+      },
+      {
+        "fields": {
+          "ColorID": "Magenta",
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\square.png",
+          "renderOrder": "0"
+        },
+        "guid": "b15818af-1928-45fc-98ec-dd0259dc5ad4",
+        "type": "Sprite"
+      },
+      {
+        "fields": null,
+        "guid": "7fb2a562-9629-4e57-b00e-a8de7b0acbd2",
+        "type": "EditorSprite"
+      },
+      {
+        "fields": {
+          "position.x": "197.818192",
+          "position.y": "-150.424377",
+          "rotation": "0.000000",
+          "scale.x": "0.250000",
+          "scale.y": "0.250000"
+        },
+        "guid": "9f62bd39-8a69-452d-aeaf-8bddef6c2b7b",
+        "type": "Transform"
+      }
+    ],
+    "guid": "b5e4915e-526c-4276-a1dc-f4be673bd9b9",
+    "name": "Floor Square (3)",
+    "parent": ""
+  }
+]

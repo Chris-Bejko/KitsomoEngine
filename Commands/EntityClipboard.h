@@ -3,12 +3,12 @@
 #include <vector>
 
 // Forward declaration
-struct SerializableComponent;
+class SerializedComponent;
 
-struct SerializedEntity
+struct SerializedEntityClipboard
 {
 	std::string name;
-	std::vector<SerializableComponent> components;
+	std::vector<SerializedComponent> components;
 };
 
 class EntityClipboard
@@ -20,13 +20,13 @@ public:
 		return instance;
 	}
 
-	void Copy(const SerializedEntity& entity)
+	void Copy(const SerializedEntityClipboard& entity)
 	{
 		clipboard = entity;
 		hasContent = true;
 	}
 
-	SerializedEntity GetClipboard() const
+	SerializedEntityClipboard GetClipboard() const
 	{
 		return clipboard;
 	}
@@ -39,11 +39,12 @@ public:
 	void Clear()
 	{
 		hasContent = false;
-		clipboard = SerializedEntity();
+		clipboard = SerializedEntityClipboard();
+        clipboard.components.clear();
 	}
 
 private:
 	EntityClipboard() = default;
-	SerializedEntity clipboard;
+	SerializedEntityClipboard clipboard;
 	bool hasContent = false;
 };

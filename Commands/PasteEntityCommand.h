@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "Vector2.h"
 #include "Transform.h"
+#include "ComponentRegistry.h"
 class PasteEntityCommand : public Command
 {
 public:
@@ -25,20 +26,26 @@ public:
         auto clipboard = EntityClipboard::get().GetClipboard();
 
         std::string newName = Engine::get().GetManager()->GetUniqueName(clipboard.name);
+
         pastedEntity = new Entity(newName);
 
-        for (const auto &comp : clipboard.components)
+        for (const auto &serialized : clipboard.components)
         {
-            if (comp.componentName == "Transform")
-                continue;
-            pastedEntity->AddComponentByName(comp.componentName);
-        }
+            auto it = ComponentRegistry::get().GetAll().find(serialized.GetType());
 
-        pastedEntity->ValidateAddedComponents();
-        pastedEntity->InitializeComponentFields(clipboard.components);
+            if (it == ComponentRegistry::get().GetAll().end())
+            {
+                LOG_WARNING("PasteEntity: Unknown component: ", serialized.GetType().c_str());
+
+                continue;
+            }
+
+            it->second.factory(pastedEntity, serialized);
+        }
 
         // Override position with mouse world position
         auto mousePixel = sf::Mouse::getPosition(Engine::get().GetWindow());
+
         auto mouseWorld = Engine::get().GetWindow().mapPixelToCoords(mousePixel);
 
         if (pastedEntity->HasComponent<Transform>())
@@ -67,5 +74,5 @@ public:
 private:
     Entity *pastedEntity;
     Vector2F offset;
-    SerializedEntity savedClipboard;
+    SerializedEntityClipboard savedClipboard;
 };
