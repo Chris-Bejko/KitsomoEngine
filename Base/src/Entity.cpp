@@ -308,6 +308,10 @@ void Entity::DisplayComponents()
 
 	for (auto &e : components)
 	{
+		auto *script = dynamic_cast<SerializableScript *>(e.get());
+    	if (!script)
+        	continue;
+
 		std::string str(typeid(*e).name());
 		str = std::regex_replace(str, std::regex("class "), "");
 		auto &fields = e->GetSerializedFields();
@@ -352,7 +356,6 @@ void Entity::DisplayComponents()
 		int uniqueFieldId = 0;
 		for (auto &field : fields)
 		{
-			auto *script = dynamic_cast<SerializableScript *>(e.get());
 			field->Draw({this, script, uniqueId + "##" + std::to_string(uniqueFieldId)});
 			uniqueFieldId++;
 		}

@@ -8,9 +8,7 @@ REGISTER_SERIALIZABLE_COMPONENT(Camera)
 
 bool Camera::Init()
 {
-	LOG_INFO("========== CAMERA INIT ==========");
-    LOG_INFO("Camera this: ", this);
-    LOG_INFO("Entity: ", entity);
+
     const auto windowSize = Engine::get().GetWindow().getSize();
 
     view.setSize(
@@ -18,7 +16,7 @@ bool Camera::Init()
         static_cast<float>(windowSize.y));
 
     transform = &entity->GetComponent<Transform>();
-
+    Field("FollowTarget", followTarget);
     return true;
 }
 
