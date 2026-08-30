@@ -8,7 +8,6 @@ REGISTER_SERIALIZABLE_COMPONENT(Camera)
 
 bool Camera::Init()
 {
-
     const auto windowSize = Engine::get().GetWindow().getSize();
 
     view.setSize(
