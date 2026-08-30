@@ -1,4 +1,5 @@
 #include "imguiHandler.h"
+#include "imgui-SFML.h"
 #include "Logger.h"
 #include "CommandHistory.h"
 #include "Commands/CopyEntityCommand.h"

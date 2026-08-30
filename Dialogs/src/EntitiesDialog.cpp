@@ -3,11 +3,14 @@
 #include "EntitiesDialog.h"
 #include "ColorPalletes.h"
 #include "DialogManager.h"
+#include "Entity.h"
+#include "GizmoSystem.h"
 REGISTER_DIALOG(EntitiesDialog);
 
 EntitiesDialog::EntitiesDialog() {};
 void EntitiesDialog::Open()
 {
+	manager = Engine::get().GetManager();
 }
 void EntitiesDialog::Close()
 {
@@ -15,6 +18,9 @@ void EntitiesDialog::Close()
 
 void EntitiesDialog::Draw()
 {
+	manager = Engine::get().GetManager();
+	if (!manager)
+		return;
 	ImGui::Begin("Entities");
 
 	// Add entity button
@@ -22,7 +28,7 @@ void EntitiesDialog::Draw()
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.75f, 0.45f, 1.0f));
 	if (ImGui::Button("+ New Entity", ImVec2(-1, 28)))
 		Engine::get().Spawn(new Entity(
-			Engine::get().GetManager()->GetUniqueName("New Entity")));
+			manager->GetUniqueName("New Entity")));
 	ImGui::PopStyleColor(2);
 
 	// Prefabs section
@@ -52,6 +58,103 @@ void EntitiesDialog::Draw()
 	ImGui::Separator();
 	ImGui::Spacing();
 
-	Engine::get().GetManager()->DisplayEntities();
+	DisplayEntities();
 	ImGui::End();
+}
+
+
+void EntitiesDialog::DisplayEntities()
+{
+	if(!manager)
+		return;
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(8, 6));
+
+	if (ImGui::GetDragDropPayload() == nullptr)
+		dragHoveredEntity = nullptr;
+
+	for (auto &e : manager->GetEntities())
+	{
+		if (!e || e->IsPendingDestroy())
+			continue;
+		if (e->HasParent())
+			continue;
+		DisplayEntityNode(e.get());
+	}
+
+	ImGui::PopStyleVar();
+}
+
+void EntitiesDialog::DisplayEntityNode(Entity *e)
+{
+
+	if (!e || e->IsPendingDestroy())
+		return;
+	std::string name = e->GetName().c_str();
+	bool isSelected = (manager->GetSelectedEntity() == e);
+	bool hasChildren = !e->GetChildren().empty();
+
+	if (isSelected)
+		ImGui::PushStyleColor(ImGuiCol_Header, ImVec4(0.2f, 0.4f, 0.7f, 0.6f));
+
+	ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow |
+							   ImGuiTreeNodeFlags_SpanAvailWidth;
+	if (!hasChildren)
+		flags |= ImGuiTreeNodeFlags_Leaf;
+	if (isSelected)
+		flags |= ImGuiTreeNodeFlags_Selected;
+
+	bool opened = ImGui::TreeNodeEx(name.c_str(), flags);
+
+	if (ImGui::IsItemClicked())
+	{
+		for (auto &a : manager->GetEntities())
+			a->displayComponents = false;
+
+		e->displayComponents = true;
+		manager->SetSelectedEntity(e);
+		GizmoSystem::get().SetSelectedEntity(e);
+
+		float currentTime = ImGui::GetTime();
+		if (lastClickedEntity == e && (currentTime - lastClickTime) < 0.3f)
+		{
+			Engine::get().FocusOnEntity(e);
+			e->displayComponents = true;
+		}
+		lastClickedEntity = e;
+		lastClickTime = currentTime;
+	}
+
+	// Track hover for preview
+	if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem) && ImGui::GetDragDropPayload() != nullptr)
+		manager->SetDragHoveredEntity(e);
+
+	if (ImGui::BeginDragDropSource())
+	{
+		Entity *ptr = e;
+		ImGui::SetDragDropPayload("ENTITY", &ptr, sizeof(Entity *));
+		ImGui::Text("%s", name.c_str());
+		ImGui::EndDragDropSource();
+	}
+
+	// Drop target - reparent only
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
+		{
+			Entity *dragged = *(Entity **)payload->Data;
+			if (dragged != e)
+				dragged->SetParent(e);
+		}
+		ImGui::EndDragDropTarget();
+	}
+
+	if (isSelected)
+		ImGui::PopStyleColor();
+
+	if (opened)
+	{
+		for (auto *child : e->GetChildren())
+			DisplayEntityNode(child);
+		ImGui::TreePop();
+	}
 }
