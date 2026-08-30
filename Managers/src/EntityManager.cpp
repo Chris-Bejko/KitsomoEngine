@@ -213,14 +213,6 @@ void EntityManager::ClearInspector()
 	}
 }
 
-void EntityManager::DisplayComponents()
-{
-	for (auto &e : entities)
-	{
-		e->DisplayComponents();
-	}
-}
-
 void EntityManager::DestroyAllEntities()
 {
 	for (auto &e : entities)
@@ -469,14 +461,4 @@ std::string EntityManager::GetUniqueName(const std::string &baseName)
 			return candidate;
 		counter++;
 	}
-}
-
-void EntityManager::DisplayComponentsOf(Entity *e)
-{
-	if (!e)
-		return;
-	bool prev = e->displayComponents;
-	e->displayComponents = true; // force show
-	e->DisplayComponents();
-	e->displayComponents = prev; // restore
 }

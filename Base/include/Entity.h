@@ -3,8 +3,6 @@
 #include "ECS.h"
 #include <vector>
 #include <memory>
-#include "imgui.h"
-#include "imgui-SFML.h"
 #include <regex>
 #include "Component.h"
 #include <filesystem>
@@ -277,10 +275,6 @@ public:
 
 	void SaveAvailableComponents();
 
-	void DisplayComponents();
-
-	void DisplayAvailableComponents();
-
 	std::vector<SerializedComponent> GetSerializedComponents();
 	bool DeletePressed();
 
@@ -312,7 +306,7 @@ public:
 	}
 
 	void ForceNullParent() { parent = nullptr; }
-
+	std::vector<std::string> GetAvailableComponents() { return availableComponents; }
 private:
 	bool isActive = true;
 

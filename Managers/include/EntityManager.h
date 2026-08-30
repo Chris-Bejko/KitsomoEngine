@@ -45,8 +45,6 @@ public:
 
 	void ClearInspector();
 
-	void DisplayComponents();
-
 	void DestroyAllEntities();
 	void RemoveCollisionPairsForEntity(Entity *e);
 
@@ -64,7 +62,6 @@ public:
 	std::vector<std::unique_ptr<Entity>> &GetUnvalidatedEntities() { return to_add; }
 	void DisplayEntityNode(Entity *e);
 	Entity *GetDragHoveredEntity() { return dragHoveredEntity; }
-	void DisplayComponentsOf(Entity *e);
 	void RemoveEntityByGUID(const std::string &guid);
 	void ClearAllEntities() { entities.clear(); to_add.clear(); }
 private:
