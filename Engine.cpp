@@ -103,6 +103,7 @@ void Engine::Init()
 
 void Engine::Clean()
 {
+	GizmoSystem::get().Dispose();
 	AssetManager::get().clean();
 	if (projectModuleLoader && projectModuleLoader->HasLoadedModule())
 	{
