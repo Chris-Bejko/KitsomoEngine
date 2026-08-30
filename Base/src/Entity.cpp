@@ -314,7 +314,7 @@ void Entity::DisplayComponents()
 
 		std::string str(typeid(*e).name());
 		str = std::regex_replace(str, std::regex("class "), "");
-		auto &fields = e->GetSerializedFields();
+		auto &fields =  script->GetSerializedFields();
 
 		if (str == "Transform")
 		{
