@@ -5,6 +5,9 @@
 
 void EntityVectorField::Resolve()
 {
+    if (!value)
+        return;
+
     value->clear();
 
     if (serializedValue.empty())
@@ -13,17 +16,33 @@ void EntityVectorField::Resolve()
     std::stringstream ss(serializedValue);
     std::string token;
 
+    if (!Engine::get().GetManager())
+        return;
+
     while (std::getline(ss, token, ';'))
     {
         if (token.empty() || token == "null")
             continue;
 
+        bool found = false;
         for (auto &entity : Engine::get().GetManager()->GetEntities())
         {
-            if (entity->GetGUID() == token)
+            if (entity && entity->GetGUID() == token)
             {
                 value->push_back(entity.get());
+                found = true;
                 break;
+            }
+        }
+        if (!found)
+        {
+            for (auto &entity : Engine::get().GetManager()->GetUnvalidatedEntities())
+            {
+                if (entity && entity->GetGUID() == token)
+                {
+                    value->push_back(entity.get());
+                    break;
+                }
             }
         }
     }
@@ -31,6 +50,8 @@ void EntityVectorField::Resolve()
 
 void EntityVectorField::Draw(const FieldDrawContext& context)
 {
+    Resolve();
+
     int removeIndex = -1;
 
     for (size_t i = 0; i < value->size(); ++i)

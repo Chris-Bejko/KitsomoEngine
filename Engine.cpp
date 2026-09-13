@@ -584,6 +584,7 @@ Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 	manager->addEntity(ent);
 
 	manager->ValidateAdded();
+	ent->ValidateAddedComponents();
 
 	for (auto &component : ent->GetComponents())
 	{
@@ -1231,6 +1232,10 @@ void Engine::SpawnEntities(const std::vector<SerializedEntity> &entities)
 	// PASS 2: Move deferred components into their
 	// actual component lists.
 	manager->ValidateAdded();
+	for (auto &ent : manager->GetEntities())
+	{
+		ent->ValidateAddedComponents();
+	}
 
 	// PASS 3: Resolve entity/component pointers.
 	for (auto &ent : manager->GetEntities())

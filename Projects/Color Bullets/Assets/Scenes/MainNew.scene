@@ -3,6 +3,13 @@
     "components": [
       {
         "fields": {
+          "FollowTarget": ""
+        },
+        "guid": "1f2f48f2-1072-46fa-967a-3751b7a796de",
+        "type": "Camera"
+      },
+      {
+        "fields": {
           "position.x": "0.000000",
           "position.y": "0.000000",
           "rotation": "0.000000",
@@ -87,7 +94,7 @@
         "fields": {
           "position.x": "576.953674",
           "position.y": "341.004639",
-          "rotation": "0.000000",
+          "rotation": "-0.238716",
           "scale.x": "1.000000",
           "scale.y": "1.000000"
         },
@@ -114,7 +121,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "0.000000|0.000000",
+          "anchorOffset": "433.477966|285.609467",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -123,8 +130,8 @@
       },
       {
         "fields": {
-          "position.x": "576.953674",
-          "position.y": "247.578705",
+          "position.x": "982.557312",
+          "position.y": "514.411926",
           "rotation": "0.000000",
           "scale.x": "1.000000",
           "scale.y": "1.000000"
@@ -150,7 +157,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "-360.000061|-250.000000",
+          "anchorOffset": "-359.333374|-250.000000",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -167,7 +174,7 @@
       },
       {
         "fields": {
-          "position.x": "576.953674",
+          "position.x": "577.576538",
           "position.y": "247.578705",
           "rotation": "0.000000",
           "scale.x": "1.000000",
@@ -198,18 +205,18 @@
         "fields": {
           "anchorOffset": "-658.666809|-372.120911",
           "pivot": "0.500000|0.500000",
-          "sizeDelta": "100.000000|50.000000"
+          "sizeDelta": "109.417206|59.417206"
         },
         "guid": "65ab512b-142a-44e0-a22a-45723144fa27",
         "type": "UIRect"
       },
       {
         "fields": {
-          "position.x": "297.921509",
-          "position.y": "133.486115",
+          "position.x": "293.522430",
+          "position.y": "129.087051",
           "rotation": "0.000000",
-          "scale.x": "1.000000",
-          "scale.y": "1.000000"
+          "scale.x": "109.417206",
+          "scale.y": "59.417206"
         },
         "guid": "76b151fb-0933-4123-a8bb-d352eec58b18",
         "type": "Transform"
@@ -443,11 +450,11 @@
       {
         "fields": {
           "collisionTag": "Enter tag",
-          "hitbox.height": "0.000000",
-          "hitbox.left": "0.000000",
-          "hitbox.top": "0.000000",
-          "hitbox.width": "0.000000",
-          "isTrigger": "0"
+          "hitbox.height": "120.950439",
+          "hitbox.left": "-2.148438",
+          "hitbox.top": "0.000244",
+          "hitbox.width": "126.779785",
+          "isTrigger": "1"
         },
         "guid": "d85b038d-cfa0-4816-aa39-68e34d0b3a61",
         "type": "BoxCollider"
@@ -491,11 +498,11 @@
       {
         "fields": {
           "collisionTag": "Enter tag",
-          "hitbox.height": "0.000000",
-          "hitbox.left": "0.000000",
-          "hitbox.top": "0.000000",
-          "hitbox.width": "0.000000",
-          "isTrigger": "0"
+          "hitbox.height": "125.634705",
+          "hitbox.left": "5.472076",
+          "hitbox.top": "-1.394653",
+          "hitbox.width": "121.004272",
+          "isTrigger": "1"
         },
         "guid": "55ca71ff-5f86-463f-b427-4f49ee16ebd9",
         "type": "BoxCollider"
@@ -535,11 +542,11 @@
       {
         "fields": {
           "collisionTag": "Enter tag",
-          "hitbox.height": "0.000000",
-          "hitbox.left": "0.000000",
-          "hitbox.top": "0.000000",
-          "hitbox.width": "0.000000",
-          "isTrigger": "0"
+          "hitbox.height": "123.949341",
+          "hitbox.left": "3.127289",
+          "hitbox.top": "0.579193",
+          "hitbox.width": "122.578979",
+          "isTrigger": "1"
         },
         "guid": "a9ac476c-d499-4b06-9a27-0039ff7de1e2",
         "type": "BoxCollider"
@@ -583,11 +590,11 @@
       {
         "fields": {
           "collisionTag": "Enter tag",
-          "hitbox.height": "0.000000",
-          "hitbox.left": "0.000000",
-          "hitbox.top": "0.000000",
-          "hitbox.width": "0.000000",
-          "isTrigger": "0"
+          "hitbox.height": "120.578552",
+          "hitbox.left": "4.258926",
+          "hitbox.top": "2.494812",
+          "hitbox.width": "119.429871",
+          "isTrigger": "1"
         },
         "guid": "7094b86e-ca5b-429f-bc2b-c426e80fa1ef",
         "type": "BoxCollider"
@@ -642,9 +649,9 @@
       },
       {
         "fields": {
-          "AudioSource": "",
-          "Camera": "",
-          "Sprite": "",
+          "AudioSource": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|685878f4-3375-4477-ac0a-71f28eeb5510",
+          "Camera": "c318f141-2b23-4586-97e2-9f43420fc842|1f2f48f2-1072-46fa-967a-3751b7a796de",
+          "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|0697fdf5-ce48-4303-b625-c6212fd6f7e7",
           "bulletPrefab": "Bullet",
           "cooldown": "0.500000",
           "floorTouchSound": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Audio/powerUp.wav",
@@ -657,27 +664,27 @@
       },
       {
         "fields": {
-          "ColorID": "Red",
-          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
-          "renderOrder": "2"
-        },
-        "guid": "9b4469c3-bccf-484f-9d05-56a92005b598",
-        "type": "Sprite"
-      },
-      {
-        "fields": {
           "collisionTag": "default",
-          "isTrigger": "0",
-          "vertices": "0.000000|-500.000000;563.164795|480.368774;-583.379517|513.451355"
+          "isTrigger": "1",
+          "vertices": "587.649780|490.909271;1.672200|-460.677307;-577.924316|509.387482"
         },
         "guid": "1eea6922-d86d-4928-9274-b78f51618efc",
         "type": "PolygonCollider"
       },
       {
         "fields": {
-          "position.x": "-338.666748",
-          "position.y": "-509.654877",
-          "rotation": "0.226837",
+          "ColorID": "Red",
+          "Texture": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Textures\\triangle.png",
+          "renderOrder": "0"
+        },
+        "guid": "0697fdf5-ce48-4303-b625-c6212fd6f7e7",
+        "type": "Sprite"
+      },
+      {
+        "fields": {
+          "position.x": "-813.666748",
+          "position.y": "-491.654877",
+          "rotation": "-0.748772",
           "scale.x": "0.050000",
           "scale.y": "0.050000"
         },
@@ -721,18 +728,18 @@
       {
         "fields": {
           "GameState": "0",
-          "endUI": "",
-          "environment": "",
-          "finalScore": "",
+          "endUI": "83270db5-fa83-407e-9506-bd1d99b422b5",
+          "environment": "c2360255-75bf-4a82-ba46-fea492927809",
+          "finalScore": "e434ef22-8d31-4caa-b9fc-11b1067ffb6c|c530e9b1-a3fb-446f-b3bb-d5cd005630ec",
           "highScore": "0",
-          "highScoreText": "",
-          "mainMenuButton": "",
-          "playAgainButton": "",
-          "playButton": "",
-          "player": "",
+          "highScoreText": "78029789-044a-4d3b-8a8f-6d8c5e5f7627|2e51edb1-f7d7-442f-9c0c-1e10fb4b3342",
+          "mainMenuButton": "4399b10c-367d-491a-91b2-2fee063e5bfb|62853400-36ed-4dde-8322-80aaecaeeca8",
+          "playAgainButton": "197d8213-1d1a-483d-a0ac-f9b4e05080ce|d9bb0149-04ac-40d7-8f6a-572e60623efe",
+          "playButton": "4a1cf809-e074-4d9f-873a-53dd9428ed04|bcde682b-d9b5-46dd-a439-c350617c00e6",
+          "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
           "score": "3",
-          "scoreText": "",
-          "startUI": ""
+          "scoreText": "7adbdfbe-7fc7-4ad0-8393-ea9d5c4a646f|abdd52fb-e4b3-4c42-8f30-968f168ecaa7",
+          "startUI": "ea9d9612-2219-44ad-b406-748ab473d088"
         },
         "guid": "968f3aff-082c-40eb-b7ba-697b2e1084db",
         "type": "GameManager"
@@ -795,10 +802,10 @@
     "components": [
       {
         "fields": {
-          "Environment": "",
-          "GameManager": "",
+          "Environment": "c2360255-75bf-4a82-ba46-fea492927809",
+          "GameManager": "c654de34-f964-48af-8341-8dcea5cd045c|968f3aff-082c-40eb-b7ba-697b2e1084db",
           "enemyPrefab": "Enemy",
-          "player": "",
+          "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
           "spawnInterval": "3.000000"
         },
         "guid": "cc20a329-bc90-45d4-8ac7-e3f39d96a7d9",

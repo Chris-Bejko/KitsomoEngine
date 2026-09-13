@@ -65,8 +65,6 @@ void ProjectModuleApplySerialized(Entity *entity, const SerializedComponent &ser
         {
             component = &entity->AddComponent<T>(FromGUID(componentGuid));
         }
-
-        return;
     }
     else
     {

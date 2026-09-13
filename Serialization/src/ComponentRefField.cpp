@@ -17,9 +17,6 @@ std::string ComponentRefField::Serialize()
 void ComponentRefField::Deserialize(const std::string &serialized)
 {
     packedGUID = serialized;
-
-    if (value)
-        *value = nullptr;
 }
 
 void ComponentRefField::Resolve()
@@ -29,7 +26,7 @@ void ComponentRefField::Resolve()
 
     *value = nullptr;
 
-    if (packedGUID.empty())
+    if (packedGUID.empty() || packedGUID == "null")
         return;
 
     auto pipe = packedGUID.find('|');
@@ -38,66 +35,58 @@ void ComponentRefField::Resolve()
         return;
 
     std::string entityGUID = packedGUID.substr(0, pipe);
-
     std::string componentGUID = packedGUID.substr(pipe + 1);
 
-    for (auto &entity : Engine::get().GetManager()->GetEntities())
-    {
-        if (entity->GetGUID() != entityGUID)
-            continue;
+    if (!Engine::get().GetManager())
+        return;
+
+    auto checkEntity = [&](Entity *entity) -> bool {
+        if (!entity || entity->GetGUID() != entityGUID)
+            return false;
 
         for (auto &component : entity->GetComponents())
         {
-            if (component->GetGUID() == componentGUID)
+            if (component && component->GetGUID() == componentGUID)
             {
                 *value = component.get();
-                return;
+                return true;
             }
         }
+        for (auto &component : entity->GetUnvalidatedComponents())
+        {
+            if (component && component->GetGUID() == componentGUID)
+            {
+                *value = component.get();
+                return true;
+            }
+        }
+        return false;
+    };
 
-        return;
+    for (auto &entity : Engine::get().GetManager()->GetEntities())
+    {
+        if (checkEntity(entity.get()))
+            return;
+    }
+    for (auto &entity : Engine::get().GetManager()->GetUnvalidatedEntities())
+    {
+        if (checkEntity(entity.get()))
+            return;
     }
 }
 
 void ComponentRefField::Draw(const FieldDrawContext &context)
 {
+    Resolve();
+
     bool isEmpty = packedGUID.empty() || packedGUID == "null";
+    Component *resolved = value ? *value : nullptr;
 
-    Component *resolved = nullptr;
     ImGui::Text("%s", name);
-
-    if (!isEmpty)
-    {
-        auto pipe = packedGUID.find('|');
-
-        if (pipe != std::string::npos)
-        {
-            std::string entityGUID = packedGUID.substr(0, pipe);
-
-            std::string componentGUID = packedGUID.substr(pipe + 1);
-
-            for (auto &entity : Engine::get().GetManager()->GetEntities())
-            {
-                if (entity->GetGUID() != entityGUID)
-                    continue;
-
-                for (auto &component : entity->GetComponents())
-                {
-                    if (component->GetGUID() == componentGUID)
-                    {
-                        resolved = component.get();
-                        break;
-                    }
-                }
-
-                break;
-            }
-        }
-    }
 
     std::string displayText = "Drop component here...";
 
-    if (resolved)
+    if (resolved && resolved->entity)
     {
         std::string compName = typeid(*resolved).name();
 
@@ -129,21 +118,31 @@ void ComponentRefField::Draw(const FieldDrawContext &context)
 
             if (dropped)
             {
-                for (auto &component : dropped->GetComponents())
-                {
-                    std::string componentTypeName = typeid(*component).name();
-
-                    componentTypeName = std::regex_replace(componentTypeName, std::regex("class "), "");
-
-                    if (componentTypeName == "Transform" || componentTypeName == "EditorSprite")
-                        continue;
-
-                    if (typeHint.empty() || componentTypeName == typeHint)
+                auto checkComps = [&](const std::vector<std::unique_ptr<Component>> &compList) -> bool {
+                    for (auto &component : compList)
                     {
-                        packedGUID = dropped->GetGUID() + "|" + component->GetGUID();
-                        Engine::get().GetManager()->SetSelectedEntity(context.entity);
-                        break;
+                        if (!component)
+                            continue;
+                        std::string componentTypeName = typeid(*component).name();
+                        componentTypeName = std::regex_replace(componentTypeName, std::regex("class "), "");
+
+                        if (componentTypeName == "Transform" || componentTypeName == "EditorSprite")
+                            continue;
+
+                        if (typeHint.empty() || componentTypeName == typeHint)
+                        {
+                            packedGUID = dropped->GetGUID() + "|" + component->GetGUID();
+                            *value = component.get();
+                            Engine::get().GetManager()->SetSelectedEntity(context.entity);
+                            return true;
+                        }
                     }
+                    return false;
+                };
+
+                if (!checkComps(dropped->GetComponents()))
+                {
+                    checkComps(dropped->GetUnvalidatedComponents());
                 }
             }
         }

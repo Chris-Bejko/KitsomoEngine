@@ -1,0 +1,25 @@
+[
+  {
+    "components": [
+      {
+        "fields": null,
+        "guid": "aed2f96d-7229-4705-a7e9-3bfe784ff8f1",
+        "type": "EditorSprite"
+      },
+      {
+        "fields": {
+          "position.x": "0.000000",
+          "position.y": "0.000000",
+          "rotation": "0.000000",
+          "scale.x": "1.000000",
+          "scale.y": "1.000000"
+        },
+        "guid": "1b373b78-9145-4ba3-9771-8c62f0606542",
+        "type": "Transform"
+      }
+    ],
+    "guid": "c318f141-2b23-4586-97e2-9f43420fc842",
+    "name": "Camera",
+    "parent": ""
+  }
+]

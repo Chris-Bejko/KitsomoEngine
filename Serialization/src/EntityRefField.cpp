@@ -13,13 +13,17 @@ std::string EntityRefField::Serialize()
 void EntityRefField::Deserialize(const std::string& serialized)
 {
     guidStorage = serialized;
-    *value = nullptr;
+    if (value)
+        *value = nullptr;
 }
 
 
 void EntityRefField::Resolve()
 {
-    if (guidStorage.empty())
+    if (!value)
+        return;
+
+    if (guidStorage.empty() || guidStorage == "null")
     {
         *value = nullptr;
         return;
@@ -27,18 +31,31 @@ void EntityRefField::Resolve()
 
     *value = nullptr;
 
+    if (!Engine::get().GetManager())
+        return;
+
     for (auto& entity : Engine::get().GetManager()->GetEntities())
     {
-        if (entity->GetGUID() == guidStorage)
+        if (entity && entity->GetGUID() == guidStorage)
         {
             *value = entity.get();
-            break;
+            return;
+        }
+    }
+    for (auto& entity : Engine::get().GetManager()->GetUnvalidatedEntities())
+    {
+        if (entity && entity->GetGUID() == guidStorage)
+        {
+            *value = entity.get();
+            return;
         }
     }
 }
 
 void EntityRefField::Draw(const FieldDrawContext& context)
 {
+    Resolve();
+
     Entity* resolved = value ? *value : nullptr;
     std::string displayText = resolved ? "-> " + resolved->GetName() : guidStorage.empty() ? "Drop entity here..." : "NOT FOUND";
     ImVec4 boxColor = resolved ? ImVec4(0.1f, 0.25f, 0.1f, 1.0f) : guidStorage.empty() ? ImVec4(0.15f, 0.18f, 0.25f, 1.0f) : ImVec4(0.35f, 0.1f, 0.1f, 1.0f);

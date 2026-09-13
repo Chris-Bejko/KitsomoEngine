@@ -38,6 +38,44 @@ Entity::Entity(std::string name, std::string guid)
 	this->entityName = name;
 }
 
+Entity::~Entity()
+{
+	if (parent)
+	{
+		parent->RemoveChild(this);
+		parent = nullptr;
+	}
+
+	for (Entity *child : children)
+	{
+		if (child)
+		{
+			child->parent = nullptr;
+			if (child->transform)
+				child->transform->SetParent(nullptr);
+		}
+	}
+	children.clear();
+
+	if (transform)
+	{
+		transform->SetParent(nullptr);
+	}
+
+	if (Engine::get().GetManager())
+	{
+		if (Engine::get().GetManager()->GetSelectedEntity() == this)
+		{
+			Engine::get().GetManager()->SetSelectedEntity(nullptr);
+		}
+		if (Engine::get().GetManager()->GetDragHoveredEntity() == this)
+		{
+			Engine::get().GetManager()->SetDragHoveredEntity(nullptr);
+		}
+		Engine::get().GetManager()->RemoveCollisionPairsForEntity(this);
+	}
+}
+
 std::vector<SerializedComponent> Entity::GetSerializedComponents()
 {
 	std::vector<SerializedComponent> result;
@@ -82,6 +120,8 @@ bool Entity::IsActiveInHierarchy() const
 	int depth = 0;
 	while (current != nullptr)
 	{
+		if(++depth > 100)
+			return false;
 		if (current->isPendingDestroy)
 			return false;
 		if (!current->isActive)

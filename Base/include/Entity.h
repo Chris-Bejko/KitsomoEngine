@@ -23,7 +23,7 @@ public:
 	Transform *transform;
 	Entity(std::string name, std::string guid = "");
 
-	virtual ~Entity() {}
+	virtual ~Entity();
 
 	template <typename T, typename... TArgs>
 	inline T& AddComponent(TArgs&&... args)

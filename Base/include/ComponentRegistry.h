@@ -124,21 +124,26 @@ public:
                 {
                     component = &entity->AddComponent<T>(FromGUID(guid));
                 }
-
-                return;
-            }
-
-            if (!entity->HasComponent<T>())
-            {
-                component = &entity->AddComponent<T>(FromGUID(guid));
             }
             else
             {
-                component = &entity->GetComponent<T>();
-                if (!guid.empty())
+                if (!entity->HasComponent<T>())
                 {
-                    component->SetGUID(guid);
+                    component = &entity->AddComponent<T>(FromGUID(guid));
                 }
+                else
+                {
+                    component = &entity->GetComponent<T>();
+                    if (!guid.empty())
+                    {
+                        component->SetGUID(guid);
+                    }
+                }
+            }
+
+            if (!component)
+            {
+                return;
             }
 
             for (const auto &fieldPtr : component->GetSerializedFields())

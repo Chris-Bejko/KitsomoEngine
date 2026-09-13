@@ -56,6 +56,7 @@ void Player::updateEngine(float dt)
 
 void Player::update(float dt)
 {
+	lastColor.SetColor(lastColorString);
 	LOG_INFO("HOT RELOAD WORKS");
 	camera->Follow(sf::Vector2f(entity->transform->position.x, entity->transform->position.y));
 	SetSpawnPointPosition();

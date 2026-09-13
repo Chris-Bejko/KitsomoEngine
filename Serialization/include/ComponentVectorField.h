@@ -30,6 +30,8 @@ public:
 template <typename T>
 void ComponentVectorField<T>::Draw(const FieldDrawContext &context)
 {
+    Resolve();
+
     int removeIndex = -1;
 
     for (size_t i = 0; i < value->size(); ++i)
@@ -45,7 +47,7 @@ void ComponentVectorField<T>::Draw(const FieldDrawContext &context)
 
         T *component = (*value)[i];
 
-        if (component)
+        if (component && component->entity)
         {
             std::string componentName = typeid(*component).name();
 
@@ -135,6 +137,9 @@ std::string ComponentVectorField<T>::Serialize() const
 template <typename T>
 void ComponentVectorField<T>::Resolve()
 {
+    if (!value)
+        return;
+
     value->clear();
 
     if (serializedValue.empty())
@@ -143,9 +148,12 @@ void ComponentVectorField<T>::Resolve()
     std::stringstream ss(serializedValue);
     std::string token;
 
+    if (!Engine::get().GetManager())
+        return;
+
     while (std::getline(ss, token, ';'))
     {
-        if (token.empty())
+        if (token.empty() || token == "null")
             continue;
 
         auto pipe = token.find('|');
@@ -154,28 +162,57 @@ void ComponentVectorField<T>::Resolve()
             continue;
 
         std::string entityGUID = token.substr(0, pipe);
-
         std::string componentGUID = token.substr(pipe + 1);
 
-        for (auto &entity : Engine::get().GetManager()->GetEntities())
-        {
-            if (entity->GetGUID() != entityGUID)
-                continue;
+        auto checkEntity = [&](Entity *entity) -> bool {
+            if (!entity || entity->GetGUID() != entityGUID)
+                return false;
 
             for (auto &component : entity->GetComponents())
             {
-                if (component->GetGUID() != componentGUID)
-                    continue;
+                if (component && component->GetGUID() == componentGUID)
+                {
+                    T *typed = dynamic_cast<T *>(component.get());
+                    if (typed)
+                    {
+                        value->push_back(typed);
+                        return true;
+                    }
+                }
+            }
+            for (auto &component : entity->GetUnvalidatedComponents())
+            {
+                if (component && component->GetGUID() == componentGUID)
+                {
+                    T *typed = dynamic_cast<T *>(component.get());
+                    if (typed)
+                    {
+                        value->push_back(typed);
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
 
-                T *typed = dynamic_cast<T *>(component.get());
-
-                if (typed)
-                    value->push_back(typed);
-
+        bool found = false;
+        for (auto &entity : Engine::get().GetManager()->GetEntities())
+        {
+            if (checkEntity(entity.get()))
+            {
+                found = true;
                 break;
             }
-
-            break;
+        }
+        if (!found)
+        {
+            for (auto &entity : Engine::get().GetManager()->GetUnvalidatedEntities())
+            {
+                if (checkEntity(entity.get()))
+                {
+                    break;
+                }
+            }
         }
     }
 }
