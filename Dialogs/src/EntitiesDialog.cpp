@@ -30,28 +30,6 @@ void EntitiesDialog::Draw()
 		Engine::get().Spawn(new Entity(
 			manager->GetUniqueName("New Entity")));
 	ImGui::PopStyleColor(2);
-
-	// Prefabs section
-	std::filesystem::path prefabDir = SceneManager::get().GetPrefabDirectory();
-	if (std::filesystem::exists(prefabDir))
-	{
-		ImGui::Spacing();
-		ImGui::TextColored(COLOR_TEXT_DIM, "PREFABS");
-		ImGui::Separator();
-		ImGui::Spacing();
-
-		for (const auto &entry : std::filesystem::directory_iterator(prefabDir))
-		{
-			std::string prefabFile = entry.path().stem().string();
-			std::string buttonLabel = "  " + prefabFile + "##prefab";
-			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.18f, 0.22f, 0.35f, 1.0f));
-			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.25f, 0.35f, 0.55f, 1.0f));
-			if (ImGui::Button(buttonLabel.c_str(), ImVec2(-1, 24)))
-				Engine::get().LoadPrefab(prefabFile);
-			ImGui::PopStyleColor(2);
-		}
-	}
-
 	// Entities list
 	ImGui::Spacing();
 	ImGui::TextColored(COLOR_TEXT_DIM, "SCENE");
@@ -59,6 +37,37 @@ void EntitiesDialog::Draw()
 	ImGui::Spacing();
 
 	DisplayEntities();
+
+	// Fill remaining window space so the drag drop target can cover empty area below items
+	ImGui::Dummy(ImGui::GetContentRegionAvail());
+
+	// Drop target for whole dialog / empty space to spawn prefabs or reparent to root
+	if (ImGui::BeginDragDropTarget())
+	{
+		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("PREFAB"))
+		{
+			const char *pathStr = static_cast<const char *>(payload->Data);
+			if (pathStr)
+			{
+				Entity *spawned = Engine::get().SpawnPrefab(pathStr, Vector2F(0, 0));
+				if (spawned)
+				{
+					manager->SetSelectedEntity(spawned);
+					GizmoSystem::get().SetSelectedEntity(spawned);
+				}
+			}
+		}
+		else if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
+		{
+			Entity *dragged = *(Entity **)payload->Data;
+			if (dragged)
+			{
+				dragged->SetParent(nullptr);
+			}
+		}
+		ImGui::EndDragDropTarget();
+	}
+
 	ImGui::End();
 }
 
@@ -136,7 +145,7 @@ void EntitiesDialog::DisplayEntityNode(Entity *e)
 		ImGui::EndDragDropSource();
 	}
 
-	// Drop target - reparent only
+	// Drop target - reparent only or spawn prefab
 	if (ImGui::BeginDragDropTarget())
 	{
 		if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ENTITY"))
@@ -144,6 +153,20 @@ void EntitiesDialog::DisplayEntityNode(Entity *e)
 			Entity *dragged = *(Entity **)payload->Data;
 			if (dragged != e)
 				dragged->SetParent(e);
+		}
+		else if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("PREFAB"))
+		{
+			const char *pathStr = static_cast<const char *>(payload->Data);
+			if (pathStr)
+			{
+				Entity *spawned = Engine::get().SpawnPrefab(pathStr, Vector2F(0, 0));
+				if (spawned)
+				{
+					spawned->SetParent(e);
+					manager->SetSelectedEntity(spawned);
+					GizmoSystem::get().SetSelectedEntity(spawned);
+				}
+			}
 		}
 		ImGui::EndDragDropTarget();
 	}

@@ -121,7 +121,7 @@
       },
       {
         "fields": {
-          "anchorOffset": "433.477966|285.609467",
+          "anchorOffset": "0.000000|0.000000",
           "pivot": "0.500000|0.500000",
           "sizeDelta": "100.000000|50.000000"
         },
@@ -130,8 +130,8 @@
       },
       {
         "fields": {
-          "position.x": "982.557312",
-          "position.y": "514.411926",
+          "position.x": "577.576538",
+          "position.y": "247.578705",
           "rotation": "0.000000",
           "scale.x": "1.000000",
           "scale.y": "1.000000"
@@ -449,7 +449,7 @@
       },
       {
         "fields": {
-          "collisionTag": "Enter tag",
+          "collisionTag": "floor",
           "hitbox.height": "120.950439",
           "hitbox.left": "-2.148438",
           "hitbox.top": "0.000244",
@@ -497,7 +497,7 @@
       },
       {
         "fields": {
-          "collisionTag": "Enter tag",
+          "collisionTag": "floor",
           "hitbox.height": "125.634705",
           "hitbox.left": "5.472076",
           "hitbox.top": "-1.394653",
@@ -541,7 +541,7 @@
       },
       {
         "fields": {
-          "collisionTag": "Enter tag",
+          "collisionTag": "floor",
           "hitbox.height": "123.949341",
           "hitbox.left": "3.127289",
           "hitbox.top": "0.579193",
@@ -589,7 +589,7 @@
       },
       {
         "fields": {
-          "collisionTag": "Enter tag",
+          "collisionTag": "floor",
           "hitbox.height": "120.578552",
           "hitbox.left": "4.258926",
           "hitbox.top": "2.494812",
@@ -652,7 +652,7 @@
           "AudioSource": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|685878f4-3375-4477-ac0a-71f28eeb5510",
           "Camera": "c318f141-2b23-4586-97e2-9f43420fc842|1f2f48f2-1072-46fa-967a-3751b7a796de",
           "Sprite": "0d6607ed-1435-48f5-9c5a-1dbefee638ba|0697fdf5-ce48-4303-b625-c6212fd6f7e7",
-          "bulletPrefab": "Bullet",
+          "bulletPrefab": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Prefabs\\Bullet.prefab",
           "cooldown": "0.500000",
           "floorTouchSound": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Audio/powerUp.wav",
           "lastColorString": "",
@@ -804,7 +804,7 @@
         "fields": {
           "Environment": "c2360255-75bf-4a82-ba46-fea492927809",
           "GameManager": "c654de34-f964-48af-8341-8dcea5cd045c|968f3aff-082c-40eb-b7ba-697b2e1084db",
-          "enemyPrefab": "Enemy",
+          "enemyPrefab": "C:\\Users\\kitso\\Documents\\CPP Game\\CPP PRoject\\ECSEngine\\Projects\\Color Bullets\\Assets\\Prefabs\\Enemy.prefab",
           "player": "0d6607ed-1435-48f5-9c5a-1dbefee638ba",
           "spawnInterval": "3.000000"
         },

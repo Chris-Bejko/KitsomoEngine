@@ -5,6 +5,7 @@
 #include "SerializableScript.h"
 #include "Sprite.h"
 #include "AudioSource.h"
+#include "Prefab.h"
 class Player : public SerializableScript
 {
 public:
@@ -44,7 +45,7 @@ private:
 
 	sf::Vector2f mousePos;
 
-	std::string bulletPrefab = "Bullet";
+	Prefab bulletPrefab;
 	Audio shootSound;
 	Audio floorTouchSound;
 	AudioSource* audioSource;

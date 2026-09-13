@@ -540,7 +540,18 @@ bool Engine::LoadPrefab(std::string prefabName)
 	return true;
 }
 
-Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
+Entity *Engine::SpawnPrefab(const Prefab &prefab, Vector2F position)
+{
+	if (!prefab.HasPath())
+	{
+		LOG_WARNING("Cannot spawn prefab: Prefab asset reference has no path");
+		return nullptr;
+	}
+
+	return SpawnPrefab(prefab.GetPath(), position);
+}
+
+Entity *Engine::SpawnPrefab(const std::string &prefabName, Vector2F position)
 {
 	if (!SceneManager::get().HasProjectRoot())
 	{
@@ -548,7 +559,34 @@ Entity *Engine::SpawnPrefab(const std::string prefabName, Vector2F position)
 		return nullptr;
 	}
 
-	std::filesystem::path path = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + prefabName + ".prefab");
+	if (prefabName.empty())
+	{
+		LOG_WARNING("Cannot spawn prefab with empty name/path");
+		return nullptr;
+	}
+
+	std::filesystem::path path(prefabName);
+	if (!path.is_absolute())
+	{
+		if (prefabName.find("Assets") == 0 || path.extension() == ".prefab")
+		{
+			path = SceneManager::get().ResolveProjectPath(prefabName);
+		}
+		else
+		{
+			path = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + prefabName + ".prefab");
+		}
+	}
+
+	if (!std::filesystem::exists(path))
+	{
+		std::filesystem::path fallback = SceneManager::get().ResolveProjectPath("Assets/Prefabs/" + std::filesystem::path(prefabName).filename().string());
+		if (fallback.extension() != ".prefab")
+			fallback += ".prefab";
+
+		if (std::filesystem::exists(fallback))
+			path = fallback;
+	}
 
 	auto entities = ParseFile(path.string());
 

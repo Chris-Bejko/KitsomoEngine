@@ -8,6 +8,7 @@
 #include "Events.h"
 #include "SerializedComponent.h"
 #include "SerializedEntity.h"
+#include "Prefab.h"
 class ProjectModuleLoader;
 class Sprite;
 using ComponentFactory = std::function<void(Entity *, const SerializedComponent &)>;
@@ -83,7 +84,8 @@ public:
     void SpawnEntities(const std::vector<SerializedEntity> &entities);
     std::vector<SerializedEntity> ParseFile(const std::string &fileName);
 
-    Entity *SpawnPrefab(const std::string prefabName, Vector2F position);
+    Entity *SpawnPrefab(const Prefab &prefab, Vector2F position);
+    Entity *SpawnPrefab(const std::string &prefabName, Vector2F position);
     void FocusOnEntity(Entity *entity);
     bool IsLoading() { return loading; }
     void TriggerGameOver();

@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Engine.h"
 #include "Enemy.h"
+#include "Prefab.h"
 
 class EnemySpawner : public SerializableScript
 {
@@ -36,7 +37,7 @@ public:
 
 private:
     float spawnInterval = 3.f;
-    std::string enemyPrefab = "Enemy";
+    Prefab enemyPrefab;
     Entity *player = nullptr;
     Entity* environment = nullptr;
     float timer = 0.f;
