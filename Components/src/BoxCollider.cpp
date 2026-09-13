@@ -75,7 +75,15 @@ std::string BoxCollider::GetCollisionTag()
 
 sf::FloatRect BoxCollider::GetRect()
 {
-    return entity->GetComponent<Sprite>().TranslateHitbox(hitbox);
+    if (hitbox.width == 0 && hitbox.height == 0 && entity && entity->HasComponent<Sprite>())
+    {
+        hitbox = entity->GetComponent<Sprite>().GetGlobalBounds();
+    }
+    if (entity && entity->HasComponent<Sprite>())
+    {
+        return entity->GetComponent<Sprite>().TranslateHitbox(hitbox);
+    }
+    return hitbox;
 }
 
 void BoxCollider::draw()
@@ -242,7 +250,6 @@ void BoxCollider::UpdateEditMode()
 
         // Update visual
         SetUpColliderVisuals();
-        Serialize();
     }
 }
 

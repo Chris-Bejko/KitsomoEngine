@@ -21,6 +21,7 @@ file(GLOB COLLISION_SOURCES   CONFIGURE_DEPENDS "Collision/*.cpp")
 file(GLOB UI_SOURCES          CONFIGURE_DEPENDS "UI/*.cpp")
 file(GLOB COMPONENTS_SOURCES  CONFIGURE_DEPENDS "Components/src/*.cpp")
 file(GLOB PROJECT_EXPLORER_SOURCES  CONFIGURE_DEPENDS "ProjectExplorer/src/*.cpp")
+file(GLOB SERIALIZATION_SOURCES  CONFIGURE_DEPENDS "Serialization/src/*.cpp")
 list(REMOVE_ITEM ROOT_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/main.cpp")
 
 set(IMGUI_SOURCES
@@ -45,6 +46,7 @@ add_library(ECSEngineCore SHARED
     ${UI_SOURCES}
     ${IMGUI_SOURCES}
     ${DIALOG_SOURCES}
+    ${SERIALIZATION_SOURCES}
 )
 
 set_target_properties(ECSEngineCore PROPERTIES 
@@ -65,6 +67,7 @@ target_include_directories(ECSEngineCore PUBLIC
     Dialogs/include/base/
     HotReloading/include/
     ProjectExplorer/include/
+    Serialization/include/
     Components/
     imgui/
     include/

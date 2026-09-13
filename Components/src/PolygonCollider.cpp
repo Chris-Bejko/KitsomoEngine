@@ -39,12 +39,6 @@ bool PolygonCollider::Init()
     return true;
 }
 
-void PolygonCollider::InitSerializedFields(ReadableSerializableVariableMap map)
-{
-    SerializableScript::InitSerializedFields(map);
-    RebuildVisual();
-}
-
 std::vector<Vector2F> PolygonCollider::GetWorldVertices()
 {
     std::vector<Vector2F> worldVerts;
@@ -226,7 +220,6 @@ void PolygonCollider::RebuildVisual()
     colliderVisual.setFillColor(sf::Color::Transparent);
     colliderVisual.setOutlineColor(sf::Color(255, 165, 0, 255));
     colliderVisual.setOutlineThickness(1.f);
-    Serialize();
 }
 
 void PolygonCollider::DrawDebug()

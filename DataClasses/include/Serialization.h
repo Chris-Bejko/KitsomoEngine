@@ -4,6 +4,7 @@
 #include <vector>
 #include <chrono>
 #include <map>
+#include "SerializedComponent.h"
 
 enum VariableType
 {
@@ -52,5 +53,5 @@ struct SerializableEntity
     std::string guiD;
     std::string entityName;
     std::string parentGUID;
-    std::vector<SerializableComponent> components;
+    std::vector<SerializedComponent> components;
 };

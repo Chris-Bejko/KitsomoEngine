@@ -42,6 +42,7 @@ public:
     float snapSize = 16.f;
     bool IsGizmoDragging() { return activeDrag != GizmoAxis::None; }
     Entity* GetSelectedEntity() { return selectedEntity; }
+    void Dispose();
 private:
     GizmoSystem() = default;
 

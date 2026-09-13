@@ -6,10 +6,11 @@
 #include <memory>
 #include "Vector2.h"
 #include "Events.h"
+#include "SerializedComponent.h"
+#include "SerializedEntity.h"
 class ProjectModuleLoader;
 class Sprite;
-using ComponentFactory = std::function<void(Entity *, ReadableSerializableVariableMap, std::string)>;
-
+using ComponentFactory = std::function<void(Entity *, const SerializedComponent &)>;
 constexpr int SCREEN_WIDTH = 1280;
 constexpr int SCREEN_HEIGHT = 720;
 enum EngineState
@@ -79,8 +80,8 @@ public:
     float GetDt() { return dt; }
     void UpdateEditorCamera(float dt);
     void RegisterComponents();
-    void SpawnEntities(const std::vector<SerializableEntity> &entities);
-    std::vector<SerializableEntity> ParseFile(const std::string &fileName);
+    void SpawnEntities(const std::vector<SerializedEntity> &entities);
+    std::vector<SerializedEntity> ParseFile(const std::string &fileName);
 
     Entity *SpawnPrefab(const std::string prefabName, Vector2F position);
     void FocusOnEntity(Entity *entity);

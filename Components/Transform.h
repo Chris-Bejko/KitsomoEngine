@@ -10,7 +10,7 @@ public:
 	Transform(float x, float y, float scX, float scY);
 
 	Transform(float x, float y, float scX, float scY, float roation);
-	virtual ~Transform() = default;
+	virtual ~Transform();
 
 	bool Init() override final;
 

@@ -2,7 +2,7 @@
 #include "Command.h"
 #include "EntityClipboard.h"
 #include "Entity.h"
-
+#include <regex>
 class CopyEntityCommand : public Command
 {
 public:
@@ -12,13 +12,37 @@ public:
 
     void Execute() override
     {
-        if (entityToCopy)
+        if (!entityToCopy)
+            return;
+
+        SerializedEntityClipboard clipboard;
+        clipboard.name = entityToCopy->GetName();
+
+        for (auto &component : entityToCopy->GetComponents())
         {
-            SerializedEntity clipboard;
-            clipboard.name = entityToCopy->GetName();
-            clipboard.components = entityToCopy->GetAllComponentVariables(); // already has fields built!
-            EntityClipboard::get().Copy(clipboard);
+            if (!component)
+                continue;
+
+            SerializedComponent serialized;
+
+            std::string componentName = typeid(*component).name();
+            componentName = std::regex_replace(componentName, std::regex("class "), "");
+
+            serialized.SetType(componentName);
+            serialized.SetGUID(component->GetGUID());
+
+            for (auto &field : component->GetSerializedFields())
+            {
+                if (!field)
+                    continue;
+
+                serialized.AddSerializedField(field->GetName(), field->Serialize());
+            }
+
+            clipboard.components.push_back(std::move(serialized));
         }
+
+        EntityClipboard::get().Copy(clipboard);
     }
     void Undo() override
     {

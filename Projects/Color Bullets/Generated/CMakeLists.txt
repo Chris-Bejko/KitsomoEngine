@@ -47,6 +47,7 @@ target_include_directories(GameScripts PRIVATE
     "${ENGINE_ROOT}/Tools/include"
     "${ENGINE_ROOT}/Collision"
     "${ENGINE_ROOT}/Components"
+    "${ENGINE_ROOT}/Serialization/include"
     "${ENGINE_ROOT}/UI"
     "${ENGINE_ROOT}/Commands"
     "${ENGINE_ROOT}/include"

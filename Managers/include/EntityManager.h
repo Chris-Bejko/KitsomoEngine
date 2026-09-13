@@ -3,8 +3,6 @@
 #include <vector>
 #include <memory>
 #include "Entity.h"
-#include "imgui.h"
-#include "imgui-SFML.h"
 #include <set>
 
 class SerializableEntity;
@@ -41,11 +39,7 @@ public:
 
 	void RemoveActiveCollision(std::vector<std::string> it);
 
-	void DisplayEntities();
-
 	void ClearInspector();
-
-	void DisplayComponents();
 
 	void DestroyAllEntities();
 	void RemoveCollisionPairsForEntity(Entity *e);
@@ -62,9 +56,8 @@ public:
 	std::string GetUniqueName(const std::string &baseName);
 	std::vector<std::unique_ptr<Entity>> &GetEntities() { return entities; }
 	std::vector<std::unique_ptr<Entity>> &GetUnvalidatedEntities() { return to_add; }
-	void DisplayEntityNode(Entity *e);
 	Entity *GetDragHoveredEntity() { return dragHoveredEntity; }
-	void DisplayComponentsOf(Entity *e);
+	void SetDragHoveredEntity(Entity *entity) { dragHoveredEntity = entity; }
 	void RemoveEntityByGUID(const std::string &guid);
 	void ClearAllEntities() { entities.clear(); to_add.clear(); }
 private:
@@ -77,7 +70,5 @@ private:
 
 	std::vector<std::vector<std::string>> activeCollisions;
 	Entity *selectedEntity = nullptr;
-	Entity *lastClickedEntity = nullptr;
-	float lastClickTime = 0.f;
 	Entity *dragHoveredEntity = nullptr;
 };

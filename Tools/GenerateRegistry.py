@@ -139,6 +139,7 @@ def generate_cmake(scripts):
     lines.append('    "${ENGINE_ROOT}/Tools/include"')
     lines.append('    "${ENGINE_ROOT}/Collision"')
     lines.append('    "${ENGINE_ROOT}/Components"')
+    lines.append('    "${ENGINE_ROOT}/Serialization/include"')
     lines.append('    "${ENGINE_ROOT}/UI"')
     lines.append('    "${ENGINE_ROOT}/Commands"')
     lines.append('    "${ENGINE_ROOT}/include"')

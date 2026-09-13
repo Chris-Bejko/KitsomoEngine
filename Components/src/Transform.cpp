@@ -31,6 +31,24 @@ Transform::Transform(float x, float y, float scX, float scY, float roation)
 	this->rotation = rotation;
 }
 
+Transform::~Transform()
+{
+	if (parent)
+	{
+		parent->RemoveChild(this);
+		parent = nullptr;
+	}
+
+	for (Transform *child : children)
+	{
+		if (child)
+		{
+			child->parent = nullptr;
+		}
+	}
+	children.clear();
+}
+
 bool Transform::Init()
 {
 	Field("position.x", position.x);
@@ -95,9 +113,17 @@ Vector2F Transform::GetWorldPosition()
 {
 	try
 	{
-
 		if (parent == nullptr || parent->entity == nullptr)
 			return position;
+
+		int depth = 0;
+		Transform *curr = parent;
+		while (curr != nullptr && curr->entity != nullptr)
+		{
+			if (++depth > 100)
+				return position;
+			curr = curr->parent;
+		}
 
 		Vector2F parentWorld = parent->GetWorldPosition();
 		float parentRot = parent->GetWorldRotation() * 3.14159f / 180.f;
@@ -109,7 +135,7 @@ Vector2F Transform::GetWorldPosition()
 
 		return Vector2F(parentWorld.x + rotatedX, parentWorld.y + rotatedY);
 	}
-	catch(char *e)
+	catch(...)
 	{
 		return position;
 	}

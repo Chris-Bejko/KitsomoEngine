@@ -16,6 +16,18 @@ sf::Vector2f GizmoSystem::GetMouseWorld()
         sf::Mouse::getPosition(Engine::get().GetWindow()));
 }
 
+void GizmoSystem::Dispose()
+{
+    selectedEntity = nullptr;
+    activeDrag = GizmoAxis::None;
+    dragStartMouse = sf::Vector2f(0.f, 0.f);
+    dragStartPosition = Vector2F(0.f, 0.f);
+    dragStartRotation = 0.f;
+    dragStartScale = Vector2F(1.f, 1.f);
+    snapEnabled = false;
+    mode = GizmoMode::Move;
+}
+
 float GizmoSystem::Snap(float value, float size)
 {
     return std::round(value / size) * size;

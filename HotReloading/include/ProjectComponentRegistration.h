@@ -9,94 +9,89 @@
 // Add default
 // ============================================================
 
-template<typename T>
+template <typename T>
 bool ProjectModuleAddDefault(
-    Entity* entity)
+    Entity *entity)
 {
     if (entity == nullptr)
     {
         return false;
     }
 
-
     constexpr bool allowsMultiple =
         ComponentRegistrationMeta<T>::allowMultiple;
 
-
-    if (!ProjectModuleHasRequiredTypes<T>(
-            entity))
+    if (!ProjectModuleHasRequiredTypes<T>(entity))
     {
         return false;
     }
 
-
-    if (!allowsMultiple &&
-        entity->HasComponent<T>())
+    if (!allowsMultiple && entity->HasComponent<T>())
     {
         return false;
     }
-
 
     entity->AddComponent<T>();
 
     return entity->HasComponent<T>();
 }
 
-
 // ============================================================
 // Apply serialized data
 // ============================================================
 
-template<typename T>
-void ProjectModuleApplySerialized(
-    Entity* entity,
-    const ReadableSerializableVariableMap& fields,
-    const char* guid)
+template <typename T>
+void ProjectModuleApplySerialized(Entity *entity, const SerializedComponent &serialized)
 {
-    if (entity == nullptr)
+    if (!entity)
     {
+        LOG_ERROR("ProjectModuleApplySerialized: entity is null");
         return;
     }
 
+    T *component = nullptr;
 
-    const std::string componentGuid =
-        guid == nullptr
-            ? std::string()
-            : std::string(guid);
+    const std::string componentGuid = serialized.GetGUID();
 
-
-    constexpr bool allowsMultiple =
-        ComponentRegistrationMeta<T>::allowMultiple;
-
+    constexpr bool allowsMultiple = ComponentRegistrationMeta<T>::allowMultiple;
 
     if (allowsMultiple)
     {
         if (!componentGuid.empty() && entity->HasComponent<T>(componentGuid))
         {
-            entity->GetComponent<T>(componentGuid).SetGUID(componentGuid);
-
-            entity->GetComponent<T>(componentGuid).InitSerializedFields(fields);
+            component = &entity->GetComponent<T>(componentGuid);
         }
         else
         {
-            entity->AddComponent<T>(FromGUID(componentGuid)).InitSerializedFields(fields);
+            component = &entity->AddComponent<T>(FromGUID(componentGuid));
         }
-
-        return;
-    }
-
-
-    if (!entity->HasComponent<T>())
-    {
-        entity->AddComponent<T>(FromGUID(componentGuid)).InitSerializedFields(fields);
     }
     else
     {
-        if (!componentGuid.empty())
+        if (!entity->HasComponent<T>())
         {
-            entity->GetComponent<T>().SetGUID(componentGuid);
+            component = &entity->AddComponent<T>(FromGUID(componentGuid));
         }
+        else
+        {
+            component = &entity->GetComponent<T>();
+        }
+    }
 
-        entity->GetComponent<T>().InitSerializedFields(fields);
+    if (!component)
+    {
+        LOG_ERROR("ProjectModuleApplySerialized: failed to create/find component");
+        return;
+    }
+
+    for (const auto &field : component->GetSerializedFields())
+    {
+        if (!field)
+            continue;
+        auto it = serialized.GetFields().find(field->GetName());
+        if (it != serialized.GetFields().end())
+        {
+            field->Deserialize(it->second);
+        }
     }
 }
