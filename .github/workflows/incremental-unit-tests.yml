@@ -1,0 +1,34 @@
+ name: PR Incremental Build
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+jobs:
+  unit-tests:
+    name: Run Unit Tests
+    needs: incremental-build
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Configure CTest
+        run: >
+          cmake -S . -B build -A x64
+          -DBUILD_TESTING=ON
+          -DECSEngine_ENABLE_RUNTIME=OFF
+
+      - name: Download unit-test executable
+        uses: actions/download-artifact@v4
+        with:
+          name: unit-test-executable
+          path: build/Debug
+
+      - name: Run unit tests
+        run: ctest --test-dir build -C Debug --output-on-failure
