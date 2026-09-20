@@ -1,10 +1,18 @@
 #include "ComponentTypeRegistry.h"
 #include "CommandHistory.h"
+#include "EntityClipboard.h"
+#include "EventSystem.h"
 #include "GUIDGenerator.h"
+#include "Logger.h"
+#include "Prefab.h"
+#include "SerializedComponent.h"
+#include "SerializedEntity.h"
+#include "SystemManager.h"
 #include "Vector2.h"
 
 #include <cmath>
 #include <cstring>
+#include <filesystem>
 #include <iostream>
 #include <regex>
 #include <string>
@@ -15,6 +23,16 @@ namespace
 {
     class TestComponentA {};
     class TestComponentB {};
+
+    struct ScoreEvent
+    {
+        int amount;
+    };
+
+    struct HealthEvent
+    {
+        int amount;
+    };
 
     class CounterCommand final : public Command
     {
@@ -43,6 +61,58 @@ namespace
         int& counter;
         int amount;
         std::string description;
+    };
+
+    class RecordingSystem final : public System
+    {
+    public:
+        explicit RecordingSystem(int& updateCount)
+            : updateCount(updateCount)
+        {
+        }
+
+        void Update() override
+        {
+            ++updateCount;
+        }
+
+    private:
+        int& updateCount;
+    };
+
+    class TestAssetReference final : public AssetReference
+    {
+    public:
+        using AssetReference::AssetReference;
+
+        bool Load() override
+        {
+            ++loadCount;
+            loaded = HasPath();
+            return HasPath();
+        }
+
+        void Unload() override
+        {
+            ++unloadCount;
+            loaded = false;
+        }
+
+        bool IsLoaded() const override
+        {
+            return loaded;
+        }
+
+        std::filesystem::path Resolve(const std::string& assetPath)
+        {
+            return ResolvePath(assetPath);
+        }
+
+        int loadCount = 0;
+        int unloadCount = 0;
+
+    private:
+        bool loaded = false;
     };
 
     int failures = 0;
@@ -220,6 +290,201 @@ namespace
         CHECK(testName, history.GetRedoDescription().empty());
     }
 
+    void EventSystemDispatchesAndUnsubscribesSafely()
+    {
+        const char* testName = "EventSystemDispatchesAndUnsubscribesSafely";
+        auto& events = EventSystem::get();
+        events.Clear();
+        int firstTotal = 0;
+        int secondTotal = 0;
+        int lateTotal = 0;
+        EventSystem::CallbackId secondListener = 0;
+
+        events.Subscribe<ScoreEvent>([&](const ScoreEvent& event)
+        {
+            firstTotal += event.amount;
+            events.Unsubscribe<ScoreEvent>(secondListener);
+            events.Subscribe<ScoreEvent>([&](const ScoreEvent& nextEvent)
+            {
+                lateTotal += nextEvent.amount;
+            });
+        });
+        secondListener = events.Subscribe<ScoreEvent>([&](const ScoreEvent& event)
+        {
+            secondTotal += event.amount;
+        });
+
+        events.Fire(ScoreEvent{3});
+        CHECK(testName, firstTotal == 3);
+        CHECK(testName, secondTotal == 0);
+        CHECK(testName, lateTotal == 0);
+
+        events.Fire(ScoreEvent{2});
+        CHECK(testName, firstTotal == 5);
+        CHECK(testName, secondTotal == 0);
+        CHECK(testName, lateTotal == 2);
+        events.Clear();
+    }
+
+    void EventSystemKeepsEventChannelsIndependent()
+    {
+        const char* testName = "EventSystemKeepsEventChannelsIndependent";
+        auto& events = EventSystem::get();
+        events.Clear();
+        int scoreTotal = 0;
+        int healthTotal = 0;
+
+        events.Subscribe<ScoreEvent>([&](const ScoreEvent& event)
+        {
+            scoreTotal += event.amount;
+        });
+        events.Subscribe<HealthEvent>([&](const HealthEvent& event)
+        {
+            healthTotal += event.amount;
+        });
+
+        events.Fire(ScoreEvent{7});
+        CHECK(testName, scoreTotal == 7);
+        CHECK(testName, healthTotal == 0);
+
+        events.Fire(HealthEvent{4});
+        CHECK(testName, scoreTotal == 7);
+        CHECK(testName, healthTotal == 4);
+        events.Clear();
+    }
+
+    void SerializationPreservesEntityAndComponentData()
+    {
+        const char* testName = "SerializationPreservesEntityAndComponentData";
+        SerializedComponent sprite("Sprite", "component-guid");
+        sprite.AddSerializedField("texture", "Assets/Textures/player.png");
+        sprite.AddSerializedField("layer", "3");
+        sprite.AddSerializedField("layer", "4");
+
+        CHECK(testName, sprite.GetType() == "Sprite");
+        CHECK(testName, sprite.GetGUID() == "component-guid");
+        CHECK(testName, sprite.GetFields().size() == 2);
+        CHECK(testName, sprite.GetFields().at("layer") == "4");
+
+        SerializedEntity entity("Player", "entity-guid");
+        entity.SetParentGUID("parent-guid");
+        entity.AddComponent(sprite);
+        entity.AddComponent(SerializedComponent("Rigidbody", "body-guid"));
+
+        CHECK(testName, entity.GetName() == "Player");
+        CHECK(testName, entity.GetGUID() == "entity-guid");
+        CHECK(testName, entity.HasParent());
+        CHECK(testName, entity.GetParentGUID() == "parent-guid");
+        CHECK(testName, entity.GetComponents().size() == 2);
+        CHECK(testName, entity.GetComponents().at(0).GetFields().at("texture") == "Assets/Textures/player.png");
+
+        entity.SetParentGUID("");
+        entity.SetName("RenamedPlayer");
+        entity.SetGUID("new-entity-guid");
+        CHECK(testName, !entity.HasParent());
+        CHECK(testName, entity.GetName() == "RenamedPlayer");
+        CHECK(testName, entity.GetGUID() == "new-entity-guid");
+    }
+
+    void LoggerDeliversLevelAndMessageToCallback()
+    {
+        const char* testName = "LoggerDeliversLevelAndMessageToCallback";
+        auto& logger = Logger::get();
+        int callbackCount = 0;
+        LogLevel receivedLevel = LogLevel::Info;
+        std::string receivedMessage;
+
+        logger.SetCallback([&](LogLevel level, const std::string& message)
+        {
+            ++callbackCount;
+            receivedLevel = level;
+            receivedMessage = message;
+        });
+        logger.Log(LogLevel::Warning, "unit-test-message-", 42);
+        logger.SetCallback({});
+
+        CHECK(testName, callbackCount == 1);
+        CHECK(testName, receivedLevel == LogLevel::Warning);
+        CHECK(testName, receivedMessage.find("[WARNING]") != std::string::npos);
+        CHECK(testName, receivedMessage.find("unit-test-message-42") != std::string::npos);
+    }
+
+    void ClipboardCopiesAndClearsSerializedEntities()
+    {
+        const char* testName = "ClipboardCopiesAndClearsSerializedEntities";
+        auto& clipboard = EntityClipboard::get();
+        clipboard.Clear();
+
+        SerializedEntityClipboard source;
+        source.name = "Copied Entity";
+        SerializedComponent component("Sprite", "sprite-guid");
+        component.AddSerializedField("texture", "Assets/Textures/player.png");
+        source.components.push_back(component);
+
+        clipboard.Copy(source);
+        source.name = "Changed Source";
+        source.components.front().AddSerializedField("texture", "Assets/Textures/changed.png");
+        const SerializedEntityClipboard copied = clipboard.GetClipboard();
+
+        CHECK(testName, clipboard.HasContent());
+        CHECK(testName, copied.name == "Copied Entity");
+        CHECK(testName, copied.components.size() == 1);
+        CHECK(testName, copied.components.front().GetType() == "Sprite");
+        CHECK(testName, copied.components.front().GetFields().at("texture") == "Assets/Textures/player.png");
+
+        clipboard.Clear();
+        const SerializedEntityClipboard cleared = clipboard.GetClipboard();
+        CHECK(testName, !clipboard.HasContent());
+        CHECK(testName, cleared.name.empty());
+        CHECK(testName, cleared.components.empty());
+    }
+
+    void SystemsUpdateRegisteredSystems()
+    {
+        const char* testName = "SystemsUpdateRegisteredSystems";
+        int firstUpdates = 0;
+        int secondUpdates = 0;
+        auto& systems = SystemsManager::get();
+
+        systems.AddSystem(new RecordingSystem(firstUpdates));
+        systems.AddSystem(new RecordingSystem(secondUpdates));
+        systems.Update();
+        systems.Update();
+
+        CHECK(testName, firstUpdates == 2);
+        CHECK(testName, secondUpdates == 2);
+    }
+
+    void AssetsMaintainReferenceLifecycleAndPaths()
+    {
+        const char* testName = "AssetsMaintainReferenceLifecycleAndPaths";
+        TestAssetReference asset;
+
+        CHECK(testName, !asset.HasPath());
+        CHECK(testName, asset.GetName().empty());
+        asset.SetPath("Assets/Textures/player.png");
+        CHECK(testName, asset.HasPath());
+        CHECK(testName, asset.GetPath() == "Assets/Textures/player.png");
+        CHECK(testName, asset.GetName() == "player.png");
+        CHECK(testName, asset.unloadCount == 1);
+        CHECK(testName, asset.loadCount == 1);
+        CHECK(testName, asset.IsLoaded());
+
+        const auto expectedPath = std::filesystem::current_path() / "Assets/Textures/player.png";
+        CHECK(testName, asset.Resolve("Assets/Textures/player.png") == expectedPath);
+        CHECK(testName, asset.Resolve(expectedPath.string()) == expectedPath);
+
+        asset.SetPath("");
+        CHECK(testName, !asset.HasPath());
+        CHECK(testName, asset.unloadCount == 2);
+        CHECK(testName, asset.loadCount == 1);
+
+        Prefab prefab("Assets/Prefabs/player.prefab");
+        CHECK(testName, prefab.HasPath());
+        CHECK(testName, prefab.GetName() == "player.prefab");
+        CHECK(testName, prefab.IsLoaded());
+    }
+
     struct TestCase
     {
         const char* name;
@@ -236,6 +501,13 @@ namespace
         {"Guid.GenerationUsesRfc4122VersionFourFormat", GuidGenerationUsesRfc4122VersionFourFormat},
         {"CommandHistory.ExecutesUndoesAndRedoes", CommandHistoryExecutesUndoesAndRedoes},
         {"Registry.StopsAtItsCapacity", ComponentRegistryStopsAtItsCapacity},
+        {"Events.DispatchesAndUnsubscribesSafely", EventSystemDispatchesAndUnsubscribesSafely},
+        {"Events.KeepsEventChannelsIndependent", EventSystemKeepsEventChannelsIndependent},
+        {"Serialization.PreservesEntityAndComponentData", SerializationPreservesEntityAndComponentData},
+        {"Logger.DeliversLevelAndMessageToCallback", LoggerDeliversLevelAndMessageToCallback},
+        {"Clipboard.CopiesAndClearsSerializedEntities", ClipboardCopiesAndClearsSerializedEntities},
+        {"Systems.UpdatesRegisteredSystems", SystemsUpdateRegisteredSystems},
+        {"Assets.MaintainsReferenceLifecycleAndPaths", AssetsMaintainReferenceLifecycleAndPaths},
     };
 
     bool RunTest(const TestCase& testCase)

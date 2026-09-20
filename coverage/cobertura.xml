@@ -1,0 +1,2139 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE coverage SYSTEM 'http://cobertura.sourceforge.net/xml/coverage-04.dtd'>
+<coverage line-rate="0.9436619718309859" branch-rate="0.5540540540540541" lines-covered="335" lines-valid="355" branches-covered="164" branches-valid="296" complexity="0.0" timestamp="1789929540" version="gcovr 8.6">
+  <sources>
+    <source>C:/Users/kitso/Documents/CPP Game/CPP PRoject/ECSEngine</source>
+  </sources>
+  <packages>
+    <package name="Base.src" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+      <classes>
+        <class name="ComponentTypeRegistry_cpp" filename="Base/src/ComponentTypeRegistry.cpp" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+          <methods>
+            <method name="ComponentTypeRegistry::get" signature="()" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="4" hits="50" branch="false"/>
+                <line number="6" hits="50" branch="true" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="75%"/>
+                  </conditions>
+                </line>
+                <line number="7" hits="50" branch="false"/>
+              </lines>
+            </method>
+            <method name="ComponentTypeRegistry::GetOrCreateID" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="12" hits="1312" branch="false"/>
+                <line number="15" hits="1312" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="17" hits="1312" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="19" hits="10" branch="false"/>
+                <line number="22" hits="1302" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="24" hits="20" branch="false"/>
+                <line number="27" hits="1282" branch="false"/>
+                <line number="29" hits="1282" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="31" hits="1282" branch="false"/>
+              </lines>
+            </method>
+            <method name="ComponentTypeRegistry::GetID" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;) const" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="36" hits="20" branch="false"/>
+                <line number="39" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="41" hits="20" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="43" hits="10" branch="false"/>
+                <line number="46" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="ComponentTypeRegistry::UnregisterProjectTypes" signature="(std::vector&lt;std::type_index, std::allocator&lt;std::type_index&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="51" hits="10" branch="false"/>
+                <line number="54" hits="20" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="56" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="58" hits="10" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="4" hits="50" branch="false"/>
+            <line number="6" hits="50" branch="true" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="75%"/>
+              </conditions>
+            </line>
+            <line number="7" hits="50" branch="false"/>
+            <line number="12" hits="1312" branch="false"/>
+            <line number="15" hits="1312" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="17" hits="1312" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="19" hits="10" branch="false"/>
+            <line number="22" hits="1302" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="24" hits="20" branch="false"/>
+            <line number="27" hits="1282" branch="false"/>
+            <line number="29" hits="1282" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="31" hits="1282" branch="false"/>
+            <line number="36" hits="20" branch="false"/>
+            <line number="39" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="41" hits="20" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="43" hits="10" branch="false"/>
+            <line number="46" hits="10" branch="false"/>
+            <line number="51" hits="10" branch="false"/>
+            <line number="54" hits="20" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="56" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="58" hits="10" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="C:.Users.kitso.DOCUME~1.CPPGAM~1.CPPPRO~1.ECSENG~1.Base.include" line-rate="0.8823529411764706" branch-rate="0.5833333333333334" complexity="0.0">
+      <classes>
+        <class name="ComponentTypeRegistry_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/Base/include/ComponentTypeRegistry.h" line-rate="0.8823529411764706" branch-rate="0.5833333333333334" complexity="0.0">
+          <methods>
+            <method name="unsigned int ComponentTypeRegistry::GetID&lt;(anonymous namespace)::TestComponentA&gt;" signature="() const" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="29" hits="30" branch="false"/>
+                <line number="31" hits="30" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="33" hits="30" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="35" hits="10" branch="false"/>
+                <line number="38" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="unsigned int ComponentTypeRegistry::GetID&lt;(anonymous namespace)::TestComponentB&gt;" signature="() const" line-rate="0.8" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="29" hits="10" branch="false"/>
+                <line number="31" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="33" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="35" hits="10" branch="false"/>
+                <line number="38" hits="0" branch="false"/>
+              </lines>
+            </method>
+            <method name="void ComponentTypeRegistry::AssociateType&lt;(anonymous namespace)::TestComponentA&gt;" signature="(unsigned int)" line-rate="0.75" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="62" hits="10" branch="false"/>
+                <line number="64" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="66" hits="0" branch="false"/>
+                <line number="69" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="ComponentTypeRegistry::ComponentTypeRegistry" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="83" hits="13" branch="false"/>
+              </lines>
+            </method>
+            <method name="unsigned int getComponentTypeID&lt;(anonymous namespace)::TestComponentA&gt;" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="104" hits="10" branch="false"/>
+                <line number="106" hits="10" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="29" hits="30" branch="false"/>
+            <line number="29" hits="10" branch="false"/>
+            <line number="31" hits="30" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="31" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="33" hits="30" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="33" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="35" hits="10" branch="false"/>
+            <line number="35" hits="10" branch="false"/>
+            <line number="38" hits="20" branch="false"/>
+            <line number="38" hits="0" branch="false"/>
+            <line number="62" hits="10" branch="false"/>
+            <line number="64" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="66" hits="0" branch="false"/>
+            <line number="69" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="83" hits="13" branch="false"/>
+            <line number="104" hits="10" branch="false"/>
+            <line number="106" hits="10" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="C:.Users.kitso.DOCUME~1.CPPGAM~1.CPPPRO~1.ECSENG~1.DATACL~1.include" line-rate="1.0" branch-rate="0.63" complexity="0.0">
+      <classes>
+        <class name="AssetReference_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/DATACL~1/include/AssetReference.h" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+          <methods>
+            <method name="AssetReference::AssetReference" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="9" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="AssetReference::~AssetReference" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="11" hits="20" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="9" hits="10" branch="false"/>
+            <line number="11" hits="20" branch="false"/>
+          </lines>
+        </class>
+        <class name="GUIDGenerator_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/DATACL~1/include/GUIDGenerator.h" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+          <methods>
+            <method name="EngineGUID::Generate[abi:cxx11]" signature="()" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="17" hits="1000" branch="false"/>
+                <line number="19" hits="1000" branch="true" condition-coverage="50% (4/8)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="20" hits="1000" branch="true" condition-coverage="50% (5/10)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="21" hits="1000" branch="true" condition-coverage="50% (4/8)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="23" hits="1000" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="24" hits="1000" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="27" hits="1000" branch="false"/>
+                <line number="28" hits="1000" branch="false"/>
+                <line number="30" hits="1000" branch="false"/>
+                <line number="31" hits="1000" branch="false"/>
+                <line number="33" hits="1000" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="34" hits="1000" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="36" hits="1000" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="37" hits="1000" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="38" hits="1000" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="39" hits="1000" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="40" hits="1000" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="42" hits="2000" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="43" hits="1000" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="17" hits="1000" branch="false"/>
+            <line number="19" hits="1000" branch="true" condition-coverage="50% (4/8)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="20" hits="1000" branch="true" condition-coverage="50% (5/10)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="21" hits="1000" branch="true" condition-coverage="50% (4/8)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="23" hits="1000" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="24" hits="1000" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="27" hits="1000" branch="false"/>
+            <line number="28" hits="1000" branch="false"/>
+            <line number="30" hits="1000" branch="false"/>
+            <line number="31" hits="1000" branch="false"/>
+            <line number="33" hits="1000" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="34" hits="1000" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="36" hits="1000" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="37" hits="1000" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="38" hits="1000" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="39" hits="1000" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="40" hits="1000" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="42" hits="2000" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="43" hits="1000" branch="false"/>
+          </lines>
+        </class>
+        <class name="Prefab_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/DATACL~1/include/Prefab.h" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+          <methods>
+            <method name="Prefab::~Prefab" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="10" hits="10" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="10" hits="10" branch="false"/>
+          </lines>
+        </class>
+        <class name="Vector2_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/DATACL~1/include/Vector2.h" line-rate="1.0" branch-rate="0.7954545454545454" complexity="0.0">
+          <methods>
+            <method name="VectorBase&lt;float, Vector2&lt;float&gt; &gt;::magnitude" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="12" hits="40" branch="false"/>
+                <line number="14" hits="40" branch="false"/>
+                <line number="15" hits="40" branch="false"/>
+                <line number="16" hits="120" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="17" hits="80" branch="false"/>
+                <line number="18" hits="40" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;float, Vector2&lt;float&gt; &gt;::magnitudeSq" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="21" hits="10" branch="false"/>
+                <line number="23" hits="10" branch="false"/>
+                <line number="24" hits="10" branch="false"/>
+                <line number="25" hits="30" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="26" hits="20" branch="false"/>
+                <line number="27" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;float, Vector2&lt;float&gt; &gt;::normalized" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="30" hits="20" branch="false"/>
+                <line number="32" hits="20" branch="false"/>
+                <line number="33" hits="20" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="34" hits="10" branch="false"/>
+                <line number="35" hits="10" branch="false"/>
+                <line number="36" hits="30" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="37" hits="20" branch="false"/>
+                <line number="38" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;float, Vector2&lt;float&gt; &gt;::dot" signature="(Vector2&lt;float&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="58" hits="10" branch="false"/>
+                <line number="60" hits="10" branch="false"/>
+                <line number="61" hits="10" branch="false"/>
+                <line number="62" hits="10" branch="false"/>
+                <line number="63" hits="30" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="64" hits="20" branch="false"/>
+                <line number="65" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;float, Vector2&lt;float&gt; &gt;::distance" signature="(Vector2&lt;float&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="69" hits="10" branch="false"/>
+                <line number="71" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;float, Vector2&lt;float&gt; &gt;::lerp" signature="(Vector2&lt;float&gt; const&amp;, float) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="75" hits="10" branch="false"/>
+                <line number="77" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;float, Vector2&lt;float&gt; &gt;::operator==" signature="(Vector2&lt;float&gt; const&amp;) const" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="81" hits="20" branch="false"/>
+                <line number="83" hits="20" branch="false"/>
+                <line number="84" hits="20" branch="false"/>
+                <line number="85" hits="60" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="86" hits="40" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="87" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;int, Vector2&lt;int&gt; &gt;::operator==" signature="(Vector2&lt;int&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="81" hits="70" branch="false"/>
+                <line number="83" hits="70" branch="false"/>
+                <line number="84" hits="70" branch="false"/>
+                <line number="85" hits="190" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="86" hits="130" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="87" hits="60" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;int, Vector3&lt;int&gt; &gt;::operator==" signature="(Vector3&lt;int&gt; const&amp;) const" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="81" hits="20" branch="false"/>
+                <line number="83" hits="20" branch="false"/>
+                <line number="84" hits="20" branch="false"/>
+                <line number="85" hits="80" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="86" hits="60" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="87" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;int, Vector4&lt;int&gt; &gt;::operator==" signature="(Vector4&lt;int&gt; const&amp;) const" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="81" hits="20" branch="false"/>
+                <line number="83" hits="20" branch="false"/>
+                <line number="84" hits="20" branch="false"/>
+                <line number="85" hits="100" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="86" hits="80" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="87" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;int, Vector2&lt;int&gt; &gt;::operator!=" signature="(Vector2&lt;int&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="90" hits="10" branch="false"/>
+                <line number="92" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="VectorBase&lt;float, Vector2&lt;float&gt; &gt;::toString[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="0.6428571428571429" complexity="0.0">
+              <lines>
+                <line number="96" hits="10" branch="false"/>
+                <line number="98" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="99" hits="10" branch="false"/>
+                <line number="100" hits="30" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="102" hits="20" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="103" hits="20" branch="true" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="75%"/>
+                  </conditions>
+                </line>
+                <line number="105" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="106" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;float&gt;::Vector2" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="116" hits="30" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;int&gt;::Vector2" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="116" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;float&gt;::Vector2" signature="(float, float)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="117" hits="70" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;int&gt;::Vector2" signature="(int, int)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="117" hits="140" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;float&gt;::operator+" signature="(Vector2&lt;float&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="119" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;int&gt;::operator+" signature="(Vector2&lt;int&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="119" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;float&gt;::operator-" signature="(Vector2&lt;float&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="120" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;int&gt;::operator-" signature="(Vector2&lt;int&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="120" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;float&gt;::operator*" signature="(float) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="121" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;int&gt;::operator*" signature="(int) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="121" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector2&lt;int&gt;::operator/" signature="(int) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="122" hits="20" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="operator+=" signature="(Vector2&lt;int&gt;&amp;, Vector2&lt;int&gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="124" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="operator-=" signature="(Vector2&lt;int&gt;&amp;, Vector2&lt;int&gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="125" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="operator*=" signature="(Vector2&lt;int&gt;&amp;, int)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="126" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector3&lt;int&gt;::Vector3" signature="(int, int, int)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="140" hits="80" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector3&lt;int&gt;::operator+" signature="(Vector3&lt;int&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="142" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector3&lt;int&gt;::cross" signature="(Vector3&lt;int&gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="152" hits="10" branch="false"/>
+                <line number="154" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector4&lt;int&gt;::Vector4" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="168" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector4&lt;int&gt;::Vector4" signature="(int, int, int, int)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="169" hits="30" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector4&lt;int&gt;::operator*" signature="(int) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="173" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Vector4&lt;int&gt;::operator/" signature="(int) const" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="174" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="12" hits="40" branch="false"/>
+            <line number="14" hits="40" branch="false"/>
+            <line number="15" hits="40" branch="false"/>
+            <line number="16" hits="120" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="17" hits="80" branch="false"/>
+            <line number="18" hits="40" branch="false"/>
+            <line number="21" hits="10" branch="false"/>
+            <line number="23" hits="10" branch="false"/>
+            <line number="24" hits="10" branch="false"/>
+            <line number="25" hits="30" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="26" hits="20" branch="false"/>
+            <line number="27" hits="10" branch="false"/>
+            <line number="30" hits="20" branch="false"/>
+            <line number="32" hits="20" branch="false"/>
+            <line number="33" hits="20" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="34" hits="10" branch="false"/>
+            <line number="35" hits="10" branch="false"/>
+            <line number="36" hits="30" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="37" hits="20" branch="false"/>
+            <line number="38" hits="10" branch="false"/>
+            <line number="58" hits="10" branch="false"/>
+            <line number="60" hits="10" branch="false"/>
+            <line number="61" hits="10" branch="false"/>
+            <line number="62" hits="10" branch="false"/>
+            <line number="63" hits="30" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="64" hits="20" branch="false"/>
+            <line number="65" hits="10" branch="false"/>
+            <line number="69" hits="10" branch="false"/>
+            <line number="71" hits="10" branch="false"/>
+            <line number="75" hits="10" branch="false"/>
+            <line number="77" hits="10" branch="false"/>
+            <line number="81" hits="20" branch="false"/>
+            <line number="81" hits="70" branch="false"/>
+            <line number="81" hits="20" branch="false"/>
+            <line number="81" hits="20" branch="false"/>
+            <line number="83" hits="20" branch="false"/>
+            <line number="83" hits="70" branch="false"/>
+            <line number="83" hits="20" branch="false"/>
+            <line number="83" hits="20" branch="false"/>
+            <line number="84" hits="20" branch="false"/>
+            <line number="84" hits="70" branch="false"/>
+            <line number="84" hits="20" branch="false"/>
+            <line number="84" hits="20" branch="false"/>
+            <line number="85" hits="60" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="85" hits="190" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="85" hits="80" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="85" hits="100" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="86" hits="40" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="86" hits="130" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="86" hits="60" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="86" hits="80" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="87" hits="20" branch="false"/>
+            <line number="87" hits="60" branch="false"/>
+            <line number="87" hits="20" branch="false"/>
+            <line number="87" hits="20" branch="false"/>
+            <line number="90" hits="10" branch="false"/>
+            <line number="92" hits="10" branch="false"/>
+            <line number="96" hits="10" branch="false"/>
+            <line number="98" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="99" hits="10" branch="false"/>
+            <line number="100" hits="30" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="102" hits="20" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="103" hits="20" branch="true" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="75%"/>
+              </conditions>
+            </line>
+            <line number="105" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="106" hits="10" branch="false"/>
+            <line number="116" hits="30" branch="false"/>
+            <line number="116" hits="20" branch="false"/>
+            <line number="117" hits="70" branch="false"/>
+            <line number="117" hits="140" branch="false"/>
+            <line number="119" hits="10" branch="false"/>
+            <line number="119" hits="10" branch="false"/>
+            <line number="120" hits="10" branch="false"/>
+            <line number="120" hits="10" branch="false"/>
+            <line number="121" hits="20" branch="false"/>
+            <line number="121" hits="10" branch="false"/>
+            <line number="122" hits="20" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="124" hits="10" branch="false"/>
+            <line number="125" hits="10" branch="false"/>
+            <line number="126" hits="10" branch="false"/>
+            <line number="140" hits="80" branch="false"/>
+            <line number="142" hits="10" branch="false"/>
+            <line number="152" hits="10" branch="false"/>
+            <line number="154" hits="10" branch="false"/>
+            <line number="168" hits="20" branch="false"/>
+            <line number="169" hits="30" branch="false"/>
+            <line number="173" hits="10" branch="false"/>
+            <line number="174" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="C:.Users.kitso.DOCUME~1.CPPGAM~1.CPPPRO~1.ECSENG~1.SERIAL~1.include" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+      <classes>
+        <class name="SerializedComponent_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/SERIAL~1/include/SerializedComponent.h" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+          <methods>
+            <method name="SerializedComponent::SerializedComponent" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="9" hits="30" branch="false"/>
+                <line number="12" hits="30" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="14" hits="30" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedComponent::GetType[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="16" hits="20" branch="false"/>
+                <line number="18" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedComponent::GetGUID[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="21" hits="10" branch="false"/>
+                <line number="23" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedComponent::GetFields[abi:cxx11]" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="26" hits="30" branch="false"/>
+                <line number="28" hits="30" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedComponent::GetFields[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="31" hits="10" branch="false"/>
+                <line number="33" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedComponent::AddSerializedField" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="46" hits="50" branch="false"/>
+                <line number="48" hits="50" branch="false"/>
+                <line number="49" hits="50" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="9" hits="30" branch="false"/>
+            <line number="12" hits="30" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="14" hits="30" branch="false"/>
+            <line number="16" hits="20" branch="false"/>
+            <line number="18" hits="20" branch="false"/>
+            <line number="21" hits="10" branch="false"/>
+            <line number="23" hits="10" branch="false"/>
+            <line number="26" hits="30" branch="false"/>
+            <line number="28" hits="30" branch="false"/>
+            <line number="31" hits="10" branch="false"/>
+            <line number="33" hits="10" branch="false"/>
+            <line number="46" hits="50" branch="false"/>
+            <line number="48" hits="50" branch="false"/>
+            <line number="49" hits="50" branch="false"/>
+          </lines>
+        </class>
+        <class name="SerializedEntity_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/SERIAL~1/include/SerializedEntity.h" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+          <methods>
+            <method name="SerializedEntity::SerializedEntity" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="22" hits="10" branch="false"/>
+                <line number="23" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="25" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::GetGUID[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="28" hits="20" branch="false"/>
+                <line number="30" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::SetGUID" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="33" hits="10" branch="false"/>
+                <line number="35" hits="10" branch="false"/>
+                <line number="36" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::GetName[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="38" hits="20" branch="false"/>
+                <line number="40" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::SetName" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="43" hits="10" branch="false"/>
+                <line number="45" hits="10" branch="false"/>
+                <line number="46" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::GetParentGUID[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="49" hits="10" branch="false"/>
+                <line number="51" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::SetParentGUID" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="54" hits="20" branch="false"/>
+                <line number="56" hits="20" branch="false"/>
+                <line number="57" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::HasParent" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="59" hits="20" branch="false"/>
+                <line number="61" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::GetComponents" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="65" hits="20" branch="false"/>
+                <line number="67" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::AddComponent" signature="(SerializedComponent const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="75" hits="10" branch="false"/>
+                <line number="77" hits="10" branch="false"/>
+                <line number="78" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="SerializedEntity::AddComponent" signature="(SerializedComponent&amp;&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="80" hits="10" branch="false"/>
+                <line number="82" hits="10" branch="false"/>
+                <line number="83" hits="10" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="22" hits="10" branch="false"/>
+            <line number="23" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="25" hits="10" branch="false"/>
+            <line number="28" hits="20" branch="false"/>
+            <line number="30" hits="20" branch="false"/>
+            <line number="33" hits="10" branch="false"/>
+            <line number="35" hits="10" branch="false"/>
+            <line number="36" hits="10" branch="false"/>
+            <line number="38" hits="20" branch="false"/>
+            <line number="40" hits="20" branch="false"/>
+            <line number="43" hits="10" branch="false"/>
+            <line number="45" hits="10" branch="false"/>
+            <line number="46" hits="10" branch="false"/>
+            <line number="49" hits="10" branch="false"/>
+            <line number="51" hits="10" branch="false"/>
+            <line number="54" hits="20" branch="false"/>
+            <line number="56" hits="20" branch="false"/>
+            <line number="57" hits="20" branch="false"/>
+            <line number="59" hits="20" branch="false"/>
+            <line number="61" hits="20" branch="false"/>
+            <line number="65" hits="20" branch="false"/>
+            <line number="67" hits="20" branch="false"/>
+            <line number="75" hits="10" branch="false"/>
+            <line number="77" hits="10" branch="false"/>
+            <line number="78" hits="10" branch="false"/>
+            <line number="80" hits="10" branch="false"/>
+            <line number="82" hits="10" branch="false"/>
+            <line number="83" hits="10" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="C:.Users.kitso.DOCUME~1.CPPGAM~1.CPPPRO~1.ECSENG~1.Systems.include" line-rate="0.927536231884058" branch-rate="0.56" complexity="0.0">
+      <classes>
+        <class name="EventSystem_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/Systems/include/EventSystem.h" line-rate="0.9523809523809523" branch-rate="0.56" complexity="0.0">
+          <methods>
+            <method name="unsigned long long EventSystem::Subscribe&lt;(anonymous namespace)::HealthEvent&gt;" signature="(std::function&lt;void ((anonymous namespace)::HealthEvent const&amp;)&gt;)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="20" hits="10" branch="false"/>
+                <line number="22" hits="10" branch="false"/>
+                <line number="23" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="unsigned long long EventSystem::Subscribe&lt;(anonymous namespace)::ScoreEvent&gt;" signature="(std::function&lt;void ((anonymous namespace)::ScoreEvent const&amp;)&gt;)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="20" hits="50" branch="false"/>
+                <line number="22" hits="50" branch="false"/>
+                <line number="23" hits="50" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="void EventSystem::Unsubscribe&lt;(anonymous namespace)::ScoreEvent&gt;" signature="(unsigned long long)" line-rate="0.8" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="27" hits="20" branch="false"/>
+                <line number="29" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="30" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="31" hits="0" branch="false"/>
+                <line number="33" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="void EventSystem::Fire&lt;(anonymous namespace)::HealthEvent&gt;" signature="((anonymous namespace)::HealthEvent const&amp;)" line-rate="0.8" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="37" hits="10" branch="false"/>
+                <line number="39" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="40" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="41" hits="0" branch="false"/>
+                <line number="43" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="void EventSystem::Fire&lt;(anonymous namespace)::ScoreEvent&gt;" signature="((anonymous namespace)::ScoreEvent const&amp;)" line-rate="0.8" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="37" hits="30" branch="false"/>
+                <line number="39" hits="30" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="40" hits="30" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="41" hits="0" branch="false"/>
+                <line number="43" hits="30" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="EventSystem::EventSystem" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="49" hits="11" branch="false"/>
+              </lines>
+            </method>
+            <method name="EventSystem::~EventSystem" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="50" hits="11" branch="false"/>
+              </lines>
+            </method>
+            <method name="EventSystem::ChannelBase::~ChannelBase" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="57" hits="30" branch="false"/>
+              </lines>
+            </method>
+            <method name="EventSystem::Channel&lt;(anonymous namespace)::HealthEvent&gt;::Subscribe" signature="(std::function&lt;void ((anonymous namespace)::HealthEvent const&amp;)&gt;)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="64" hits="10" branch="false"/>
+                <line number="66" hits="10" branch="false"/>
+                <line number="67" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="68" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="EventSystem::Channel&lt;(anonymous namespace)::ScoreEvent&gt;::Subscribe" signature="(std::function&lt;void ((anonymous namespace)::ScoreEvent const&amp;)&gt;)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="64" hits="50" branch="false"/>
+                <line number="66" hits="50" branch="false"/>
+                <line number="67" hits="50" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="68" hits="50" branch="false"/>
+              </lines>
+            </method>
+            <method name="EventSystem::Channel&lt;(anonymous namespace)::ScoreEvent&gt;::Unsubscribe" signature="(unsigned long long)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="71" hits="20" branch="false"/>
+                <line number="73" hits="40" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="74" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="auto EventSystem::Channel&lt;(anonymous namespace)::ScoreEvent&gt;::Unsubscribe(unsigned long long)::{lambda(auto:1 const&amp;)#1}::operator()&lt;std::pair&lt;unsigned long long, std::function&lt;void ((anonymous namespace)::ScoreEvent const&amp;)&gt; &gt; &gt;" signature="(std::pair&lt;unsigned long long, std::function&lt;void ((anonymous namespace)::ScoreEvent const&amp;)&gt; &gt; const&amp;) const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="77" hits="40" branch="false"/>
+                <line number="79" hits="40" branch="false"/>
+                <line number="81" hits="20" branch="false"/>
+                <line number="82" hits="20" branch="false"/>
+                <line number="109" hits="60" branch="false"/>
+                <line number="111" hits="60" branch="false"/>
+                <line number="113" hits="60" branch="false"/>
+                <line number="115" hits="60" branch="false"/>
+                <line number="117" hits="30" branch="false"/>
+                <line number="118" hits="30" branch="false"/>
+                <line number="119" hits="30" branch="false"/>
+                <line number="120" hits="30" branch="false"/>
+                <line number="121" hits="30" branch="false"/>
+                <line number="123" hits="30" branch="false"/>
+              </lines>
+            </method>
+            <method name="EventSystem::Channel&lt;(anonymous namespace)::HealthEvent&gt;::Fire" signature="((anonymous namespace)::HealthEvent const&amp;)" line-rate="1.0" branch-rate="0.6" complexity="0.0">
+              <lines>
+                <line number="84" hits="10" branch="false"/>
+                <line number="86" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="88" hits="20" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="90" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="98" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="99" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="101" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="EventSystem::Channel&lt;(anonymous namespace)::ScoreEvent&gt;::Fire" signature="((anonymous namespace)::ScoreEvent const&amp;)" line-rate="1.0" branch-rate="0.7" complexity="0.0">
+              <lines>
+                <line number="84" hits="30" branch="false"/>
+                <line number="86" hits="30" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="88" hits="80" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="90" hits="50" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="98" hits="50" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="99" hits="40" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="101" hits="30" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="20" hits="10" branch="false"/>
+            <line number="20" hits="50" branch="false"/>
+            <line number="22" hits="10" branch="false"/>
+            <line number="22" hits="50" branch="false"/>
+            <line number="23" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="23" hits="50" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="27" hits="20" branch="false"/>
+            <line number="29" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="30" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="31" hits="0" branch="false"/>
+            <line number="33" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="37" hits="10" branch="false"/>
+            <line number="37" hits="30" branch="false"/>
+            <line number="39" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="39" hits="30" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="40" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="40" hits="30" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="41" hits="0" branch="false"/>
+            <line number="41" hits="0" branch="false"/>
+            <line number="43" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="43" hits="30" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="49" hits="11" branch="false"/>
+            <line number="50" hits="11" branch="false"/>
+            <line number="57" hits="30" branch="false"/>
+            <line number="64" hits="10" branch="false"/>
+            <line number="64" hits="50" branch="false"/>
+            <line number="66" hits="10" branch="false"/>
+            <line number="66" hits="50" branch="false"/>
+            <line number="67" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="67" hits="50" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="68" hits="10" branch="false"/>
+            <line number="68" hits="50" branch="false"/>
+            <line number="71" hits="20" branch="false"/>
+            <line number="73" hits="40" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="74" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="77" hits="40" branch="false"/>
+            <line number="79" hits="40" branch="false"/>
+            <line number="81" hits="20" branch="false"/>
+            <line number="82" hits="20" branch="false"/>
+            <line number="84" hits="10" branch="false"/>
+            <line number="84" hits="30" branch="false"/>
+            <line number="86" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="86" hits="30" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="88" hits="20" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="88" hits="80" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="90" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="90" hits="50" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="98" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="98" hits="50" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="99" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="99" hits="40" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="101" hits="10" branch="false"/>
+            <line number="101" hits="30" branch="false"/>
+            <line number="109" hits="60" branch="false"/>
+            <line number="111" hits="60" branch="false"/>
+            <line number="113" hits="60" branch="false"/>
+            <line number="115" hits="60" branch="false"/>
+            <line number="117" hits="30" branch="false"/>
+            <line number="118" hits="30" branch="false"/>
+            <line number="119" hits="30" branch="false"/>
+            <line number="120" hits="30" branch="false"/>
+            <line number="121" hits="30" branch="false"/>
+            <line number="123" hits="30" branch="false"/>
+          </lines>
+        </class>
+        <class name="SystemManager_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/Systems/include/SystemManager.h" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+          <methods>
+            <method name="SystemsManager::SystemsManager" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="10" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="SystemsManager::~SystemsManager" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="11" hits="10" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="10" hits="10" branch="false"/>
+            <line number="11" hits="10" branch="false"/>
+          </lines>
+        </class>
+        <class name="System_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/Systems/include/System.h" line-rate="0.5" branch-rate="1.0" complexity="0.0">
+          <methods>
+            <method name="System::System" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="6" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="System::~System" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="7" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="System::Init" signature="()" line-rate="0.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="9" hits="0" branch="false"/>
+              </lines>
+            </method>
+            <method name="System::Update" signature="()" line-rate="0.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="10" hits="0" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="6" hits="20" branch="false"/>
+            <line number="7" hits="20" branch="false"/>
+            <line number="9" hits="0" branch="false"/>
+            <line number="10" hits="0" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="C:.Users.kitso.DOCUME~1.CPPGAM~1.CPPPRO~1.ECSENG~1.Tools.include" line-rate="0.8260869565217391" branch-rate="0.35526315789473684" complexity="0.0">
+      <classes>
+        <class name="Logger_h" filename="C:/Users/kitso/DOCUME~1/CPPGAM~1/CPPPRO~1/ECSENG~1/Tools/include/Logger.h" line-rate="0.8260869565217391" branch-rate="0.35526315789473684" complexity="0.0">
+          <methods>
+            <method name="Logger::get" signature="()" line-rate="1.0" branch-rate="0.375" complexity="0.0">
+              <lines>
+                <line number="25" hits="10" branch="false"/>
+                <line number="27" hits="10" branch="true" condition-coverage="37% (3/8)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="37%"/>
+                  </conditions>
+                </line>
+                <line number="28" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Logger::SetCallback" signature="(std::function&lt;void (LogLevel, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)&gt;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="33" hits="20" branch="false"/>
+                <line number="35" hits="20" branch="false"/>
+                <line number="36" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="void Logger::Log&lt;char const (&amp;) [19], int&gt;" signature="(LogLevel, char const (&amp;) [19], int&amp;&amp;)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="39" hits="10" branch="false"/>
+                <line number="41" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="42" hits="10" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="43" hits="10" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="44" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Logger::Logger" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="54" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Logger::GetPrefix[abi:cxx11]" signature="(LogLevel)" line-rate="0.42857142857142855" branch-rate="0.13333333333333333" complexity="0.0">
+              <lines>
+                <line number="59" hits="10" branch="false"/>
+                <line number="61" hits="10" branch="true" condition-coverage="20% (1/5)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="20%"/>
+                  </conditions>
+                </line>
+                <line number="63" hits="0" branch="true" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="0%"/>
+                  </conditions>
+                </line>
+                <line number="64" hits="30" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="65" hits="0" branch="true" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="0%"/>
+                  </conditions>
+                </line>
+                <line number="66" hits="0" branch="true" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="0%"/>
+                  </conditions>
+                </line>
+                <line number="67" hits="0" branch="true" condition-coverage="0% (0/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="0%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="Logger::GetTimestamp[abi:cxx11]" signature="()" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="71" hits="10" branch="false"/>
+                <line number="73" hits="10" branch="false"/>
+                <line number="74" hits="10" branch="false"/>
+                <line number="77" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="78" hits="10" branch="false"/>
+                <line number="79" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="Logger::SetConsoleColor" signature="(LogLevel)" line-rate="0.625" branch-rate="0.2" complexity="0.0">
+              <lines>
+                <line number="82" hits="10" branch="false"/>
+                <line number="85" hits="10" branch="false"/>
+                <line number="86" hits="10" branch="true" condition-coverage="20% (1/5)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="20%"/>
+                  </conditions>
+                </line>
+                <line number="88" hits="0" branch="false"/>
+                <line number="89" hits="10" branch="false"/>
+                <line number="90" hits="0" branch="false"/>
+                <line number="91" hits="0" branch="false"/>
+                <line number="94" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Logger::ResetConsoleColor" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="96" hits="10" branch="false"/>
+                <line number="99" hits="10" branch="false"/>
+                <line number="101" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Logger::Print" signature="(LogLevel, std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="0.9" branch-rate="0.4117647058823529" complexity="0.0">
+              <lines>
+                <line number="103" hits="10" branch="false"/>
+                <line number="105" hits="10" branch="true" condition-coverage="50% (6/12)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="106" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="107" hits="10" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="108" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="109" hits="10" branch="true" condition-coverage="33% (2/6)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="33%"/>
+                  </conditions>
+                </line>
+                <line number="110" hits="0" branch="true" condition-coverage="0% (0/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="0%"/>
+                  </conditions>
+                </line>
+                <line number="112" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="113" hits="10" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="114" hits="10" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="25" hits="10" branch="false"/>
+            <line number="27" hits="10" branch="true" condition-coverage="37% (3/8)">
+              <conditions>
+                <condition number="0" type="jump" coverage="37%"/>
+              </conditions>
+            </line>
+            <line number="28" hits="10" branch="false"/>
+            <line number="33" hits="20" branch="false"/>
+            <line number="35" hits="20" branch="false"/>
+            <line number="36" hits="20" branch="false"/>
+            <line number="39" hits="10" branch="false"/>
+            <line number="41" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="42" hits="10" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="43" hits="10" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="44" hits="10" branch="false"/>
+            <line number="54" hits="10" branch="false"/>
+            <line number="59" hits="10" branch="false"/>
+            <line number="61" hits="10" branch="true" condition-coverage="20% (1/5)">
+              <conditions>
+                <condition number="0" type="jump" coverage="20%"/>
+              </conditions>
+            </line>
+            <line number="63" hits="0" branch="true" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="0%"/>
+              </conditions>
+            </line>
+            <line number="64" hits="30" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="65" hits="0" branch="true" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="0%"/>
+              </conditions>
+            </line>
+            <line number="66" hits="0" branch="true" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="0%"/>
+              </conditions>
+            </line>
+            <line number="67" hits="0" branch="true" condition-coverage="0% (0/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="0%"/>
+              </conditions>
+            </line>
+            <line number="71" hits="10" branch="false"/>
+            <line number="73" hits="10" branch="false"/>
+            <line number="74" hits="10" branch="false"/>
+            <line number="77" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="78" hits="10" branch="false"/>
+            <line number="79" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="82" hits="10" branch="false"/>
+            <line number="85" hits="10" branch="false"/>
+            <line number="86" hits="10" branch="true" condition-coverage="20% (1/5)">
+              <conditions>
+                <condition number="0" type="jump" coverage="20%"/>
+              </conditions>
+            </line>
+            <line number="88" hits="0" branch="false"/>
+            <line number="89" hits="10" branch="false"/>
+            <line number="90" hits="0" branch="false"/>
+            <line number="91" hits="0" branch="false"/>
+            <line number="94" hits="10" branch="false"/>
+            <line number="96" hits="10" branch="false"/>
+            <line number="99" hits="10" branch="false"/>
+            <line number="101" hits="10" branch="false"/>
+            <line number="103" hits="10" branch="false"/>
+            <line number="105" hits="10" branch="true" condition-coverage="50% (6/12)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="106" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="107" hits="10" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="108" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="109" hits="10" branch="true" condition-coverage="33% (2/6)">
+              <conditions>
+                <condition number="0" type="jump" coverage="33%"/>
+              </conditions>
+            </line>
+            <line number="110" hits="0" branch="true" condition-coverage="0% (0/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="0%"/>
+              </conditions>
+            </line>
+            <line number="112" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="113" hits="10" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="114" hits="10" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="DataClasses.src" line-rate="0.8529411764705882" branch-rate="0.65" complexity="0.0">
+      <classes>
+        <class name="AssetReference_cpp" filename="DataClasses/src/AssetReference.cpp" line-rate="0.96" branch-rate="0.65" complexity="0.0">
+          <methods>
+            <method name="AssetReference::ResolvePath" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="0.875" branch-rate="0.6" complexity="0.0">
+              <lines>
+                <line number="5" hits="20" branch="false"/>
+                <line number="8" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="9" hits="0" branch="false"/>
+                <line number="11" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="13" hits="20" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="14" hits="10" branch="false"/>
+                <line number="16" hits="10" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="17" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="AssetReference::AssetReference" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="19" hits="10" branch="false"/>
+                <line number="20" hits="10" branch="false"/>
+                <line number="22" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="AssetReference::SetPath" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="24" hits="20" branch="false"/>
+                <line number="26" hits="20" branch="false"/>
+                <line number="28" hits="20" branch="false"/>
+                <line number="30" hits="20" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="31" hits="10" branch="false"/>
+                <line number="32" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="AssetReference::GetPath[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="34" hits="10" branch="false"/>
+                <line number="36" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="AssetReference::GetName[abi:cxx11]" signature="() const" line-rate="1.0" branch-rate="0.625" complexity="0.0">
+              <lines>
+                <line number="39" hits="30" branch="false"/>
+                <line number="41" hits="30" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="42" hits="10" branch="false"/>
+                <line number="44" hits="20" branch="true" condition-coverage="50% (3/6)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+              </lines>
+            </method>
+            <method name="AssetReference::HasPath" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="47" hits="70" branch="false"/>
+                <line number="49" hits="70" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="5" hits="20" branch="false"/>
+            <line number="8" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="9" hits="0" branch="false"/>
+            <line number="11" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="13" hits="20" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="14" hits="10" branch="false"/>
+            <line number="16" hits="10" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="17" hits="20" branch="false"/>
+            <line number="19" hits="10" branch="false"/>
+            <line number="20" hits="10" branch="false"/>
+            <line number="22" hits="10" branch="false"/>
+            <line number="24" hits="20" branch="false"/>
+            <line number="26" hits="20" branch="false"/>
+            <line number="28" hits="20" branch="false"/>
+            <line number="30" hits="20" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="31" hits="10" branch="false"/>
+            <line number="32" hits="20" branch="false"/>
+            <line number="34" hits="10" branch="false"/>
+            <line number="36" hits="10" branch="false"/>
+            <line number="39" hits="30" branch="false"/>
+            <line number="41" hits="30" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="42" hits="10" branch="false"/>
+            <line number="44" hits="20" branch="true" condition-coverage="50% (3/6)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="47" hits="70" branch="false"/>
+            <line number="49" hits="70" branch="false"/>
+          </lines>
+        </class>
+        <class name="Prefab_cpp" filename="DataClasses/src/Prefab.cpp" line-rate="0.5555555555555556" branch-rate="1.0" complexity="0.0">
+          <methods>
+            <method name="Prefab::Prefab" signature="(std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt; const&amp;)" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="3" hits="10" branch="false"/>
+                <line number="4" hits="10" branch="false"/>
+                <line number="6" hits="10" branch="false"/>
+              </lines>
+            </method>
+            <method name="Prefab::Load" signature="()" line-rate="0.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="8" hits="0" branch="false"/>
+                <line number="10" hits="0" branch="false"/>
+              </lines>
+            </method>
+            <method name="Prefab::Unload" signature="()" line-rate="0.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="13" hits="0" branch="false"/>
+                <line number="15" hits="0" branch="false"/>
+              </lines>
+            </method>
+            <method name="Prefab::IsLoaded" signature="() const" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="17" hits="10" branch="false"/>
+                <line number="19" hits="10" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="3" hits="10" branch="false"/>
+            <line number="4" hits="10" branch="false"/>
+            <line number="6" hits="10" branch="false"/>
+            <line number="8" hits="0" branch="false"/>
+            <line number="10" hits="0" branch="false"/>
+            <line number="13" hits="0" branch="false"/>
+            <line number="15" hits="0" branch="false"/>
+            <line number="17" hits="10" branch="false"/>
+            <line number="19" hits="10" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+    <package name="Systems.src" line-rate="1.0" branch-rate="0.6428571428571429" complexity="0.0">
+      <classes>
+        <class name="EventSystem_cpp" filename="Systems/src/EventSystem.cpp" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+          <methods>
+            <method name="EventSystem::get" signature="()" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="3" hits="20" branch="false"/>
+                <line number="5" hits="20" branch="true" condition-coverage="75% (3/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="75%"/>
+                  </conditions>
+                </line>
+                <line number="6" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="EventSystem::Clear" signature="()" line-rate="1.0" branch-rate="1.0" complexity="0.0">
+              <lines>
+                <line number="9" hits="40" branch="false"/>
+                <line number="11" hits="40" branch="false"/>
+                <line number="12" hits="40" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="3" hits="20" branch="false"/>
+            <line number="5" hits="20" branch="true" condition-coverage="75% (3/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="75%"/>
+              </conditions>
+            </line>
+            <line number="6" hits="20" branch="false"/>
+            <line number="9" hits="40" branch="false"/>
+            <line number="11" hits="40" branch="false"/>
+            <line number="12" hits="40" branch="false"/>
+          </lines>
+        </class>
+        <class name="SystemManager_cpp" filename="Systems/src/SystemManager.cpp" line-rate="1.0" branch-rate="0.6" complexity="0.0">
+          <methods>
+            <method name="SystemsManager::AddSystem" signature="(System*)" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="5" hits="20" branch="false"/>
+                <line number="7" hits="20" branch="false"/>
+                <line number="9" hits="20" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="10" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="SystemsManager::Update" signature="()" line-rate="1.0" branch-rate="0.75" complexity="0.0">
+              <lines>
+                <line number="12" hits="20" branch="false"/>
+                <line number="14" hits="60" branch="true" condition-coverage="100% (2/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="100%"/>
+                  </conditions>
+                </line>
+                <line number="16" hits="40" branch="true" condition-coverage="50% (1/2)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="18" hits="20" branch="false"/>
+              </lines>
+            </method>
+            <method name="SystemsManager::get" signature="()" line-rate="1.0" branch-rate="0.5" complexity="0.0">
+              <lines>
+                <line number="20" hits="10" branch="false"/>
+                <line number="22" hits="10" branch="true" condition-coverage="50% (2/4)">
+                  <conditions>
+                    <condition number="0" type="jump" coverage="50%"/>
+                  </conditions>
+                </line>
+                <line number="23" hits="10" branch="false"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line number="5" hits="20" branch="false"/>
+            <line number="7" hits="20" branch="false"/>
+            <line number="9" hits="20" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="10" hits="20" branch="false"/>
+            <line number="12" hits="20" branch="false"/>
+            <line number="14" hits="60" branch="true" condition-coverage="100% (2/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="100%"/>
+              </conditions>
+            </line>
+            <line number="16" hits="40" branch="true" condition-coverage="50% (1/2)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="18" hits="20" branch="false"/>
+            <line number="20" hits="10" branch="false"/>
+            <line number="22" hits="10" branch="true" condition-coverage="50% (2/4)">
+              <conditions>
+                <condition number="0" type="jump" coverage="50%"/>
+              </conditions>
+            </line>
+            <line number="23" hits="10" branch="false"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+</coverage>
