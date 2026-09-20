@@ -4,10 +4,12 @@
 #include "UIText.h"
 #include "UIButton.h"
 #include "PlayerPrefs.h"
+#include "Events.h"
 
 class GameManager : public SerializableScript
 {
 public:
+    Action<int> OnGameStateChanged;
     bool Init() override
     {
         Field("scoreText", scoreText);
