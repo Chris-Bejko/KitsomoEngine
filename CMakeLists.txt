@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(ECSEngine_ENABLE_RUNTIME "Enable SFML-dependent engine runtime targets" ON)
+option(ECSEngine_COMPILE_ALL_FOR_COVERAGE "Compile all engine source files into a coverage-only object target" OFF)
 
 # Remove SFML_STATIC - using dynamic SFML now
 add_compile_definitions(NOMINMAX WIN32_LEAN_AND_MEAN)
@@ -80,6 +81,45 @@ target_include_directories(ECSEngineCore PUBLIC
 
 target_include_directories(ECSEngine PRIVATE .)
 
+if(ECSEngine_COMPILE_ALL_FOR_COVERAGE)
+    add_library(ECSEngineCoverageObjects OBJECT
+        ${ROOT_SOURCES}
+        ${BASE_SOURCES}
+        ${MANAGER_SOURCES}
+        ${SYSTEM_SOURCES}
+        ${DATA_SOURCES}
+        ${TOOL_SOURCES}
+        ${HOT_RELOAD_SOURCES}
+        ${COLLISION_SOURCES}
+        ${COMPONENTS_SOURCES}
+        ${PROJECT_EXPLORER_SOURCES}
+        ${UI_SOURCES}
+        ${IMGUI_SOURCES}
+        ${DIALOG_SOURCES}
+        ${SERIALIZATION_SOURCES}
+    )
+
+    target_include_directories(ECSEngineCoverageObjects PRIVATE
+        .
+        Base/include/
+        Managers/include/
+        Systems/include/
+        DataClasses/include/
+        Tools/include/
+        Dialogs/include/
+        Dialogs/include/base/
+        HotReloading/include/
+        ProjectExplorer/include/
+        Serialization/include/
+        Components/
+        imgui/
+        include/
+        Collision/
+        Commands/
+        UI/
+    )
+endif()
+
 if(ECSEngine_ENABLE_RUNTIME)
     # Dynamic SFML
     set(SFML_STATIC_LIBRARIES FALSE)
@@ -108,12 +148,19 @@ if(BUILD_TESTING)
     add_executable(ECSEngineUnitTests
         Tests/TestSuite.cpp
         Base/src/ComponentTypeRegistry.cpp
+        DataClasses/src/AssetReference.cpp
+        DataClasses/src/Prefab.cpp
+        Systems/src/EventSystem.cpp
+        Systems/src/SystemManager.cpp
     )
 
     target_include_directories(ECSEngineUnitTests PRIVATE
         Base/include/
         DataClasses/include/
         Commands/
+        Serialization/include/
+        Systems/include/
+        Tools/include/
     )
 
     function(add_engine_unit_test test_name)
@@ -129,6 +176,13 @@ if(BUILD_TESTING)
     add_engine_unit_test(Guid.GenerationUsesRfc4122VersionFourFormat)
     add_engine_unit_test(CommandHistory.ExecutesUndoesAndRedoes)
     add_engine_unit_test(Registry.StopsAtItsCapacity)
+    add_engine_unit_test(Events.DispatchesAndUnsubscribesSafely)
+    add_engine_unit_test(Events.KeepsEventChannelsIndependent)
+    add_engine_unit_test(Serialization.PreservesEntityAndComponentData)
+    add_engine_unit_test(Logger.DeliversLevelAndMessageToCallback)
+    add_engine_unit_test(Clipboard.CopiesAndClearsSerializedEntities)
+    add_engine_unit_test(Systems.UpdatesRegisteredSystems)
+    add_engine_unit_test(Assets.MaintainsReferenceLifecycleAndPaths)
 endif()
 
 if(ECSEngine_ENABLE_RUNTIME)
