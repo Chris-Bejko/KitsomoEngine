@@ -98,6 +98,35 @@ target_link_libraries(ECSEngineCore PUBLIC
 
 target_link_libraries(ECSEngine PRIVATE ECSEngineCore)
 
+include(CTest)
+
+if(BUILD_TESTING)
+    add_executable(ECSEngineUnitTests
+        Tests/TestSuite.cpp
+        Base/src/ComponentTypeRegistry.cpp
+    )
+
+    target_include_directories(ECSEngineUnitTests PRIVATE
+        Base/include/
+        DataClasses/include/
+        Commands/
+    )
+
+    function(add_engine_unit_test test_name)
+        add_test(NAME ${test_name} COMMAND ECSEngineUnitTests ${test_name})
+    endfunction()
+
+    add_engine_unit_test(Registry.RegistersAndFindsAName)
+    add_engine_unit_test(Registry.UnknownNamesAreInvalid)
+    add_engine_unit_test(Registry.AssociatesAndUnregistersTypes)
+    add_engine_unit_test(Vector.ArithmeticAndComparison)
+    add_engine_unit_test(Vector.MathProducesExpectedResults)
+    add_engine_unit_test(Vector.Vector3AndVector4SupportCoreOperations)
+    add_engine_unit_test(Guid.GenerationUsesRfc4122VersionFourFormat)
+    add_engine_unit_test(CommandHistory.ExecutesUndoesAndRedoes)
+    add_engine_unit_test(Registry.StopsAtItsCapacity)
+endif()
+
 # Copy SFML DLLs next to exe so they're found at runtime
 set(SFML_BIN_DIR "${CMAKE_SOURCE_DIR}/bin")
 add_custom_command(TARGET ECSEngine POST_BUILD
