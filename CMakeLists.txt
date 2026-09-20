@@ -145,6 +145,11 @@ target_link_libraries(ECSEngine PRIVATE ECSEngineCore)
 include(CTest)
 
 if(BUILD_TESTING)
+
+    # =========================
+    # Unit Tests
+    # =========================
+
     add_executable(ECSEngineUnitTests
         Tests/TestSuite.cpp
         Base/src/ComponentTypeRegistry.cpp
@@ -163,8 +168,21 @@ if(BUILD_TESTING)
         Tools/include/
     )
 
+    target_link_libraries(ECSEngineUnitTests PRIVATE
+        ECSEngineCore
+    )
+
+    add_custom_command(TARGET ECSEngineUnitTests POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "$<TARGET_FILE:ECSEngineCore>"
+            "$<TARGET_FILE_DIR:ECSEngineUnitTests>"
+    )
+
     function(add_engine_unit_test test_name)
-        add_test(NAME ${test_name} COMMAND ECSEngineUnitTests ${test_name})
+        add_test(
+            NAME ${test_name}
+            COMMAND ECSEngineUnitTests ${test_name}
+        )
     endfunction()
 
     add_engine_unit_test(Registry.RegistersAndFindsAName)
@@ -183,6 +201,58 @@ if(BUILD_TESTING)
     add_engine_unit_test(Clipboard.CopiesAndClearsSerializedEntities)
     add_engine_unit_test(Systems.UpdatesRegisteredSystems)
     add_engine_unit_test(Assets.MaintainsReferenceLifecycleAndPaths)
+
+    if(ECSEngine_ENABLE_RUNTIME)
+        add_executable(ECSEngineIntegrationTests
+            Tests/IntegrationSuite.cpp
+        )
+
+        target_link_libraries(ECSEngineIntegrationTests PRIVATE ECSEngineCore)
+
+        add_test(
+            NAME Integration.EntityManagerLifecycle
+            COMMAND ECSEngineIntegrationTests EntityManagerLifecycle
+        )
+        add_test(
+            NAME Integration.EntityHierarchyAndTransforms
+            COMMAND ECSEngineIntegrationTests EntityHierarchyAndTransforms
+        )
+        add_test(
+            NAME Integration.EntityActiveHierarchy
+            COMMAND ECSEngineIntegrationTests EntityActiveHierarchy
+        )
+        add_test(
+            NAME Integration.EntityManagerRemovesPendingEntities
+            COMMAND ECSEngineIntegrationTests EntityManagerRemovesPendingEntities
+        )
+        add_test(
+            NAME Integration.EntityManagerTracksCollisionRecords
+            COMMAND ECSEngineIntegrationTests EntityManagerTracksCollisionRecords
+        )
+        add_test(
+            NAME Integration.EntitySerializesComponentFields
+            COMMAND ECSEngineIntegrationTests EntitySerializesComponentFields
+        )
+        add_test(
+            NAME Integration.EntityComponentLifecycle
+            COMMAND ECSEngineIntegrationTests EntityComponentLifecycle
+        )
+        add_test(
+            NAME Integration.EntityManagerClearsInspectorState
+            COMMAND ECSEngineIntegrationTests EntityManagerClearsInspectorState
+        )
+        add_test(
+            NAME Integration.EntityManagerSerializesEntitySet
+            COMMAND ECSEngineIntegrationTests EntityManagerSerializesEntitySet
+        )
+
+        add_custom_command(TARGET ECSEngineIntegrationTests POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "$<TARGET_FILE:ECSEngineCore>"
+                "$<TARGET_FILE_DIR:ECSEngineIntegrationTests>"
+        )
+    endif()
+
 endif()
 
 if(ECSEngine_ENABLE_RUNTIME)
