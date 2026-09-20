@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   incremental-build:
-    name: Incremental Unit-Test Build
+    name: Incremental Engine Build
     runs-on: windows-latest
     env:
       SCCACHE_GHA_ENABLED: "true"
@@ -20,6 +20,26 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Restore SFML runtime cache
+        id: sfml-cache
+        uses: actions/cache@v4
+        with:
+          path: bin
+          key: sfml-2.6.1-vc17-x64
+
+      - name: Download SFML runtime
+        if: steps.sfml-cache.outputs.cache-hit != 'true'
+        shell: pwsh
+        run: |
+          $archive = Join-Path $env:RUNNER_TEMP "SFML-2.6.1-windows-vc17-64-bit.zip"
+          $extractPath = Join-Path $env:RUNNER_TEMP "sfml"
+          Invoke-WebRequest -Uri "https://github.com/SFML/SFML/releases/download/2.6.1/SFML-2.6.1-windows-vc17-64-bit.zip" -OutFile $archive
+          Expand-Archive -Path $archive -DestinationPath $extractPath
+          $sfmlBin = Get-ChildItem -Path $extractPath -Recurse -Filter "sfml-system-d-2.dll" | Select-Object -First 1 -ExpandProperty DirectoryName
+          if ($null -eq $sfmlBin) { throw "The SFML archive did not contain the debug runtime DLLs." }
+          New-Item -ItemType Directory -Force -Path bin | Out-Null
+          Copy-Item -Path (Join-Path $sfmlBin "*") -Destination bin -Force
+
       - name: Set up compiler cache
         uses: mozilla-actions/sccache-action@v0.0.9
 
@@ -27,12 +47,11 @@ jobs:
         run: >
           cmake -S . -B build -A x64
           -DBUILD_TESTING=ON
-          -DECSEngine_ENABLE_RUNTIME=OFF
           -DCMAKE_C_COMPILER_LAUNCHER=sccache
           -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
-      - name: Build unit tests
-        run: cmake --build build --config Debug --target ECSEngineUnitTests
+      - name: Build engine and unit tests
+        run: cmake --build build --config Debug --target ALL_BUILD
 
       - name: Upload unit-test executable
         uses: actions/upload-artifact@v4
