@@ -17,7 +17,7 @@ ImguiHandler &ImguiHandler::get()
 	return instance;
 }
 
-void ImguiHandler::ApplyEditorStyle()
+void ImguiHandler::ApplyEditorStyle() does skip work? 
 {
 	ImGuiStyle &style = ImGui::GetStyle();
 	style.WindowRounding = 6.0f;
