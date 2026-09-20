@@ -17,6 +17,12 @@ public:
         Field("rotationSpeed", rotationSpeed);
         return true;
     }
+    
+    ~Enemy()
+    {
+        if (gameManager)
+            gameManager->OnGameStateChanged.Unsubscribe(this, &Enemy::OnGameStateChanged);
+    }
 
     void Awake() override
     {
@@ -33,6 +39,22 @@ public:
         if (!gameManager)
         {
             LOG_WARNING("No game manager found for enemy with guid: ", entity->GetGUID(), ". Destroying");
+            entity->Destroy();
+            return;
+        }
+
+        gameManager->OnGameStateChanged.Bind(this, &Enemy::OnGameStateChanged);
+    }
+
+    void OnGameStateChanged(int state)
+    {
+        if (!entity || entity->IsPendingDestroy())
+            return;
+
+        if (state == 2)
+        {
+            if (gameManager)
+                gameManager->OnGameStateChanged.Unsubscribe(this, &Enemy::OnGameStateChanged);
             entity->Destroy();
         }
     }
@@ -91,7 +113,6 @@ public:
                 LOG_INFO("Wrong color! Game over!");
                 other.entity->Destroy();
                 gameManager->SetGameState(2);
-                entity->Destroy();
             }
         }
         if (other.entity->HasComponent<FloorSquare>())
@@ -101,6 +122,11 @@ public:
             if (floorColor == colorString)
                 return;
             SetColor(floorColor);
+        }
+
+        if(other.GetCollisionTag() == "Player")
+        {
+            gameManager->SetGameState(2);
         }
     }
 
