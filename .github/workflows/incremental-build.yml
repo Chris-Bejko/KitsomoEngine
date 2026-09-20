@@ -12,6 +12,10 @@ permissions:
 jobs:
   incremental-build:
     name: Incremental Engine Build
+    if: >-
+      github.event_name != 'pull_request' ||
+      (!contains(github.event.pull_request.title, '[skip_]') &&
+      !contains(github.event.pull_request.body, '[skip_]'))
     runs-on: windows-latest
     env:
       SCCACHE_GHA_ENABLED: "true"
