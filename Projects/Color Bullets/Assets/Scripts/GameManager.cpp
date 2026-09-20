@@ -5,6 +5,8 @@
 void GameManager::SetGameState(int _gameState)
 {
     gameState = _gameState;
+    OnGameStateChanged.Invoke(_gameState);
+
     if (!(environment && endUI && startUI))
         return;
 
