@@ -6,7 +6,6 @@
 #include <unordered_map>
 #include <filesystem>
 #include "SceneManager.h"
-
 class AssetManager
 {
 public:

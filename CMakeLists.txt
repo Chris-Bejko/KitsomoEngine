@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(ECSEngine_ENABLE_RUNTIME "Enable SFML-dependent engine runtime targets" ON)
+
 # Remove SFML_STATIC - using dynamic SFML now
 add_compile_definitions(NOMINMAX WIN32_LEAN_AND_MEAN)
 
@@ -78,34 +80,67 @@ target_include_directories(ECSEngineCore PUBLIC
 
 target_include_directories(ECSEngine PRIVATE .)
 
-# Dynamic SFML
-set(SFML_STATIC_LIBRARIES FALSE)
-set(SFML_DIR "${CMAKE_SOURCE_DIR}/lib/cmake/SFML")
-find_package(SFML 2.6 COMPONENTS graphics window system audio REQUIRED)
+if(ECSEngine_ENABLE_RUNTIME)
+    # Dynamic SFML
+    set(SFML_STATIC_LIBRARIES FALSE)
+    set(SFML_DIR "${CMAKE_SOURCE_DIR}/lib/cmake/SFML")
+    find_package(SFML 2.6 COMPONENTS graphics window system audio REQUIRED)
 
-target_link_directories(ECSEngineCore PUBLIC "${CMAKE_SOURCE_DIR}/lib")
+    target_link_directories(ECSEngineCore PUBLIC "${CMAKE_SOURCE_DIR}/lib")
 
-# Link dynamic SFML libs (no -s suffix = dynamic, -d = debug)
-target_link_libraries(ECSEngineCore PUBLIC
-    sfml-graphics-d
-    sfml-window-d
-    sfml-system-d
-    sfml-audio-d
-    opengl32
-    winmm
-    gdi32
-)
+    # Link dynamic SFML libs (no -s suffix = dynamic, -d = debug)
+    target_link_libraries(ECSEngineCore PUBLIC
+        sfml-graphics-d
+        sfml-window-d
+        sfml-system-d
+        sfml-audio-d
+        opengl32
+        winmm
+        gdi32
+    )
+endif()
 
 target_link_libraries(ECSEngine PRIVATE ECSEngineCore)
 
-# Copy SFML DLLs next to exe so they're found at runtime
-set(SFML_BIN_DIR "${CMAKE_SOURCE_DIR}/bin")
-add_custom_command(TARGET ECSEngine POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${SFML_BIN_DIR}/sfml-graphics-d-2.dll"
-        "${SFML_BIN_DIR}/sfml-window-d-2.dll"
-        "${SFML_BIN_DIR}/sfml-system-d-2.dll"
-        "${SFML_BIN_DIR}/sfml-audio-d-2.dll"
-        "${SFML_BIN_DIR}/OpenAL32.dll"
-        $<TARGET_FILE_DIR:ECSEngine>
-)
+include(CTest)
+
+if(BUILD_TESTING)
+    add_executable(ECSEngineUnitTests
+        Tests/TestSuite.cpp
+        Base/src/ComponentTypeRegistry.cpp
+    )
+
+    target_include_directories(ECSEngineUnitTests PRIVATE
+        Base/include/
+        DataClasses/include/
+        Commands/
+    )
+
+    function(add_engine_unit_test test_name)
+        add_test(NAME ${test_name} COMMAND ECSEngineUnitTests ${test_name})
+    endfunction()
+
+    add_engine_unit_test(Registry.RegistersAndFindsAName)
+    add_engine_unit_test(Registry.UnknownNamesAreInvalid)
+    add_engine_unit_test(Registry.AssociatesAndUnregistersTypes)
+    add_engine_unit_test(Vector.ArithmeticAndComparison)
+    add_engine_unit_test(Vector.MathProducesExpectedResults)
+    add_engine_unit_test(Vector.Vector3AndVector4SupportCoreOperations)
+    add_engine_unit_test(Guid.GenerationUsesRfc4122VersionFourFormat)
+    add_engine_unit_test(CommandHistory.ExecutesUndoesAndRedoes)
+    add_engine_unit_test(Registry.StopsAtItsCapacity)
+endif()
+
+if(ECSEngine_ENABLE_RUNTIME)
+    # Copy SFML DLLs next to exe so they're found at runtime
+    set(SFML_BIN_DIR "${CMAKE_SOURCE_DIR}/bin")
+    add_custom_command(TARGET ECSEngine POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_BIN_DIR}/sfml-graphics-d-2.dll"
+            "${SFML_BIN_DIR}/sfml-window-d-2.dll"
+            "${SFML_BIN_DIR}/sfml-system-d-2.dll"
+            "${SFML_BIN_DIR}/sfml-audio-d-2.dll"
+            "${SFML_BIN_DIR}/OpenAL32.dll"
+            $<TARGET_FILE_DIR:ECSEngine>
+    )
+endif()
