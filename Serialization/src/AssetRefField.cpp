@@ -24,7 +24,11 @@ void AssetRefField::Draw(const FieldDrawContext &context)
 
     if (ImGui::BeginDragDropTarget())
     {
-        if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ASSET_PATH"))
+        const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("ASSET_PATH");
+        if (!payload)
+            payload = ImGui::AcceptDragDropPayload("PREFAB");
+
+        if (payload)
         {
             const char *droppedPath = static_cast<const char *>(payload->Data);
 

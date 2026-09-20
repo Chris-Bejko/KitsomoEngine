@@ -78,6 +78,20 @@ void EntityRefField::Draw(const FieldDrawContext& context)
                 Engine::get().GetManager()->SetSelectedEntity(context.entity);
             }
         }
+        else if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("PREFAB"))
+        {
+            const char* pathStr = static_cast<const char*>(payload->Data);
+            if (pathStr)
+            {
+                Entity* spawned = Engine::get().SpawnPrefab(pathStr, Vector2F(0, 0));
+                if (spawned)
+                {
+                    *value = spawned;
+                    guidStorage = spawned->GetGUID();
+                    Engine::get().GetManager()->SetSelectedEntity(context.entity);
+                }
+            }
+        }
         ImGui::EndDragDropTarget();
     }
 }
