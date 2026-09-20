@@ -8,27 +8,35 @@ on:
 
 permissions:
   contents: read
+
 jobs:
   unit-tests:
-    name: Run Unit Tests
-    needs: incremental-build
+    name: Incremental Unit Tests
     runs-on: windows-latest
+    env:
+      SCCACHE_GHA_ENABLED: "true"
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Configure CTest
+      - name: Set up compiler cache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Configure CMake
         run: >
           cmake -S . -B build -A x64
           -DBUILD_TESTING=ON
           -DECSEngine_ENABLE_RUNTIME=OFF
+          -DCMAKE_C_COMPILER_LAUNCHER=sccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
-      - name: Download unit-test executable
-        uses: actions/download-artifact@v4
-        with:
-          name: unit-test-executable
-          path: build/Debug
+      - name: Build unit tests
+        run: cmake --build build --config Debug --target ECSEngineUnitTests
 
       - name: Run unit tests
         run: ctest --test-dir build -C Debug --output-on-failure
+
+      - name: Show compiler cache statistics
+        if: always()
+        run: sccache --show-stats

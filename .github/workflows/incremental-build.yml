@@ -50,15 +50,8 @@ jobs:
           -DCMAKE_C_COMPILER_LAUNCHER=sccache
           -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
 
-      - name: Build engine and unit tests
-        run: cmake --build build --config Debug --target ALL_BUILD
-
-      - name: Upload unit-test executable
-        uses: actions/upload-artifact@v4
-        with:
-          name: unit-test-executable
-          path: build/Debug/ECSEngineUnitTests.exe
-          if-no-files-found: error
+      - name: Build engine
+        run: cmake --build build --config Debug --target ECSEngine
 
       - name: Show compiler cache statistics
         if: always()
