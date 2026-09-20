@@ -10,19 +10,61 @@ permissions:
   contents: read
 
 jobs:
+  incremental-build:
+    name: Incremental Unit-Test Build
+    runs-on: windows-latest
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up compiler cache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Configure CMake
+        run: >
+          cmake -S . -B build -A x64
+          -DBUILD_TESTING=ON
+          -DECSEngine_ENABLE_RUNTIME=OFF
+          -DCMAKE_C_COMPILER_LAUNCHER=sccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+
+      - name: Build unit tests
+        run: cmake --build build --config Debug --target ECSEngineUnitTests
+
+      - name: Upload unit-test executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-executable
+          path: build/Debug/ECSEngineUnitTests.exe
+          if-no-files-found: error
+
+      - name: Show compiler cache statistics
+        if: always()
+        run: sccache --show-stats
+
   unit-tests:
-    name: Build and Run Unit Tests
+    name: Run Unit Tests
+    needs: incremental-build
     runs-on: windows-latest
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Configure CMake
-        run: cmake -S . -B build -A x64 -DBUILD_TESTING=ON -DECSEngine_ENABLE_RUNTIME=OFF
+      - name: Configure CTest
+        run: >
+          cmake -S . -B build -A x64
+          -DBUILD_TESTING=ON
+          -DECSEngine_ENABLE_RUNTIME=OFF
 
-      - name: Build unit tests
-        run: cmake --build build --config Debug --target ECSEngineUnitTests
+      - name: Download unit-test executable
+        uses: actions/download-artifact@v4
+        with:
+          name: unit-test-executable
+          path: build/Debug
 
       - name: Run unit tests
         run: ctest --test-dir build -C Debug --output-on-failure
