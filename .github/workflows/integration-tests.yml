@@ -1,0 +1,47 @@
+name: PR Integration Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integration-tests:
+    name: Integration Tests
+    if: >-
+      github.event_name != 'pull_request' ||
+      (!contains(github.event.pull_request.title, '[skip_]') &&
+      !contains(github.event.pull_request.body, '[skip_]'))
+    runs-on: windows-latest
+
+    env:
+      SCCACHE_GHA_ENABLED: "true"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up compiler cache
+        uses: mozilla-actions/sccache-action@v0.0.9
+
+      - name: Configure CMake
+        run: >
+          cmake -S . -B build -A x64
+          -DBUILD_TESTING=ON
+          -DECSEngine_ENABLE_RUNTIME=ON
+          -DCMAKE_C_COMPILER_LAUNCHER=sccache
+          -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+
+      - name: Build integration tests
+        run: cmake --build build --config Debug --target ECSEngineIntegrationTests
+
+      - name: Run integration tests
+        run: ctest --test-dir build -C Debug -R "^Integration\." --output-on-failure
+
+      - name: Show compiler cache statistics
+        if: always()
+        run: sccache --show-stats
