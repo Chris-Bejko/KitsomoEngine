@@ -24,19 +24,26 @@ This project was also heavily influenced by the game I made as a remake of [Colo
 - Input handling and camera systems
 - Basic gameplay UI elements for editor-driven playtesting
 - Serialization support for scenes, entities, and editor data
-
+- In-Engine event handling
+- User defined Actions (Unity-Style events)
+- File Explorer and Project loading
+- Hot reloading and fully building a Project
 ## What it does not include, but might be added  
-- Proper File explorer navigation in-engine -> Currently being done on Build Pipeline branch
-- A scripting language & Hot reloading of it -> No scripting language yet, but Hot Reloading is officially a thing, though it can probably be better
-- Unity-style building  (from inside the engine) -> Build Pipeline branch exists to provide such support, very near to finished
-- Cursor state update -> Blocking events like hot reloading now just freeze the game. It would be nice to be able to set a "Loading" cursor. imgui/sfml probably has something there. 
+- A scripting language
+- Cursor state update -> Blocking events like hot reloading now just freeze the game. It would be nice to be able to set a "Loading" cursor. imgui/sfml probably has something there.
+- Scene architecture is currently poor, barely supported. 
+  
+##Improvements made so far
+Dialogs now handle their own logic, deriving from a parent class and getting their draw called by the DialogManager
+Serialization/Deserialization was improved by getting rid of enum-type handling, and replaced with class implementations instead. 
+Entity is now fully decoupled from Imgui
+Incremental build and unit tests added, now requirement for merging a PR into main. 
+
 
 ## What can be improved   
-I am aware that potential employers and recruiters might be looking at this page, and the code is clearly not perfect.
-- One thing that bothers me is how I approached drawing all the ImGui windows. I made one file , imguiHandler.cpp, and just started adding to it. This could be refactored to feature a more abstract and object oriented approach, making it easy for users to also make their own dialogs easily. -> Almost fixed, dialogs are separate now, but they are blocked on editor game mode :D.
-- Entities is responsible for drawing the serialized components on the inspector. This was deliberate but there is probably a better way.. looking into it.
-- 
-- To be continued (But if you are a recruiter, feel free to ask me about my design decisions :).)
+- Gizmos is very buggy for drag-dropping. Undo/Redo does not work for UI elements. 
+- UI Scaling is poor, only looks ok when window is full size
+- Potential for dropping unique pointers, and turning to manual memory management, maybe even using Sparse Sets or Archetypes, with the goal of turning this into an ECS serialized engine (hard)
 
 ## Tech stack
 
